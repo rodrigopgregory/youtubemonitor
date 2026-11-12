@@ -10,8 +10,8 @@ async function sql(nome, input) {
 const tema = String(event.tema || '').trim().slice(0, 150);
 if (!tema) return { ok: false, erro: 'Escreva um tema.' };
 const vazio = { ok: true, vazio: true, resumo: 'Nenhum vídeo da base trata do tema "' + tema + '".' };
-const tr = ((await sql('buscaTrechos', { tema })).rows || []);
-const vids = ((await sql('buscaResumos', { tema })).rows || []);
+const tr = ((await sql('buscaTrechos', { tema, canalId: Number(event.canalId || 0) })).rows || []);
+const vids = ((await sql('buscaResumos', { tema, canalId: Number(event.canalId || 0) })).rows || []);
 if (!tr.length && !vids.length) return vazio;
 const mmss = s => { const h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 60), se = s % 60; return (h ? h + ':' + String(mi).padStart(2, '0') : mi) + ':' + String(se).padStart(2, '0'); };
 const fonte = vids.map(v => 'VIDEO "' + v.TITULO + '" (resumo): ' + v.RESUMO).join('\n\n') + '\n\n' + tr.map(x => '[' + x.TITULO + ' ' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n');

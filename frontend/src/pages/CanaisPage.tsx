@@ -3,7 +3,9 @@ import { Plus, ExternalLink } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
+import { useNavigate } from 'react-router-dom'
 import { linhas, chamar, dataBr } from '../lib/api'
+import { useCanal } from '../components/CanalFiltro'
 
 interface Canal { ID: number; NOME: string; HANDLE: string; URL: string; THUMB: string; CARGA_STATUS: string; CARGA_MSG: string; ULTIMA_CHECAGEM: string | null; CRIADO_EM: string; ESTUDADOS: number; FILA: number; PENDENTES: number; TOTAL: number }
 
@@ -16,6 +18,8 @@ export default function CanaisPage() {
   const [url, setUrl] = useState('')
   const [msg, setMsg] = useState<{ t: string; erro: boolean } | null>(null)
   const [salvando, setSalvando] = useState(false)
+  const [, setCanalId] = useCanal()
+  const navegar = useNavigate()
 
   const carregar = useCallback(() => { linhas<Canal>('canaisListar').then(setCanais) }, [])
   useEffect(() => { carregar(); const t = setInterval(carregar, 30000); return () => clearInterval(t) }, [carregar])
@@ -65,6 +69,10 @@ export default function CanaisPage() {
                 {Number(c.FILA) > 0 && <span>{c.FILA} na fila</span>}
                 {Number(c.PENDENTES) > 0 && <span style={{ color: 'var(--warning-text)' }}>{c.PENDENTES} pendentes</span>}
                 <span>Última checagem: {c.ULTIMA_CHECAGEM ? dataBr(c.ULTIMA_CHECAGEM) + ' ' + c.ULTIMA_CHECAGEM.slice(11, 16) : 'ainda não'}</span>
+              </div>
+              <div className="flex gap-2">
+                <Button size="sm" variant="secondary" onClick={() => { setCanalId(c.ID); navegar('/videos') }}>Ver vídeos do canal</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setCanalId(c.ID); navegar('/chat') }}>Perguntar sobre este canal</Button>
               </div>
               {c.CARGA_STATUS === 'LISTANDO' && c.CARGA_MSG && <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{c.CARGA_MSG}</p>}
             </Card>)

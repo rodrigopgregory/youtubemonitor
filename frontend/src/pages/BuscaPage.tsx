@@ -3,6 +3,7 @@ import { Search, Sparkles, PlayCircle } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { chamar, linhas, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Res { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; SCORE: number; MOMS: string }
@@ -16,17 +17,18 @@ export default function BuscaPage() {
   const [res, setRes] = useState<Res[] | null>(null)
   const [resumo, setResumo] = useState<{ texto: string; vazio?: boolean; erro?: boolean } | null>(null)
   const [carregando, setCarregando] = useState(false)
+  const [canalId, setCanalId] = useCanal()
 
-  async function buscar(t = tema, o = ordem, comResumo = true) {
+  async function buscar(t = tema, o = ordem, comResumo = true, canal = canalId) {
     const q = t.trim(); if (!q) return
     setCarregando(true); setBuscado(q)
     if (comResumo) setResumo(null)
     try {
-      const r = await linhas<Res>('buscarTema', { tema: q, ordem: o, limit: 50, offset: 0 })
+      const r = await linhas<Res>('buscarTema', { tema: q, ordem: o, limit: 50, offset: 0, canalId: canal })
       setRes(r)
       if (comResumo) {
         if (!r.length) setResumo({ texto: `Nenhum vídeo da base trata do tema "${q}".`, vazio: true })
-        else chamar<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q })
+        else chamar<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q, canalId: canal })
           .then(x => setResumo(x.ok ? { texto: x.resumo || '', vazio: x.vazio } : { texto: x.erro || 'Não consegui gerar o resumo agora.', erro: true }))
           .catch(() => setResumo({ texto: 'Não consegui gerar o resumo agora.', erro: true }))
       }
@@ -43,6 +45,7 @@ export default function BuscaPage() {
         <h1 className="text-[22px] font-semibold">Pesquisar um tema</h1>
         <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>A resposta usa só o que foi falado nos vídeos dos canais cadastrados.</p>
       </div>
+      <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); if (buscado) buscar(buscado, ordem, true, id) }} />
       <form onSubmit={e => { e.preventDefault(); buscar() }} className="flex gap-2">
         <div className="relative flex-1">
           <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: 'var(--fg-subtle)' }} />

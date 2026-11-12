@@ -36,7 +36,7 @@ try {
   const canaisLista = ((await sql('canaisNomes', {})).rows || []);
   plano = JSON.parse(await gemini(
     'Voce ajuda uma pessoa a pesquisar uma base de transcricoes de videos de espiritualidade (canais do YouTube). Leia o pedido e devolva so JSON:\n' +
-    '{"tipo":"busca"|"estudar"|"andamento"|"fora","termos":["..."],"ordem":"relevancia"|"recentes","somenteLives":true|false,"quantidade":<numero>,"canalId":<numero ou 0>}\n' +
+    '{"tipo":"busca"|"estudar"|"andamento"|"fora","termos":["..."],"ordem":"relevancia"|"recentes","somenteLives":true|false,"quantidade":<numero>,"canalId":<numero ou 0>}\n- canalId tambem vale para "busca": se a pessoa citar um canal no pedido (ex.: "o que a Monica fala sobre..."), use o ID dele; senao 0.\n' +
     '- tipo "estudar": a pessoa pede para estudar/rodar/processar/carregar mais videos (ex.: "roda mais 50 videos", "estuda mais 200 do Wagner"). quantidade = o numero pedido (se nao disser, 50; se pedir todos, 2000). canalId = o ID do canal citado, ou 0 para todos. Canais: ' + canaisLista.map(c => c.ID + '=' + c.NOME).join(', ') + '\n' +
     '- tipo "andamento": a pessoa pergunta quantos videos ja foram estudados, como esta o estudo, o que falta.\n' +
     '- termos: de 2 a 6 termos de UMA ou DUAS palavras cada, em portugues, do jeito que alguem falaria num video (o assunto pedido, sinonimos e palavras-chave; ex.: para "protecao contra energias negativas" use "protecao", "energia negativa", "obsessor", "defesa energetica"). Use a conversa anterior para entender pedidos como "e sobre isso nas lives?".\n' +
@@ -53,7 +53,7 @@ if (plano.tipo === 'andamento') {
 if (plano.tipo === 'estudar') {
   const quantidade = Math.min(2000, Math.max(1, Math.floor(Number(plano.quantidade) || 50)));
   const canaisLista = ((await sql('canaisNomes', {})).rows || []);
-  const canal = canaisLista.find(c => Number(c.ID) === Number(plano.canalId));
+  const canal = canaisLista.find(c => Number(c.ID) === (Number(plano.canalId) || Number(event.canalId || 0)));
   if (!canaisLista.length) return { ok: true, resposta: 'Ainda não há canal cadastrado. Cadastre um na tela Canais.', videos: [], termos: [] };
   const onde = canal ? 'do canal ' + canal.NOME : (canaisLista.length === 1 ? 'do canal ' + canaisLista[0].NOME : 'de cada canal');
   return { ok: true, resposta: 'Posso colocar mais ' + quantidade + ' vídeos ' + onde + ' na fila de estudo, seguindo dos mais recentes para os mais antigos que ainda não foram estudados. Isso usa a cota do Gemini da sua chave. Confirma?', videos: [], termos: [],
@@ -63,22 +63,23 @@ if (plano.tipo === 'fora') return { ok: true, resposta: 'Eu busco assuntos dentr
 const termos = [...new Set((plano.termos || []).map(t => String(t).trim().toLowerCase()).filter(t => t.length >= 3))].slice(0, 5);
 if (!termos.length) return { ok: true, resposta: 'Não entendi qual assunto buscar. Pode dizer o tema com outras palavras?', videos: [], termos: [] };
 const ordem = plano.ordem === 'recentes' ? 'recentes' : 'relevancia';
+const canalBusca = Math.floor(Number(event.canalId || 0)) || Math.floor(Number(plano.canalId || 0)) || 0;
 
 const vids = {}; const trechos = []; const resumos = {};
 for (const tema of termos) {
-  for (const v of ((await sql('buscarTema', { tema, ordem: 'relevancia', limit: 30, offset: 0 })).rows || [])) {
+  for (const v of ((await sql('buscarTema', { tema, ordem: 'relevancia', limit: 30, offset: 0, canalId: canalBusca })).rows || [])) {
     if (plano.somenteLives && v.TIPO !== 'LIVE') continue;
     const a = vids[v.ID] || (vids[v.ID] = Object.assign({}, v, { SCORE: 0, MOMS: '' }));
     a.SCORE += Number(v.SCORE || 0); a.MOMS = [a.MOMS, v.MOMS].filter(Boolean).join(',');
   }
-  for (const t of ((await sql('buscaTrechos', { tema })).rows || []).slice(0, 25)) trechos.push(t);
-  for (const r of ((await sql('buscaResumos', { tema })).rows || [])) resumos[r.TITULO] = r.RESUMO;
+  for (const t of ((await sql('buscaTrechos', { tema, canalId: canalBusca })).rows || []).slice(0, 25)) trechos.push(t);
+  for (const r of ((await sql('buscaResumos', { tema, canalId: canalBusca })).rows || [])) resumos[r.TITULO] = r.RESUMO;
 }
 let lista = Object.values(vids);
 lista.sort((a, b) => ordem === 'recentes' ? String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')) || b.SCORE - a.SCORE : b.SCORE - a.SCORE || String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')));
 lista = lista.slice(0, 15);
 const titulos = new Set(lista.map(v => v.TITULO));
-if (!lista.length) return { ok: true, vazio: true, resposta: 'Nenhum vídeo da base trata disso' + (plano.somenteLives ? ' nas lives' : '') + '. Procurei por: ' + termos.join(', ') + '.', videos: [], termos, ordem };
+if (!lista.length) return { ok: true, vazio: true, resposta: 'Nenhum vídeo da base trata disso' + (plano.somenteLives ? ' nas lives' : '') + (canalBusca ? ' neste canal' : '') + '. Procurei por: ' + termos.join(', ') + '.', videos: [], termos, ordem };
 
 const vistos = new Set();
 const material = Object.keys(resumos).filter(t => titulos.has(t)).map(t => 'RESUMO DO VIDEO "' + t + '": ' + resumos[t]).join('\n\n') + '\n\n' +

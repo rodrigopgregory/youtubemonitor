@@ -4,6 +4,7 @@ import Badge from '../components/ui/Badge'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import VideoDetalhe from '../components/VideoDetalhe'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { linhas, dataBr, duracao } from '../lib/api'
 
 interface Tema { ID: number; NOME: string; QTD: number }
@@ -25,17 +26,18 @@ export default function VideosPage() {
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(true)
   const [aberto, setAberto] = useState<number | null>(null)
+  const [canalId, setCanalId] = useCanal()
 
   const carregar = useCallback(async (offset = 0) => {
     setCarregando(true)
-    const r = await linhas<Video>('videosListar', { status, temaId, limit: PAG, offset })
+    const r = await linhas<Video>('videosListar', { status, temaId, canalId, limit: PAG, offset })
     setVideos(v => offset ? [...v, ...r] : r); setFim(r.length < PAG); setCarregando(false)
-  }, [status, temaId])
+  }, [status, temaId, canalId])
 
   const carregarTemas = useCallback(() => {
-    linhas<Tema>('temasListar').then(setTemas)
-    linhas<Painel>('painelResumo').then(r => setPainel(r[0] || null))
-  }, [])
+    linhas<Tema>('temasListar', { canalId }).then(setTemas)
+    linhas<Painel>('painelResumo', { canalId }).then(r => setPainel(r[0] || null))
+  }, [canalId])
 
   useEffect(() => { carregarTemas() }, [carregarTemas])
   useEffect(() => { carregar(0) }, [carregar])
@@ -50,6 +52,7 @@ export default function VideosPage() {
           <h1 className="text-[22px] font-semibold">Vídeos e temas</h1>
           <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Os vídeos agrupados pelos temas. Clique num vídeo para ver o resumo, a transcrição e editar os temas.</p>
         </div>
+        <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); filtro('tema', '') }} />
         {painel && (
           <div className="flex gap-2 flex-wrap">
             {[['', 'Todos'], ['ESTUDADO', `${painel.ESTUDADOS || 0} estudados`], ['FILA', `${painel.FILA || 0} na fila`], ['PENDENTE', `${painel.PENDENTES || 0} pendentes`]].map(([k, l]) => (

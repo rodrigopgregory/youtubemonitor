@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Send, PlayCircle, Trash2, MessageSquare } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; MOMS: string }
@@ -19,6 +20,7 @@ export default function ChatPage() {
   const [msgs, setMsgs] = useState<Msg[]>(carregar)
   const [texto, setTexto] = useState('')
   const [pensando, setPensando] = useState(false)
+  const [canalId, setCanalId] = useCanal()
   const fim = useRef<HTMLDivElement>(null)
 
   useEffect(() => { localStorage.setItem(CHAVE, JSON.stringify(msgs.slice(-40))) }, [msgs])
@@ -29,7 +31,7 @@ export default function ChatPage() {
     const historico = msgs.slice(-8).map(m => ({ papel: m.papel, texto: m.texto }))
     setMsgs(m => [...m, { papel: 'pessoa', texto: q }]); setTexto(''); setPensando(true)
     try {
-      const r = await chamar<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[]; acao?: Acao }>('chatBusca', { texto: q, mensagens: historico })
+      const r = await chamar<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[]; acao?: Acao }>('chatBusca', { texto: q, mensagens: historico, canalId })
       setMsgs(m => [...m, r.ok ? { papel: 'agente', texto: r.resposta || '', videos: r.videos, termos: r.termos, acao: r.acao } : { papel: 'agente', texto: r.erro || 'Não consegui responder agora.', erro: true }])
     } catch (e) {
       setMsgs(m => [...m, { papel: 'agente', texto: (e as Error).message, erro: true }])
@@ -61,7 +63,10 @@ export default function ChatPage() {
           <h1 className="text-[22px] font-semibold">Chat</h1>
           <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Peça com as suas palavras o que quer encontrar. A resposta usa só o que foi falado nos vídeos da base. Você também pode pedir para estudar mais vídeos.</p>
         </div>
-        {msgs.length > 0 && <Button variant="ghost" size="sm" onClick={() => setMsgs([])}><Trash2 size={14} />Nova conversa</Button>}
+        <div className="flex items-center gap-2">
+          <CanalFiltro valor={canalId} onChange={setCanalId} />
+          {msgs.length > 0 && <Button variant="ghost" size="sm" onClick={() => setMsgs([])}><Trash2 size={14} />Nova conversa</Button>}
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto rounded-2xl border p-4 flex flex-col gap-4" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
