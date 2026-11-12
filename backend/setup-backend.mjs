@@ -1,0 +1,92 @@
+import 'dotenv/config';
+import { configureSdkMitra, runDdlMitra, runDmlMitra } from 'mitra-sdk';
+
+configureSdkMitra({ baseURL: process.env.MITRA_BASE_URL, token: process.env.MITRA_TOKEN, integrationURL: process.env.MITRA_BASE_URL_INTEGRATIONS });
+const projectId = Number(process.env.MITRA_PROJECT_ID);
+
+const ddls = [
+  `CREATE TABLE CONFIG (
+    CHAVE VARCHAR(60) PRIMARY KEY,
+    VALOR VARCHAR(500)
+  ) COMMENT='Parametros do monitor. RETENCAO: tudo, poucas linhas'`,
+  `CREATE TABLE CANAIS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    YT_CHANNEL_ID VARCHAR(40) NOT NULL UNIQUE,
+    HANDLE VARCHAR(120),
+    NOME VARCHAR(300),
+    URL VARCHAR(500),
+    UPLOADS_PLAYLIST VARCHAR(60),
+    THUMB VARCHAR(500),
+    CARGA_STATUS VARCHAR(20) DEFAULT 'LISTANDO',
+    CARGA_TOKEN VARCHAR(200),
+    CARGA_MSG VARCHAR(500),
+    ULTIMA_CHECAGEM VARCHAR(19),
+    CRIADO_EM VARCHAR(19)
+  ) COMMENT='Canais monitorados. RETENCAO: tudo, cadastro da dona'`,
+  `CREATE TABLE AVISOS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    CRIADO_EM VARCHAR(19),
+    QTD INT,
+    LIDO BOOLEAN DEFAULT FALSE,
+    LIDO_EM VARCHAR(19)
+  ) COMMENT='Avisos de videos novos estudados. RETENCAO: tudo, uma linha por dia com novidade'`,
+  `CREATE TABLE VIDEOS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    CANAL_ID INT NOT NULL,
+    YT_VIDEO_ID VARCHAR(20) NOT NULL UNIQUE,
+    TITULO VARCHAR(500),
+    PUBLICADO_EM VARCHAR(19),
+    DURACAO_SEG INT,
+    TIPO VARCHAR(10),
+    THUMB VARCHAR(500),
+    STATUS VARCHAR(20) DEFAULT 'FILA',
+    MOTIVO VARCHAR(1000),
+    ORIGEM VARCHAR(12),
+    PROGRESSO_SEG INT DEFAULT 0,
+    TENTATIVAS INT DEFAULT 0,
+    RESUMO TEXT,
+    INDISPONIVEL BOOLEAN DEFAULT FALSE,
+    ESTUDADO_EM VARCHAR(19),
+    ATUALIZADO_EM VARCHAR(19),
+    AVISO_ID INT,
+    STAGE_JSON LONGTEXT,
+    CRIADO_EM VARCHAR(19),
+    INDEX IX_VID_STATUS (STATUS, PUBLICADO_EM),
+    FOREIGN KEY (CANAL_ID) REFERENCES CANAIS(ID),
+    FOREIGN KEY (AVISO_ID) REFERENCES AVISOS(ID)
+  ) COMMENT='Videos e lives elegiveis (mais de 10 min). RETENCAO: tudo, e a base de conhecimento'`,
+  `CREATE TABLE TRECHOS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    VIDEO_ID INT NOT NULL,
+    SEGUNDO INT NOT NULL,
+    TEXTO TEXT,
+    INDEX IX_TR_VIDEO (VIDEO_ID, SEGUNDO),
+    FOREIGN KEY (VIDEO_ID) REFERENCES VIDEOS(ID)
+  ) COMMENT='Transcricao com marcacao de tempo. RETENCAO: tudo, e a base de conhecimento'`,
+  `CREATE TABLE TEMAS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    NOME VARCHAR(150) NOT NULL UNIQUE
+  ) COMMENT='Temas (palavras-chave). RETENCAO: tudo'`,
+  `CREATE TABLE VIDEO_TEMAS (
+    ID INT AUTO_INCREMENT PRIMARY KEY,
+    VIDEO_ID INT NOT NULL,
+    TEMA_ID INT NOT NULL,
+    ORIGEM VARCHAR(10) DEFAULT 'IA',
+    MOMENTOS VARCHAR(1000),
+    UNIQUE KEY UQ_VT (VIDEO_ID, TEMA_ID),
+    FOREIGN KEY (VIDEO_ID) REFERENCES VIDEOS(ID),
+    FOREIGN KEY (TEMA_ID) REFERENCES TEMAS(ID)
+  ) COMMENT='Temas de cada video (IA ou editados pela dona). RETENCAO: tudo'`,
+];
+
+for (const sql of ddls) {
+  const r = await runDdlMitra({ projectId, sql });
+  console.log(sql.slice(13, 40).trim(), '->', JSON.stringify(r).slice(0, 200));
+}
+const r = await runDmlMitra({ projectId, sql: `INSERT INTO CONFIG (CHAVE, VALOR) VALUES
+  ('MODELO_TRANSCRICAO','gemini-2.5-flash'),
+  ('MODELO_ANALISE','gemini-2.5-flash'),
+  ('BLOCO_SEG','900'),
+  ('DURACAO_MIN_SEG','600'),
+  ('ORCAMENTO_SEG','230')` });
+console.log('config', JSON.stringify(r).slice(0, 200));
