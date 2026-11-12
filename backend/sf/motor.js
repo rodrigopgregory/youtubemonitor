@@ -137,8 +137,16 @@ async function gemini(cfg, modelos, body) {
   throw new Error(ultimo || 'Gemini sem resposta');
 }
 function jsonDe(txt) {
-  const a = txt.indexOf('{'), z = txt.lastIndexOf('}');
-  return JSON.parse(txt.slice(a, z + 1));
+  const a = txt.indexOf('{');
+  try { return JSON.parse(txt.slice(a, txt.lastIndexOf('}') + 1)); } catch (e) {
+    let prof = 0, aspas = false, esc = false;
+    for (let i = a; i < txt.length; i++) {
+      const ch = txt[i];
+      if (aspas) { if (esc) esc = false; else if (ch === '\\') esc = true; else if (ch === '"') aspas = false; continue; }
+      if (ch === '"') aspas = true; else if (ch === '{') prof++; else if (ch === '}' && --prof === 0) return JSON.parse(txt.slice(a, i + 1));
+    }
+    throw e;
+  }
 }
 function mmss(s) { const h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 60), se = s % 60; return (h ? h + ':' + String(mi).padStart(2, '0') : mi) + ':' + String(se).padStart(2, '0'); }
 
