@@ -183,7 +183,7 @@ async function analisar(cfg, v) {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
       'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}]}\n' +
-      'Em "mentores" liste os mentores, guias ou espiritos comunicantes que se manifestam ou sao citados pelo nome no video (ex.: Veludo, Pai Joaquim, Dr. Espanhol); lista vazia se nao houver. Escreva o nome sempre do mesmo jeito; mentores ja usados na base: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' +
+      'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium ou e o convidado principal do encontro. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupa, Shell Y Ann, Pai Joaquim, Dr. Espanhol. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Escreva o nome sempre do mesmo jeito; mentores ja usados na base: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' +
       'De 3 a 8 temas. Reaproveite um destes temas ja usados na base quando servir: ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
@@ -192,7 +192,7 @@ async function analisar(cfg, v) {
   const seg = t => { const p = String(t).split(':').map(Number); return p.reduce((a, b) => a * 60 + b, 0); };
   const temas = (j.temas || []).filter(t => t && t.nome).slice(0, 10).map(t => ({ nome: String(t.nome).trim().toLowerCase().slice(0, 150), momentos: (t.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') }));
   const nomes = new Set(temas.map(t => t.nome));
-  for (const mt of (j.mentores || []).filter(x => x && x.nome).slice(0, 10)) {
+  for (const mt of (j.mentores || []).filter(x => x && x.nome).slice(0, 3)) {
     const nome = ('mentor: ' + String(mt.nome).trim().toLowerCase()).slice(0, 150);
     if (nomes.has(nome)) continue; nomes.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
@@ -200,6 +200,7 @@ async function analisar(cfg, v) {
   const chave = 'M:' + v.ID;
   await lote(chave, temas);
   await sql('temasGarantirLote', { chave });
+  await sql('videoTemasIALimpar', { videoId: v.ID });
   await sql('videoTemasIA', { chave, videoId: v.ID });
   await sql('loteApagar', { chave });
   await sql('videoConcluir', { id: v.ID, resumo: String(j.resumo || '').slice(0, 20000), quando: agora() });
