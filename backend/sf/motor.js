@@ -170,18 +170,25 @@ async function transcreverAudio(cfg, v) {
 async function analisar(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   const texto = tr.map(x => '[' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n').slice(0, 600000);
-  const temasExist = ((await sql('temasNomes', {})).rows || []).map(r => r.NOME).slice(0, 300);
+  const temasExist = ((await sql('temasNomes', {})).rows || []).map(r => r.NOME);
   const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
-      'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}]}\n' +
-      'De 3 a 8 temas. Reaproveite um destes temas ja usados na base quando servir: ' + temasExist.join('; ') + '\n' +
+      'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}]}\n' +
+      'Em "mentores" liste os mentores, guias ou espiritos comunicantes que se manifestam ou sao citados pelo nome no video (ex.: Veludo, Pai Joaquim, Dr. Espanhol); lista vazia se nao houver. Escreva o nome sempre do mesmo jeito; mentores ja usados na base: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' +
+      'De 3 a 8 temas. Reaproveite um destes temas ja usados na base quando servir: ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
   });
   const j = jsonDe(txt);
   const seg = t => { const p = String(t).split(':').map(Number); return p.reduce((a, b) => a * 60 + b, 0); };
   const temas = (j.temas || []).filter(t => t && t.nome).slice(0, 10).map(t => ({ nome: String(t.nome).trim().toLowerCase().slice(0, 150), momentos: (t.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') }));
+  const nomes = new Set(temas.map(t => t.nome));
+  for (const mt of (j.mentores || []).filter(x => x && x.nome).slice(0, 10)) {
+    const nome = ('mentor: ' + String(mt.nome).trim().toLowerCase()).slice(0, 150);
+    if (nomes.has(nome)) continue; nomes.add(nome);
+    temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
+  }
   const chave = 'M:' + v.ID;
   await lote(chave, temas);
   await sql('temasGarantirLote', { chave });

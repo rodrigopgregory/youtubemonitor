@@ -16,7 +16,7 @@ export const sqls = [
   S('trechosInserirLote', `INSERT IGNORE INTO TRECHOS (VIDEO_ID, SEGUNDO, TEXTO) SELECT {{videoId}}, S, T FROM VW_LOTE_TRECHOS WHERE CHAVE = '{{chave}}'`, 'Grava trechos da transcrição'),
   S('videoProgresso', `UPDATE VIDEOS SET PROGRESSO_SEG = {{seg}} WHERE ID = {{id}}`, 'Progresso da transcrição pelo áudio'),
   S('trechosDoVideo', `SELECT SEGUNDO, TEXTO FROM TRECHOS WHERE VIDEO_ID = {{videoId}} ORDER BY SEGUNDO LIMIT {{limit}} OFFSET {{offset}}`, 'Trechos de um vídeo'),
-  S('temasNomes', `SELECT T.NOME FROM TEMAS T JOIN VIDEO_TEMAS VT ON VT.TEMA_ID = T.ID GROUP BY T.NOME ORDER BY COUNT(*) DESC LIMIT 300`, 'Temas já usados'),
+  S('temasNomes', `SELECT T.NOME FROM TEMAS T JOIN VIDEO_TEMAS VT ON VT.TEMA_ID = T.ID GROUP BY T.NOME ORDER BY (T.NOME LIKE 'mentor: %') DESC, COUNT(*) DESC LIMIT 400`, 'Temas já usados'),
   S('temasGarantirLote', `INSERT IGNORE INTO TEMAS (NOME) SELECT DISTINCT NOME FROM VW_LOTE_TEMAS WHERE CHAVE = '{{chave}}'`, 'Cria temas novos'),
   S('videoTemasIA', `INSERT INTO VIDEO_TEMAS (VIDEO_ID, TEMA_ID, ORIGEM, MOMENTOS) SELECT V.ID, T.ID, 'IA', L.MOM FROM VW_LOTE_TEMAS L JOIN TEMAS T ON T.NOME = L.NOME JOIN VIDEOS V ON V.ID = {{videoId}} AND V.TEMAS_EDITADOS = 0 WHERE L.CHAVE = '{{chave}}' ON DUPLICATE KEY UPDATE MOMENTOS = VALUES(MOMENTOS)`, 'Temas sugeridos pela IA (não mexe se a dona editou)'),
   S('videoConcluir', `UPDATE VIDEOS SET STATUS = 'ESTUDADO', RESUMO = '{{resumo}}', ESTUDADO_EM = '{{quando}}', ATUALIZADO_EM = '{{quando}}', MOTIVO = NULL WHERE ID = {{id}}`, 'Marca vídeo estudado'),
