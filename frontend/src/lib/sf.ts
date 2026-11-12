@@ -28,5 +28,7 @@ export const SF = {
   "motorAndamento": 86,
   "canaisLimiteMais": 91,
   "canaisNomes": 92,
-  "estudoAndamento": 93
+  "estudoAndamento": 93,
+  "exportVideos": 95,
+  "exportTrechos": 96
 } as const
