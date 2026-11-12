@@ -89,5 +89,9 @@ export function initMitra(): boolean {
     return true;
   }
 
-  return false;
+  configureSdkMitra({
+    ...(import.meta.env.VITE_MITRA_BASE_URL ? { baseURL: import.meta.env.VITE_MITRA_BASE_URL } : {}),
+    projectId: PROJECT_ID,
+  });
+  return true;
 }

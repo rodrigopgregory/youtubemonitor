@@ -1,12 +1,12 @@
-import { executeServerFunctionMitra } from 'mitra-interactions-sdk'
+import { executePublicServerFunctionMitra } from 'mitra-interactions-sdk'
 import { SF } from './sf'
 
 type Nome = keyof typeof SF
+const PROJECT_ID = Number(import.meta.env.VITE_MITRA_PROJECT_ID)
 
 export async function chamar<T = any>(nome: Nome, input: Record<string, unknown> = {}): Promise<T> {
-  const r = await executeServerFunctionMitra({ serverFunctionId: SF[nome], input })
-  const res = r.result
-  if (res.executionStatus === 'FAILED') throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
+  const res = await executePublicServerFunctionMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input })
+  if (res.status === 'FAILED') throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
   let out = res.output
   if (typeof out === 'string') { try { out = JSON.parse(out) } catch { /* texto */ } }
   return out as T

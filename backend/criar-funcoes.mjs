@@ -50,5 +50,8 @@ await sdk.updateServerFunctionMitra({ projectId, serverFunctionId: ids.motor, cr
 const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'estudarMais', 'trechosDoVideo', ...tela.map(f => f.name)];
 fs.writeFileSync('sf-tela.json', JSON.stringify(Object.fromEntries(telaNomes.map(n => [n, ids[n]]))));
 console.log('ok', Object.keys(ids).length);
+const publicas = ['avisoMarcarLido', 'avisoVideos', 'avisosListar', 'buscarTema', 'canaisListar', 'canaisNomes', 'canalCadastrar', 'chatBusca', 'estudarMais', 'exportTrechos', 'exportVideos', 'painelResumo', 'resumoBusca', 'temaEditar', 'temasListar', 'trechosDoVideo', 'videoDetalhe', 'videoTemas', 'videosListar'];
+for (const n of Object.keys(ids)) await sdk.togglePublicExecutionMitra({ projectId, serverFunctionId: ids[n], publicExecution: publicas.includes(n) });
+console.log('públicas', publicas.length);
 await sdk.setProfileServerFunctionsMitra({ projectId, profileId: 1, serverFunctionIds: Object.values(ids) });
 console.log('perfil ok');
