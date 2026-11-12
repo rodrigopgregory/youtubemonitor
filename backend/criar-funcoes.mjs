@@ -40,13 +40,13 @@ export const sqls = [
 ];
 const ids = {};
 for (const f of [...sqls, ...tela]) ids[f.name] = await garantirSF(f);
-const JS = ['motor', 'canalCadastrar', 'temaEditar', 'resumoBusca'];
+const JS = ['motor', 'canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca'];
 for (const n of JS) ids[n] = await garantirSF({ name: n, type: 'JAVASCRIPT', code: 'return 1;' });
 fs.writeFileSync('sf-ids.json', JSON.stringify(ids, null, 1));
-const desc = { motor: 'Motor: carga histórica, checagem diária e estudo dos vídeos', canalCadastrar: 'Cadastra canal pelo link', temaEditar: 'Acrescenta, tira ou renomeia tema de um vídeo', resumoBusca: 'Resumo do tema feito só com a base' };
+const desc = { motor: 'Motor: carga histórica, checagem diária e estudo dos vídeos', canalCadastrar: 'Cadastra canal pelo link', temaEditar: 'Acrescenta, tira ou renomeia tema de um vídeo', resumoBusca: 'Resumo do tema feito só com a base', chatBusca: 'Chat de busca: entende o pedido e responde só com a base' };
 for (const n of JS) await garantirSF({ name: n, type: 'JAVASCRIPT', code: fs.readFileSync('sf/' + n + '.js', 'utf8').replace('__SF__', JSON.stringify(ids)), description: desc[n] });
 await sdk.updateServerFunctionMitra({ projectId, serverFunctionId: ids.motor, cronExpression: '0 5 * * * *', cronInputJson: JSON.stringify({ modo: 'agendado' }) });
-const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'trechosDoVideo', ...tela.map(f => f.name)];
+const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'trechosDoVideo', ...tela.map(f => f.name)];
 fs.writeFileSync('sf-tela.json', JSON.stringify(Object.fromEntries(telaNomes.map(n => [n, ids[n]]))));
 console.log('ok', Object.keys(ids).length);
 await sdk.setProfileServerFunctionsMitra({ projectId, profileId: 1, serverFunctionIds: Object.values(ids) });

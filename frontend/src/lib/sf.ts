@@ -2,6 +2,7 @@ export const SF = {
   "canalCadastrar": 87,
   "temaEditar": 88,
   "resumoBusca": 89,
+  "chatBusca": 90,
   "trechosDoVideo": 43,
   "canalPorYt": 66,
   "canalInserir": 67,

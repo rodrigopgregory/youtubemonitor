@@ -6,6 +6,7 @@ import Layout from './components/Layout'
 import BuscaPage from './pages/BuscaPage'
 import VideosPage from './pages/VideosPage'
 import CanaisPage from './pages/CanaisPage'
+import ChatPage from './pages/ChatPage'
 
 function App() {
   const [configured, setConfigured] = useState(initMitra)
@@ -15,6 +16,7 @@ function App() {
       <Route path="/login" element={<LoginPage onLogin={() => setConfigured(true)} />} />
       <Route element={configured ? <Layout /> : <Navigate to="/login" replace />}>
         <Route path="/" element={<BuscaPage />} />
+        <Route path="/chat" element={<ChatPage />} />
         <Route path="/videos" element={<VideosPage />} />
         <Route path="/canais" element={<CanaisPage />} />
       </Route>
