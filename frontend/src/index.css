@@ -41,7 +41,7 @@
   --fg-disabled: #b3b1bc;
   --fg-inverted: #ffffff;
 
-  --brand: #4b5563;
+  --brand: #6d4fc2;
   --accent: var(--brand);
   --accent-hover: color-mix(in srgb, var(--brand) 88%, black);
   --accent-soft: color-mix(in srgb, var(--brand) 8%, transparent);
@@ -103,7 +103,7 @@
   --fg-disabled: #484d53;
   --fg-inverted: #0b0c0e;
 
-  --brand: #a0a7b0;
+  --brand: #a990f0;
   --accent: var(--brand);
   /* Marca clara no escuro: o texto sobre ela e' a tinta escura, nao branco */
   --accent-fg: #0b0c0e;

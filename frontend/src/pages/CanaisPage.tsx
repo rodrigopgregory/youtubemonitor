@@ -1,0 +1,76 @@
+import { useCallback, useEffect, useState } from 'react'
+import { Plus, ExternalLink } from 'lucide-react'
+import Button from '../components/ui/Button'
+import { Card } from '../components/ui/Card'
+import Badge from '../components/ui/Badge'
+import { linhas, chamar, dataBr } from '../lib/api'
+
+interface Canal { ID: number; NOME: string; HANDLE: string; URL: string; THUMB: string; CARGA_STATUS: string; CARGA_MSG: string; ULTIMA_CHECAGEM: string | null; CRIADO_EM: string; ESTUDADOS: number; FILA: number; PENDENTES: number; TOTAL: number }
+
+const st: Record<string, { l: string; v: 'success' | 'info' | 'neutral' }> = {
+  LISTANDO: { l: 'Levantando vídeos', v: 'neutral' }, ESTUDANDO: { l: 'Estudando o acervo', v: 'info' }, EM_DIA: { l: 'Em dia', v: 'success' },
+}
+
+export default function CanaisPage() {
+  const [canais, setCanais] = useState<Canal[]>([])
+  const [url, setUrl] = useState('')
+  const [msg, setMsg] = useState<{ t: string; erro: boolean } | null>(null)
+  const [salvando, setSalvando] = useState(false)
+
+  const carregar = useCallback(() => { linhas<Canal>('canaisListar').then(setCanais) }, [])
+  useEffect(() => { carregar(); const t = setInterval(carregar, 30000); return () => clearInterval(t) }, [carregar])
+
+  async function cadastrar(e: React.FormEvent) {
+    e.preventDefault(); if (!url.trim()) return
+    setSalvando(true); setMsg(null)
+    try {
+      const r = await chamar<{ ok: boolean; nome?: string; erro?: string }>('canalCadastrar', { url })
+      if (r.ok) { setMsg({ t: `Canal "${r.nome}" cadastrado. O levantamento dos vídeos já começou.`, erro: false }); setUrl(''); carregar() }
+      else setMsg({ t: r.erro || 'Não foi possível cadastrar.', erro: true })
+    } catch (er) { setMsg({ t: (er as Error).message, erro: true }) } finally { setSalvando(false) }
+  }
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-[22px] font-semibold">Canais monitorados</h1>
+        <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Cada canal novo tem o acervo estudado, e todo dia o sistema confere se há vídeos novos. Entram vídeos e lives gravadas com mais de 10 minutos.</p>
+      </div>
+      <Card className="p-5">
+        <form onSubmit={cadastrar} className="flex flex-col sm:flex-row gap-2">
+          <input className="controle flex-1" placeholder="Cole o link do canal, ex.: https://www.youtube.com/@NomeDoCanal" value={url} onChange={e => setUrl(e.target.value)} />
+          <Button variant="primary" type="submit" disabled={salvando || !url.trim()}><Plus size={15} />{salvando ? 'Cadastrando…' : 'Cadastrar canal'}</Button>
+        </form>
+        {msg && <p className="text-[13.5px] mt-2" style={{ color: msg.erro ? 'var(--danger)' : 'var(--success-text)' }}>{msg.t}</p>}
+      </Card>
+      <div className="grid gap-3 md:grid-cols-2">
+        {canais.map(c => {
+          const s = st[c.CARGA_STATUS] || { l: c.CARGA_STATUS, v: 'neutral' as const }
+          const tot = Number(c.TOTAL || 0), est = Number(c.ESTUDADOS || 0)
+          return (
+            <Card key={c.ID} className="p-5 flex flex-col gap-3">
+              <div className="flex items-center gap-3">
+                {c.THUMB && <img src={c.THUMB} alt="" className="w-11 h-11 rounded-full object-cover" />}
+                <div className="min-w-0 flex-1">
+                  <div className="text-[15px] font-medium truncate">{c.NOME}</div>
+                  <a href={c.URL} target="_blank" rel="noreferrer" className="text-[12.5px] inline-flex items-center gap-1 hover:underline" style={{ color: 'var(--fg-muted)' }}>{c.HANDLE || c.URL}<ExternalLink size={11} /></a>
+                </div>
+                <Badge variant={s.v} dot>{s.l}</Badge>
+              </div>
+              <div className="h-2 rounded-full overflow-hidden" style={{ background: 'var(--surface-muted)' }}>
+                <div className="h-full rounded-full" style={{ width: tot ? `${Math.round(est / tot * 100)}%` : '0%', background: 'var(--accent)' }} />
+              </div>
+              <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]" style={{ color: 'var(--fg-muted)' }}>
+                <span><b style={{ color: 'var(--fg)' }}>{est}</b> de {tot} estudados</span>
+                {Number(c.FILA) > 0 && <span>{c.FILA} na fila</span>}
+                {Number(c.PENDENTES) > 0 && <span style={{ color: 'var(--warning-text)' }}>{c.PENDENTES} pendentes</span>}
+                <span>Última checagem: {c.ULTIMA_CHECAGEM ? dataBr(c.ULTIMA_CHECAGEM) + ' ' + c.ULTIMA_CHECAGEM.slice(11, 16) : 'ainda não'}</span>
+              </div>
+              {c.CARGA_STATUS === 'LISTANDO' && c.CARGA_MSG && <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{c.CARGA_MSG}</p>}
+            </Card>)
+        })}
+        {canais.length === 0 && <Card className="p-6"><p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum canal cadastrado ainda.</p></Card>}
+      </div>
+    </div>
+  )
+}
