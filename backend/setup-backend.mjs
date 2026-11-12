@@ -79,6 +79,7 @@ const ddls = [
   ) COMMENT='Temas de cada video (IA ou editados pela dona). RETENCAO: tudo'`,
 ];
 
+ddls.push(`ALTER TABLE CANAIS ADD COLUMN TEM_MENTOR TINYINT NOT NULL DEFAULT 0`);
 for (const sql of ddls) {
   const r = await runDdlMitra({ projectId, sql });
   console.log(sql.slice(13, 40).trim(), '->', JSON.stringify(r).slice(0, 200));
