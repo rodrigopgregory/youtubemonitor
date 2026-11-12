@@ -33,15 +33,32 @@ const conversa = hist.map(x => (x.papel === 'agente' ? 'ASSISTENTE: ' : 'PESSOA:
 let plano;
 try {
   const temas = ((await sql('temasNomes', {})).rows || []).map(r => r.NOME).slice(0, 200);
+  const canaisLista = ((await sql('canaisNomes', {})).rows || []);
   plano = JSON.parse(await gemini(
     'Voce ajuda uma pessoa a pesquisar uma base de transcricoes de videos de espiritualidade (canais do YouTube). Leia o pedido e devolva so JSON:\n' +
-    '{"tipo":"busca"|"fora","termos":["..."],"ordem":"relevancia"|"recentes","somenteLives":true|false}\n' +
+    '{"tipo":"busca"|"estudar"|"andamento"|"fora","termos":["..."],"ordem":"relevancia"|"recentes","somenteLives":true|false,"quantidade":<numero>,"canalId":<numero ou 0>}\n' +
+    '- tipo "estudar": a pessoa pede para estudar/rodar/processar/carregar mais videos (ex.: "roda mais 50 videos", "estuda mais 200 do Wagner"). quantidade = o numero pedido (se nao disser, 50; se pedir todos, 2000). canalId = o ID do canal citado, ou 0 para todos. Canais: ' + canaisLista.map(c => c.ID + '=' + c.NOME).join(', ') + '\n' +
+    '- tipo "andamento": a pessoa pergunta quantos videos ja foram estudados, como esta o estudo, o que falta.\n' +
     '- termos: de 2 a 6 termos de UMA ou DUAS palavras cada, em portugues, do jeito que alguem falaria num video (o assunto pedido, sinonimos e palavras-chave; ex.: para "protecao contra energias negativas" use "protecao", "energia negativa", "obsessor", "defesa energetica"). Use a conversa anterior para entender pedidos como "e sobre isso nas lives?".\n' +
     '- ordem: "recentes" se a pessoa pedir os mais novos/recentes/ultimos; senao "relevancia".\n' +
     '- tipo "fora" so se o pedido nao tiver nada a ver com procurar assuntos nos videos.\n' +
     'Temas que ja existem na base (use quando servir): ' + temas.join('; ') + '\n\nCONVERSA ANTERIOR:\n' + (conversa || '(nenhuma)') + '\n\nPEDIDO: ' + pedido, true));
 } catch (e) { return { ok: false, erro: 'Não consegui entender o pedido agora. Tente de novo em instantes.' }; }
 
+if (plano.tipo === 'andamento') {
+  const linhas = ((await sql('estudoAndamento', {})).rows || []);
+  const txt = linhas.map(c => c.NOME + ': ' + Number(c.ESTUDADOS || 0) + ' vídeos estudados, ' + Number(c.FILA || 0) + ' na fila' + (Number(c.PENDENTES || 0) ? ', ' + c.PENDENTES + ' pendentes (tentados de novo na próxima checagem)' : '') + '.').join('\n');
+  return { ok: true, resposta: (txt || 'Nenhum canal cadastrado ainda.') + '\n\nPara estudar mais, peça por exemplo: "estude mais 100 vídeos".', videos: [], termos: [] };
+}
+if (plano.tipo === 'estudar') {
+  const quantidade = Math.min(2000, Math.max(1, Math.floor(Number(plano.quantidade) || 50)));
+  const canaisLista = ((await sql('canaisNomes', {})).rows || []);
+  const canal = canaisLista.find(c => Number(c.ID) === Number(plano.canalId));
+  if (!canaisLista.length) return { ok: true, resposta: 'Ainda não há canal cadastrado. Cadastre um na tela Canais.', videos: [], termos: [] };
+  const onde = canal ? 'do canal ' + canal.NOME : (canaisLista.length === 1 ? 'do canal ' + canaisLista[0].NOME : 'de cada canal');
+  return { ok: true, resposta: 'Posso colocar mais ' + quantidade + ' vídeos ' + onde + ' na fila de estudo, seguindo dos mais recentes para os mais antigos que ainda não foram estudados. Isso usa a cota do Gemini da sua chave. Confirma?', videos: [], termos: [],
+    acao: { tipo: 'estudar', quantidade, canalId: canal ? Number(canal.ID) : 0, rotulo: 'Estudar mais ' + quantidade + ' vídeos' } };
+}
 if (plano.tipo === 'fora') return { ok: true, resposta: 'Eu busco assuntos dentro dos vídeos dos canais cadastrados. Diga um tema ou uma pergunta, por exemplo: "o que ele fala sobre chakra coronário?" ou "lives mais recentes sobre mantras".', videos: [], termos: [] };
 const termos = [...new Set((plano.termos || []).map(t => String(t).trim().toLowerCase()).filter(t => t.length >= 3))].slice(0, 5);
 if (!termos.length) return { ok: true, resposta: 'Não entendi qual assunto buscar. Pode dizer o tema com outras palavras?', videos: [], termos: [] };

@@ -26,7 +26,7 @@ export const sqls = [
   S('videoForaDoFiltro', `UPDATE VIDEOS SET STATUS = 'FORA', MOTIVO = 'Duração de até 10 minutos.' WHERE ID = {{id}}`, 'Vídeo curto'),
   S('videoOrigem', `UPDATE VIDEOS SET ORIGEM = '{{origem}}' WHERE ID = {{id}}`, 'Origem da transcrição'),
   S('videosRetentar', `UPDATE VIDEOS SET STATUS = 'FILA' WHERE STATUS = 'PENDENTE' AND TENTATIVAS < 10`, 'Recoloca pendentes na fila'),
-  S('canaisParaMotor', `SELECT ID, NOME, UPLOADS_PLAYLIST, CARGA_STATUS, CARGA_TOKEN, POS_BASE, ELEGIVEIS FROM CANAIS ORDER BY ID`, 'Canais monitorados'),
+  S('canaisParaMotor', `SELECT ID, NOME, UPLOADS_PLAYLIST, CARGA_STATUS, CARGA_TOKEN, POS_BASE, ELEGIVEIS, LIMITE FROM CANAIS ORDER BY ID`, 'Canais monitorados'),
   S('filaProximo', `SELECT V.ID, V.YT_VIDEO_ID, V.TITULO, V.DURACAO_SEG, V.TIPO, V.ORIGEM, V.PROGRESSO_SEG FROM VIDEOS V JOIN CANAIS C ON C.ID = V.CANAL_ID WHERE V.STATUS = 'FILA' AND C.CARGA_STATUS <> 'LISTANDO' AND ({{canalId}} = 0 OR V.CANAL_ID = {{canalId}}) ORDER BY V.PRIORIDADE DESC, V.ORDEM ASC LIMIT 1`, 'Próximo vídeo da fila'),
   S('filaContar', `SELECT COUNT(*) N FROM VIDEOS WHERE STATUS = 'FILA'`, 'Tamanho da fila'),
   S('avisoPendentes', `SELECT COUNT(*) N FROM VIDEOS WHERE DESCOBERTA = 'DIARIA' AND STATUS = 'ESTUDADO' AND AVISO_ID IS NULL`, 'Vídeos novos sem aviso'),
@@ -40,13 +40,13 @@ export const sqls = [
 ];
 const ids = {};
 for (const f of [...sqls, ...tela]) ids[f.name] = await garantirSF(f);
-const JS = ['motor', 'canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca'];
+const JS = ['motor', 'canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'estudarMais'];
 for (const n of JS) ids[n] = await garantirSF({ name: n, type: 'JAVASCRIPT', code: 'return 1;' });
 fs.writeFileSync('sf-ids.json', JSON.stringify(ids, null, 1));
-const desc = { motor: 'Motor: carga histórica, checagem diária e estudo dos vídeos', canalCadastrar: 'Cadastra canal pelo link', temaEditar: 'Acrescenta, tira ou renomeia tema de um vídeo', resumoBusca: 'Resumo do tema feito só com a base', chatBusca: 'Chat de busca: entende o pedido e responde só com a base' };
+const desc = { motor: 'Motor: carga histórica, checagem diária e estudo dos vídeos', canalCadastrar: 'Cadastra canal pelo link', temaEditar: 'Acrescenta, tira ou renomeia tema de um vídeo', resumoBusca: 'Resumo do tema feito só com a base', chatBusca: 'Chat de busca: entende o pedido e responde só com a base', estudarMais: 'Coloca mais vídeos na fila de estudo (pedido pelo chat)' };
 for (const n of JS) await garantirSF({ name: n, type: 'JAVASCRIPT', code: fs.readFileSync('sf/' + n + '.js', 'utf8').replace('__SF__', JSON.stringify(ids)), description: desc[n] });
 await sdk.updateServerFunctionMitra({ projectId, serverFunctionId: ids.motor, cronExpression: '0 5 * * * *', cronInputJson: JSON.stringify({ modo: 'agendado' }) });
-const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'trechosDoVideo', ...tela.map(f => f.name)];
+const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'estudarMais', 'trechosDoVideo', ...tela.map(f => f.name)];
 fs.writeFileSync('sf-tela.json', JSON.stringify(Object.fromEntries(telaNomes.map(n => [n, ids[n]]))));
 console.log('ok', Object.keys(ids).length);
 await sdk.setProfileServerFunctionsMitra({ projectId, profileId: 1, serverFunctionIds: Object.values(ids) });

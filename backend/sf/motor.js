@@ -56,7 +56,7 @@ async function listarPagina(canal, token) {
 }
 
 async function cargaHistorica(canal, cfg, log) {
-  const limite = Number(cfg.LIMITE_CARGA || 0);
+  const limite = Number(canal.LIMITE || cfg.LIMITE_CARGA || 0);
   let token = canal.CARGA_TOKEN || null;
   let pos = Number(canal.POS_BASE || 0);
   let total = Number(canal.ELEGIVEIS || 0);

@@ -3,6 +3,7 @@ export const SF = {
   "temaEditar": 88,
   "resumoBusca": 89,
   "chatBusca": 90,
+  "estudarMais": 94,
   "trechosDoVideo": 43,
   "canalPorYt": 66,
   "canalInserir": 67,
@@ -24,5 +25,8 @@ export const SF = {
   "avisosListar": 83,
   "avisoVideos": 84,
   "avisoMarcarLido": 85,
-  "motorAndamento": 86
+  "motorAndamento": 86,
+  "canaisLimiteMais": 91,
+  "canaisNomes": 92,
+  "estudoAndamento": 93
 } as const

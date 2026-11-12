@@ -5,10 +5,11 @@ import Badge from '../components/ui/Badge'
 import { chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; MOMS: string }
-interface Msg { papel: 'pessoa' | 'agente'; texto: string; videos?: Vid[]; termos?: string[]; erro?: boolean }
+interface Acao { tipo: 'estudar'; quantidade: number; canalId: number; rotulo: string; estado?: 'feito' | 'cancelado' }
+interface Msg { papel: 'pessoa' | 'agente'; texto: string; videos?: Vid[]; termos?: string[]; erro?: boolean; acao?: Acao }
 
 const CHAVE = 'monitor-yt-chat'
-const exemplos = ['O que ele fala sobre proteção contra energias negativas?', 'Vídeos mais recentes sobre mentores espirituais', 'Como ele explica a saída do corpo?', 'Lives que falam de mantras']
+const exemplos = ['O que ele fala sobre proteção contra energias negativas?', 'Vídeos mais recentes sobre mentores espirituais', 'Lives que falam de mantras', 'Estude mais 100 vídeos', 'Como está o estudo?']
 
 function carregar(): Msg[] {
   try { return JSON.parse(localStorage.getItem(CHAVE) || '[]') } catch { return [] }
@@ -28,8 +29,26 @@ export default function ChatPage() {
     const historico = msgs.slice(-8).map(m => ({ papel: m.papel, texto: m.texto }))
     setMsgs(m => [...m, { papel: 'pessoa', texto: q }]); setTexto(''); setPensando(true)
     try {
-      const r = await chamar<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[] }>('chatBusca', { texto: q, mensagens: historico })
-      setMsgs(m => [...m, r.ok ? { papel: 'agente', texto: r.resposta || '', videos: r.videos, termos: r.termos } : { papel: 'agente', texto: r.erro || 'Não consegui responder agora.', erro: true }])
+      const r = await chamar<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[]; acao?: Acao }>('chatBusca', { texto: q, mensagens: historico })
+      setMsgs(m => [...m, r.ok ? { papel: 'agente', texto: r.resposta || '', videos: r.videos, termos: r.termos, acao: r.acao } : { papel: 'agente', texto: r.erro || 'Não consegui responder agora.', erro: true }])
+    } catch (e) {
+      setMsgs(m => [...m, { papel: 'agente', texto: (e as Error).message, erro: true }])
+    } finally { setPensando(false) }
+  }
+
+  function marcar(i: number, estado: 'feito' | 'cancelado') {
+    setMsgs(m => m.map((x, j) => j === i && x.acao ? { ...x, acao: { ...x.acao, estado } } : x))
+  }
+
+  async function executar(i: number, a: Acao) {
+    if (pensando) return
+    setPensando(true)
+    try {
+      const r = await chamar<{ ok: boolean; erro?: string; quantidade?: number }>('estudarMais', { quantidade: a.quantidade, canalId: a.canalId })
+      marcar(i, 'feito')
+      setMsgs(m => [...m, r.ok
+        ? { papel: 'agente', texto: `Pronto: ${r.quantidade} vídeos a mais entraram na fila. O estudo já começou e segue sozinho, uns 8 vídeos por minuto quando há legenda no YouTube. Pergunte "como está o estudo?" quando quiser.` }
+        : { papel: 'agente', texto: r.erro || 'Não consegui colocar os vídeos na fila.', erro: true }])
     } catch (e) {
       setMsgs(m => [...m, { papel: 'agente', texto: (e as Error).message, erro: true }])
     } finally { setPensando(false) }
@@ -40,7 +59,7 @@ export default function ChatPage() {
       <div className="flex items-end justify-between gap-3 pb-4">
         <div>
           <h1 className="text-[22px] font-semibold">Chat</h1>
-          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Peça com as suas palavras o que quer encontrar. A resposta usa só o que foi falado nos vídeos da base.</p>
+          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Peça com as suas palavras o que quer encontrar. A resposta usa só o que foi falado nos vídeos da base. Você também pode pedir para estudar mais vídeos.</p>
         </div>
         {msgs.length > 0 && <Button variant="ghost" size="sm" onClick={() => setMsgs([])}><Trash2 size={14} />Nova conversa</Button>}
       </div>
@@ -60,6 +79,13 @@ export default function ChatPage() {
         ) : (
           <div key={i} className="self-start max-w-[92%] flex flex-col gap-3">
             <div className="rounded-2xl rounded-bl-md px-4 py-3 text-[14px] leading-relaxed whitespace-pre-line" style={{ background: 'var(--surface-muted)', color: m.erro ? 'var(--danger)' : 'var(--fg)' }}>{m.texto}</div>
+            {m.acao && (
+              m.acao.estado ? <span className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{m.acao.estado === 'feito' ? 'Confirmado.' : 'Cancelado.'}</span> :
+              <div className="flex gap-2">
+                <Button size="sm" variant="primary" disabled={pensando} onClick={() => executar(i, m.acao!)}>{m.acao.rotulo}</Button>
+                <Button size="sm" variant="secondary" disabled={pensando} onClick={() => marcar(i, 'cancelado')}>Cancelar</Button>
+              </div>
+            )}
             {m.videos && m.videos.length > 0 && (
               <div className="flex flex-col gap-2">
                 <span className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{m.videos.length} {m.videos.length === 1 ? 'vídeo encontrado' : 'vídeos encontrados'}{m.termos?.length ? ' · procurei por: ' + m.termos.join(', ') : ''}</span>

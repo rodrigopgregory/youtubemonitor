@@ -22,4 +22,7 @@ export const tela = [
   S('avisoVideos', `SELECT V.ID, V.YT_VIDEO_ID, V.TITULO, V.PUBLICADO_EM, C.NOME CANAL FROM VIDEOS V JOIN CANAIS C ON C.ID = V.CANAL_ID WHERE V.AVISO_ID = {{id}} ORDER BY V.PUBLICADO_EM DESC`, 'Vídeos do aviso'),
   S('avisoMarcarLido', `UPDATE AVISOS SET LIDO = TRUE, LIDO_EM = DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s') WHERE ID = {{id}} AND LIDO = FALSE`, 'Marca aviso como lido'),
   S('motorAndamento', `SELECT VALOR LOCK_ATE FROM CONFIG WHERE CHAVE = 'LOCK'`, 'Se o motor está rodando'),
+  S('canaisLimiteMais', `UPDATE CANAIS SET LIMITE = (SELECT COUNT(*) FROM VIDEOS V WHERE V.CANAL_ID = CANAIS.ID) + {{qtd}}, CARGA_STATUS = 'LISTANDO', CARGA_TOKEN = '', POS_BASE = 0, ELEGIVEIS = 0, CARGA_MSG = 'Levantando mais {{qtd}} vídeos do canal' WHERE {{canalId}} = 0 OR ID = {{canalId}}`, 'Libera mais vídeos para estudar'),
+  S('canaisNomes', `SELECT ID, NOME, HANDLE FROM CANAIS ORDER BY ID`, 'Nomes dos canais'),
+  S('estudoAndamento', `SELECT C.ID, C.NOME, SUM(V.STATUS = 'ESTUDADO') ESTUDADOS, SUM(V.STATUS = 'FILA') FILA, SUM(V.STATUS = 'PENDENTE') PENDENTES FROM CANAIS C LEFT JOIN VIDEOS V ON V.CANAL_ID = C.ID GROUP BY C.ID, C.NOME ORDER BY C.ID`, 'Andamento do estudo por canal'),
 ];
