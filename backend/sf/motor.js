@@ -245,7 +245,11 @@ async function estudar(cfg, v, log) {
       }
       if (!ok) {
         if (!cfg.GEMINI_OK) { await sql('videoPendente', { id: v.ID, motivo: 'Sem legenda no YouTube e a transcrição pelo áudio ainda não está ligada.' }); return; }
-        if (v.ORIGEM !== 'AUDIO') { await sql('videoOrigem', { id: v.ID, origem: 'AUDIO' }); v.PROGRESSO_SEG = 0; }
+        if (v.ORIGEM !== 'AUDIO') {
+          await sql('videoOrigem', { id: v.ID, origem: 'AUDIO' }); v.PROGRESSO_SEG = 0;
+          const comLegenda = Number((((await sql('filaComLegenda', {})).rows || [{}])[0] || {}).N || 0);
+          if (comLegenda > 0) { log.push(v.YT_VIDEO_ID + ': sem legenda, fica para o fim da fila'); return; }
+        }
         const terminou = await transcreverAudio(cfg, v);
         if (!terminou) { log.push(v.YT_VIDEO_ID + ': transcrição pelo áudio continua na próxima rodada'); return; }
       }
