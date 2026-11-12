@@ -8,7 +8,7 @@ import { linhas, chamar, dataBr } from '../lib/api'
 import { useCanal } from '../components/CanalFiltro'
 import { exportarTemas, exportarTranscricoes } from '../lib/exportar'
 
-interface Canal { ID: number; NOME: string; HANDLE: string; URL: string; THUMB: string; CARGA_STATUS: string; CARGA_MSG: string; ULTIMA_CHECAGEM: string | null; CRIADO_EM: string; ESTUDADOS: number; FILA: number; PENDENTES: number; TOTAL: number }
+interface Canal { ID: number; NOME: string; HANDLE: string; URL: string; THUMB: string; CARGA_STATUS: string; CARGA_MSG: string; ULTIMA_CHECAGEM: string | null; CRIADO_EM: string; ESTUDADOS: number; FILA: number; PENDENTES: number; SEM_LEGENDA: number; TOTAL: number }
 
 const st: Record<string, { l: string; v: 'success' | 'info' | 'neutral' }> = {
   LISTANDO: { l: 'Levantando vídeos', v: 'neutral' }, ESTUDANDO: { l: 'Estudando o acervo', v: 'info' }, EM_DIA: { l: 'Em dia', v: 'success' },
@@ -75,7 +75,8 @@ export default function CanaisPage() {
               </div>
               <div className="flex flex-wrap gap-x-4 gap-y-1 text-[13px]" style={{ color: 'var(--fg-muted)' }}>
                 <span><b style={{ color: 'var(--fg)' }}>{est}</b> de {tot} estudados</span>
-                {Number(c.FILA) > 0 && <span>{c.FILA} na fila</span>}
+                {Number(c.FILA) - Number(c.SEM_LEGENDA || 0) > 0 && <span>{Number(c.FILA) - Number(c.SEM_LEGENDA || 0)} com legenda na fila</span>}
+                {Number(c.SEM_LEGENDA) > 0 && <span>{c.SEM_LEGENDA} sem legenda aguardando</span>}
                 {Number(c.PENDENTES) > 0 && <span style={{ color: 'var(--warning-text)' }}>{c.PENDENTES} pendentes</span>}
                 <span>Última checagem: {c.ULTIMA_CHECAGEM ? dataBr(c.ULTIMA_CHECAGEM) + ' ' + c.ULTIMA_CHECAGEM.slice(11, 16) : 'ainda não'}</span>
               </div>
@@ -88,6 +89,7 @@ export default function CanaisPage() {
                 <Button size="sm" variant="ghost" disabled={!!exportando || !est} onClick={() => exportar(c.ID, 'zip', () => exportarTranscricoes(c.ID, c.NOME, m => setExportMsg({ id: c.ID, msg: m })).then(r => `ZIP baixado com ${r.videos} transcrições.`))}><Download size={14} />Exportar transcrições (ZIP)</Button>
               </div>
               {exportMsg && exportMsg.id === c.ID && <p className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>{exportMsg.msg}</p>}
+              {Number(c.SEM_LEGENDA) > 0 && Number(c.FILA) === Number(c.SEM_LEGENDA) && <p className="text-[12.5px]" style={{ color: 'var(--warning-text)' }}>Todos os vídeos com legenda já foram estudados. Os {c.SEM_LEGENDA} sem legenda estão aguardando.</p>}
               {c.CARGA_STATUS === 'LISTANDO' && c.CARGA_MSG && <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{c.CARGA_MSG}</p>}
             </Card>)
         })}

@@ -47,7 +47,7 @@ try {
 
 if (plano.tipo === 'andamento') {
   const linhas = ((await sql('estudoAndamento', {})).rows || []);
-  const txt = linhas.map(c => c.NOME + ': ' + Number(c.ESTUDADOS || 0) + ' vídeos estudados, ' + Number(c.FILA || 0) + ' na fila' + (Number(c.PENDENTES || 0) ? ', ' + c.PENDENTES + ' pendentes (tentados de novo na próxima checagem)' : '') + '.').join('\n');
+  const txt = linhas.map(c => { const sem = Number(c.SEM_LEGENDA || 0), comLeg = Number(c.FILA || 0) - sem; return c.NOME + ': ' + Number(c.ESTUDADOS || 0) + ' vídeos estudados, ' + comLeg + ' com legenda na fila' + (sem ? ', ' + sem + ' sem legenda aguardando' : '') + (Number(c.PENDENTES || 0) ? ', ' + c.PENDENTES + ' pendentes (tentados de novo na próxima checagem)' : '') + '.' + (comLeg === 0 && sem ? ' Todos os vídeos com legenda já foram estudados.' : ''); }).join('\n');
   return { ok: true, resposta: (txt || 'Nenhum canal cadastrado ainda.') + '\n\nPara estudar mais, peça por exemplo: "estude mais 100 vídeos".', videos: [], termos: [] };
 }
 if (plano.tipo === 'estudar') {

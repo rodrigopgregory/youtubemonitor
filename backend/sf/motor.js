@@ -245,10 +245,11 @@ async function estudar(cfg, v, log) {
       }
       if (!ok) {
         if (!cfg.GEMINI_OK) { await sql('videoPendente', { id: v.ID, motivo: 'Sem legenda no YouTube e a transcrição pelo áudio ainda não está ligada.' }); return; }
+        if (v.ORIGEM === 'AUDIO' && cfg.AUDIO_LIGADO !== '1') return;
         if (v.ORIGEM !== 'AUDIO') {
           await sql('videoOrigem', { id: v.ID, origem: 'AUDIO' }); v.PROGRESSO_SEG = 0;
           const comLegenda = Number((((await sql('filaComLegenda', {})).rows || [{}])[0] || {}).N || 0);
-          if (comLegenda > 0) { log.push(v.YT_VIDEO_ID + ': sem legenda, fica para o fim da fila'); return; }
+          if (cfg.AUDIO_LIGADO !== '1' || comLegenda > 0) { log.push(v.YT_VIDEO_ID + ': sem legenda, fica para o fim da fila'); return; }
         }
         const terminou = await transcreverAudio(cfg, v);
         if (!terminou) { log.push(v.YT_VIDEO_ID + ': transcrição pelo áudio continua na próxima rodada'); return; }
@@ -296,7 +297,7 @@ try {
   }
   let estudados = 0; const vistos = new Set();
   while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
-    const fila = ((await sql('filaProximo', { canalId: Number(event.canalId || 0) })).rows || []);
+    const fila = ((await sql('filaProximo', { canalId: Number(event.canalId || 0), audio: cfg.AUDIO_LIGADO === '1' ? 1 : 0 })).rows || []);
     if (!fila.length || vistos.has(fila[0].ID)) break;
     vistos.add(fila[0].ID);
     await estudar(cfg, fila[0], log);
