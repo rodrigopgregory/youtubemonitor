@@ -5,6 +5,7 @@ export const SF = {
   "chatBusca": 90,
   "estudarMais": 94,
   "trechosDoVideo": 43,
+  "playlistsListar": 106,
   "canalPorYt": 66,
   "canalInserir": 67,
   "canaisListar": 68,

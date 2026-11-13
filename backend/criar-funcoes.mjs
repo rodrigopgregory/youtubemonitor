@@ -27,7 +27,7 @@ export const sqls = [
   S('videoForaDoFiltro', `UPDATE VIDEOS SET STATUS = 'FORA', MOTIVO = 'Duração de até 10 minutos.' WHERE ID = {{id}}`, 'Vídeo curto'),
   S('videoOrigem', `UPDATE VIDEOS SET ORIGEM = '{{origem}}' WHERE ID = {{id}}`, 'Origem da transcrição'),
   S('videosRetentar', `UPDATE VIDEOS SET STATUS = 'FILA' WHERE STATUS = 'PENDENTE' AND TENTATIVAS < 10`, 'Recoloca pendentes na fila'),
-  S('canaisParaMotor', `SELECT ID, NOME, UPLOADS_PLAYLIST, CARGA_STATUS, CARGA_TOKEN, POS_BASE, ELEGIVEIS, LIMITE FROM CANAIS ORDER BY ID`, 'Canais monitorados'),
+  S('canaisParaMotor', `SELECT ID, NOME, YT_CHANNEL_ID, PLAYLISTS_EM, UPLOADS_PLAYLIST, CARGA_STATUS, CARGA_TOKEN, POS_BASE, ELEGIVEIS, LIMITE FROM CANAIS ORDER BY ID`, 'Canais monitorados'),
   S('filaComLegenda', `SELECT COUNT(*) N FROM VIDEOS WHERE STATUS = 'FILA' AND (ORIGEM IS NULL OR ORIGEM <> 'AUDIO')`, 'Vídeos na fila ainda sem tentativa pelo áudio'),
   S('filaProximo', `SELECT ID, YT_VIDEO_ID, TITULO, DURACAO_SEG, TIPO, ORIGEM, PROGRESSO_SEG, TEM_MENTOR FROM (SELECT V.ID, V.YT_VIDEO_ID, V.TITULO, V.DURACAO_SEG, V.TIPO, V.ORIGEM, V.PROGRESSO_SEG, C.TEM_MENTOR, V.PRIORIDADE, V.ORDEM, C.ID CANAL_ORDEM, ROW_NUMBER() OVER (PARTITION BY V.CANAL_ID ORDER BY V.PRIORIDADE DESC, V.ORDEM ASC) AS VEZ FROM VIDEOS V JOIN CANAIS C ON C.ID = V.CANAL_ID WHERE (V.STATUS = 'FILA' OR (V.STATUS = 'ESTUDADO' AND V.PRIORIDADE = 2)) AND C.CARGA_STATUS <> 'LISTANDO' AND ({{audio}} = 1 OR V.ORIGEM IS NULL OR V.ORIGEM <> 'AUDIO' OR V.PROGRESSO_SEG >= V.DURACAO_SEG) AND ({{canalId}} = 0 OR V.CANAL_ID = {{canalId}})) X ORDER BY PRIORIDADE DESC, (ORIGEM = 'AUDIO') ASC, CANAL_ORDEM ASC, ORDEM ASC LIMIT 1`, 'Próximo vídeo da fila'),
   S('filaContar', `SELECT COUNT(*) N FROM VIDEOS WHERE STATUS = 'FILA'`, 'Tamanho da fila'),
@@ -38,6 +38,12 @@ export const sqls = [
   S('avisoRecontar', `UPDATE AVISOS SET QTD = (SELECT COUNT(*) FROM VIDEOS WHERE AVISO_ID = {{id}}), LIDO = FALSE WHERE ID = {{id}}`, 'Reconta aviso'),
   S('canaisAtualizarStatus', `UPDATE CANAIS C SET CARGA_STATUS = CASE WHEN EXISTS (SELECT 1 FROM VIDEOS V WHERE V.CANAL_ID = C.ID AND V.STATUS = 'FILA') THEN 'ESTUDANDO' ELSE 'EM_DIA' END WHERE C.CARGA_STATUS IN ('ESTUDANDO', 'EM_DIA')`, 'Status do canal'),
   S('lockAdquirir', `UPDATE CONFIG SET VALOR = '{{ate}}' WHERE CHAVE = 'LOCK' AND (VALOR = '' OR CAST(VALOR AS UNSIGNED) < {{agora}})`, 'Trava do motor'),
+  S('playlistsGravar', `INSERT INTO PLAYLISTS (CANAL_ID, YT_PLAYLIST_ID, TITULO, QTD_YT, ORDEM, SINC, ATUALIZADO_EM) SELECT {{canalId}}, PID, TITULO, QTD, ORDEM, '{{sinc}}', DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s') FROM VW_LOTE_PLAYLISTS WHERE CHAVE = '{{chave}}' ON DUPLICATE KEY UPDATE TITULO = VALUES(TITULO), QTD_YT = VALUES(QTD_YT), ORDEM = VALUES(ORDEM), SINC = VALUES(SINC), ATUALIZADO_EM = VALUES(ATUALIZADO_EM)`, 'Grava as playlists de um canal'),
+  S('playlistVideosLimpar', `DELETE PV FROM PLAYLIST_VIDEOS PV JOIN PLAYLISTS P ON P.ID = PV.PLAYLIST_ID WHERE P.CANAL_ID = {{canalId}}`, 'Limpa os vídeos das playlists do canal antes de regravar'),
+  S('playlistVideosGravar', `INSERT IGNORE INTO PLAYLIST_VIDEOS (PLAYLIST_ID, YT_VIDEO_ID, POS) SELECT P.ID, L.YT, L.POS FROM VW_LOTE_PLAYLIST_VIDEOS L JOIN PLAYLISTS P ON P.YT_PLAYLIST_ID = L.PID WHERE L.CHAVE = '{{chave}}'`, 'Grava os vídeos das playlists de um canal'),
+  S('playlistsSumidasVideos', `DELETE PV FROM PLAYLIST_VIDEOS PV JOIN PLAYLISTS P ON P.ID = PV.PLAYLIST_ID WHERE P.CANAL_ID = {{canalId}} AND P.SINC <> '{{sinc}}'`, 'Apaga vídeos de playlists que sumiram do canal'),
+  S('playlistsSumidas', `DELETE FROM PLAYLISTS WHERE CANAL_ID = {{canalId}} AND SINC <> '{{sinc}}'`, 'Apaga playlists que sumiram do canal'),
+  S('canalPlaylistsFeito', `UPDATE CANAIS SET PLAYLISTS_EM = '{{dia}}' WHERE ID = {{id}}`, 'Marca o dia da leitura das playlists'),
   S('lockLiberar', `UPDATE CONFIG SET VALOR = '' WHERE CHAVE = 'LOCK' AND VALOR = '{{ate}}'`, 'Libera trava'),
 ];
 const ids = {};
@@ -51,7 +57,7 @@ await sdk.updateServerFunctionMitra({ projectId, serverFunctionId: ids.motor, cr
 const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'estudarMais', 'trechosDoVideo', ...tela.map(f => f.name)];
 fs.writeFileSync('sf-tela.json', JSON.stringify(Object.fromEntries(telaNomes.map(n => [n, ids[n]]))));
 console.log('ok', Object.keys(ids).length);
-const publicas = ['avisoMarcarLido', 'avisoVideos', 'avisosListar', 'buscarTema', 'canaisListar', 'canaisNomes', 'canalCadastrar', 'chatBusca', 'estudarMais', 'exportTrechos', 'exportVideos', 'painelResumo', 'resumoBusca', 'temaEditar', 'temasListar', 'trechosDoVideo', 'videoDetalhe', 'videoTemas', 'videosListar'];
+const publicas = ['avisoMarcarLido', 'avisoVideos', 'avisosListar', 'buscarTema', 'canaisListar', 'canaisNomes', 'canalCadastrar', 'chatBusca', 'estudarMais', 'exportTrechos', 'exportVideos', 'painelResumo', 'resumoBusca', 'temaEditar', 'temasListar', 'trechosDoVideo', 'videoDetalhe', 'videoTemas', 'videosListar', 'playlistsListar'];
 for (const n of Object.keys(ids)) await sdk.togglePublicExecutionMitra({ projectId, serverFunctionId: ids[n], publicExecution: publicas.includes(n) });
 console.log('públicas', publicas.length);
 await sdk.setProfileServerFunctionsMitra({ projectId, profileId: 1, serverFunctionIds: Object.values(ids) });

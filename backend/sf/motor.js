@@ -107,6 +107,63 @@ async function checagemDiaria(canal, cfg, log) {
   log.push('checagem ' + canal.NOME + ': ' + novos.length + ' novos');
 }
 
+function playlistsDe(o, acc) {
+  if (!o || typeof o !== 'object') return acc;
+  if (o.lockupViewModel) {
+    const l = o.lockupViewModel;
+    if (l.contentType === 'LOCKUP_CONTENT_TYPE_PLAYLIST' && l.contentId) {
+      const n = (JSON.stringify(l.contentImage || {}).match(/"text":"([^"]*)"/) || [])[1] || '';
+      const qtd = /^um /i.test(n) ? 1 : Number((n.replace(/\./g, '').match(/\d+/) || [0])[0]);
+      acc.push({ id: l.contentId, titulo: (((l.metadata || {}).lockupMetadataViewModel || {}).title || {}).content || '', qtd });
+    }
+    return acc;
+  }
+  for (const k in o) playlistsDe(o[k], acc);
+  return acc;
+}
+function videosDaPlaylist(o, acc) {
+  if (!o || typeof o !== 'object') return acc;
+  if (o.playlistVideoRenderer) { if (o.playlistVideoRenderer.videoId) acc.push(o.playlistVideoRenderer.videoId); return acc; }
+  if (o.lockupViewModel) { const l = o.lockupViewModel; if (l.contentType === 'LOCKUP_CONTENT_TYPE_VIDEO' && l.contentId) acc.push(l.contentId); return acc; }
+  for (const k in o) videosDaPlaylist(o[k], acc);
+  return acc;
+}
+async function sincronizarPlaylists(canal, dia, log) {
+  const lista = []; const vistos = new Set();
+  let b = await yt('browse', { browseId: canal.YT_CHANNEL_ID, params: 'EglwbGF5bGlzdHPyBgQKAkIA' }, WEB);
+  for (let p = 0; p < 30 && b; p++) {
+    for (const x of playlistsDe(b, [])) if (!vistos.has(x.id) && !/^(UU|LL|WL)/.test(x.id)) { vistos.add(x.id); x.ordem = lista.length; lista.push(x); }
+    const t = contToken(b); if (!t) break;
+    b = await yt('browse', { continuation: t }, WEB);
+  }
+  const chave = 'P:' + canal.ID;
+  if (lista.length) { await lote(chave, lista); await sql('playlistsGravar', { chave, canalId: canal.ID, sinc: dia }); await sql('loteApagar', { chave }); }
+  const todos = [];
+  for (const pl of lista) {
+    if (Date.now() - T0 > 170e3) { log.push('playlists ' + canal.NOME + ': parou no meio, continua na próxima rodada'); return false; }
+    const ja = new Set();
+    let pb = await yt('browse', { browseId: 'VL' + pl.id }, WEB);
+    for (let p = 0; p < 40 && pb; p++) {
+      for (const id of videosDaPlaylist(pb, [])) if (!ja.has(id)) { ja.add(id); todos.push({ pid: pl.id, yt: id, pos: ja.size - 1 }); }
+      const t = contToken(pb); if (!t) break;
+      pb = await yt('browse', { continuation: t }, WEB);
+    }
+  }
+  await sql('playlistVideosLimpar', { canalId: canal.ID });
+  const ck = 'PV:' + canal.ID;
+  for (let i = 0; i < todos.length; i += 2000) {
+    await lote(ck, todos.slice(i, i + 2000));
+    await sql('playlistVideosGravar', { chave: ck });
+  }
+  if (todos.length) await sql('loteApagar', { chave: ck });
+  const nv = todos.length;
+  await sql('playlistsSumidasVideos', { canalId: canal.ID, sinc: dia });
+  await sql('playlistsSumidas', { canalId: canal.ID, sinc: dia });
+  await sql('canalPlaylistsFeito', { id: canal.ID, dia });
+  log.push('playlists ' + canal.NOME + ': ' + lista.length + ' playlists, ' + nv + ' vídeos');
+  return true;
+}
+
 function agruparLegenda(j3) {
   const out = []; let cur = null;
   for (const ev of (j3.events || [])) {
@@ -306,6 +363,9 @@ try {
     try {
       if (c.CARGA_STATUS === 'LISTANDO') await cargaHistorica(c, cfg, log);
       else if (fazerDiaria) await checagemDiaria(c, cfg, log);
+      if (c.CARGA_STATUS !== 'LISTANDO' && c.PLAYLISTS_EM !== hojeBR && Date.now() - T0 < 120e3) {
+        try { await sincronizarPlaylists(c, hojeBR, log); } catch (e) { log.push('playlists ' + c.NOME + ': ' + String(e.message || e).slice(0, 200)); }
+      }
     } catch (e) {
       log.push('canal ' + c.NOME + ': ' + String(e.message || e).slice(0, 200));
       await sql('canalCargaMsg', { id: c.ID, msg: ('Falha ao ler o canal no YouTube: ' + String(e.message || e)).slice(0, 480) }).catch(() => {});
