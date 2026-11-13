@@ -17,9 +17,10 @@ const mmss = s => { const h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 6
 const fonte = vids.map(v => 'VIDEO "' + v.TITULO + '" (resumo): ' + v.RESUMO).join('\n\n') + '\n\n' + tr.map(x => '[' + x.TITULO + ' ' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n');
 const cfg = {}; ((await sql('configLer', {})).rows || []).forEach(r => { cfg[r.CHAVE] = r.VALOR; });
 let ultimo = '';
+for (const conexao of String(cfg.GEMINI_CONEXOES || 'gemini').split(',').map(x => x.trim()).filter(Boolean))
 for (const modelo of String(cfg.MODELO_ANALISE).split(',').map(x => x.trim()).filter(Boolean)) {
   try {
-    const r = await m.callIntegrationMitra({ projectId: pid, connection: 'gemini', method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body: {
+    const r = await m.callIntegrationMitra({ projectId: pid, connection: conexao, method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body: {
       contents: [{ parts: [{ text: 'Use SOMENTE o material abaixo, tirado das transcricoes de videos de uma base de estudo. Escreva em portugues um resumo de 1 a 3 paragrafos do que foi falado sobre o tema "' + tema + '", citando o titulo do video quando ajudar. Nao acrescente nada de fora do material. Se o material nao tratar do tema, responda exatamente: NENHUM.\n\nMATERIAL:\n' + fonte.slice(0, 200000) }] }],
       generationConfig: { temperature: 0.2 } } });
     const b = (r.result ? r.result.body : r.body) || {};

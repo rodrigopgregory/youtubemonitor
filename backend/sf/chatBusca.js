@@ -10,9 +10,10 @@ async function sql(nome, input) {
 const cfg = {}; ((await sql('configLer', {})).rows || []).forEach(r => { cfg[r.CHAVE] = r.VALOR; });
 async function gemini(prompt, json) {
   let ultimo = '';
+  for (const conexao of String(cfg.GEMINI_CONEXOES || 'gemini').split(',').map(x => x.trim()).filter(Boolean))
   for (const modelo of String(cfg.MODELO_ANALISE).split(',').map(x => x.trim()).filter(Boolean)) {
     try {
-      const r = await m.callIntegrationMitra({ projectId: pid, connection: 'gemini', method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body: {
+      const r = await m.callIntegrationMitra({ projectId: pid, connection: conexao, method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body: {
         contents: [{ parts: [{ text: prompt }] }],
         generationConfig: Object.assign({ temperature: 0.2 }, json ? { responseMimeType: 'application/json' } : {}) } });
       const b = (r.result ? r.result.body : r.body) || {};

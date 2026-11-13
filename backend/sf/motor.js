@@ -120,19 +120,28 @@ function agruparLegenda(j3) {
   return out;
 }
 
+const ESGOTADO = new Set();
 async function gemini(cfg, modelos, body) {
   let ultimo = '';
-  for (const modelo of String(modelos).split(',').map(x => x.trim()).filter(Boolean)) {
-    try {
-      const r = await m.callIntegrationMitra({ projectId: pid, connection: 'gemini', method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body });
-      const st = r.result ? r.result.statusCode : r.statusCode;
-      const b = (r.result ? r.result.body : r.body) || {};
-      if ((st && st >= 400) || b.error) { ultimo = 'Gemini (' + modelo + '): ' + String((b.error && b.error.message) || st).slice(0, 200); continue; }
-      const parts = (((b.candidates || [])[0] || {}).content || {}).parts || [];
-      const txt = parts.map(p => p.text || '').join('');
-      if (txt) return txt;
-      ultimo = 'Gemini (' + modelo + ') respondeu vazio';
-    } catch (e) { ultimo = 'Gemini (' + modelo + '): ' + String(e.message || e).slice(0, 200); }
+  const conexoes = String(cfg.GEMINI_CONEXOES || 'gemini').split(',').map(x => x.trim()).filter(Boolean);
+  for (const conexao of conexoes) {
+    for (const modelo of String(modelos).split(',').map(x => x.trim()).filter(Boolean)) {
+      const k = conexao + '|' + modelo;
+      if (ESGOTADO.has(k)) continue;
+      try {
+        const r = await m.callIntegrationMitra({ projectId: pid, connection: conexao, method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body });
+        const st = r.result ? r.result.statusCode : r.statusCode;
+        const b = (r.result ? r.result.body : r.body) || {};
+        if ((st && st >= 400) || b.error) {
+          if (st === 429 || (b.error && b.error.code === 429)) ESGOTADO.add(k);
+          ultimo = 'Gemini (' + modelo + '): ' + String((b.error && b.error.message) || st).slice(0, 200); continue;
+        }
+        const parts = (((b.candidates || [])[0] || {}).content || {}).parts || [];
+        const txt = parts.map(p => p.text || '').join('');
+        if (txt) return txt;
+        ultimo = 'Gemini (' + modelo + ') respondeu vazio';
+      } catch (e) { ultimo = 'Gemini (' + modelo + '): ' + String(e.message || e).slice(0, 200); }
+    }
   }
   throw new Error(ultimo || 'Gemini sem resposta');
 }
