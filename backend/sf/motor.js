@@ -295,7 +295,7 @@ async function regrasMentor() {
 
 async function mentorConduz(cfg, titulo, texto, nome) {
   const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
-    contents: [{ parts: [{ text: 'Abaixo esta a transcricao do video "' + titulo + '". Pergunta: o mentor espiritual "' + nome + '" esta INCORPORADO num medium (ex.: Monica de Medeiros ou outro) e CONDUZ esta live, falando ele mesmo em primeira pessoa por boa parte do video? Responda NAO se ele so e citado, lembrado, se alguem le uma mensagem dele, se aparece so numa prece ou se fala so poucos minutos. Na duvida, NAO. Responda so JSON: {"conduz":true|false,"motivo":"uma frase","momento":"mm:ss do trecho que comprova"}\n\nTRANSCRICAO:\n' + texto }] }],
+    contents: [{ parts: [{ text: 'Abaixo esta a transcricao do video "' + titulo + '". Pergunta: o mentor espiritual "' + nome + '" esta INCORPORADO num medium (ex.: Monica de Medeiros ou outro) e CONDUZ esta live, falando ele mesmo em primeira pessoa por boa parte do video? Responda NAO se ele so e citado, lembrado, se alguem le uma mensagem dele, se aparece so numa prece ou se fala so poucos minutos. Se o titulo do video traz o nome de OUTRO mentor, quem conduz e esse outro: responda NAO. Confira quem se apresenta e de onde diz que vem (ex.: Shell Y Ann fala do planeta natal dela, Tizeon). Na duvida, NAO. Responda so JSON: {"conduz":true|false,"motivo":"uma frase","momento":"mm:ss do trecho que comprova"}\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0 }
   });
   const j = jsonDe(txt);
@@ -344,6 +344,7 @@ async function analisar(cfg, v) {
   const semA = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
   for (const k of Object.keys(ALIAS)) if (!RM.alias[semA(k)]) RM.alias[semA(k)] = ALIAS[k];
   for (const k of Object.keys(RM.alias)) ALIAS[k] = RM.alias[k];
+  const doTitulo = new Set();
   for (const mt of (Number(v.TEM_MENTOR) ? (j.mentores || []) : []).filter(x => x && x.nome).slice(0, 3)) {
     const base0 = String(mt.nome).trim().toLowerCase().replace(/\s+/g, ' ');
     const base = RM.alias[semA(base0)] ? semA(base0) : base0;
@@ -356,7 +357,7 @@ async function analisar(cfg, v) {
     if (nomes.has(nome)) continue;
     const noTitulo = formas.filter(f => f.length >= 4).some(f => sem(v.TITULO).includes(f));
     if (!noTitulo) { try { if (!(await mentorConduz(cfg, v.TITULO, texto, nome.slice(8))).conduz) continue; } catch (e) { continue; } }
-    nomes.add(nome);
+    nomes.add(nome); if (noTitulo) doTitulo.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
   }
   if (Number(v.TEM_MENTOR)) {
@@ -373,9 +374,10 @@ async function analisar(cfg, v) {
       if (RM.nao.has(semA(alvo)) || NAO_MENTOR.has(semA(alvo))) continue;
       const nome = ('mentor: ' + capMentor(alvo)).slice(0, 150);
       if ([...nomes].some(x => semA(x) === semA(nome))) continue;
-      nomes.add(nome); temas.push({ nome, momentos: '' });
+      nomes.add(nome); doTitulo.add(nome); temas.push({ nome, momentos: '' });
     }
   }
+  if (doTitulo.size) for (let i = temas.length - 1; i >= 0; i--) if (temas[i].nome.startsWith('mentor: ') && ![...doTitulo].some(d => semA(d) === semA(temas[i].nome))) temas.splice(i, 1);
   const chave = 'M:' + v.ID;
   await lote(chave, temas);
   await sql('temasGarantirLote', { chave });
