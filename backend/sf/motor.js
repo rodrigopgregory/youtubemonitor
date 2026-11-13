@@ -447,8 +447,14 @@ async function estudar(cfg, v, log) {
     await analisar(cfg, v);
     log.push(v.YT_VIDEO_ID + ': estudado');
   } catch (e) {
-    await sql('videoPendente', { id: v.ID, motivo: String(e.message || e).slice(0, 900) }).catch(() => {});
-    log.push(v.YT_VIDEO_ID + ': erro ' + String(e.message || e).slice(0, 200));
+    const msg = String(e.message || e);
+    if (/Gemini sem resposta|: 429|high demand|timed out/i.test(msg)) {
+      await sql('videoCotaEspera', { id: v.ID, motivo: ('Aguardando cota da IA: ' + msg).slice(0, 900) }).catch(() => {});
+      log.push(v.YT_VIDEO_ID + ': cota da IA, fica na fila');
+      return 'cota';
+    }
+    await sql('videoPendente', { id: v.ID, motivo: msg.slice(0, 900) }).catch(() => {});
+    log.push(v.YT_VIDEO_ID + ': erro ' + msg.slice(0, 200));
   }
 }
 
@@ -491,7 +497,7 @@ try {
     const fila = ((await sql('filaProximo', { canalId: Number(event.canalId || 0), audio: cfg.AUDIO_LIGADO === '1' ? 1 : 0 })).rows || []);
     if (!fila.length || vistos.has(fila[0].ID)) break;
     vistos.add(fila[0].ID);
-    await estudar(cfg, fila[0], log);
+    if (await estudar(cfg, fila[0], log) === 'cota') break;
     estudados++;
   }
   let mentoresConferidos = 0; const vistosM = new Set();

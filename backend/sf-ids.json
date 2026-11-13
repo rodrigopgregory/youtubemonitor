@@ -21,6 +21,7 @@
  "videoDetalhes": 50,
  "videoForaDoFiltro": 51,
  "videoOrigem": 52,
+ "videoCotaEspera": 150,
  "videosRetentar": 53,
  "canaisParaMotor": 54,
  "filaComLegenda": 97,

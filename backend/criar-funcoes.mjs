@@ -26,6 +26,7 @@ export const sqls = [
   S('videoDetalhes', `UPDATE VIDEOS SET PUBLICADO_EM = NULLIF('{{publicado}}', ''), DURACAO_SEG = {{duracao}}, TIPO = '{{tipo}}', INDISPONIVEL = 0 WHERE ID = {{id}}`, 'Detalhes do vídeo'),
   S('videoForaDoFiltro', `UPDATE VIDEOS SET STATUS = 'FORA', MOTIVO = 'Duração de até 10 minutos.' WHERE ID = {{id}}`, 'Vídeo curto'),
   S('videoOrigem', `UPDATE VIDEOS SET ORIGEM = '{{origem}}' WHERE ID = {{id}}`, 'Origem da transcrição'),
+  S('videoCotaEspera', `UPDATE VIDEOS SET MOTIVO = '{{motivo}}', ATUALIZADO_EM = DATE_FORMAT(NOW(), '%Y-%m-%dT%H:%i:%s') WHERE ID = {{id}}`, 'Mantém o vídeo na fila quando a cota da IA acabou'),
   S('videosRetentar', `UPDATE VIDEOS SET STATUS = 'FILA' WHERE STATUS = 'PENDENTE' AND TENTATIVAS < 10`, 'Recoloca pendentes na fila'),
   S('canaisParaMotor', `SELECT ID, NOME, YT_CHANNEL_ID, PLAYLISTS_EM, UPLOADS_PLAYLIST, CARGA_STATUS, CARGA_TOKEN, POS_BASE, ELEGIVEIS, LIMITE FROM CANAIS ORDER BY ID`, 'Canais monitorados'),
   S('filaComLegenda', `SELECT COUNT(*) N FROM VIDEOS WHERE STATUS = 'FILA' AND (ORIGEM IS NULL OR ORIGEM <> 'AUDIO')`, 'Vídeos na fila ainda sem tentativa pelo áudio'),
