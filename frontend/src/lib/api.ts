@@ -1,4 +1,4 @@
-import { executePublicServerFunctionMitra } from 'mitra-interactions-sdk'
+import { executePublicServerFunctionMitra, executePublicServerFunctionAsyncMitra, getPublicServerFunctionExecutionMitra } from 'mitra-interactions-sdk'
 import { SF } from './sf'
 
 type Nome = keyof typeof SF
@@ -10,6 +10,24 @@ export async function chamar<T = any>(nome: Nome, input: Record<string, unknown>
   let out = res.output
   if (typeof out === 'string') { try { out = JSON.parse(out) } catch { /* texto */ } }
   return out as T
+}
+
+export async function chamarDemorado<T = any>(nome: Nome, input: Record<string, unknown> = {}, limiteSeg = 240): Promise<T> {
+  const ini = await executePublicServerFunctionAsyncMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input }) as { executionId?: string }
+  if (!ini?.executionId) throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
+  const fim = Date.now() + limiteSeg * 1000
+  while (Date.now() < fim) {
+    await new Promise(r => setTimeout(r, 2500))
+    let res: { status?: string; output?: unknown }
+    try { res = await getPublicServerFunctionExecutionMitra({ projectId: PROJECT_ID, executionId: ini.executionId }) as typeof res } catch { continue }
+    if (res.status === 'FAILED' || res.status === 'ERROR' || res.status === 'TIMEOUT') throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
+    if (res.status === 'SUCCESS' || res.status === 'COMPLETED') {
+      let out = res.output
+      if (typeof out === 'string') { try { out = JSON.parse(out) } catch { /* texto */ } }
+      return out as T
+    }
+  }
+  throw new Error('A resposta está demorando mais que o normal. Tente de novo em instantes.')
 }
 
 export async function linhas<T = any>(nome: Nome, input: Record<string, unknown> = {}): Promise<T[]> {

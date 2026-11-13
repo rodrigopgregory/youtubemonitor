@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { Send, PlayCircle, Trash2, MessageSquare } from 'lucide-react'
+import { Send, PlayCircle, Trash2, MessageSquare, Mic, Square } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
-import { chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
+import { chamar, chamarDemorado, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; MOMS: string }
 interface Acao { tipo: 'estudar'; quantidade: number; canalId: number; rotulo: string; estado?: 'feito' | 'cancelado' }
@@ -11,6 +11,15 @@ interface Msg { papel: 'pessoa' | 'agente'; texto: string; videos?: Vid[]; termo
 
 const CHAVE = 'monitor-yt-chat'
 const exemplos = ['O que ele fala sobre proteção contra energias negativas?', 'Vídeos mais recentes sobre mentores espirituais', 'Lives que falam de mantras', 'Estude mais 100 vídeos', 'Como está o estudo?']
+
+type Reconhecedor = { lang: string; continuous: boolean; interimResults: boolean; start: () => void; stop: () => void;
+  onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null;
+  onend: (() => void) | null; onerror: ((e: { error: string }) => void) | null }
+function criarReconhecedor(): Reconhecedor | null {
+  const w = window as unknown as Record<string, new () => Reconhecedor>
+  const C = w.SpeechRecognition || w.webkitSpeechRecognition
+  return C ? new C() : null
+}
 
 function carregar(): Msg[] {
   try { return JSON.parse(localStorage.getItem(CHAVE) || '[]') } catch { return [] }
@@ -22,16 +31,45 @@ export default function ChatPage() {
   const [pensando, setPensando] = useState(false)
   const [canalId, setCanalId] = useCanal()
   const fim = useRef<HTMLDivElement>(null)
+  const [ouvindo, setOuvindo] = useState(false)
+  const [avisoVoz, setAvisoVoz] = useState('')
+  const rec = useRef<Reconhecedor | null>(null)
+  const base = useRef('')
+  const temVoz = typeof window !== 'undefined' && ('SpeechRecognition' in window || 'webkitSpeechRecognition' in window)
+
+  function falar() {
+    if (ouvindo) { rec.current?.stop(); return }
+    const r = criarReconhecedor()
+    if (!r) { setAvisoVoz('Este navegador não aceita ditado por voz. Use o Chrome ou o Edge.'); return }
+    setAvisoVoz('')
+    base.current = texto ? texto.trimEnd() + ' ' : ''
+    r.lang = 'pt-BR'; r.continuous = true; r.interimResults = true
+    let final = ''
+    r.onresult = e => {
+      let parcial = ''
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const t = e.results[i][0].transcript
+        if (e.results[i].isFinal) final += t + ' '; else parcial += t
+      }
+      setTexto((base.current + final + parcial).replace(/\s+/g, ' ').trimStart())
+    }
+    r.onerror = e => { setAvisoVoz(e.error === 'not-allowed' || e.error === 'service-not-allowed' ? 'Libere o microfone para este site no navegador (ícone de cadeado na barra de endereço).' : e.error === 'no-speech' ? 'Não ouvi nada. Toque no microfone e fale de novo.' : 'Não consegui ouvir agora. Tente de novo.') }
+    r.onend = () => { setOuvindo(false); rec.current = null }
+    rec.current = r
+    try { r.start(); setOuvindo(true) } catch { setAvisoVoz('Não consegui ligar o microfone. Tente de novo.') }
+  }
+  useEffect(() => () => rec.current?.stop(), [])
 
   useEffect(() => { localStorage.setItem(CHAVE, JSON.stringify(msgs.slice(-40))) }, [msgs])
   useEffect(() => { fim.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs, pensando])
 
   async function enviar(t = texto) {
     const q = t.trim(); if (!q || pensando) return
+    if (ouvindo) rec.current?.stop()
     const historico = msgs.slice(-8).map(m => ({ papel: m.papel, texto: m.texto }))
     setMsgs(m => [...m, { papel: 'pessoa', texto: q }]); setTexto(''); setPensando(true)
     try {
-      const r = await chamar<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[]; acao?: Acao }>('chatBusca', { texto: q, mensagens: historico, canalId })
+      const r = await chamarDemorado<{ ok: boolean; resposta?: string; erro?: string; videos?: Vid[]; termos?: string[]; acao?: Acao }>('chatBusca', { texto: q, mensagens: historico, canalId })
       setMsgs(m => [...m, r.ok ? { papel: 'agente', texto: r.resposta || '', videos: r.videos, termos: r.termos, acao: r.acao } : { papel: 'agente', texto: r.erro || 'Não consegui responder agora.', erro: true }])
     } catch (e) {
       setMsgs(m => [...m, { papel: 'agente', texto: (e as Error).message, erro: true }])
@@ -115,16 +153,20 @@ export default function ChatPage() {
             )}
           </div>
         ))}
-        {pensando && <div className="self-start rounded-2xl px-4 py-2.5 text-[14px]" style={{ background: 'var(--surface-muted)', color: 'var(--fg-muted)' }}>Procurando nos vídeos…</div>}
+        {pensando && <div className="self-start rounded-2xl px-4 py-2.5 text-[14px]" style={{ background: 'var(--surface-muted)', color: 'var(--fg-muted)' }}>Procurando nos vídeos… isso leva até 1 minuto.</div>}
         <div ref={fim} />
       </div>
 
       <form onSubmit={e => { e.preventDefault(); enviar() }} className="flex gap-2 pt-3">
-        <textarea value={texto} onChange={e => setTexto(e.target.value)} rows={1} placeholder="Ex.: o que ele fala sobre chakra coronário nas lives?"
+        <textarea value={texto} onChange={e => setTexto(e.target.value)} rows={1} placeholder={ouvindo ? 'Ouvindo…' : 'Escreva ou toque no microfone. Ex.: o que ele fala sobre chakra coronário?'}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviar() } }}
           className="controle flex-1 resize-none py-2" style={{ height: 'auto', minHeight: 'var(--altura-controle)' }} />
+        {temVoz && <Button type="button" variant={ouvindo ? 'primary' : 'secondary'} onClick={falar} disabled={pensando} aria-label={ouvindo ? 'Parar de ouvir' : 'Falar por voz'} title={ouvindo ? 'Parar de ouvir' : 'Falar por voz'}>
+          {ouvindo ? <><Square size={14} />Parar</> : <Mic size={16} />}
+        </Button>}
         <Button variant="primary" type="submit" disabled={pensando || !texto.trim()}><Send size={15} />Enviar</Button>
       </form>
+      {(ouvindo || avisoVoz) && <p className="text-[12.5px] pt-1.5" style={{ color: avisoVoz ? 'var(--warning-text)' : 'var(--accent-text)' }}>{avisoVoz || 'Ouvindo… fale a sua pergunta. Toque em Parar quando terminar e depois em Enviar.'}</p>}
     </div>
   )
 }

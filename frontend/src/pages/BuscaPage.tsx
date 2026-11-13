@@ -4,7 +4,7 @@ import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
-import { chamar, linhas, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
+import { chamarDemorado, linhas, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Res { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; SCORE: number; MOMS: string }
 
@@ -28,7 +28,7 @@ export default function BuscaPage() {
       setRes(r)
       if (comResumo) {
         if (!r.length) setResumo({ texto: `Nenhum vídeo da base trata do tema "${q}".`, vazio: true })
-        else chamar<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q, canalId: canal })
+        else chamarDemorado<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q, canalId: canal })
           .then(x => setResumo(x.ok ? { texto: x.resumo || '', vazio: x.vazio } : { texto: x.erro || 'Não consegui gerar o resumo agora.', erro: true }))
           .catch(() => setResumo({ texto: 'Não consegui gerar o resumo agora.', erro: true }))
       }
