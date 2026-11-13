@@ -105,6 +105,7 @@ async function checagemDiaria(canal, cfg, log) {
   }
   await sql('canalChecado', { id: canal.ID, quando: agora() });
   log.push('checagem ' + canal.NOME + ': ' + novos.length + ' novos');
+  return novos.length;
 }
 
 function playlistsDe(o, acc) {
@@ -464,6 +465,18 @@ async function fecharAvisos(hoje) {
   let id = Number((((await sql('avisoHoje', { dia: hoje })).rows || [{}])[0] || {}).ID || 0);
   if (!id) { await sql('avisoCriar', { dia: hoje, quando: agora() }); id = Number((((await sql('avisoHoje', { dia: hoje })).rows || [{}])[0] || {}).ID || 0); }
   if (id) { await sql('avisoVincular', { id }); await sql('avisoRecontar', { id }); }
+}
+
+if (event.modo === 'buscarNovos') {
+  const cfgB = {}; ((await sql('configLer', {})).rows || []).forEach(r => { cfgB[r.CHAVE] = r.VALOR; });
+  const logB = []; const canaisB = []; let totalB = 0;
+  for (const c of ((await sql('canaisParaMotor', {})).rows || [])) {
+    if (c.CARGA_STATUS === 'LISTANDO') { canaisB.push({ nome: c.NOME, novos: 0, msg: 'ainda levantando o acervo' }); continue; }
+    try { const n = await checagemDiaria(c, cfgB, logB); totalB += n; canaisB.push({ nome: c.NOME, novos: n }); }
+    catch (e) { canaisB.push({ nome: c.NOME, novos: 0, msg: 'não consegui ler o canal agora' }); }
+  }
+  if (totalB > 0) await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.motor, input: { modo: 'continuar' } });
+  return { ok: true, novos: totalB, canais: canaisB };
 }
 
 const log = [];

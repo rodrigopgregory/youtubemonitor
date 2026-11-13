@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, ExternalLink, Download, Package } from 'lucide-react'
+import { Plus, ExternalLink, Download, Package, RefreshCw } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
@@ -38,6 +38,17 @@ export default function CanaisPage() {
     finally { setExportando(null) }
   }
 
+  const [busca, setBusca] = useState<{ rodando: boolean; msg: string; erro?: boolean } | null>(null)
+  async function buscarNovos() {
+    setBusca({ rodando: true, msg: 'Procurando vídeos novos nos canais…' })
+    try {
+      const r = await chamar<{ ok: boolean; novos?: number; canais?: { nome: string; novos: number; msg?: string }[]; erro?: string }>('canaisAtualizar')
+      if (!r?.ok) { setBusca({ rodando: false, msg: r?.erro || 'Não foi possível procurar agora. Tente de novo em instantes.', erro: true }); return }
+      const det = (r.canais || []).filter(c => c.novos > 0 || c.msg).map(c => c.msg ? `${c.nome}: ${c.msg}` : `${c.nome}: ${c.novos}`).join(' · ')
+      setBusca({ rodando: false, msg: r.novos ? `${r.novos} ${r.novos === 1 ? 'vídeo novo entrou' : 'vídeos novos entraram'} na fila de estudo. ${det}` : `Nenhum vídeo novo nos canais.${det ? ' ' + det : ''}` })
+      carregar()
+    } catch (er) { setBusca({ rodando: false, msg: (er as Error).message, erro: true }) }
+  }
   const carregar = useCallback(() => { linhas<Canal>('canaisListar').then(setCanais) }, [])
   useEffect(() => { carregar(); const t = setInterval(carregar, 30000); return () => clearInterval(t) }, [carregar])
 
@@ -59,6 +70,10 @@ export default function CanaisPage() {
         <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Cada canal novo tem o acervo estudado, e todo dia o sistema confere se há vídeos novos. Entram vídeos e lives gravadas com mais de 10 minutos.</p>
       </div>
         <div className="flex flex-col sm:items-end gap-1 sm:max-w-[320px]">
+          <Button variant="primary" disabled={!!busca?.rodando} onClick={buscarNovos} title="Procura agora, em todos os canais, vídeos novos publicados desde a última conferência">
+            <RefreshCw size={15} className={busca?.rodando ? 'animate-spin' : ''} />{busca?.rodando ? 'Procurando…' : 'Atualizar canais'}
+          </Button>
+          {busca && <p className="text-[12.5px] sm:text-right" style={{ color: busca.erro ? 'var(--danger-text, var(--warning-text))' : 'var(--fg-muted)' }}>{busca.msg}</p>}
           <Button variant="secondary" disabled={!!pacote?.rodando} onClick={baixarTudo} title="Baixa um ZIP com o código do app, a estrutura do banco e todos os dados, para levar o sistema para outra plataforma ou IA">
             <Package size={15} />{pacote?.rodando ? 'Montando o pacote…' : 'Exportar tudo (app + banco)'}
           </Button>
