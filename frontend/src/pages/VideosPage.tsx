@@ -1,3 +1,4 @@
+import { X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Badge from '../components/ui/Badge'
@@ -39,10 +40,10 @@ export default function VideosPage() {
   }, [status, temaId, playlistId, canalId])
 
   const carregarTemas = useCallback(() => {
-    linhas<Tema>('temasListar', { canalId }).then(setTemas)
-    linhas<Playlist>('playlistsListar', { canalId }).then(setPlaylists).catch(() => setPlaylists([]))
+    linhas<Tema>('temasListar', { canalId, playlistId }).then(setTemas)
+    linhas<Playlist>('playlistsListar', { canalId, temaId }).then(setPlaylists).catch(() => setPlaylists([]))
     linhas<Painel>('painelResumo', { canalId }).then(r => setPainel(r[0] || null))
-  }, [canalId])
+  }, [canalId, playlistId, temaId])
 
   useEffect(() => { carregarTemas() }, [carregarTemas])
   useEffect(() => { carregar(0) }, [carregar])
@@ -50,7 +51,10 @@ export default function VideosPage() {
   const filtro = (k: string, v: string) => { const n = new URLSearchParams(sp); if (v) n.set(k, v); else n.delete(k); setSp(n) }
   const temaAtual = temas.find(t => t.ID === temaId)
   const playlistAtual = playlists.find(p => p.ID === playlistId)
-  const trocarAgrupar = (a: 'temas' | 'playlists') => { setAgrupar(a); const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); setSp(n) }
+  const [nomes, setNomes] = useState<{ tema?: string; playlist?: string }>({})
+  useEffect(() => { if (temaAtual) setNomes(n => ({ ...n, tema: temaAtual.NOME })) }, [temaAtual])
+  useEffect(() => { if (playlistAtual) setNomes(n => ({ ...n, playlist: playlistAtual.TITULO })) }, [playlistAtual])
+  const trocarAgrupar = (a: 'temas' | 'playlists') => setAgrupar(a)
   const mostrarCanal = !canalId && new Set(playlists.map(p => p.CANAL_ID)).size > 1
 
   return (
@@ -58,7 +62,7 @@ export default function VideosPage() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-[22px] font-semibold">Vídeos e temas</h1>
-          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Os vídeos agrupados pelos temas ou pelas playlists dos canais. Clique num vídeo para ver o resumo, a transcrição e editar os temas.</p>
+          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Os vídeos agrupados pelos temas ou pelas playlists dos canais. Escolha uma playlist e um tema para combinar os dois. Clique num vídeo para ver o resumo, a transcrição e editar os temas.</p>
         </div>
         <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); setSp(n) }} />
         {painel && (
@@ -74,13 +78,13 @@ export default function VideosPage() {
         <Card className="p-3 self-start lg:sticky lg:top-20 max-h-[70vh] overflow-y-auto">
           <div className="flex gap-1 p-1 mb-2 rounded-lg" style={{ background: 'var(--surface-muted)' }}>
             {([['temas', 'Temas'], ['playlists', 'Playlists']] as const).map(([k, l]) => (
-              <button key={k} onClick={() => trocarAgrupar(k)} className="flex-1 h-7 rounded-md text-[13px] font-medium"
-                style={agrupar === k ? { background: 'var(--surface)', color: 'var(--fg)', boxShadow: 'var(--shadow-sm)' } : { color: 'var(--fg-muted)' }}>{l}</button>))}
+              <button key={k} onClick={() => trocarAgrupar(k)} className="flex-1 h-7 rounded-md text-[13px] font-medium inline-flex items-center justify-center gap-1"
+                style={agrupar === k ? { background: 'var(--surface)', color: 'var(--fg)', boxShadow: 'var(--shadow-sm)' } : { color: 'var(--fg-muted)' }}>{l}{(k === 'temas' ? temaId : playlistId) > 0 && <span className="w-1.5 h-1.5 rounded-full" style={{ background: 'var(--accent)' }} />}</button>))}
           </div>
           {agrupar === 'temas' ? <>
           <button onClick={() => filtro('tema', '')} className="w-full text-left px-2 py-1.5 rounded-md text-[13.5px] flex justify-between"
             style={!temaId ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : {}}>Todos os temas</button>
-          {temas.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>Os temas aparecem quando os vídeos forem estudados.</p>}
+          {temas.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>{playlistId ? 'Nenhum vídeo estudado desta playlist ainda.' : 'Os temas aparecem quando os vídeos forem estudados.'}</p>}
           {temas.map(t => (
             <button key={t.ID} onClick={() => filtro('tema', String(t.ID))} className="w-full text-left px-2 py-1.5 rounded-md text-[13.5px] flex justify-between gap-2"
               style={temaId === t.ID ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : {}}>
@@ -89,7 +93,7 @@ export default function VideosPage() {
           </> : <>
           <button onClick={() => filtro('playlist', '')} className="w-full text-left px-2 py-1.5 rounded-md text-[13.5px] flex justify-between"
             style={!playlistId ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : {}}>Todas as playlists</button>
-          {playlists.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>As playlists aparecem depois que o sistema ler os canais no YouTube (uma vez por dia).</p>}
+          {playlists.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>{temaId ? 'Nenhuma playlist tem vídeo com este tema.' : 'As playlists aparecem depois que o sistema ler os canais no YouTube (uma vez por dia).'}</p>}
           {playlists.map((p, i) => (
             <div key={p.ID}>
               {mostrarCanal && (i === 0 || playlists[i - 1].CANAL_ID !== p.CANAL_ID) && <div className="px-2 pt-3 pb-1 text-[11.5px] font-medium truncate" style={{ color: 'var(--fg-subtle)' }}>{p.CANAL}</div>}
@@ -102,8 +106,14 @@ export default function VideosPage() {
         </Card>
 
         <div className="flex flex-col gap-3 min-w-0">
-          {temaAtual && <h2 className="text-[16px] font-medium">Tema: {temaAtual.NOME}</h2>}
-          {playlistAtual && <h2 className="text-[16px] font-medium">Playlist: {playlistAtual.TITULO} <span className="text-[13px] font-normal" style={{ color: 'var(--fg-muted)' }}>· {playlistAtual.CANAL} · {playlistAtual.ESTUDADOS || 0} de {playlistAtual.QTD} estudados, na ordem da playlist</span></h2>}
+          {(temaId > 0 || playlistId > 0) && (
+            <div className="flex items-center gap-2 flex-wrap">
+              {playlistId > 0 && <button onClick={() => filtro('playlist', '')} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={{ background: 'var(--accent-soft)', color: 'var(--accent-text)' }} title="Tirar este filtro">Playlist: {playlistAtual?.TITULO || nomes.playlist || '…'} <X size={14} /></button>}
+              {temaId > 0 && <button onClick={() => filtro('tema', '')} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={{ background: 'var(--accent-soft)', color: 'var(--accent-text)' }} title="Tirar este filtro">Tema: {temaAtual?.NOME || nomes.tema || '…'} <X size={14} /></button>}
+              {playlistAtual && <span className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>{playlistAtual.CANAL} · {temaId ? `${playlistAtual.QTD} ${playlistAtual.QTD === 1 ? 'vídeo' : 'vídeos'} com o tema nesta playlist` : `${playlistAtual.ESTUDADOS || 0} de ${playlistAtual.QTD} estudados`}, na ordem da playlist</span>}
+              {temaId > 0 && playlistId > 0 && <button onClick={() => { const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); setSp(n) }} className="text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Limpar filtros</button>}
+            </div>
+          )}
           {!carregando && videos.length === 0 && <Card className="p-6"><p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum vídeo aqui ainda.</p></Card>}
           {videos.map(v => {
             const st = statusInfo[v.STATUS] || { label: v.STATUS, v: 'neutral' as const }

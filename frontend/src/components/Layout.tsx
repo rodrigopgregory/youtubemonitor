@@ -5,7 +5,7 @@ import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
 interface Aviso { ID: number; DIA: string; CRIADO_EM: string; QTD: number; LIDO: boolean | number }
-interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; CANAL: string }
+interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; STATUS: string; CANAL: string }
 
 const abas = [
   { to: '/', label: 'Busca', icon: Search, end: true },
@@ -69,7 +69,7 @@ export default function Layout() {
             style={{ background: 'var(--accent-soft)', borderColor: 'var(--accent-border)' }}>
             <Bell size={18} style={{ color: 'var(--accent)' }} />
             <span className="text-[14px]">
-              <b>{naoLidos[0].QTD} {Number(naoLidos[0].QTD) === 1 ? 'vídeo novo estudado' : 'vídeos novos estudados'}</b> em {dataBr(naoLidos[0].DIA)}. Clique para ver a lista.
+              <b>{naoLidos[0].QTD} {Number(naoLidos[0].QTD) === 1 ? 'vídeo novo captado' : 'vídeos novos captados'}</b> em {dataBr(naoLidos[0].DIA)}. Clique para ver a lista.
             </span>
           </button>
         </div>
@@ -80,11 +80,11 @@ export default function Layout() {
       <Modal isOpen={aberto} onClose={() => setAberto(false)} title={atual ? `${atual.QTD} ${Number(atual.QTD) === 1 ? 'vídeo novo' : 'vídeos novos'} em ${dataBr(atual.DIA)}` : 'Avisos de vídeos novos'} size="lg">
         <div className="p-5">
           {!atual && (avisos.length === 0
-            ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum aviso ainda. Quando a checagem diária estudar vídeos novos, o aviso aparece aqui.</p>
+            ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum aviso ainda. Quando a checagem diária das 6h encontrar vídeos novos, o aviso aparece aqui.</p>
             : <ul className="flex flex-col gap-2">{avisos.map(a => (
                 <li key={a.ID}>
                   <button onClick={() => abrirAviso(a)} className="w-full text-left rounded-lg px-3 py-2.5 border flex items-center justify-between gap-3" style={{ borderColor: 'var(--border)' }}>
-                    <span className="text-[14px]">{a.QTD} {Number(a.QTD) === 1 ? 'vídeo novo estudado' : 'vídeos novos estudados'} em {dataBr(a.DIA)}</span>
+                    <span className="text-[14px]">{a.QTD} {Number(a.QTD) === 1 ? 'vídeo novo captado' : 'vídeos novos captados'} em {dataBr(a.DIA)}</span>
                     <span className="text-[12px] font-medium" style={{ color: a.LIDO ? 'var(--fg-subtle)' : 'var(--accent)' }}>{a.LIDO ? 'Lido' : 'Não lido'}</span>
                   </button>
                 </li>))}</ul>)}
@@ -95,7 +95,7 @@ export default function Layout() {
                 <ul className="flex flex-col gap-2">{vids.map(v => (
                   <li key={v.ID} className="rounded-lg px-3 py-2.5 border" style={{ borderColor: 'var(--border)' }}>
                     <a href={linkYt(v.YT_VIDEO_ID)} target="_blank" rel="noreferrer" className="text-[14px] font-medium hover:underline">{v.TITULO}</a>
-                    <div className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>{v.CANAL} · publicado em {dataBr(v.PUBLICADO_EM)}</div>
+                    <div className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>{v.CANAL} · publicado em {dataBr(v.PUBLICADO_EM)} · {v.STATUS === 'ESTUDADO' ? 'já estudado' : v.STATUS === 'PENDENTE' ? 'estudo com problema' : 'na fila para estudar'}</div>
                   </li>))}</ul>}
             </div>
           )}
