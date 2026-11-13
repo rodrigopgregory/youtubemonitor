@@ -302,7 +302,7 @@ async function analisar(cfg, v) {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
       'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}],"praticas":[{"tipo":"...","titulo":"...","instrucao":"...","momento":"mm:ss"}]}\n' + PROMPT_PRATICAS +
-      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. A medium e pessoas vivas (ex.: Monica de Medeiros, Shirlene, Margarete Aquila, Pava) NAO sao mentores, e Mae Maria, Oxala, Frei Luiz e Mario Schenberg tambem nao entram. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + [...new Set([...RM.mentores, ...temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8))])].join('; ') + (RM.nao.size ? '. Estes NAO sao mentores, nunca ponha: ' + [...RM.nao].join('; ') : '') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
+      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Olhe SEMPRE o titulo do video ("' + v.TITULO + '"): nos videos da Casa do Consolador o nome do mentor quase sempre esta no titulo; senao, e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. A medium e pessoas vivas (ex.: Monica de Medeiros, Shirlene, Margarete Aquila, Pava) NAO sao mentores, e Mae Maria, Oxala, Frei Luiz e Mario Schenberg tambem nao entram. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + [...new Set([...RM.mentores, ...temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8))])].join('; ') + (RM.nao.size ? '. Estes NAO sao mentores, nunca ponha: ' + [...RM.nao].join('; ') : '') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
       'De 2 a 6 temas, escolhidos SO desta lista de categorias (copie o nome exatamente como esta): ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
@@ -335,6 +335,23 @@ async function analisar(cfg, v) {
     const nome = ('mentor: ' + capMentor(ALIAS[base] || base)).slice(0, 150);
     if (nomes.has(nome)) continue; nomes.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
+  }
+  if (Number(v.TEM_MENTOR)) {
+    const pal = x => ' ' + String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() + ' ';
+    const tit = pal(v.TITULO);
+    const conhecidos = [...new Set([...RM.mentores, ...temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8))])];
+    const formasT = [];
+    for (const n of conhecidos) formasT.push([n, n]);
+    for (const k of Object.keys(RM.alias)) formasT.push([k, RM.alias[k]]);
+    for (const k of Object.keys(ALIAS)) formasT.push([k, ALIAS[k]]);
+    for (const [forma, alvo] of formasT) {
+      const f = pal(forma);
+      if (f.trim().length < 4 || !tit.includes(f)) continue;
+      if (RM.nao.has(semA(alvo)) || NAO_MENTOR.has(semA(alvo))) continue;
+      const nome = ('mentor: ' + capMentor(alvo)).slice(0, 150);
+      if ([...nomes].some(x => semA(x) === semA(nome))) continue;
+      nomes.add(nome); temas.push({ nome, momentos: '' });
+    }
   }
   const chave = 'M:' + v.ID;
   await lote(chave, temas);
