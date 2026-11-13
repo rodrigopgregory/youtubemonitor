@@ -12,6 +12,7 @@ export const SF = {
   "painelResumo": 69,
   "videosListar": 70,
   "temasListar": 71,
+  "mentoresListar": 127,
   "videoDetalhe": 72,
   "videoTemas": 73,
   "temaGarantir": 74,
@@ -43,5 +44,9 @@ export const SF = {
   "exportTabPlaylistVideos": 115,
   "exportTabAvisos": 116,
   "exportVideosFiltro": 118,
+  "praticasTipos": 123,
+  "praticasDoVideo": 124,
+  "praticasResumo": 125,
+  "exportTabPraticas": 126,
   "exportTabConfig": 117
 } as const

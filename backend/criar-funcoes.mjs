@@ -44,6 +44,10 @@ export const sqls = [
   S('playlistsSumidasVideos', `DELETE PV FROM PLAYLIST_VIDEOS PV JOIN PLAYLISTS P ON P.ID = PV.PLAYLIST_ID WHERE P.CANAL_ID = {{canalId}} AND P.SINC <> '{{sinc}}'`, 'Apaga vídeos de playlists que sumiram do canal'),
   S('playlistsSumidas', `DELETE FROM PLAYLISTS WHERE CANAL_ID = {{canalId}} AND SINC <> '{{sinc}}'`, 'Apaga playlists que sumiram do canal'),
   S('canalPlaylistsFeito', `UPDATE CANAIS SET PLAYLISTS_EM = '{{dia}}' WHERE ID = {{id}}`, 'Marca o dia da leitura das playlists'),
+  S('praticasLimpar', `DELETE FROM PRATICAS WHERE VIDEO_ID = {{videoId}}`, 'Tira as práticas antigas do vídeo antes de reler'),
+  S('praticasGravar', `INSERT INTO PRATICAS (VIDEO_ID, TIPO, TITULO, INSTRUCAO, SEGUNDO, CRIADO_EM) SELECT {{videoId}}, TIPO, TITULO, INSTRUCAO, SEG, DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s') FROM VW_LOTE_PRATICAS WHERE CHAVE = '{{chave}}'`, 'Grava as práticas de um vídeo'),
+  S('videoPraticasFeito', `UPDATE VIDEOS SET PRATICAS_EM = '{{quando}}' WHERE ID = {{id}}`, 'Marca o vídeo como lido para práticas'),
+  S('praticasFila', `SELECT V.ID, V.TITULO, V.DURACAO_SEG FROM VIDEOS V WHERE V.STATUS = 'ESTUDADO' AND V.PRATICAS_EM IS NULL ORDER BY V.PUBLICADO_EM DESC LIMIT 1`, 'Próximo vídeo estudado que ainda não foi lido para práticas'),
   S('lockLiberar', `UPDATE CONFIG SET VALOR = '' WHERE CHAVE = 'LOCK' AND VALOR = '{{ate}}'`, 'Libera trava'),
 ];
 const ids = {};
@@ -57,7 +61,7 @@ await sdk.updateServerFunctionMitra({ projectId, serverFunctionId: ids.motor, cr
 const telaNomes = ['canalCadastrar', 'temaEditar', 'resumoBusca', 'chatBusca', 'estudarMais', 'trechosDoVideo', ...tela.map(f => f.name)];
 fs.writeFileSync('sf-tela.json', JSON.stringify(Object.fromEntries(telaNomes.map(n => [n, ids[n]]))));
 console.log('ok', Object.keys(ids).length);
-const publicas = ['avisoMarcarLido', 'avisoVideos', 'avisosListar', 'buscarTema', 'canaisListar', 'canaisNomes', 'canalCadastrar', 'chatBusca', 'estudarMais', 'exportTrechos', 'exportVideos', 'painelResumo', 'resumoBusca', 'temaEditar', 'temasListar', 'trechosDoVideo', 'videoDetalhe', 'videoTemas', 'videosListar', 'playlistsListar', 'exportEstrutura', 'exportIndices', 'exportTabCanais', 'exportTabVideos', 'exportTabTrechos', 'exportTabTemas', 'exportTabVideoTemas', 'exportTabPlaylists', 'exportTabPlaylistVideos', 'exportTabAvisos', 'exportTabConfig', 'exportVideosFiltro'];
+const publicas = ['avisoMarcarLido', 'avisoVideos', 'avisosListar', 'buscarTema', 'canaisListar', 'canaisNomes', 'canalCadastrar', 'chatBusca', 'estudarMais', 'exportTrechos', 'exportVideos', 'painelResumo', 'resumoBusca', 'temaEditar', 'temasListar', 'trechosDoVideo', 'videoDetalhe', 'videoTemas', 'videosListar', 'playlistsListar', 'exportEstrutura', 'exportIndices', 'exportTabCanais', 'exportTabVideos', 'exportTabTrechos', 'exportTabTemas', 'exportTabVideoTemas', 'exportTabPlaylists', 'exportTabPlaylistVideos', 'exportTabAvisos', 'exportTabConfig', 'exportVideosFiltro', 'praticasTipos', 'praticasDoVideo', 'praticasResumo', 'exportTabPraticas', 'mentoresListar'];
 for (const n of Object.keys(ids)) await sdk.togglePublicExecutionMitra({ projectId, serverFunctionId: ids[n], publicExecution: publicas.includes(n) });
 console.log('públicas', publicas.length);
 await sdk.setProfileServerFunctionsMitra({ projectId, profileId: 1, serverFunctionIds: Object.values(ids) });

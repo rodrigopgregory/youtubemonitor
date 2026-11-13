@@ -241,6 +241,41 @@ async function transcreverAudio(cfg, v) {
   return true;
 }
 
+const TIPOS_PRATICA = ['meditação', 'visualização', 'respiração', 'prece e oração', 'mantra e decreto', 'banho de ervas', 'velas', 'defumação', 'chás e ervas', 'água, sal e cristais', 'limpeza e proteção energética', 'projeção astral', 'chakras e exercício energético', 'ritual e oferenda', 'outra prática'];
+const PROMPT_PRATICAS = 'Em "praticas" liste TODA instrucao de algo para a pessoa FAZER que aparece na fala: meditacao, visualizacao, exercicio de respiracao, prece ou oracao, mantra ou decreto, banho de ervas, uso de velas, defumacao, cha, agua, sal ou cristais, limpeza ou protecao energetica, tecnica de projecao astral, exercicio com chakras, ritual ou oferenda, ou qualquer outro trabalho espiritual ensinado. So o que e ensinado ou recomendado para fazer, nao o que e so comentado. Para cada uma: "tipo" (escolha SO desta lista, copiando o nome: ' + TIPOS_PRATICA.join('; ') + '), "titulo" (nome curto da pratica, ex.: "banho de arruda e guine para descarrego"), "instrucao" (o passo a passo como foi ensinado: ingredientes, quantidades, horario, o que falar ou mentalizar; ate 8 frases) e "momento" ("mm:ss" do trecho em que comeca). Lista vazia se o video nao ensina nenhuma pratica.\n';
+
+function limparPraticas(lista, dur) {
+  const seg = t => { const p = String(t || '').split(':').map(Number); return p.some(isNaN) ? 0 : p.reduce((a, b) => a * 60 + b, 0); };
+  const norm = x => String(x || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const mapa = new Map(TIPOS_PRATICA.map(t => [norm(t), t]));
+  return (Array.isArray(lista) ? lista : []).filter(p => p && (p.titulo || p.instrucao)).slice(0, 15).map(p => {
+    const s = seg(p.momento);
+    return { tipo: mapa.get(norm(p.tipo)) || 'outra prática', titulo: String(p.titulo || '').trim().slice(0, 290), instrucao: String(p.instrucao || '').trim().slice(0, 3900), seg: s >= 0 && s <= Number(dur || 1e9) ? s : 0 };
+  });
+}
+
+async function gravarPraticas(v, lista) {
+  const chave = 'P:' + v.ID;
+  await sql('praticasLimpar', { videoId: v.ID });
+  if (lista.length) { await lote(chave, lista); await sql('praticasGravar', { chave, videoId: v.ID }); await sql('loteApagar', { chave }); }
+  await sql('videoPraticasFeito', { id: v.ID, quando: agora() });
+}
+
+async function lerPraticas(cfg, v) {
+  const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
+  if (!tr.length) { await gravarPraticas(v, []); return 0; }
+  const texto = tr.map(x => '[' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n').slice(0, 600000);
+  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+    contents: [{ parts: [{ text: 'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\nResponda so JSON: {"praticas":[{"tipo":"...","titulo":"...","instrucao":"...","momento":"mm:ss"}]}\n' + PROMPT_PRATICAS + 'Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
+    generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
+  });
+  const lista = limparPraticas(jsonDe(txt).praticas, v.DURACAO_SEG);
+  await gravarPraticas(v, lista);
+  return lista.length;
+}
+
+const NAO_MENTOR = new Set(['shirlene', 'monicademedeiros', 'monica', 'maemaria', 'jesus', 'mariamadalena', 'chicoxavier', 'kardec', 'allankardec', 'emmanuel']);
+
 async function analisar(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   const texto = tr.map(x => '[' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n').slice(0, 600000);
@@ -248,8 +283,8 @@ async function analisar(cfg, v) {
   const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
-      'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}]}\n' +
-      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
+      'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}],"praticas":[{"tipo":"...","titulo":"...","instrucao":"...","momento":"mm:ss"}]}\n' + PROMPT_PRATICAS +
+      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. A medium e pessoas vivas (ex.: Monica de Medeiros, Shirlene) NAO sao mentores, e Mae Maria tambem nao entra. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
       'De 2 a 6 temas, escolhidos SO desta lista de categorias (copie o nome exatamente como esta): ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
@@ -267,13 +302,14 @@ async function analisar(cfg, v) {
     }
   }
   const nomes = new Set(temas.map(t => t.nome));
-  const ALIAS = { 'tupan': 'tupã', 'shell y ann': 'shellyana', 'shelly ann': 'shellyana', 'shellyann': 'shellyana', 'shelly ana': 'shellyana', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
+  const ALIAS = { 'tupan': 'tupã', 'shell y ann': 'shellyana', 'shelly ann': 'shellyana', 'shellyann': 'shellyana', 'shelly ana': 'shellyana', 'shel': 'shellyana', 'sheli': 'shellyana', 'shelly': 'shellyana', 'sheelian': 'shellyana', 'sheliane': 'shellyana', 'shellyanna': 'shellyana', 'sheliana': 'shellyana', 'shelyana': 'shellyana', 'tranqueira': 'tronqueira', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
   for (const mt of (Number(v.TEM_MENTOR) ? (j.mentores || []) : []).filter(x => x && x.nome).slice(0, 3)) {
     const base = String(mt.nome).trim().toLowerCase().replace(/\s+/g, ' ');
     const sem = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
     const onde = sem(v.TITULO + ' ' + texto);
     const formas = [base, ALIAS[base] || base, ...Object.keys(ALIAS).filter(k => ALIAS[k] === (ALIAS[base] || base))].map(sem).filter(f => f.length >= 3);
     if (!formas.some(f => onde.includes(f))) continue;
+    if (NAO_MENTOR.has(sem(ALIAS[base] || base))) continue;
     const nome = ('mentor: ' + (ALIAS[base] || base)).slice(0, 150);
     if (nomes.has(nome)) continue; nomes.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
@@ -285,6 +321,7 @@ async function analisar(cfg, v) {
   await sql('videoTemasIA', { chave, videoId: v.ID });
   await sql('loteApagar', { chave });
   await sql('videoConcluir', { id: v.ID, resumo: String(j.resumo || '').slice(0, 20000), quando: agora() });
+  await gravarPraticas(v, limparPraticas(j.praticas, v.DURACAO_SEG));
 }
 
 async function estudar(cfg, v, log) {
@@ -388,14 +425,25 @@ try {
     await estudar(cfg, fila[0], log);
     estudados++;
   }
+  let praticasLidas = 0; const vistosP = new Set();
+  if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const pf = ((await sql('praticasFila', {})).rows || []);
+      if (!pf.length || vistosP.has(pf[0].ID)) break;
+      vistosP.add(pf[0].ID);
+      try { const n = await lerPraticas(cfg, pf[0]); praticasLidas++; log.push('praticas ' + pf[0].ID + ': ' + n); }
+      catch (e) { log.push('praticas ' + pf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); break; }
+    }
+  }
   await fecharAvisos(hojeBR);
   await sql('canaisAtualizarStatus', {});
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
-  resultado = { estudados, resta, log, ms: Date.now() - T0 };
+  const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
+  resultado = { estudados, praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
 } finally {
   await sql('lockLiberar', { ate: String(ate) }).catch(() => {});
 }
-if (resultado.resta > 0 && !event.semContinuar && Number(event.rodada || 0) < 400 && resultado.estudados > 0) {
+if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
   await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.motor, input: { modo: 'continuar', rodada: Number(event.rodada || 0) + 1 } });
 }
 return resultado;

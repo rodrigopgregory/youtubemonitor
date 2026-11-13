@@ -8,11 +8,13 @@ import { linhas, chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/
 interface Det { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; RESUMO: string | null; CANAL: string }
 interface Tema { ID: number; NOME: string; ORIGEM: string; MOMENTOS: string }
 interface Trecho { SEGUNDO: number; TEXTO: string }
+interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number }
 
 export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onClose: () => void; onMudou: () => void }) {
   const [d, setD] = useState<Det | null>(null)
   const [temas, setTemas] = useState<Tema[]>([])
   const [trechos, setTrechos] = useState<Trecho[]>([])
+  const [praticas, setPraticas] = useState<Pratica[]>([])
   const [mais, setMais] = useState(false)
   const [novo, setNovo] = useState('')
   const [editando, setEditando] = useState<number | null>(null)
@@ -24,6 +26,7 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
   useEffect(() => {
     linhas<Det>('videoDetalhe', { id }).then(r => setD(r[0] || null))
     carregarTemas()
+    linhas<Pratica>('praticasDoVideo', { videoId: id }).then(setPraticas).catch(() => setPraticas([]))
     linhas<Trecho>('trechosDoVideo', { videoId: id, limit: 100, offset: 0 }).then(r => { setTrechos(r); setMais(r.length === 100) })
   }, [id, carregarTemas])
 
@@ -56,6 +59,23 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
           {d.STATUS === 'FILA' && <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Este vídeo ainda está na fila para ser estudado.</p>}
 
           {d.RESUMO && <section><h3 className="text-[14px] font-medium mb-1.5">Resumo</h3><p className="text-[14px] leading-relaxed">{d.RESUMO}</p></section>}
+
+          {praticas.length > 0 && (
+            <section>
+              <h3 className="text-[14px] font-medium mb-2">Práticas ensinadas</h3>
+              <div className="flex flex-col gap-3">
+                {praticas.map(p => (
+                  <div key={p.ID} className="rounded-lg p-3 flex flex-col gap-1.5" style={{ background: 'var(--surface-muted)' }}>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Badge variant="success">{p.TIPO}</Badge>
+                      <span className="text-[14px] font-medium">{p.TITULO}</span>
+                      <a href={linkYt(d.YT_VIDEO_ID, p.SEGUNDO)} target="_blank" rel="noreferrer" className="text-[12px] inline-flex items-center gap-0.5 hover:underline" style={{ color: 'var(--accent-text)' }}><PlayCircle size={12} />{mmss(p.SEGUNDO)}</a>
+                    </div>
+                    {p.INSTRUCAO && <p className="text-[13.5px] leading-relaxed whitespace-pre-line">{p.INSTRUCAO}</p>}
+                  </div>))}
+              </div>
+            </section>
+          )}
 
           <section>
             <h3 className="text-[14px] font-medium mb-2">Temas</h3>

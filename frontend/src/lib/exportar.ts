@@ -64,8 +64,8 @@ const TABELA_CRC = (() => {
   for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0 }
   return t
 })()
-type VideoFiltro = VideoExp & { STATUS: string; PLAYLISTS: string | null }
-export type FiltroVideos = { canalId: number; status: string; temaId: number; playlistId: number }
+type VideoFiltro = VideoExp & { STATUS: string; PLAYLISTS: string | null; PRATICAS: string | null }
+export type FiltroVideos = Record<string, string | number>
 const statusNome: Record<string, string> = { ESTUDADO: 'Estudado', FILA: 'Na fila', PENDENTE: 'Pendente' }
 
 export async function exportarVideosFiltro(filtro: FiltroVideos, nome: string, progresso: Progresso) {
@@ -79,10 +79,10 @@ export async function exportarVideosFiltro(filtro: FiltroVideos, nome: string, p
     depois = pag[pag.length - 1].ID
   }
   todos.sort((a, b) => String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')))
-  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Situação', 'Playlists', 'Temas', 'Mentores', 'Resumo']
+  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Situação', 'Playlists', 'Temas', 'Mentores', 'Práticas', 'Resumo']
   const corpo = todos.map(v => {
     const { temas, mentores } = separarTemas(v.TEMAS)
-    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), statusNome[v.STATUS] || v.STATUS, v.PLAYLISTS || '', temas.join(', '), mentores.join(', '), v.RESUMO || ''].map(celula).join(';')
+    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), statusNome[v.STATUS] || v.STATUS, v.PLAYLISTS || '', temas.join(', '), mentores.join(', '), v.PRATICAS || '', v.RESUMO || ''].map(celula).join(';')
   })
   baixar(new Blob(['\ufeff' + [cab.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeArquivo(nome) + '.csv')
   return todos.length
@@ -202,6 +202,7 @@ const TABELAS: { tabela: string; funcao: Parameters<typeof linhas>[0]; pagina: n
   { tabela: 'PLAYLISTS', funcao: 'exportTabPlaylists', pagina: 5000 },
   { tabela: 'PLAYLIST_VIDEOS', funcao: 'exportTabPlaylistVideos', pagina: 5000 },
   { tabela: 'AVISOS', funcao: 'exportTabAvisos', pagina: 5000 },
+  { tabela: 'PRATICAS', funcao: 'exportTabPraticas', pagina: 5000 },
   { tabela: 'TRECHOS', funcao: 'exportTabTrechos', pagina: 5000 },
 ]
 
