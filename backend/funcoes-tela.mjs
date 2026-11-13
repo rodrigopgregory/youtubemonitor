@@ -60,4 +60,10 @@ export const tela = [
   S('mentorTemaRenomear', `UPDATE TEMAS SET NOME = '{{nome}}' WHERE ID = {{temaId}} AND NOME LIKE 'mentor: %'`, 'Renomeia o mentor'),
   S('mentorMarcarTitulos', `INSERT IGNORE INTO VIDEO_TEMAS (VIDEO_ID, TEMA_ID, ORIGEM, MOMENTOS) SELECT V.ID, {{temaId}}, 'USUARIO', '' FROM VIDEOS V WHERE V.STATUS = 'ESTUDADO' AND V.TITULO COLLATE utf8mb4_0900_ai_ci LIKE CONCAT('%', '{{nome}}', '%')`, 'Marca o mentor nos vídeos com o nome dele no título'),
   S('mentorRegrasMotor', `SELECT NOME, TIPO, DESTINO FROM MENTOR_REGRAS`, 'Regras de mentores para o motor'),
+  S('mentorConferirFila', `SELECT VT.ID, VT.VIDEO_ID, SUBSTRING(T.NOME, 9) MENTOR, V.TITULO FROM VIDEO_TEMAS VT JOIN TEMAS T ON T.ID = VT.TEMA_ID JOIN VIDEOS V ON V.ID = VT.VIDEO_ID WHERE T.NOME LIKE 'mentor: %' AND VT.VERIFICADO IS NULL AND VT.ORIGEM = 'IA' ORDER BY VT.ID LIMIT 1`, 'Próximo mentor marcado pela IA que falta conferir na transcrição'),
+  S('mentorConferirContar', `SELECT COUNT(*) N FROM VIDEO_TEMAS VT JOIN TEMAS T ON T.ID = VT.TEMA_ID WHERE T.NOME LIKE 'mentor: %' AND VT.VERIFICADO IS NULL AND VT.ORIGEM = 'IA'`, 'Quantos mentores faltam conferir'),
+  S('mentorConferido', `UPDATE VIDEO_TEMAS SET VERIFICADO = 1 WHERE ID = {{id}}`, 'Marca mentor como conferido'),
+  S('mentorDescartarBkp', `INSERT IGNORE INTO VIDEO_TEMAS_BKP_MENTORES (ID, VIDEO_ID, TEMA_ID, ORIGEM, MOMENTOS) SELECT ID, VIDEO_ID, TEMA_ID, ORIGEM, MOMENTOS FROM VIDEO_TEMAS WHERE ID = {{id}}`, 'Cópia antes de tirar mentor que não conduz'),
+  S('mentorDescartar', `DELETE FROM VIDEO_TEMAS WHERE ID = {{id}}`, 'Tira mentor que não conduz a live'),
+  S('videoMentoresVerificados', `UPDATE VIDEO_TEMAS VT JOIN TEMAS T ON T.ID = VT.TEMA_ID SET VT.VERIFICADO = 1 WHERE VT.VIDEO_ID = {{videoId}} AND T.NOME LIKE 'mentor: %'`, 'Mentores do vídeo já conferidos no estudo'),
 ];

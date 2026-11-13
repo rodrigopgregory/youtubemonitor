@@ -293,6 +293,26 @@ async function regrasMentor() {
   return r;
 }
 
+async function mentorConduz(cfg, titulo, texto, nome) {
+  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+    contents: [{ parts: [{ text: 'Abaixo esta a transcricao do video "' + titulo + '". Pergunta: o mentor espiritual "' + nome + '" esta INCORPORADO num medium (ex.: Monica de Medeiros ou outro) e CONDUZ esta live, falando ele mesmo em primeira pessoa por boa parte do video? Responda NAO se ele so e citado, lembrado, se alguem le uma mensagem dele, se aparece so numa prece ou se fala so poucos minutos. Na duvida, NAO. Responda so JSON: {"conduz":true|false,"motivo":"uma frase","momento":"mm:ss do trecho que comprova"}\n\nTRANSCRICAO:\n' + texto }] }],
+    generationConfig: { responseMimeType: 'application/json', temperature: 0 }
+  });
+  const j = jsonDe(txt);
+  return { conduz: j.conduz === true, motivo: String(j.motivo || '').slice(0, 300) };
+}
+
+async function conferirMentor(cfg, x) {
+  const tr = ((await sql('trechosDoVideo', { videoId: x.VIDEO_ID, limit: 2000, offset: 0 })).rows || []);
+  if (!tr.length) { await sql('mentorConferido', { id: x.ID }); return 'sem transcricao'; }
+  const texto = tr.map(t => '[' + mmss(t.SEGUNDO) + '] ' + t.TEXTO).join('\n').slice(0, 600000);
+  const r = await mentorConduz(cfg, x.TITULO, texto, x.MENTOR);
+  if (r.conduz) { await sql('mentorConferido', { id: x.ID }); return 'mantido: ' + r.motivo; }
+  await sql('mentorDescartarBkp', { id: x.ID });
+  await sql('mentorDescartar', { id: x.ID });
+  return 'retirado: ' + r.motivo;
+}
+
 async function analisar(cfg, v) {
   const RM = await regrasMentor();
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
@@ -333,7 +353,10 @@ async function analisar(cfg, v) {
     if (!formas.some(f => onde.includes(f))) continue;
     if (NAO_MENTOR.has(sem(ALIAS[base] || base)) || RM.nao.has(sem(ALIAS[base] || base)) || RM.nao.has(sem(base0))) continue;
     const nome = ('mentor: ' + capMentor(ALIAS[base] || base)).slice(0, 150);
-    if (nomes.has(nome)) continue; nomes.add(nome);
+    if (nomes.has(nome)) continue;
+    const noTitulo = formas.filter(f => f.length >= 4).some(f => sem(v.TITULO).includes(f));
+    if (!noTitulo) { try { if (!(await mentorConduz(cfg, v.TITULO, texto, nome.slice(8))).conduz) continue; } catch (e) { continue; } }
+    nomes.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
   }
   if (Number(v.TEM_MENTOR)) {
@@ -358,6 +381,7 @@ async function analisar(cfg, v) {
   await sql('temasGarantirLote', { chave });
   await sql('videoTemasIALimpar', { videoId: v.ID });
   await sql('videoTemasIA', { chave, videoId: v.ID });
+  await sql('videoMentoresVerificados', { videoId: v.ID });
   await sql('loteApagar', { chave });
   await sql('videoConcluir', { id: v.ID, resumo: String(j.resumo || '').slice(0, 20000), quando: agora() });
   await gravarPraticas(v, limparPraticas(j.praticas, v.DURACAO_SEG));
@@ -464,6 +488,16 @@ try {
     await estudar(cfg, fila[0], log);
     estudados++;
   }
+  let mentoresConferidos = 0; const vistosM = new Set();
+  if (cfg.GEMINI_OK && cfg.CONFERIR_MENTOR !== '0') {
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const mf = ((await sql('mentorConferirFila', {})).rows || []);
+      if (!mf.length || vistosM.has(mf[0].ID)) break;
+      vistosM.add(mf[0].ID);
+      try { log.push('mentor ' + mf[0].MENTOR + ' / ' + mf[0].VIDEO_ID + ': ' + await conferirMentor(cfg, mf[0])); mentoresConferidos++; }
+      catch (e) { log.push('mentor ' + mf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); break; }
+    }
+  }
   let praticasLidas = 0; const vistosP = new Set();
   if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
@@ -478,11 +512,11 @@ try {
   await sql('canaisAtualizarStatus', {});
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
   const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
-  resultado = { estudados, praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
+  resultado = { estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
 } finally {
   await sql('lockLiberar', { ate: String(ate) }).catch(() => {});
 }
-if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
+if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0 || resultado.restaMentores > 0 && resultado.mentoresConferidos > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
   await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.motor, input: { modo: 'continuar', rodada: Number(event.rodada || 0) + 1 } });
 }
 return resultado;
