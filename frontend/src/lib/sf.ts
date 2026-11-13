@@ -42,5 +42,6 @@ export const SF = {
   "exportTabPlaylists": 114,
   "exportTabPlaylistVideos": 115,
   "exportTabAvisos": 116,
+  "exportVideosFiltro": 118,
   "exportTabConfig": 117
 } as const

@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { Download, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Badge from '../components/ui/Badge'
@@ -7,6 +7,7 @@ import Button from '../components/ui/Button'
 import VideoDetalhe from '../components/VideoDetalhe'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { linhas, dataBr, duracao } from '../lib/api'
+import { exportarVideosFiltro } from '../lib/exportar'
 
 interface Tema { ID: number; NOME: string; QTD: number }
 interface Playlist { ID: number; TITULO: string; CANAL_ID: number; CANAL: string; QTD: number; ESTUDADOS: number }
@@ -32,6 +33,16 @@ export default function VideosPage() {
   const [carregando, setCarregando] = useState(true)
   const [aberto, setAberto] = useState<number | null>(null)
   const [canalId, setCanalId] = useCanal()
+  const [exportMsg, setExportMsg] = useState<{ rodando: boolean; msg: string } | null>(null)
+
+  async function baixarPlanilha() {
+    const partes = ['Vídeos', playlistAtual?.TITULO || nomes.playlist, temaAtual?.NOME || nomes.tema, status ? statusInfo[status]?.label : ''].filter(Boolean)
+    setExportMsg({ rodando: true, msg: 'Buscando os vídeos…' })
+    try {
+      const n = await exportarVideosFiltro({ canalId, status, temaId, playlistId }, partes.join(' - '), m => setExportMsg({ rodando: true, msg: m }))
+      setExportMsg({ rodando: false, msg: `Planilha baixada com ${n} ${n === 1 ? 'vídeo' : 'vídeos'}.` })
+    } catch { setExportMsg({ rodando: false, msg: 'Não foi possível exportar agora. Tente de novo em instantes.' }) }
+  }
 
   const carregar = useCallback(async (offset = 0) => {
     setCarregando(true)
@@ -72,6 +83,12 @@ export default function VideosPage() {
                 style={status === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
           </div>
         )}
+        <div className="flex flex-col items-end gap-1">
+          <Button variant="secondary" size="sm" disabled={!!exportMsg?.rodando} onClick={baixarPlanilha} title="Baixa uma planilha com os vídeos que estão aparecendo agora, com os filtros escolhidos (canal, tema, playlist e situação)">
+            <Download size={14} />{exportMsg?.rodando ? 'Montando a planilha…' : 'Exportar planilha'}
+          </Button>
+          {exportMsg && <span className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>{exportMsg.msg}</span>}
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[260px_1fr]">

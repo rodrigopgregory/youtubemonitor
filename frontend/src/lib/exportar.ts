@@ -64,6 +64,30 @@ const TABELA_CRC = (() => {
   for (let n = 0; n < 256; n++) { let c = n; for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1; t[n] = c >>> 0 }
   return t
 })()
+type VideoFiltro = VideoExp & { STATUS: string; PLAYLISTS: string | null }
+export type FiltroVideos = { canalId: number; status: string; temaId: number; playlistId: number }
+const statusNome: Record<string, string> = { ESTUDADO: 'Estudado', FILA: 'Na fila', PENDENTE: 'Pendente' }
+
+export async function exportarVideosFiltro(filtro: FiltroVideos, nome: string, progresso: Progresso) {
+  const todos: VideoFiltro[] = []
+  let depois = 0
+  for (;;) {
+    progresso(todos.length ? `Buscando os vídeos… ${todos.length}` : 'Buscando os vídeos…')
+    const pag = await linhas<VideoFiltro>('exportVideosFiltro', { ...filtro, depois })
+    todos.push(...pag)
+    if (pag.length < 500) break
+    depois = pag[pag.length - 1].ID
+  }
+  todos.sort((a, b) => String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')))
+  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Situação', 'Playlists', 'Temas', 'Mentores', 'Resumo']
+  const corpo = todos.map(v => {
+    const { temas, mentores } = separarTemas(v.TEMAS)
+    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), statusNome[v.STATUS] || v.STATUS, v.PLAYLISTS || '', temas.join(', '), mentores.join(', '), v.RESUMO || ''].map(celula).join(';')
+  })
+  baixar(new Blob(['\ufeff' + [cab.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeArquivo(nome) + '.csv')
+  return todos.length
+}
+
 function crc32(b: Uint8Array) {
   let c = 0xffffffff
   for (let i = 0; i < b.length; i++) c = TABELA_CRC[(c ^ b[i]) & 0xff] ^ (c >>> 8)
