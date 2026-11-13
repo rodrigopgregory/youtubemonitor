@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -29,6 +29,15 @@ export default function Layout() {
     el.classList.toggle('dark', escuro)
   }, [escuro])
 
+  const [instalar, setInstalar] = useState<{ prompt: () => Promise<void> } | null>(null)
+  useEffect(() => {
+    const pegar = (e: Event) => { e.preventDefault(); setInstalar(e as unknown as { prompt: () => Promise<void> }) }
+    const instalado = () => setInstalar(null)
+    window.addEventListener('beforeinstallprompt', pegar)
+    window.addEventListener('appinstalled', instalado)
+    return () => { window.removeEventListener('beforeinstallprompt', pegar); window.removeEventListener('appinstalled', instalado) }
+  }, [])
+
   const naoLidos = avisos.filter(a => !a.LIDO)
 
   async function abrirAviso(a: Aviso) {
@@ -51,6 +60,9 @@ export default function Layout() {
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-1">
+            {instalar && <button onClick={() => { instalar.prompt().finally(() => setInstalar(null)) }} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Instalar o Monitor como aplicativo neste aparelho">
+              <Download size={16} /><span className="hidden sm:inline">Instalar app</span>
+            </button>}
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}
             </button>
