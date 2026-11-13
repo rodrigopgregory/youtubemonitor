@@ -9,7 +9,9 @@ async function sql(nome, input) {
   return o;
 }
 const rows = o => (o && o.rows) || [];
-const limpa = s => String(s || '').replace(/['"\\]/g, '’').trim().replace(/\s+/g, ' ').replace(/^mentor:\s*/i, '').slice(0, 140);
+const capMentor = s => String(s || '').trim().replace(/\s+/g, ' ').split(' ').map((w, i) => { const lw = w.toLowerCase(); if (i > 0 && ['de', 'da', 'do', 'das', 'dos', 'e', 'd'].includes(lw)) return lw; return lw.charAt(0).toLocaleUpperCase('pt-BR') + lw.slice(1); }).join(' ');
+const limpa0 = s => String(s || '').replace(/['"\\]/g, '’').trim().replace(/\s+/g, ' ').replace(/^mentor:\s*/i, '').slice(0, 140);
+const limpa = s => capMentor(limpa0(s));
 const sem = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
 const acao = String(event.acao || '');
 const porId = async id => rows(await sql('mentorTemaPorId', { id: Number(id) || 0 }))[0];

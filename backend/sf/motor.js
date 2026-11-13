@@ -276,6 +276,7 @@ async function lerPraticas(cfg, v) {
 
 const NAO_MENTOR = new Set(['shirlene', 'monicademedeiros', 'monica', 'maemaria', 'jesus', 'mariamadalena', 'chicoxavier', 'kardec', 'allankardec', 'emmanuel', 'margareteaquila', 'margarete', 'oxala', 'pava', 'freiluiz', 'marioschenberg', 'mario']);
 
+const capMentor = s => String(s || '').trim().replace(/\s+/g, ' ').split(' ').map((w, i) => { const lw = w.toLowerCase(); if (i > 0 && ['de', 'da', 'do', 'das', 'dos', 'e', 'd'].includes(lw)) return lw; return lw.charAt(0).toLocaleUpperCase('pt-BR') + lw.slice(1); }).join(' ');
 let REGRAS_MENTOR = null;
 async function regrasMentor() {
   if (REGRAS_MENTOR) return REGRAS_MENTOR;
@@ -331,7 +332,7 @@ async function analisar(cfg, v) {
     const formas = [base, ALIAS[base] || base, ...Object.keys(ALIAS).filter(k => ALIAS[k] === (ALIAS[base] || base))].map(sem).filter(f => f.length >= 3);
     if (!formas.some(f => onde.includes(f))) continue;
     if (NAO_MENTOR.has(sem(ALIAS[base] || base)) || RM.nao.has(sem(ALIAS[base] || base)) || RM.nao.has(sem(base0))) continue;
-    const nome = ('mentor: ' + (ALIAS[base] || base)).slice(0, 150);
+    const nome = ('mentor: ' + capMentor(ALIAS[base] || base)).slice(0, 150);
     if (nomes.has(nome)) continue; nomes.add(nome);
     temas.push({ nome, momentos: (mt.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') });
   }
