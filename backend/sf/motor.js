@@ -274,7 +274,7 @@ async function lerPraticas(cfg, v) {
   return lista.length;
 }
 
-const NAO_MENTOR = new Set(['shirlene', 'monicademedeiros', 'monica', 'maemaria', 'jesus', 'mariamadalena', 'chicoxavier', 'kardec', 'allankardec', 'emmanuel']);
+const NAO_MENTOR = new Set(['shirlene', 'monicademedeiros', 'monica', 'maemaria', 'jesus', 'mariamadalena', 'chicoxavier', 'kardec', 'allankardec', 'emmanuel', 'margareteaquila', 'margarete', 'oxala', 'pava', 'freiluiz', 'marioschenberg', 'mario']);
 
 async function analisar(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
@@ -284,7 +284,7 @@ async function analisar(cfg, v) {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
       'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}],"praticas":[{"tipo":"...","titulo":"...","instrucao":"...","momento":"mm:ss"}]}\n' + PROMPT_PRATICAS +
-      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. A medium e pessoas vivas (ex.: Monica de Medeiros, Shirlene) NAO sao mentores, e Mae Maria tambem nao entra. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
+      (Number(v.TEM_MENTOR) ? 'Em "mentores" ponha SO o mentor (guia ou espirito) que conduz a live: quem se manifesta e fala pela medium. Normalmente o nome dele esta no titulo do video ("' + v.TITULO + '") ou e anunciado no comeco. Ex.: Veludo, Tupã, Pai Joaquim, Dr. Espanhol. So vale nome que aparece escrito no titulo ou falado na transcricao. A medium e pessoas vivas (ex.: Monica de Medeiros, Shirlene, Margarete Aquila, Pava) NAO sao mentores, e Mae Maria, Oxala, Frei Luiz e Mario Schenberg tambem nao entram. Nomes que so sao citados ou comentados (ex.: Maria Madalena, Jesus, Chico Xavier, Emmanuel, Kardec) NAO sao mentores: se forem assunto importante, entram em "temas". Em geral ha 0 ou 1 mentor, no maximo 3; lista vazia se ninguem conduz como mentor. Se for um destes mentores ja usados, use a mesma grafia: ' + temasExist.filter(n => n.startsWith('mentor: ')).map(n => n.slice(8)).join('; ') + '\n' : 'Deixe "mentores" sempre como lista vazia.\n') +
       'De 2 a 6 temas, escolhidos SO desta lista de categorias (copie o nome exatamente como esta): ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
@@ -302,7 +302,7 @@ async function analisar(cfg, v) {
     }
   }
   const nomes = new Set(temas.map(t => t.nome));
-  const ALIAS = { 'tupan': 'tupã', 'shellyana': 'Shell Y Ann', 'shell y ann': 'Shell Y Ann', 'shelly ann': 'Shell Y Ann', 'shellyann': 'Shell Y Ann', 'shelly ana': 'Shell Y Ann', 'shel': 'Shell Y Ann', 'sheli': 'Shell Y Ann', 'shelly': 'Shell Y Ann', 'sheelian': 'Shell Y Ann', 'sheliane': 'Shell Y Ann', 'shellyanna': 'Shell Y Ann', 'sheliana': 'Shell Y Ann', 'shelyana': 'Shell Y Ann', 'tranqueira': 'tronqueira', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
+  const ALIAS = { 'tupan': 'tupã', 'shellyana': 'Shell Y Ann', 'shell y ann': 'Shell Y Ann', 'shelly ann': 'Shell Y Ann', 'shellyann': 'Shell Y Ann', 'shelly ana': 'Shell Y Ann', 'shel': 'Shell Y Ann', 'sheli': 'Shell Y Ann', 'shelly': 'Shell Y Ann', 'sheelian': 'Shell Y Ann', 'sheliane': 'Shell Y Ann', 'shellyanna': 'Shell Y Ann', 'sheliana': 'Shell Y Ann', 'shelyana': 'Shell Y Ann', 'tranqueira': 'tronqueira', 'pai joaquim de angola': 'pai joaquim', 'pai joaquim d\'angola': 'pai joaquim', 'tamiris': 'tamires', 'tamires das sete rosas': 'tamires', 'tamiris das sete rosas': 'tamires', 'tamires das 7 rosas': 'tamires', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
   for (const mt of (Number(v.TEM_MENTOR) ? (j.mentores || []) : []).filter(x => x && x.nome).slice(0, 3)) {
     const base = String(mt.nome).trim().toLowerCase().replace(/\s+/g, ' ');
     const sem = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
