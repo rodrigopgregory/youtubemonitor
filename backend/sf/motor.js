@@ -302,7 +302,7 @@ async function analisar(cfg, v) {
     }
   }
   const nomes = new Set(temas.map(t => t.nome));
-  const ALIAS = { 'tupan': 'tupã', 'shell y ann': 'shellyana', 'shelly ann': 'shellyana', 'shellyann': 'shellyana', 'shelly ana': 'shellyana', 'shel': 'shellyana', 'sheli': 'shellyana', 'shelly': 'shellyana', 'sheelian': 'shellyana', 'sheliane': 'shellyana', 'shellyanna': 'shellyana', 'sheliana': 'shellyana', 'shelyana': 'shellyana', 'tranqueira': 'tronqueira', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
+  const ALIAS = { 'tupan': 'tupã', 'shellyana': 'Shell Y Ann', 'shell y ann': 'Shell Y Ann', 'shelly ann': 'Shell Y Ann', 'shellyann': 'Shell Y Ann', 'shelly ana': 'Shell Y Ann', 'shel': 'Shell Y Ann', 'sheli': 'Shell Y Ann', 'shelly': 'Shell Y Ann', 'sheelian': 'Shell Y Ann', 'sheliane': 'Shell Y Ann', 'shellyanna': 'Shell Y Ann', 'sheliana': 'Shell Y Ann', 'shelyana': 'Shell Y Ann', 'tranqueira': 'tronqueira', 'dr espanhol': 'dr. espanhol', 'doutor espanhol': 'dr. espanhol' };
   for (const mt of (Number(v.TEM_MENTOR) ? (j.mentores || []) : []).filter(x => x && x.nome).slice(0, 3)) {
     const base = String(mt.nome).trim().toLowerCase().replace(/\s+/g, ' ');
     const sem = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
