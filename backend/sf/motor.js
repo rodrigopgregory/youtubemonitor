@@ -204,14 +204,16 @@ async function gemini(cfg, modelos, body) {
 }
 function jsonDe(txt) {
   const a = txt.indexOf('{');
-  try { return JSON.parse(txt.slice(a, txt.lastIndexOf('}') + 1)); } catch (e) {
+  try { return JSON.parse(txt.slice(a, txt.lastIndexOf('}') + 1)); } catch (e0) {
+  try { return JSON.parse(txt.slice(a, txt.lastIndexOf('}') + 1).replace(/,\s*([\]}])/g, '$1').replace(/}\s*{/g, '},{').replace(/"\s*\n\s*"/g, '","')); } catch (e) {
     let prof = 0, aspas = false, esc = false;
     for (let i = a; i < txt.length; i++) {
       const ch = txt[i];
       if (aspas) { if (esc) esc = false; else if (ch === '\\') esc = true; else if (ch === '"') aspas = false; continue; }
       if (ch === '"') aspas = true; else if (ch === '{') prof++; else if (ch === '}' && --prof === 0) return JSON.parse(txt.slice(a, i + 1));
     }
-    throw e;
+    throw e0;
+  }
   }
 }
 function mmss(s) { const h = Math.floor(s / 3600), mi = Math.floor(s % 3600 / 60), se = s % 60; return (h ? h + ':' + String(mi).padStart(2, '0') : mi) + ':' + String(se).padStart(2, '0'); }
@@ -318,7 +320,7 @@ async function analisar(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   const texto = tr.map(x => '[' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n').slice(0, 600000);
   const temasExist = ((await sql('temasNomes', {})).rows || []).map(r => r.NOME);
-  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+  const corpo = {
     contents: [{ parts: [{ text:
       'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\n' +
       'Responda so JSON: {"resumo":"resumo em portugues de 5 a 10 frases, so com o que foi falado","temas":[{"nome":"tema curto em minusculas","momentos":["mm:ss",...]}],"mentores":[{"nome":"nome do mentor","momentos":["mm:ss",...]}],"praticas":[{"tipo":"...","titulo":"...","instrucao":"...","momento":"mm:ss"}]}\n' + PROMPT_PRATICAS +
@@ -326,8 +328,10 @@ async function analisar(cfg, v) {
       'De 2 a 6 temas, escolhidos SO desta lista de categorias (copie o nome exatamente como esta): ' + temasExist.filter(n => !n.startsWith('mentor: ')).slice(0, 300).join('; ') + '\n' +
       'Os momentos sao os tempos dos trechos em que o tema aparece (ate 6 por tema). Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
-  });
-  const j = jsonDe(txt);
+  };
+  let j;
+  try { j = jsonDe(await gemini(cfg, cfg.MODELO_ANALISE, corpo)); }
+  catch (e) { if (!(e instanceof SyntaxError)) throw e; corpo.generationConfig.temperature = 0; j = jsonDe(await gemini(cfg, cfg.MODELO_ANALISE, corpo)); }
   const seg = t => { const p = String(t).split(':').map(Number); return p.reduce((a, b) => a * 60 + b, 0); };
   const temas = (j.temas || []).filter(t => t && t.nome).slice(0, 10).map(t => ({ nome: String(t.nome).trim().toLowerCase().slice(0, 150), momentos: (t.momentos || []).map(seg).filter(n => n >= 0 && n <= Number(v.DURACAO_SEG || 1e9)).slice(0, 6).join(',') }));
   const sem0 = x => String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]/g, '');
