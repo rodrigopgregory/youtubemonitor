@@ -31,5 +31,16 @@ export const SF = {
   "canaisNomes": 92,
   "estudoAndamento": 93,
   "exportVideos": 95,
-  "exportTrechos": 96
+  "exportTrechos": 96,
+  "exportEstrutura": 107,
+  "exportIndices": 108,
+  "exportTabCanais": 109,
+  "exportTabVideos": 110,
+  "exportTabTrechos": 111,
+  "exportTabTemas": 112,
+  "exportTabVideoTemas": 113,
+  "exportTabPlaylists": 114,
+  "exportTabPlaylistVideos": 115,
+  "exportTabAvisos": 116,
+  "exportTabConfig": 117
 } as const
