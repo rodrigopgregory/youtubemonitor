@@ -1,6 +1,7 @@
 export const SF = {
   "canalCadastrar": 87,
   "temaEditar": 88,
+  "mentorEditar": 143,
   "resumoBusca": 89,
   "chatBusca": 90,
   "estudarMais": 94,
@@ -48,5 +49,20 @@ export const SF = {
   "praticasDoVideo": 124,
   "praticasResumo": 125,
   "exportTabPraticas": 126,
-  "exportTabConfig": 117
+  "exportTabConfig": 117,
+  "mentoresGerir": 128,
+  "mentorRegrasListar": 129,
+  "mentorVideos": 130,
+  "mentorRegraGravar": 131,
+  "mentorRegraApagar": 132,
+  "mentorRegraApagarNome": 133,
+  "mentorTemaPorId": 134,
+  "mentorTemaPorNome": 135,
+  "mentorBackup": 136,
+  "mentorMover": 137,
+  "mentorDesligar": 138,
+  "mentorTemaApagar": 139,
+  "mentorTemaRenomear": 140,
+  "mentorMarcarTitulos": 141,
+  "mentorRegrasMotor": 142
 } as const

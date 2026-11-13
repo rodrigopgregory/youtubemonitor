@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download, Users } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -11,6 +11,7 @@ const abas = [
   { to: '/', label: 'Busca', icon: Search, end: true },
   { to: '/chat', label: 'Chat', icon: MessageSquare, end: false },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
+  { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },
 ]
 

@@ -7,6 +7,7 @@ import BuscaPage from './pages/BuscaPage'
 import VideosPage from './pages/VideosPage'
 import CanaisPage from './pages/CanaisPage'
 import ChatPage from './pages/ChatPage'
+import MentoresPage from './pages/MentoresPage'
 
 function App() {
   const [configured, setConfigured] = useState(initMitra)
@@ -18,6 +19,7 @@ function App() {
         <Route path="/" element={<BuscaPage />} />
         <Route path="/chat" element={<ChatPage />} />
         <Route path="/videos" element={<VideosPage />} />
+        <Route path="/mentores" element={<MentoresPage />} />
         <Route path="/canais" element={<CanaisPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
