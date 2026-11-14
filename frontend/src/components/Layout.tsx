@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -51,10 +51,28 @@ export default function Layout() {
 
   const naoLidos = avisos.filter(a => !a.LIDO)
 
+  const totalNovos = naoLidos.reduce((s, a) => s + Number(a.QTD), 0)
+
   async function abrirAviso(a: Aviso) {
     setAtual(a); setVids([])
     setVids(await linhas<AvisoVideo>('avisoVideos', { id: a.ID }))
-    if (!a.LIDO) { await chamar('avisoMarcarLido', { id: a.ID }); carregar() }
+  }
+
+  async function marcar(a: Aviso, lido: boolean) {
+    setAvisos(l => l.map(x => x.ID === a.ID ? { ...x, LIDO: lido ? 1 : 0 } : x))
+    if (atual?.ID === a.ID) setAtual({ ...a, LIDO: lido ? 1 : 0 })
+    try { await chamar('avisoMarcar', { id: a.ID, lido: lido ? 1 : 0 }) } finally { carregar() }
+  }
+
+  async function arquivar(a: Aviso) {
+    setAvisos(l => l.filter(x => x.ID !== a.ID))
+    if (atual?.ID === a.ID) setAtual(null)
+    try { await chamar('avisoArquivar', { id: a.ID }) } finally { carregar() }
+  }
+
+  async function todosLidos() {
+    setAvisos(l => l.map(x => ({ ...x, LIDO: 1 })))
+    try { await chamar('avisosTodosLidos') } finally { carregar() }
   }
 
   return (
@@ -80,10 +98,13 @@ export default function Layout() {
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}
             </button>
-            <button onClick={() => { setAberto(true); setAtual(null) }} className="relative h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]"
-              style={{ color: naoLidos.length ? 'var(--accent-text)' : 'var(--fg-muted)', background: naoLidos.length ? 'var(--accent-soft)' : 'transparent' }} aria-label="Avisos">
-              <Bell size={17} />
-              {naoLidos.length > 0 && <span className="font-medium">{naoLidos.reduce((s, a) => s + Number(a.QTD), 0)} novos</span>}
+            <button onClick={() => { setAberto(true); setAtual(null) }} className="relative h-9 w-9 inline-flex items-center justify-center rounded-lg"
+              style={{ color: naoLidos.length ? 'var(--accent)' : 'var(--fg-muted)', background: naoLidos.length ? 'var(--accent-soft)' : 'transparent' }}
+              aria-label={naoLidos.length ? `Avisos: ${naoLidos.length} não ${naoLidos.length === 1 ? 'lido' : 'lidos'}` : 'Avisos'}
+              title={naoLidos.length ? `${totalNovos} ${totalNovos === 1 ? 'vídeo novo' : 'vídeos novos'} em avisos não lidos` : 'Avisos'}>
+              <Bell size={18} fill={naoLidos.length ? 'currentColor' : 'none'} />
+              {naoLidos.length > 0 && <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 rounded-full text-[11px] font-semibold leading-[18px] text-center"
+                style={{ background: 'var(--danger)', color: 'var(--fg-inverted)', boxShadow: '0 0 0 2px var(--bg-elevated)' }}>{naoLidos.length > 99 ? '99+' : naoLidos.length}</span>}
             </button>
           </div>
         </div>
@@ -115,17 +136,34 @@ export default function Layout() {
       <Modal isOpen={aberto} onClose={() => setAberto(false)} title={atual ? `${atual.QTD} ${Number(atual.QTD) === 1 ? 'vídeo novo' : 'vídeos novos'} em ${dataBr(atual.DIA)}` : 'Avisos de vídeos novos'} size="lg">
         <div className="p-5">
           {!atual && (avisos.length === 0
-            ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum aviso ainda. Quando a checagem diária das 6h encontrar vídeos novos, o aviso aparece aqui.</p>
-            : <ul className="flex flex-col gap-2">{avisos.map(a => (
-                <li key={a.ID}>
-                  <button onClick={() => abrirAviso(a)} className="w-full text-left rounded-lg px-3 py-2.5 border flex items-center justify-between gap-3" style={{ borderColor: 'var(--border)' }}>
-                    <span className="text-[14px]">{a.QTD} {Number(a.QTD) === 1 ? 'vídeo novo captado' : 'vídeos novos captados'} em {dataBr(a.DIA)}</span>
-                    <span className="text-[12px] font-medium" style={{ color: a.LIDO ? 'var(--fg-subtle)' : 'var(--accent)' }}>{a.LIDO ? 'Lido' : 'Não lido'}</span>
-                  </button>
-                </li>))}</ul>)}
+            ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum aviso na lista. Quando a checagem diária encontrar vídeos novos, o aviso aparece aqui.</p>
+            : <div className="flex flex-col gap-2">
+                {naoLidos.length > 1 && <button onClick={todosLidos} className="self-end text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Marcar todos como lidos</button>}
+                <ul className="flex flex-col gap-2">{avisos.map(a => (
+                  <li key={a.ID} className="rounded-lg border flex items-center gap-1 pr-1.5" style={{ borderColor: a.LIDO ? 'var(--border)' : 'var(--accent-border)', background: a.LIDO ? 'transparent' : 'var(--accent-soft)' }}>
+                    <button onClick={() => abrirAviso(a)} className="flex-1 min-w-0 text-left px-3 py-2.5 flex items-center gap-2.5">
+                      <span className="w-2 h-2 rounded-full shrink-0" style={{ background: a.LIDO ? 'transparent' : 'var(--accent)' }} />
+                      <span className={'text-[14px] ' + (a.LIDO ? '' : 'font-semibold')}>{a.QTD} {Number(a.QTD) === 1 ? 'vídeo novo captado' : 'vídeos novos captados'} em {dataBr(a.DIA)}</span>
+                    </button>
+                    <button onClick={() => marcar(a, !a.LIDO)} className="h-8 px-2 rounded-md inline-flex items-center gap-1 text-[12.5px]" style={{ color: 'var(--fg-muted)' }} title={a.LIDO ? 'Marcar como não lido' : 'Marcar como lido'}>
+                      {a.LIDO ? <Mail size={14} /> : <Check size={14} />}<span className="hidden sm:inline">{a.LIDO ? 'Não lido' : 'Lido'}</span>
+                    </button>
+                    <button onClick={() => arquivar(a)} className="h-8 px-2 rounded-md inline-flex items-center gap-1 text-[12.5px]" style={{ color: 'var(--fg-muted)' }} title="Arquivar: sai da lista">
+                      <Archive size={14} /><span className="hidden sm:inline">Arquivar</span>
+                    </button>
+                  </li>))}</ul>
+              </div>)}
           {atual && (
             <div className="flex flex-col gap-3">
-              <button onClick={() => setAtual(null)} className="self-start text-[13px]" style={{ color: 'var(--fg-muted)' }}>← Todos os avisos</button>
+              <div className="flex items-center gap-2 flex-wrap">
+                <button onClick={() => setAtual(null)} className="text-[13px] mr-auto" style={{ color: 'var(--fg-muted)' }}>← Todos os avisos</button>
+                <button onClick={() => marcar(atual, !atual.LIDO)} className="h-8 px-2.5 rounded-md border inline-flex items-center gap-1.5 text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>
+                  {atual.LIDO ? <Mail size={14} /> : <Check size={14} />}{atual.LIDO ? 'Marcar como não lido' : 'Marcar como lido'}
+                </button>
+                <button onClick={() => arquivar(atual)} className="h-8 px-2.5 rounded-md border inline-flex items-center gap-1.5 text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>
+                  <Archive size={14} />Arquivar
+                </button>
+              </div>
               {vids.length === 0 ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Carregando…</p> :
                 <ul className="flex flex-col gap-2">{vids.map(v => (
                   <li key={v.ID} className="rounded-lg px-3 py-2.5 border" style={{ borderColor: 'var(--border)' }}>
