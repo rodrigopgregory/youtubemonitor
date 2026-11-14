@@ -26,16 +26,20 @@ function separarTemas(txt: string | null) {
   return { temas, mentores }
 }
 
+function origemNome(o: string | null | undefined) {
+  return o === 'AUDIO' ? 'Pelo áudio' : o === 'YOUTUBE' ? 'Legenda do YouTube' : ''
+}
+
 function celula(v: unknown) {
   const s = String(v ?? '')
   return /[";\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
 }
 
 function planilha(videos: VideoExp[]) {
-  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Temas', 'Mentores', 'Resumo']
+  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Origem da transcrição', 'Temas', 'Mentores', 'Resumo']
   const corpo = videos.map(v => {
     const { temas, mentores } = separarTemas(v.TEMAS)
-    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), temas.join(', '), mentores.join(', '), v.RESUMO || ''].map(celula).join(';')
+    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), origemNome(v.ORIGEM), temas.join(', '), mentores.join(', '), v.RESUMO || ''].map(celula).join(';')
   })
   return '\ufeff' + [cab.join(';'), ...corpo].join('\r\n')
 }
@@ -79,10 +83,10 @@ export async function exportarVideosFiltro(filtro: FiltroVideos, nome: string, p
     depois = pag[pag.length - 1].ID
   }
   todos.sort((a, b) => String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')))
-  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Situação', 'Playlists', 'Temas', 'Mentores', 'Práticas', 'Resumo']
+  const cab = ['Canal', 'Título', 'Link', 'Publicado em', 'Duração', 'Origem da transcrição', 'Situação', 'Playlists', 'Temas', 'Mentores', 'Práticas', 'Resumo']
   const corpo = todos.map(v => {
     const { temas, mentores } = separarTemas(v.TEMAS)
-    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), statusNome[v.STATUS] || v.STATUS, v.PLAYLISTS || '', temas.join(', '), mentores.join(', '), v.PRATICAS || '', v.RESUMO || ''].map(celula).join(';')
+    return [v.CANAL, v.TITULO, linkYt(v.YT_VIDEO_ID), dataBr(v.PUBLICADO_EM), duracao(Number(v.DURACAO_SEG || 0)), origemNome(v.ORIGEM), statusNome[v.STATUS] || v.STATUS, v.PLAYLISTS || '', temas.join(', '), mentores.join(', '), v.PRATICAS || '', v.RESUMO || ''].map(celula).join(';')
   })
   baixar(new Blob(['\ufeff' + [cab.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeArquivo(nome) + '.csv')
   return todos.length

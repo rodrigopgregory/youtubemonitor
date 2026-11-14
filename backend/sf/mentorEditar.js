@@ -65,6 +65,14 @@ if (acao === 'naoMentorNome') {
   await sql('mentorRegraGravar', { nome, tipo: 'NAO', destino: '' });
   return { ok: true, msg: '"' + nome + '" não será marcado como mentor.' };
 }
+if (acao === 'apelido') {
+  const nome = limpa(event.nome), d = await porId(event.destinoId);
+  if (nome.length < 2) return { ok: false, erro: 'Escreva o outro jeito de escrever o nome.' };
+  if (!d) return { ok: false, erro: 'Escolha o mentor.' };
+  if (sem(nome) === sem(d.NOME)) return { ok: false, erro: 'Esse já é o nome do mentor.' };
+  await sql('mentorRegraGravar', { nome, tipo: 'APELIDO', destino: d.NOME });
+  return { ok: true, msg: 'Quando o estudo achar "' + nome + '", vai marcar "' + d.NOME + '".' };
+}
 if (acao === 'apagarRegra') {
   await sql('mentorRegraApagar', { id: Number(event.id) || 0 });
   return { ok: true, msg: 'Regra apagada.' };

@@ -1,23 +1,19 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, Pencil, Merge, Ban, Check, X, ExternalLink, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Merge, Ban, Check, X, ExternalLink } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
-import Badge from '../components/ui/Badge'
 import Modal from '../components/ui/Modal'
 import Select from '../components/ui/Select'
 import { linhas, chamar, linkYt, dataBr } from '../lib/api'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
-interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
 interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; ORIGEM: string }
 type Res = { ok: boolean; msg?: string; erro?: string }
 
 export default function MentoresPage() {
   const [mentores, setMentores] = useState<Mentor[]>([])
-  const [regras, setRegras] = useState<Regra[]>([])
   const [novo, setNovo] = useState('')
   const [marcar, setMarcar] = useState(true)
-  const [naoNome, setNaoNome] = useState('')
   const [msg, setMsg] = useState<{ t: string; erro?: boolean } | null>(null)
   const [salvando, setSalvando] = useState(false)
   const [editando, setEditando] = useState<number | null>(null)
@@ -29,7 +25,6 @@ export default function MentoresPage() {
 
   const carregar = useCallback(() => {
     linhas<Mentor>('mentoresGerir').then(setMentores)
-    linhas<Regra>('mentorRegrasListar').then(setRegras)
   }, [])
   useEffect(() => { carregar() }, [carregar])
 
@@ -47,14 +42,11 @@ export default function MentoresPage() {
     setVids(await linhas<Vid>('mentorVideos', { temaId: m.ID }))
   }
 
-  const apelidos = regras.filter(r => r.TIPO === 'APELIDO')
-  const naoSao = regras.filter(r => r.TIPO === 'NAO')
-
   return (
     <div className="flex flex-col gap-5">
       <div>
         <h1 className="text-[22px] font-semibold">Mentores</h1>
-        <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Cadastre, renomeie, junte ou tire mentores. O que você decidir aqui vira regra: os próximos vídeos estudados já seguem.</p>
+        <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Cadastre, renomeie, junte ou tire mentores. O que você decidir aqui vira regra: os próximos vídeos estudados já seguem. Os outros jeitos de escrever e os nomes que não são mentores ficam em Configurações.</p>
       </div>
 
       <Card className="p-5 flex flex-col gap-3">
@@ -101,32 +93,6 @@ export default function MentoresPage() {
           </tbody>
         </table>
       </Card>
-
-      <div className="grid gap-3 md:grid-cols-2">
-        <Card className="p-5 flex flex-col gap-2">
-          <h2 className="text-[15px] font-medium">Outros jeitos de escrever</h2>
-          <p className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Quando o estudo achar o nome da esquerda, marca o mentor da direita.</p>
-          {apelidos.map(r => (
-            <div key={r.ID} className="flex items-center gap-2 text-[13.5px]">
-              <span>{r.NOME}</span><span style={{ color: 'var(--fg-subtle)' }}>→</span><Badge variant="accent">{r.DESTINO}</Badge>
-              <button className="ml-auto" title="Apagar regra" style={{ color: 'var(--fg-muted)' }} onClick={() => agir({ acao: 'apagarRegra', id: r.ID })}><Trash2 size={14} /></button>
-            </div>))}
-          {apelidos.length === 0 && <p className="text-[13px]" style={{ color: 'var(--fg-subtle)' }}>Nenhum.</p>}
-        </Card>
-        <Card className="p-5 flex flex-col gap-2">
-          <h2 className="text-[15px] font-medium">Não são mentores</h2>
-          <p className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Médiuns, pessoas e nomes só citados. O estudo nunca marca estes.</p>
-          <div className="flex flex-wrap gap-1.5">
-            {naoSao.map(r => (
-              <span key={r.ID} className="inline-flex items-center gap-1"><Badge variant="neutral">{r.NOME}</Badge>
-                <button title="Apagar regra" style={{ color: 'var(--fg-muted)' }} onClick={() => agir({ acao: 'apagarRegra', id: r.ID })}><X size={12} /></button></span>))}
-          </div>
-          <form className="flex gap-1.5 mt-1" onSubmit={e => { e.preventDefault(); agir({ acao: 'naoMentorNome', nome: naoNome }, () => setNaoNome('')) }}>
-            <input className="controle h-8 flex-1" placeholder="Acrescentar nome" value={naoNome} onChange={e => setNaoNome(e.target.value)} />
-            <Button size="sm" variant="secondary" type="submit" disabled={salvando || naoNome.trim().length < 2}><Plus size={14} />Acrescentar</Button>
-          </form>
-        </Card>
-      </div>
 
       {juntando && (
         <Modal isOpen onClose={() => setJuntando(null)} title={`Juntar "${juntando.NOME}"`} size="md">

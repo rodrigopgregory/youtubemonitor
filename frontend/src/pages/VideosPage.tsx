@@ -33,6 +33,7 @@ export default function VideosPage() {
   const [praticas, setPraticas] = useState<PraticaTipo[]>([])
   const [leitura, setLeitura] = useState<{ N: number; LIDOS: number } | null>(null)
   const status = sp.get('status') || ''
+  const origem = sp.get('origem') || ''
   const [temas, setTemas] = useState<Tema[]>([])
   const [mentores, setMentores] = useState<Tema[]>([])
   const [videos, setVideos] = useState<Video[]>([])
@@ -46,7 +47,7 @@ export default function VideosPage() {
 
   const filtros = useCallback(() => {
     const t = [...(sp.get('tema') || '').split(','), ...(sp.get('mentor') || '').split(',')].filter(Boolean), p = (sp.get('playlist') || '').split(',').filter(Boolean), r = (sp.get('pratica') || '').split(',').filter(Boolean)
-    return { canalId, status: sp.get('status') || '', temas: t.join(','), nTemas: t.length, playlists: p.join(','), nPlay: p.length, praticas: r.join(',').replace(/'/g, ''), nPrat: r.length }
+    return { canalId, status: sp.get('status') || '', temas: t.join(','), nTemas: t.length, playlists: p.join(','), nPlay: p.length, praticas: r.join(',').replace(/'/g, ''), nPrat: r.length, origem: ['YOUTUBE', 'AUDIO'].includes(sp.get('origem') || '') ? sp.get('origem') || '' : '' }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveFiltro, canalId])
 
@@ -62,7 +63,7 @@ export default function VideosPage() {
   }, [temas, mentores, playlists])
 
   async function baixarPlanilha() {
-    const partes = ['Vídeos', ...playSel.map(id => nomeDe('playlist', id)), ...temasSel.map(id => nomeDe('tema', id)), ...mentSel.map(id => nomeDe('mentor', id)), ...pratSel, status ? statusInfo[status]?.label : ''].filter(Boolean)
+    const partes = ['Vídeos', ...playSel.map(id => nomeDe('playlist', id)), ...temasSel.map(id => nomeDe('tema', id)), ...mentSel.map(id => nomeDe('mentor', id)), ...pratSel, status ? statusInfo[status]?.label : '', origem === 'AUDIO' ? 'Transcrito pelo áudio' : origem === 'YOUTUBE' ? 'Legenda do YouTube' : ''].filter(Boolean)
     setExportMsg({ rodando: true, msg: 'Buscando os vídeos…' })
     try {
       const n = await exportarVideosFiltro(filtros(), partes.join(' - '), m => setExportMsg({ rodando: true, msg: m }))
@@ -120,6 +121,12 @@ export default function VideosPage() {
                 style={status === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
           </div>
         )}
+        <div className="flex gap-2 flex-wrap items-center">
+          <span className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Transcrição:</span>
+          {[['', 'Todas'], ['YOUTUBE', 'Legenda do YouTube'], ['AUDIO', 'Pelo áudio']].map(([k, l]) => (
+            <button key={'o' + k} onClick={() => filtro('origem', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
+              style={origem === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
+        </div>
         <div className="flex flex-col items-end gap-1">
           <Button variant="secondary" size="sm" disabled={!!exportMsg?.rodando} onClick={baixarPlanilha} title="Baixa uma planilha com os vídeos que estão aparecendo agora, com os filtros marcados">
             <Download size={14} />{exportMsg?.rodando ? 'Montando a planilha…' : 'Exportar planilha'}
@@ -207,11 +214,11 @@ export default function VideosPage() {
                     <span className="text-[14.5px] font-medium">{v.TITULO}</span>
                     <Badge variant={st.v}>{st.label}</Badge>
                     {v.TIPO === 'LIVE' && <Badge variant="info">Live</Badge>}
+                    {v.ORIGEM === 'AUDIO' && <Badge variant="accent">Transcrito pelo áudio</Badge>}
                     {!!v.INDISPONIVEL && <Badge variant="warning">Indisponível no YouTube</Badge>}
                   </div>
                   <div className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>
                     {v.CANAL}{v.PUBLICADO_EM ? ' · ' + dataBr(v.PUBLICADO_EM) : ''} · {duracao(v.DURACAO_SEG)}
-                    {v.ORIGEM === 'AUDIO' && ' · transcrito pelo áudio'}
                   </div>
                   {v.STATUS === 'PENDENTE' && v.MOTIVO && <div className="text-[12.5px]" style={{ color: 'var(--warning-text)' }}>Motivo: {v.MOTIVO}. Nova tentativa na próxima checagem diária.</div>}
                   {v.PRATICAS && <div className="flex flex-wrap gap-1 items-center text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Ensina: {v.PRATICAS.split('|').map(t => <Badge key={t} variant="success">{t}</Badge>)}</div>}

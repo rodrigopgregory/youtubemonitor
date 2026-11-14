@@ -51,7 +51,7 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
           <div className="flex flex-wrap gap-2 items-center text-[13px]" style={{ color: 'var(--fg-muted)' }}>
             <span>{d.CANAL}</span><span>·</span><span>Publicado em {dataBr(d.PUBLICADO_EM) || '—'}</span><span>·</span><span>{duracao(d.DURACAO_SEG)}</span>
             <Badge variant={d.TIPO === 'LIVE' ? 'info' : 'neutral'}>{d.TIPO === 'LIVE' ? 'Live' : 'Vídeo'}</Badge>
-            {d.ORIGEM && <Badge variant="neutral">{d.ORIGEM === 'AUDIO' ? 'Transcrito pelo áudio' : 'Transcrição do YouTube'}</Badge>}
+            {d.ORIGEM && <Badge variant={d.ORIGEM === 'AUDIO' ? 'accent' : 'neutral'}>{d.ORIGEM === 'AUDIO' ? 'Transcrito pelo áudio' : 'Legenda do YouTube'}</Badge>}
             {!!d.INDISPONIVEL && <Badge variant="warning">Indisponível no YouTube</Badge>}
             <a href={linkYt(d.YT_VIDEO_ID)} target="_blank" rel="noreferrer" className="font-medium hover:underline" style={{ color: 'var(--accent-text)' }}>Assistir no YouTube</a>
           </div>

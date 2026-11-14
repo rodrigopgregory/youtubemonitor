@@ -90,6 +90,10 @@
  "exportTabPraticas": 126,
  "exportTabConfig": 117,
  "mentoresGerir": 128,
+ "configTelaLer": 153,
+ "configTelaGravar": 154,
+ "canaisMentorLer": 155,
+ "canalMentorGravar": 156,
  "mentorRegrasListar": 129,
  "mentorVideos": 130,
  "mentorRegraGravar": 131,
@@ -118,5 +122,6 @@
  "estudarMais": 94,
  "mentorEditar": 143,
  "canaisAtualizar": 151,
- "buscaTermos": 152
+ "buscaTermos": 152,
+ "configEditar": 157
 }

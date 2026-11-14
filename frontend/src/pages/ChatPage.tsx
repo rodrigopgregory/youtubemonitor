@@ -5,7 +5,7 @@ import Badge from '../components/ui/Badge'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { chamar, chamarDemorado, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
-interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; MOMS: string }
+interface Vid { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; ORIGEM?: string | null; CANAL: string; MOMS: string }
 interface Acao { tipo: 'estudar'; quantidade: number; canalId: number; rotulo: string; estado?: 'feito' | 'cancelado' }
 interface Msg { papel: 'pessoa' | 'agente'; texto: string; videos?: Vid[]; termos?: string[]; erro?: boolean; acao?: Acao }
 
@@ -139,6 +139,7 @@ export default function ChatPage() {
                       <div className="flex items-start gap-2 flex-wrap">
                         <a href={linkYt(v.YT_VIDEO_ID)} target="_blank" rel="noreferrer" className="text-[14px] font-medium hover:underline">{v.TITULO}</a>
                         {v.TIPO === 'LIVE' && <Badge variant="info">Live</Badge>}
+                        {v.ORIGEM === 'AUDIO' && <Badge variant="accent">Transcrito pelo áudio</Badge>}
                         {!!v.INDISPONIVEL && <Badge variant="warning">Indisponível no YouTube</Badge>}
                       </div>
                       <div className="text-[12px]" style={{ color: 'var(--fg-muted)' }}>{v.CANAL} · {dataBr(v.PUBLICADO_EM)} · {duracao(v.DURACAO_SEG)}</div>

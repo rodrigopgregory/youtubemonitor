@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -12,6 +12,7 @@ const abas = [
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },
+  { to: '/configuracoes', label: 'Configurações', icon: Settings, end: false },
 ]
 
 export default function Layout() {
