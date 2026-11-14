@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download, Users } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download, Users, RefreshCw } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -20,6 +20,16 @@ export default function Layout() {
   const [aberto, setAberto] = useState(false)
   const [atual, setAtual] = useState<Aviso | null>(null)
   const [vids, setVids] = useState<AvisoVideo[]>([])
+  const [busca, setBusca] = useState<{ rodando: boolean; msg: string; erro?: boolean } | null>(null)
+  async function buscarNovos() {
+    setBusca({ rodando: true, msg: '' })
+    try {
+      const r = await chamar<{ ok: boolean; novos?: number; canais?: { nome: string; novos: number; msg?: string }[]; erro?: string }>('canaisAtualizar')
+      if (!r?.ok) { setBusca({ rodando: false, msg: r?.erro || 'Não foi possível procurar agora. Tente de novo em instantes.', erro: true }); return }
+      const det = (r.canais || []).filter(c => c.novos > 0 || c.msg).map(c => c.msg ? `${c.nome}: ${c.msg}` : `${c.nome}: ${c.novos}`).join(' · ')
+      setBusca({ rodando: false, msg: r.novos ? `${r.novos} ${r.novos === 1 ? 'vídeo novo entrou' : 'vídeos novos entraram'} na fila de estudo. ${det}` : `Nenhum vídeo novo nos canais desde a última conferência.${det ? ' ' + det : ''}` })
+    } catch (er) { setBusca({ rodando: false, msg: (er as Error).message, erro: true }) }
+  }
   const [escuro, setEscuro] = useState(() => document.documentElement.dataset.theme === 'dark')
 
   const carregar = useCallback(() => { linhas<Aviso>('avisosListar').then(setAvisos).catch(() => {}) }, [])
@@ -64,6 +74,9 @@ export default function Layout() {
             {instalar && <button onClick={() => { instalar.prompt().finally(() => setInstalar(null)) }} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Instalar o Monitor como aplicativo neste aparelho">
               <Download size={16} /><span className="hidden sm:inline">Instalar app</span>
             </button>}
+            <button onClick={buscarNovos} disabled={busca?.rodando} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Procurar agora vídeos novos em todos os canais">
+              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
+            </button>
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}
             </button>
@@ -75,6 +88,15 @@ export default function Layout() {
           </div>
         </div>
       </header>
+
+      {busca && !busca.rodando && (
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
+          <div className="rounded-lg border px-4 py-2.5 text-[13.5px] flex items-start gap-3" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated, var(--bg))', color: busca.erro ? 'var(--danger)' : 'var(--fg)' }}>
+            <span className="flex-1">{busca.msg}</span>
+            <button onClick={() => setBusca(null)} className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Fechar</button>
+          </div>
+        </div>
+      )}
 
       {naoLidos.length > 0 && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">

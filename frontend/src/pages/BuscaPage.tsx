@@ -4,7 +4,7 @@ import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
-import { chamarDemorado, linhas, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
+import { chamar, chamarDemorado, linhas, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
 interface Res { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; INDISPONIVEL: boolean | number; CANAL: string; SCORE: number; MOMS: string }
 
@@ -19,16 +19,31 @@ export default function BuscaPage() {
   const [carregando, setCarregando] = useState(false)
   const [canalId, setCanalId] = useCanal()
 
+  const [termos, setTermos] = useState<{ q: string; lista: string[] } | null>(null)
+
   async function buscar(t = tema, o = ordem, comResumo = true, canal = canalId) {
     const q = t.trim(); if (!q) return
     setCarregando(true); setBuscado(q)
     if (comResumo) setResumo(null)
     try {
-      const r = await linhas<Res>('buscarTema', { tema: q, ordem: o, limit: 50, offset: 0, canalId: canal })
+      let lista = termos?.q === q ? termos.lista : null
+      if (!lista) {
+        try { const x = await chamar<{ ok: boolean; termos?: string[] }>('buscaTermos', { tema: q }); lista = x?.ok && x.termos?.length ? x.termos : [q] }
+        catch { lista = [q] }
+        setTermos({ q, lista })
+      }
+      const partes = await Promise.all(lista.map((termo, i) => linhas<Res>('buscarTema', { tema: termo, ordem: o, limit: 50, offset: 0, canalId: canal }).then(rs => rs.map(v => ({ ...v, SCORE: Number(v.SCORE) * (i === 0 ? 2 : 1) }))).catch(() => [] as Res[])))
+      const junto = new Map<number, Res>()
+      for (const v of partes.flat()) {
+        const j = junto.get(v.ID)
+        if (!j) junto.set(v.ID, { ...v })
+        else { j.SCORE = Number(j.SCORE) + Number(v.SCORE); j.MOMS = [j.MOMS, v.MOMS].filter(Boolean).join(',') }
+      }
+      const r = [...junto.values()].sort((a, b) => o === 'recentes' ? String(b.PUBLICADO_EM).localeCompare(String(a.PUBLICADO_EM)) : Number(b.SCORE) - Number(a.SCORE)).slice(0, 60)
       setRes(r)
       if (comResumo) {
         if (!r.length) setResumo({ texto: `Nenhum vídeo da base trata do tema "${q}".`, vazio: true })
-        else chamarDemorado<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q, canalId: canal })
+        else chamarDemorado<{ ok: boolean; resumo?: string; vazio?: boolean; erro?: string }>('resumoBusca', { tema: q, termos: lista.slice(1), canalId: canal })
           .then(x => setResumo(x.ok ? { texto: x.resumo || '', vazio: x.vazio } : { texto: x.erro || 'Não consegui gerar o resumo agora.', erro: true }))
           .catch(() => setResumo({ texto: 'Não consegui gerar o resumo agora.', erro: true }))
       }
@@ -43,7 +58,7 @@ export default function BuscaPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-[22px] font-semibold">Pesquisar um tema</h1>
-        <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>A resposta usa só o que foi falado nos vídeos dos canais cadastrados.</p>
+        <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Digite um tema: a busca também procura os sinônimos dele. A resposta usa só o que foi falado nos vídeos dos canais cadastrados.</p>
       </div>
       <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); if (buscado) buscar(buscado, ordem, true, id) }} />
       <form onSubmit={e => { e.preventDefault(); buscar() }} className="flex gap-2">
@@ -56,6 +71,13 @@ export default function BuscaPage() {
       {!buscado && (
         <div className="flex flex-wrap gap-2">
           {sugestoes.map(s => <button key={s} onClick={() => { setTema(s); buscar(s) }} className="h-8 px-3 rounded-full border text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{s}</button>)}
+        </div>
+      )}
+
+      {buscado && termos?.q === buscado && termos.lista.length > 1 && (
+        <div className="flex flex-wrap gap-1.5 items-center -mt-3">
+          <span className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>Também procurei por:</span>
+          {termos.lista.slice(1).map(t => <span key={t} className="h-7 px-2.5 rounded-full border inline-flex items-center text-[12.5px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{t}</span>)}
         </div>
       )}
 
