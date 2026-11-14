@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, MessageSquare, Download, Users, RefreshCw } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -8,8 +8,7 @@ interface Aviso { ID: number; DIA: string; CRIADO_EM: string; QTD: number; LIDO:
 interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; STATUS: string; CANAL: string }
 
 const abas = [
-  { to: '/', label: 'Busca', icon: Search, end: true },
-  { to: '/chat', label: 'Chat', icon: MessageSquare, end: false },
+  { to: '/', label: 'Pesquisar', icon: Search, end: true },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },

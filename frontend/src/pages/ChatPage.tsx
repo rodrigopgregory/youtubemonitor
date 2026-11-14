@@ -10,7 +10,7 @@ interface Acao { tipo: 'estudar'; quantidade: number; canalId: number; rotulo: s
 interface Msg { papel: 'pessoa' | 'agente'; texto: string; videos?: Vid[]; termos?: string[]; erro?: boolean; acao?: Acao }
 
 const CHAVE = 'monitor-yt-chat'
-const exemplos = ['O que ele fala sobre proteção contra energias negativas?', 'Vídeos mais recentes sobre mentores espirituais', 'Lives que falam de mantras', 'Estude mais 100 vídeos', 'Como está o estudo?']
+const exemplos = ['chakra coronário', 'O que ele fala sobre proteção contra energias negativas?', 'Vídeos mais recentes sobre mentores espirituais', 'Lives que falam de mantras', 'Estude mais 100 vídeos', 'Como está o estudo?']
 
 type Reconhecedor = { lang: string; continuous: boolean; interimResults: boolean; start: () => void; stop: () => void;
   onresult: ((e: { resultIndex: number; results: ArrayLike<{ isFinal: boolean; 0: { transcript: string } }> }) => void) | null;
@@ -98,8 +98,8 @@ export default function ChatPage() {
     <div className="flex flex-col h-[calc(100vh-8.5rem)] min-h-[480px]">
       <div className="flex items-end justify-between gap-3 pb-4">
         <div>
-          <h1 className="text-[22px] font-semibold">Chat</h1>
-          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Peça com as suas palavras o que quer encontrar. A resposta usa só o que foi falado nos vídeos da base. Você também pode pedir para estudar mais vídeos.</p>
+          <h1 className="text-[22px] font-semibold">Pesquisar</h1>
+          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Escreva um tema ou uma pergunta com as suas palavras (ex.: "chakra coronário" ou "o que a Mônica fala sobre medo nas lives?"). A pesquisa procura também os sinônimos, mostra os vídeos com os momentos e resume o que foi falado. Dá para continuar a conversa e pedir para estudar mais vídeos.</p>
         </div>
         <div className="flex items-center gap-2">
           <CanalFiltro valor={canalId} onChange={setCanalId} />
@@ -158,7 +158,7 @@ export default function ChatPage() {
       </div>
 
       <form onSubmit={e => { e.preventDefault(); enviar() }} className="flex gap-2 pt-3">
-        <textarea value={texto} onChange={e => setTexto(e.target.value)} rows={1} placeholder={ouvindo ? 'Ouvindo…' : 'Escreva ou toque no microfone. Ex.: o que ele fala sobre chakra coronário?'}
+        <textarea value={texto} onChange={e => setTexto(e.target.value)} rows={1} placeholder={ouvindo ? 'Ouvindo…' : 'Tema ou pergunta. Ex.: chakra coronário'}
           onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviar() } }}
           className="controle flex-1 resize-none py-2" style={{ height: 'auto', minHeight: 'var(--altura-controle)' }} />
         {temVoz && <Button type="button" variant={ouvindo ? 'primary' : 'secondary'} onClick={falar} disabled={pensando} aria-label={ouvindo ? 'Parar de ouvir' : 'Falar por voz'} title={ouvindo ? 'Parar de ouvir' : 'Falar por voz'}>

@@ -78,7 +78,7 @@ for (const tema of termos) {
 }
 let lista = Object.values(vids);
 lista.sort((a, b) => ordem === 'recentes' ? String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')) || b.SCORE - a.SCORE : b.SCORE - a.SCORE || String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')));
-lista = lista.slice(0, 15);
+lista = lista.slice(0, 30);
 const titulos = new Set(lista.map(v => v.TITULO));
 if (!lista.length) return { ok: true, vazio: true, resposta: 'Nenhum vídeo da base trata disso' + (plano.somenteLives ? ' nas lives' : '') + (canalBusca ? ' neste canal' : '') + '. Procurei por: ' + termos.join(', ') + '.', videos: [], termos, ordem };
 

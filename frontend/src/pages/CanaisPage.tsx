@@ -113,7 +113,7 @@ export default function CanaisPage() {
               </div>
               <div className="flex gap-2">
                 <Button size="sm" variant="secondary" onClick={() => { setCanalId(c.ID); navegar('/videos') }}>Ver vídeos do canal</Button>
-                <Button size="sm" variant="ghost" onClick={() => { setCanalId(c.ID); navegar('/chat') }}>Perguntar sobre este canal</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setCanalId(c.ID); navegar('/') }}>Perguntar sobre este canal</Button>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="ghost" disabled={!!exportando || !est} onClick={() => exportar(c.ID, 'temas', () => exportarTemas(c.ID, c.NOME, m => setExportMsg({ id: c.ID, msg: m })).then(n => `Planilha baixada com ${n} vídeos.`))}><Download size={14} />Exportar temas (planilha)</Button>
