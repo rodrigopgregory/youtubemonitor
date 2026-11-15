@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, X, Trash2 } from 'lucide-react'
+import { Plus, X, Trash2, Package } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Select from '../components/ui/Select'
 import { linhas, chamar } from '../lib/api'
+import { exportarTudo } from '../lib/exportar'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
@@ -87,6 +88,14 @@ export default function ConfiguracoesPage() {
   }
 
   const apelidos = regras.filter(r => r.TIPO === 'APELIDO')
+  const [pacote, setPacote] = useState<{ rodando: boolean; msg: string } | null>(null)
+  async function baixarTudo() {
+    setPacote({ rodando: true, msg: 'Começando…' })
+    try {
+      const r = await exportarTudo(m => setPacote({ rodando: true, msg: m }))
+      setPacote({ rodando: false, msg: `Pacote baixado: ${r.videos.toLocaleString('pt-BR')} vídeos, ${r.trechos.toLocaleString('pt-BR')} trechos de transcrição, o código do app e a estrutura do banco.` })
+    } catch { setPacote({ rodando: false, msg: 'Não foi possível montar o pacote agora. Tente de novo em instantes.' }) }
+  }
   const naoSao = regras.filter(r => r.TIPO === 'NAO')
   const liga = (k: string) => config?.[k] !== '0'
   const minAtual = config ? String(Math.round(Number(config.DURACAO_MIN_SEG || 600) / 60)) : ''
@@ -176,6 +185,18 @@ export default function ConfiguracoesPage() {
               </Linha>))}
           </Card>
         )}
+      </section>
+      <section className="flex flex-col gap-3">
+        <h2 className="text-[16px] font-semibold">Exportar</h2>
+        <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+          <p className="text-[13.5px] flex-1" style={muted}>Baixa um ZIP com o código do app, a estrutura do banco e todos os dados (vídeos, transcrições, temas, práticas, mentores, playlists e ajustes), para levar o sistema para outra plataforma ou IA. Chaves e senhas não vão no pacote.</p>
+          <div className="flex flex-col sm:items-end gap-1 sm:max-w-[320px]">
+            <Button variant="secondary" disabled={!!pacote?.rodando} onClick={baixarTudo}>
+              <Package size={15} />{pacote?.rodando ? 'Montando o pacote…' : 'Exportar tudo (app + banco)'}
+            </Button>
+            {pacote && <p className="text-[12.5px] sm:text-right" style={muted}>{pacote.msg}</p>}
+          </div>
+        </Card>
       </section>
     </div>
   )

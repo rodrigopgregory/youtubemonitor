@@ -207,13 +207,14 @@ const TABELAS: { tabela: string; funcao: Parameters<typeof linhas>[0]; pagina: n
   { tabela: 'PLAYLIST_VIDEOS', funcao: 'exportTabPlaylistVideos', pagina: 5000 },
   { tabela: 'AVISOS', funcao: 'exportTabAvisos', pagina: 5000 },
   { tabela: 'PRATICAS', funcao: 'exportTabPraticas', pagina: 5000 },
+  { tabela: 'MENTOR_REGRAS', funcao: 'exportTabMentorRegras', pagina: 5000 },
   { tabela: 'TRECHOS', funcao: 'exportTabTrechos', pagina: 5000 },
 ]
 
 type Coluna = { TABLE_NAME: string; COLUMN_NAME: string; COLUMN_TYPE: string; IS_NULLABLE: string; COLUMN_KEY: string; COLUMN_DEFAULT: string | null; EXTRA: string }
 type Indice = { TABLE_NAME: string; INDEX_NAME: string; NON_UNIQUE: number; COLUNAS: string }
 
-function montarEsquema(colunas: Coluna[], indices: Indice[]) {
+function montarEsquema(colunas: Coluna[], indices: Indice[], visoes: { TABLE_NAME: string; VIEW_DEFINITION: string }[]) {
   const porTabela = new Map<string, Coluna[]>()
   for (const c of colunas) porTabela.set(c.TABLE_NAME, [...(porTabela.get(c.TABLE_NAME) ?? []), c])
   const blocos: string[] = ['-- Estrutura do banco do Monitor de Canais do YouTube (MySQL 8)', 'SET NAMES utf8mb4;', '']
@@ -232,6 +233,7 @@ function montarEsquema(colunas: Coluna[], indices: Indice[]) {
     }
     blocos.push(`CREATE TABLE IF NOT EXISTS \`${tabela}\` (\n${linhasSql.join(',\n')}\n) DEFAULT CHARSET=utf8mb4;`, '')
   }
+  for (const v of visoes) blocos.push(`CREATE OR REPLACE VIEW \`${v.TABLE_NAME}\` AS ${v.VIEW_DEFINITION.replace(/`[a-z0-9_]+`\./gi, '')};`, '')
   blocos.push('-- Para carregar os dados: LOAD DATA LOCAL INFILE \'dados/VIDEOS.csv\' INTO TABLE VIDEOS CHARACTER SET utf8mb4', "--   FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '\"' LINES TERMINATED BY '\\r\\n' IGNORE 1 LINES;", '-- (repita para cada arquivo da pasta dados; carregue CANAIS e TEMAS antes das demais)')
   return blocos.join('\n')
 }
@@ -248,13 +250,15 @@ Este pacote tem tudo o que é preciso para levar o sistema para outra plataforma
   - codigo/backend/criar-funcoes.mjs e funcoes-tela.mjs — todas as consultas SQL que o app usa, com nome e descrição.
   - codigo/backend/setup-backend.mjs — como as tabelas foram criadas.
   - codigo/ESCOPO.md — o escopo funcional completo do sistema.
-- banco/esquema.sql — a estrutura de todas as tabelas (MySQL 8), com chaves e índices.
+- banco/esquema.sql — a estrutura de todas as tabelas (MySQL 8), com chaves e índices, mais a tabela LOTES e as visões VW_LOTE_* que o motor usa para gravar em lote.
 - dados/*.csv — todos os dados, uma planilha por tabela (separador vírgula, UTF-8, primeira linha com os nomes das colunas).
   - CANAIS: os canais monitorados.
   - VIDEOS: cada vídeo, com status, resumo e datas.
   - TRECHOS: a transcrição, trecho a trecho (VIDEO_ID + SEGUNDO + TEXTO).
   - TEMAS e VIDEO_TEMAS: os temas e em quais vídeos (e momentos, em segundos) aparecem.
   - PLAYLISTS e PLAYLIST_VIDEOS: as playlists de cada canal e seus vídeos.
+  - PRATICAS: as práticas ensinadas em cada vídeo (tipo, título, instrução e segundo).
+  - MENTOR_REGRAS: as regras de mentores que o estudo segue (quem é mentor, apelidos, quem não é).
   - AVISOS: os avisos de vídeos novos.
   - CONFIG: os parâmetros do motor (modelos de IA, horário da checagem etc.).
 
@@ -283,8 +287,8 @@ export async function exportarTudo(progresso: Progresso) {
     for (const [nome, txt] of Object.entries(fonte).sort(([a], [b]) => a.localeCompare(b))) arquivos.push({ nome: 'codigo/' + nome, partes: [enc.encode(txt)] })
   }
   progresso('Lendo a estrutura do banco…')
-  const [colunas, indices] = await Promise.all([linhas<Coluna>('exportEstrutura'), linhas<Indice>('exportIndices')])
-  arquivos.push({ nome: 'banco/esquema.sql', partes: [enc.encode(montarEsquema(colunas, indices))] })
+  const [colunas, indices, visoes] = await Promise.all([linhas<Coluna>('exportEstrutura'), linhas<Indice>('exportIndices'), linhas<{ TABLE_NAME: string; VIEW_DEFINITION: string }>('exportVisoes')])
+  arquivos.push({ nome: 'banco/esquema.sql', partes: [enc.encode(montarEsquema(colunas, indices, visoes))] })
   const totais: Record<string, number> = {}
   const config = await linhas<Record<string, unknown>>('exportTabConfig')
   arquivos.push({ nome: 'dados/CONFIG.csv', partes: [enc.encode('\ufeffCHAVE,VALOR\r\n' + config.map(r => celulaCsv(r.CHAVE) + ',' + celulaCsv(r.VALOR)).join('\r\n') + '\r\n')] })

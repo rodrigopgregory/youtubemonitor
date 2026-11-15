@@ -91,6 +91,8 @@
  "praticasTipos": 123,
  "praticasDoVideo": 124,
  "praticasResumo": 125,
+ "exportTabMentorRegras": 162,
+ "exportVisoes": 163,
  "exportTabPraticas": 126,
  "exportTabConfig": 117,
  "mentoresGerir": 128,

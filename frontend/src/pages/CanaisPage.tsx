@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, ExternalLink, Download, Package, RefreshCw } from 'lucide-react'
+import { Plus, ExternalLink, Download, RefreshCw } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import { useNavigate } from 'react-router-dom'
 import { linhas, chamar, dataBr } from '../lib/api'
 import { useCanal } from '../components/CanalFiltro'
-import { exportarTemas, exportarTranscricoes, exportarTudo } from '../lib/exportar'
+import { exportarTemas, exportarTranscricoes } from '../lib/exportar'
 
 interface Canal { ID: number; NOME: string; HANDLE: string; URL: string; THUMB: string; CARGA_STATUS: string; CARGA_MSG: string; ULTIMA_CHECAGEM: string | null; CRIADO_EM: string; ESTUDADOS: number; FILA: number; PENDENTES: number; SEM_LEGENDA: number; TOTAL: number }
 
@@ -23,14 +23,6 @@ export default function CanaisPage() {
   const navegar = useNavigate()
   const [exportando, setExportando] = useState<string | null>(null)
   const [exportMsg, setExportMsg] = useState<{ id: number; msg: string } | null>(null)
-  const [pacote, setPacote] = useState<{ rodando: boolean; msg: string } | null>(null)
-  async function baixarTudo() {
-    setPacote({ rodando: true, msg: 'Começando…' })
-    try {
-      const r = await exportarTudo(m => setPacote({ rodando: true, msg: m }))
-      setPacote({ rodando: false, msg: `Pacote baixado: ${r.videos.toLocaleString('pt-BR')} vídeos, ${r.trechos.toLocaleString('pt-BR')} trechos de transcrição, o código do app e a estrutura do banco.` })
-    } catch { setPacote({ rodando: false, msg: 'Não foi possível montar o pacote agora. Tente de novo em instantes.' }) }
-  }
   const exportar = async (id: number, tipo: string, fazer: () => Promise<string>) => {
     setExportando(id + tipo)
     try { setExportMsg({ id, msg: await fazer() }) }
@@ -74,10 +66,6 @@ export default function CanaisPage() {
             <RefreshCw size={15} className={busca?.rodando ? 'animate-spin' : ''} />{busca?.rodando ? 'Procurando…' : 'Atualizar canais'}
           </Button>
           {busca && <p className="text-[12.5px] sm:text-right" style={{ color: busca.erro ? 'var(--danger-text, var(--warning-text))' : 'var(--fg-muted)' }}>{busca.msg}</p>}
-          <Button variant="secondary" disabled={!!pacote?.rodando} onClick={baixarTudo} title="Baixa um ZIP com o código do app, a estrutura do banco e todos os dados, para levar o sistema para outra plataforma ou IA">
-            <Package size={15} />{pacote?.rodando ? 'Montando o pacote…' : 'Exportar tudo (app + banco)'}
-          </Button>
-          {pacote && <p className="text-[12.5px] sm:text-right" style={{ color: 'var(--fg-muted)' }}>{pacote.msg}</p>}
         </div>
       </div>
       <Card className="p-5">
