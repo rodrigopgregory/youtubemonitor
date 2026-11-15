@@ -8,6 +8,7 @@ import CanaisPage from './pages/CanaisPage'
 import ChatPage from './pages/ChatPage'
 import MentoresPage from './pages/MentoresPage'
 import ConfiguracoesPage from './pages/ConfiguracoesPage'
+import LivroPage from './pages/LivroPage'
 
 function App() {
   const [configured, setConfigured] = useState(initMitra)
@@ -19,6 +20,7 @@ function App() {
         <Route path="/" element={<ChatPage />} />
         <Route path="/chat" element={<Navigate to="/" replace />} />
         <Route path="/videos" element={<VideosPage />} />
+        <Route path="/livro" element={<LivroPage />} />
         <Route path="/mentores" element={<MentoresPage />} />
         <Route path="/canais" element={<CanaisPage />} />
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />

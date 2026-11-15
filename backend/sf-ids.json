@@ -44,6 +44,10 @@
  "praticasGravar": 120,
  "videoPraticasFeito": 121,
  "praticasFila": 122,
+ "livroResumos": 164,
+ "livroPraticas": 165,
+ "livroTemaInfo": 166,
+ "livroGravar": 167,
  "lockLiberar": 64,
  "playlistsListar": 106,
  "canalPorYt": 66,
@@ -120,6 +124,9 @@
  "mentorDescartarBkp": 147,
  "mentorDescartar": 148,
  "videoMentoresVerificados": 149,
+ "livroTemas": 168,
+ "livroCapitulo": 169,
+ "exportTabLivro": 170,
  "motor": 65,
  "canalCadastrar": 87,
  "temaEditar": 88,
@@ -129,5 +136,6 @@
  "mentorEditar": 143,
  "canaisAtualizar": 151,
  "buscaTermos": 152,
- "configEditar": 157
+ "configEditar": 157,
+ "livroGerar": 171
 }

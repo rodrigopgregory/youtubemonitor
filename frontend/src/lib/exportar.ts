@@ -208,6 +208,7 @@ const TABELAS: { tabela: string; funcao: Parameters<typeof linhas>[0]; pagina: n
   { tabela: 'AVISOS', funcao: 'exportTabAvisos', pagina: 5000 },
   { tabela: 'PRATICAS', funcao: 'exportTabPraticas', pagina: 5000 },
   { tabela: 'MENTOR_REGRAS', funcao: 'exportTabMentorRegras', pagina: 5000 },
+  { tabela: 'LIVRO_CAPITULOS', funcao: 'exportTabLivro', pagina: 200 },
   { tabela: 'TRECHOS', funcao: 'exportTabTrechos', pagina: 5000 },
 ]
 
