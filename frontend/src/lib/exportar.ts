@@ -315,3 +315,84 @@ export async function exportarTudo(progresso: Progresso) {
   baixar(zipPartes(arquivos), `Monitor de Canais - pacote completo ${data}.zip`)
   return { arquivos: arquivos.length, trechos: totais.TRECHOS ?? 0, videos: totais.VIDEOS ?? 0 }
 }
+
+const LIMITE_PALAVRAS = 430000
+
+export async function exportarNotebookLM(canais: { ID: number; NOME: string }[], progresso: Progresso) {
+  const enc = new TextEncoder()
+  const arquivos: ArquivoZip[] = []
+  const resumo: string[] = []
+  let totalVideos = 0
+  for (const canal of canais) {
+    progresso(`${canal.NOME}: buscando os vídeos…`)
+    const videos = (await videosDoCanal(canal.ID)).sort((a, b) => String(a.PUBLICADO_EM || '').localeCompare(String(b.PUBLICADO_EM || '')))
+    const textos = new Map<number, { bytes: Uint8Array[]; palavras: number }>()
+    let video = 0, segundo = -1
+    for (;;) {
+      const pag = await linhas<Trecho>('exportTrechos', { canalId: canal.ID, video, segundo })
+      for (const t of pag) {
+        const atual = textos.get(t.VIDEO_ID) ?? { bytes: [], palavras: 0 }
+        const linha = '[' + mmss(Number(t.SEGUNDO)) + '] ' + t.TEXTO + '\n'
+        atual.bytes.push(enc.encode(linha))
+        atual.palavras += linha.split(/\s+/).filter(Boolean).length
+        textos.set(t.VIDEO_ID, atual)
+      }
+      progresso(`${canal.NOME}: juntando as transcrições… ${textos.size.toLocaleString('pt-BR')} de ${videos.length.toLocaleString('pt-BR')} vídeos`)
+      if (pag.length < 5000) break
+      const ult = pag[pag.length - 1]
+      video = ult.VIDEO_ID; segundo = Number(ult.SEGUNDO)
+    }
+    const pasta = nomeArquivo(canal.NOME)
+    let partes: Parte[] = [], palavras = 0, primeiro = '', ultimo = '', n = 0, qtd = 0
+    const fechar = () => {
+      if (!partes.length) return
+      n++
+      const periodo = primeiro === ultimo ? primeiro : primeiro + ' a ' + ultimo
+      const cab = enc.encode(`${canal.NOME} - transcrições, parte ${n}\nVídeos publicados de ${periodo || 'data desconhecida'} (${qtd} vídeos)\nCada vídeo começa com o título, o link do YouTube, a data, os temas e o resumo. Os números entre colchetes são o minuto da fala no vídeo.\n\n`)
+      arquivos.push({ nome: `${pasta}/${pasta} - parte ${String(n).padStart(2, '0')}.txt`, partes: [cab, ...partes] })
+      partes = []; palavras = 0; primeiro = ''; qtd = 0
+    }
+    for (const v of videos) {
+      const t = textos.get(v.ID)
+      if (!t) continue
+      if (palavras && palavras + t.palavras > LIMITE_PALAVRAS) fechar()
+      const { temas, mentores } = separarTemas(v.TEMAS)
+      const dataTxt = dataBr(v.PUBLICADO_EM)
+      const cab = ['==========', 'VÍDEO: ' + v.TITULO, 'Canal: ' + canal.NOME, 'Link: ' + linkYt(v.YT_VIDEO_ID), 'Publicado em: ' + dataTxt + '  ·  Duração: ' + duracao(Number(v.DURACAO_SEG || 0))]
+      if (temas.length) cab.push('Temas: ' + temas.join(', '))
+      if (mentores.length) cab.push('Mentores: ' + mentores.join(', '))
+      if (v.RESUMO) cab.push('Resumo: ' + v.RESUMO)
+      cab.push('', 'Transcrição:', '')
+      partes.push(enc.encode(cab.join('\n') + '\n'), ...t.bytes, enc.encode('\n'))
+      palavras += t.palavras + cab.join(' ').split(/\s+/).length
+      if (!primeiro) primeiro = dataTxt
+      ultimo = dataTxt
+      qtd++
+    }
+    fechar()
+    const vidsCanal = videos.filter(v => textos.has(v.ID)).length
+    totalVideos += vidsCanal
+    resumo.push(`- ${canal.NOME}: ${vidsCanal.toLocaleString('pt-BR')} vídeos em ${n} arquivos (pasta "${pasta}")`)
+    textos.clear()
+  }
+  const leia = `Transcrições para o NotebookLM
+Gerado em ${new Date().toLocaleString('pt-BR')} pelo Monitor de Canais do YouTube.
+
+${resumo.join('\n')}
+
+Cada arquivo tem até cerca de ${LIMITE_PALAVRAS.toLocaleString('pt-BR')} palavras, abaixo do limite de 500 mil palavras por fonte do NotebookLM. Os vídeos estão em ordem de publicação.
+
+Como usar:
+1. Descompacte este ZIP.
+2. No NotebookLM (notebooklm.google.com), crie um caderno, por exemplo um por canal.
+3. Clique em "Adicionar fontes" e envie os arquivos .txt da pasta do canal.
+4. No plano gratuito, cada caderno aceita até 50 fontes; se precisar, divida os arquivos entre cadernos.
+5. Para atualizar, exporte de novo e troque as fontes do caderno.
+`
+  arquivos.unshift({ nome: 'LEIA-ME.txt', partes: [enc.encode(leia)] })
+  progresso('Montando o ZIP…')
+  const data = new Date().toISOString().slice(0, 10)
+  const nome = canais.length === 1 ? nomeArquivo(canais[0].NOME) : 'todos os canais'
+  baixar(zipPartes(arquivos), `NotebookLM - ${nome} ${data}.zip`)
+  return { videos: totalVideos, arquivos: arquivos.length - 1 }
+}

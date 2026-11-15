@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, X, Trash2, Package } from 'lucide-react'
+import { Plus, X, Trash2, Package, BookOpen } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Select from '../components/ui/Select'
 import { linhas, chamar } from '../lib/api'
-import { exportarTudo } from '../lib/exportar'
+import { exportarTudo, exportarNotebookLM } from '../lib/exportar'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
@@ -95,6 +95,17 @@ export default function ConfiguracoesPage() {
       const r = await exportarTudo(m => setPacote({ rodando: true, msg: m }))
       setPacote({ rodando: false, msg: `Pacote baixado: ${r.videos.toLocaleString('pt-BR')} vídeos, ${r.trechos.toLocaleString('pt-BR')} trechos de transcrição, o código do app e a estrutura do banco.` })
     } catch { setPacote({ rodando: false, msg: 'Não foi possível montar o pacote agora. Tente de novo em instantes.' }) }
+  }
+  const [nbCanal, setNbCanal] = useState('0')
+  const [nb, setNb] = useState<{ rodando: boolean; msg: string } | null>(null)
+  async function baixarNotebook() {
+    const escolhidos = nbCanal === '0' ? canais : canais.filter(c => String(c.ID) === nbCanal)
+    if (!escolhidos.length) return
+    setNb({ rodando: true, msg: 'Começando…' })
+    try {
+      const r = await exportarNotebookLM(escolhidos, m => setNb({ rodando: true, msg: m }))
+      setNb({ rodando: false, msg: `Baixado: ${r.videos.toLocaleString('pt-BR')} vídeos em ${r.arquivos} arquivos. Envie os .txt em "Adicionar fontes" no NotebookLM.` })
+    } catch { setNb({ rodando: false, msg: 'Não foi possível montar os arquivos agora. Tente de novo em instantes.' }) }
   }
   const naoSao = regras.filter(r => r.TIPO === 'NAO')
   const liga = (k: string) => config?.[k] !== '0'
@@ -195,6 +206,16 @@ export default function ConfiguracoesPage() {
               <Package size={15} />{pacote?.rodando ? 'Montando o pacote…' : 'Exportar tudo (app + banco)'}
             </Button>
             {pacote && <p className="text-[12.5px] sm:text-right" style={muted}>{pacote.msg}</p>}
+          </div>
+        </Card>
+        <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+          <p className="text-[13.5px] flex-1" style={muted}>Baixa as transcrições dos vídeos estudados num ZIP pronto para o NotebookLM: poucos arquivos de texto por canal, cada um abaixo do limite de uma fonte, com título, link, data, temas e resumo de cada vídeo. Depois é só enviar os arquivos em "Adicionar fontes" no NotebookLM.</p>
+          <div className="flex flex-col sm:items-end gap-2 sm:max-w-[320px]">
+            <Select value={nbCanal} onChange={setNbCanal} disabled={!!nb?.rodando} options={[{ value: '0', label: 'Todos os canais' }, ...canais.map(c => ({ value: String(c.ID), label: c.NOME }))]} />
+            <Button variant="secondary" disabled={!!nb?.rodando || !canais.length} onClick={baixarNotebook}>
+              <BookOpen size={15} />{nb?.rodando ? 'Montando os arquivos…' : 'Exportar para o NotebookLM'}
+            </Button>
+            {nb && <p className="text-[12.5px] sm:text-right" style={muted}>{nb.msg}</p>}
           </div>
         </Card>
       </section>
