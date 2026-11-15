@@ -197,7 +197,8 @@ async function gemini(cfg, modelos, body) {
         const parts = (((b.candidates || [])[0] || {}).content || {}).parts || [];
         const txt = parts.map(p => p.text || '').join('');
         if (txt) return txt;
-        ultimo = 'Gemini (' + modelo + ') respondeu vazio';
+        const porque = (b.promptFeedback && b.promptFeedback.blockReason) || (((b.candidates || [])[0] || {}).finishReason) || '';
+        ultimo = 'Gemini (' + modelo + ') respondeu vazio' + (porque ? ' (' + porque + ')' : '');
       } catch (e) { ultimo = 'Gemini (' + modelo + '): ' + String(e.message || e).slice(0, 200); }
     }
   }
@@ -225,14 +226,26 @@ async function transcreverAudio(cfg, v) {
   while (ini < v.DURACAO_SEG) {
     if (Date.now() - T0 > Number(cfg.ORCAMENTO_SEG || 230) * 1000) return false;
     const fim = Math.min(v.DURACAO_SEG, ini + passo);
-    const txt = await gemini(cfg, cfg.MODELO_TRANSCRICAO, {
+    const pedir = async (a, b) => jsonDe(await gemini(cfg, cfg.MODELO_TRANSCRICAO, {
       contents: [{ parts: [
-        { fileData: { fileUri: 'https://www.youtube.com/watch?v=' + v.YT_VIDEO_ID } , videoMetadata: { startOffset: ini + 's', endOffset: fim + 's' } },
+        { fileData: { fileUri: 'https://www.youtube.com/watch?v=' + v.YT_VIDEO_ID } , videoMetadata: { startOffset: a + 's', endOffset: b + 's' } },
         { text: 'Transcreva em portugues tudo o que e falado neste trecho do video. Responda so JSON: {"trechos":[{"s":<segundo do inicio no video inteiro>,"t":"texto"}]} com um item a cada 20 a 40 segundos. Nao resuma, nao invente.' }
       ] }],
       generationConfig: { responseMimeType: 'application/json', temperature: 0 }
-    });
-    const tr = (jsonDe(txt).trechos || []).map(x => ({ s: Math.max(ini, Math.min(fim, Math.round(Number(x.s) || ini))), t: String(x.t || '').slice(0, 4000) })).filter(x => x.t);
+    })).trechos || [];
+    let partes;
+    try { partes = await pedir(ini, fim); }
+    catch (e) {
+      if (!(e instanceof SyntaxError) || fim - ini < 120) throw e;
+      partes = [];
+      const passoMenor = Math.max(60, Math.ceil((fim - ini) / 3));
+      for (let a = ini; a < fim; a += passoMenor) {
+        const b = Math.min(fim, a + passoMenor);
+        try { partes.push(...await pedir(a, b)); }
+        catch (e2) { if (!(e2 instanceof SyntaxError)) throw e2; log.push(v.YT_VIDEO_ID + ': trecho ' + mmss(a) + '-' + mmss(b) + ' sem transcrição'); }
+      }
+    }
+    const tr = partes.map(x => ({ s: Math.max(ini, Math.min(fim, Math.round(Number(x.s) || ini))), t: String(x.t || '').slice(0, 4000) })).filter(x => x.t);
     const porSeg = {}; tr.forEach(x => { porSeg[x.s] = porSeg[x.s] ? porSeg[x.s] + ' ' + x.t : x.t; });
     tr.length = 0; Object.keys(porSeg).forEach(k => tr.push({ s: Number(k), t: porSeg[k] }));
     for (let i = 0; i < tr.length; i += 150) {
