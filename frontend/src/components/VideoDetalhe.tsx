@@ -21,6 +21,15 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
   const [nomeEd, setNomeEd] = useState('')
   const [erro, setErro] = useState('')
   const [salvando, setSalvando] = useState(false)
+  const [movendo, setMovendo] = useState(false)
+
+  async function foraTema(fora: boolean) {
+    setErro(''); setMovendo(true)
+    try {
+      await chamar('videoForaTema', { id, fora: fora ? 1 : 0 })
+      const r = await linhas<Det>('videoDetalhe', { id }); setD(r[0] || null); onMudou()
+    } catch (e) { setErro((e as Error).message) } finally { setMovendo(false) }
+  }
 
   const carregarTemas = useCallback(() => linhas<Tema>('videoTemas', { videoId: id }).then(setTemas), [id])
   useEffect(() => {
@@ -56,6 +65,13 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
             <a href={linkYt(d.YT_VIDEO_ID)} target="_blank" rel="noreferrer" className="font-medium hover:underline" style={{ color: 'var(--accent-text)' }}>Assistir no YouTube</a>
           </div>
           {d.STATUS === 'PENDENTE' && <p className="text-[13.5px]" style={{ color: 'var(--warning-text)' }}>Pendente: {d.MOTIVO}. O sistema tenta de novo na próxima checagem diária.</p>}
+          {(d.STATUS === 'ESTUDADO' || d.STATUS === 'FORA_TEMA') && (
+            <div className="flex items-center gap-3 flex-wrap">
+              {d.STATUS === 'FORA_TEMA' && <Badge variant="neutral">Fora do tema</Badge>}
+              <span className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>{d.STATUS === 'FORA_TEMA' ? 'Este vídeo não aparece nas listas, nos temas nem na Pesquisar.' : 'Não trata de espiritualidade?'}</span>
+              <Button variant="secondary" size="sm" disabled={movendo} onClick={() => foraTema(d.STATUS !== 'FORA_TEMA')}>{movendo ? 'Salvando…' : d.STATUS === 'FORA_TEMA' ? 'Trazer de volta' : 'Mover para Fora do tema'}</Button>
+            </div>
+          )}
           {d.STATUS === 'FILA' && <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Este vídeo ainda está na fila para ser estudado.</p>}
 
           {d.RESUMO && <section><h3 className="text-[14px] font-medium mb-1.5">Resumo</h3><p className="text-[14px] leading-relaxed">{d.RESUMO}</p></section>}

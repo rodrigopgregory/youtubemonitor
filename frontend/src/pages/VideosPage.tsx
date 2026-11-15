@@ -13,10 +13,10 @@ interface Tema { ID: number; NOME: string; QTD: number }
 interface Playlist { ID: number; TITULO: string; CANAL_ID: number; CANAL: string; QTD: number; ESTUDADOS: number }
 interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; CANAL: string; TEMAS: string | null; PLAYLISTS: string | null; PRATICAS: string | null }
 interface PraticaTipo { TIPO: string; QTD: number }
-interface Painel { ESTUDADOS: number; FILA: number; PENDENTES: number; TEMAS: number }
+interface Painel { ESTUDADOS: number; FILA: number; PENDENTES: number; FORA_TEMA: number; TEMAS: number }
 
 const statusInfo: Record<string, { label: string; v: 'success' | 'warning' | 'neutral' | 'danger' }> = {
-  ESTUDADO: { label: 'Estudado', v: 'success' }, FILA: { label: 'Na fila', v: 'neutral' }, PENDENTE: { label: 'Pendente', v: 'warning' },
+  ESTUDADO: { label: 'Estudado', v: 'success' }, FILA: { label: 'Na fila', v: 'neutral' }, PENDENTE: { label: 'Pendente', v: 'warning' }, FORA_TEMA: { label: 'Fora do tema', v: 'neutral' },
 }
 const PAG = 30
 
@@ -116,7 +116,7 @@ export default function VideosPage() {
         <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); limparTudo() }} />
         {painel && (
           <div className="flex gap-2 flex-wrap">
-            {[['', 'Todos'], ['ESTUDADO', `${painel.ESTUDADOS || 0} estudados`], ['FILA', `${painel.FILA || 0} na fila`], ['PENDENTE', `${painel.PENDENTES || 0} pendentes`]].map(([k, l]) => (
+            {[['', 'Todos'], ['ESTUDADO', `${painel.ESTUDADOS || 0} estudados`], ['FILA', `${painel.FILA || 0} na fila`], ['PENDENTE', `${painel.PENDENTES || 0} pendentes`], ...(Number(painel.FORA_TEMA) ? [['FORA_TEMA', `${painel.FORA_TEMA} fora do tema`]] : [])].map(([k, l]) => (
               <button key={k} onClick={() => filtro('status', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
                 style={status === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
           </div>
@@ -203,6 +203,7 @@ export default function VideosPage() {
               {algum > 1 && <button onClick={limparTudo} className="text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Limpar filtros</button>}
             </div>
           )}
+          {status === 'FORA_TEMA' && <p className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que não tratam de espiritualidade (jogo, programação, estudo de medicina). Ficam guardados aqui, com resumo e transcrição, mas não aparecem nas outras listas, nos temas nem na Pesquisar. Para trazer um de volta, abra o vídeo.</p>}
           {!carregando && videos.length === 0 && <Card className="p-6"><p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Nenhum vídeo aqui ainda.</p></Card>}
           {videos.map(v => {
             const st = statusInfo[v.STATUS] || { label: v.STATUS, v: 'neutral' as const }
