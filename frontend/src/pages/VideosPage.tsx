@@ -13,6 +13,13 @@ interface Tema { ID: number; NOME: string; QTD: number }
 interface Playlist { ID: number; TITULO: string; CANAL_ID: number; CANAL: string; QTD: number; ESTUDADOS: number }
 interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; CANAL: string; TEMAS: string | null; PLAYLISTS: string | null; PRATICAS: string | null }
 interface PraticaTipo { TIPO: string; QTD: number }
+const GRUPOS_PRATICA: [string, string[]][] = [
+  ['Técnicas de energia e consciência', ['projeção astral', 'chakras e exercício energético', 'meditação', 'respiração', 'visualização', 'limpeza e proteção energética', 'mantra e decreto']],
+  ['Preces e orações', ['prece e oração']],
+  ['Ervas, banhos, velas e rituais', ['banho de ervas', 'chás e ervas', 'velas', 'defumação', 'água, sal e cristais', 'ritual e oferenda']],
+  ['Receitas e saúde', ['alimentação e receitas', 'saúde e cuidados com o corpo']],
+  ['Outras', []],
+]
 interface Painel { ESTUDADOS: number; FILA: number; PENDENTES: number; FORA_TEMA: number; TEMAS: number }
 
 const statusInfo: Record<string, { label: string; v: 'success' | 'warning' | 'neutral' | 'danger' }> = {
@@ -180,15 +187,23 @@ export default function VideosPage() {
             })}
           </>}
           {agrupar === 'praticas' && <>
-            <p className="px-2 pb-2 text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que ensinam algo para fazer: meditação, banho de ervas, velas, prece e outros trabalhos espirituais.{leitura && leitura.LIDOS < leitura.N ? ` Já lidos ${leitura.LIDOS} de ${leitura.N} vídeos estudados; o resto entra aos poucos.` : ''}</p>
+            <p className="px-2 pb-2 text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que ensinam algo para fazer, em 4 grupos: técnicas, preces, ervas e velas, receitas e saúde. Para ver só um canal, escolha no topo.{leitura && leitura.LIDOS < leitura.N ? ` Já lidos ${leitura.LIDOS} de ${leitura.N} vídeos estudados; o resto entra aos poucos.` : ''}</p>
             {pratSel.length > 0 && <button onClick={() => filtro('pratica', '')} className="w-full text-left px-2 py-1 text-[12.5px] underline" style={{ color: 'var(--fg-muted)' }}>Desmarcar práticas</button>}
             {praticas.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>{algum ? 'Nenhum vídeo com prática nessa combinação.' : 'As práticas aparecem conforme os vídeos forem lidos.'}</p>}
-            {praticasMostrar.map(p => {
-              const on = pratSel.includes(p.TIPO)
+            {GRUPOS_PRATICA.map(([nome, tipos]) => {
+              const itens = praticasMostrar.filter(p => tipos.length ? tipos.includes(p.TIPO) : !GRUPOS_PRATICA.some(([, t]) => t.includes(p.TIPO)))
+              if (!itens.length) return null
               return (
-                <button key={p.TIPO} onClick={() => alternar('pratica', p.TIPO)} className="w-full text-left px-2 py-1.5 rounded-md text-[13.5px] flex items-center gap-2" style={on ? marcado : {}}>
-                  {caixa(on)}<span className="truncate flex-1">{p.TIPO}</span><span style={{ color: 'var(--fg-subtle)' }}>{p.QTD}</span>
-                </button>)
+                <div key={nome} className="pt-2">
+                  <div className="px-2 pb-1 text-[11.5px] font-semibold uppercase tracking-wide" style={{ color: 'var(--fg-subtle)' }}>{nome}</div>
+                  {itens.map(p => {
+                    const on = pratSel.includes(p.TIPO)
+                    return (
+                      <button key={p.TIPO} onClick={() => alternar('pratica', p.TIPO)} className="w-full text-left px-2 py-1.5 rounded-md text-[13.5px] flex items-center gap-2" style={on ? marcado : {}}>
+                        {caixa(on)}<span className="truncate flex-1">{p.TIPO}</span><span style={{ color: 'var(--fg-subtle)' }}>{p.QTD}</span>
+                      </button>)
+                  })}
+                </div>)
             })}
           </>}
         </Card>
