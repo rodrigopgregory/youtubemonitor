@@ -14,7 +14,8 @@ interface Playlist { ID: number; TITULO: string; CANAL_ID: number; CANAL: string
 interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; CANAL: string; TEMAS: string | null; PLAYLISTS: string | null; PRATICAS: string | null }
 interface PraticaTipo { TIPO: string; QTD: number }
 const GRUPOS_PRATICA: [string, string[]][] = [
-  ['Técnicas de energia e consciência', ['projeção astral', 'chakras e exercício energético', 'meditação', 'respiração', 'visualização', 'limpeza e proteção energética', 'mantra e decreto']],
+  ['Técnicas de energia e consciência', ['projeção astral', 'chakras e exercício energético', 'meditação', 'respiração', 'visualização', 'limpeza e proteção energética', 'mantra e decreto', 'mediunidade e percepção']],
+  ['Autoconhecimento e conduta', ['autoconhecimento e conduta']],
   ['Preces e orações', ['prece e oração']],
   ['Ervas, banhos, velas e rituais', ['banho de ervas', 'chás e ervas', 'velas', 'defumação', 'água, sal e cristais', 'ritual e oferenda']],
   ['Receitas e saúde', ['alimentação e receitas', 'saúde e cuidados com o corpo']],
@@ -187,7 +188,7 @@ export default function VideosPage() {
             })}
           </>}
           {agrupar === 'praticas' && <>
-            <p className="px-2 pb-2 text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que ensinam algo para fazer, em 4 grupos: técnicas, preces, ervas e velas, receitas e saúde. Para ver só um canal, escolha no topo.{leitura && leitura.LIDOS < leitura.N ? ` Já lidos ${leitura.LIDOS} de ${leitura.N} vídeos estudados; o resto entra aos poucos.` : ''}</p>
+            <p className="px-2 pb-2 text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que ensinam algo para fazer, em grupos: técnicas, preces, autoconhecimento, ervas e velas, receitas e saúde. Para ver só um canal, escolha no topo.{leitura && leitura.LIDOS < leitura.N ? ` Já lidos ${leitura.LIDOS} de ${leitura.N} vídeos estudados; o resto entra aos poucos.` : ''}</p>
             {pratSel.length > 0 && <button onClick={() => filtro('pratica', '')} className="w-full text-left px-2 py-1 text-[12.5px] underline" style={{ color: 'var(--fg-muted)' }}>Desmarcar práticas</button>}
             {praticas.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>{algum ? 'Nenhum vídeo com prática nessa combinação.' : 'As práticas aparecem conforme os vídeos forem lidos.'}</p>}
             {GRUPOS_PRATICA.map(([nome, tipos]) => {
