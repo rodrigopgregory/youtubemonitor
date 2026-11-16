@@ -594,14 +594,14 @@ try {
       catch (e) { log.push('finalidades: erro ' + String(e.message || e).slice(0, 150)); break; }
     }
   }
-  let praticasLidas = 0; const vistosP = new Set();
+  let praticasLidas = 0; const vistosP = new Set(); let errosP = 0;
   if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
-      const pf = ((await sql('praticasFila', {})).rows || []);
+      const pf = ((await sql('praticasFila', { pular: [0, ...vistosP].join(',') })).rows || []);
       if (!pf.length || vistosP.has(pf[0].ID)) break;
       vistosP.add(pf[0].ID);
       try { const n = await lerPraticas(cfg, pf[0]); praticasLidas++; log.push('praticas ' + pf[0].ID + ': ' + n); }
-      catch (e) { log.push('praticas ' + pf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); break; }
+      catch (e) { log.push('praticas ' + pf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosP >= 5) break; }
     }
   }
   let livroDisparado = false;
