@@ -67,9 +67,9 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
           {d.STATUS === 'PENDENTE' && <p className="text-[13.5px]" style={{ color: 'var(--warning-text)' }}>Pendente: {d.MOTIVO}. O sistema tenta de novo na próxima checagem diária.</p>}
           {(d.STATUS === 'ESTUDADO' || d.STATUS === 'FORA_TEMA') && (
             <div className="flex items-center gap-3 flex-wrap">
-              {d.STATUS === 'FORA_TEMA' && <Badge variant="neutral">Fora do tema</Badge>}
+              {d.STATUS === 'FORA_TEMA' && <Badge variant="neutral">Fora do tema espiritualidade</Badge>}
               <span className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>{d.STATUS === 'FORA_TEMA' ? 'Este vídeo não aparece nas listas, nos temas nem na Pesquisar.' : 'Não trata de espiritualidade?'}</span>
-              <Button variant="secondary" size="sm" disabled={movendo} onClick={() => foraTema(d.STATUS !== 'FORA_TEMA')}>{movendo ? 'Salvando…' : d.STATUS === 'FORA_TEMA' ? 'Trazer de volta' : 'Mover para Fora do tema'}</Button>
+              <Button variant="secondary" size="sm" disabled={movendo} onClick={() => foraTema(d.STATUS !== 'FORA_TEMA')}>{movendo ? 'Salvando…' : d.STATUS === 'FORA_TEMA' ? 'Trazer de volta' : 'Mover para Fora do tema espiritualidade'}</Button>
             </div>
           )}
           {d.STATUS === 'FILA' && <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Este vídeo ainda está na fila para ser estudado.</p>}

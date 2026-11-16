@@ -24,7 +24,7 @@ const GRUPOS_PRATICA: [string, string[]][] = [
 interface Painel { ESTUDADOS: number; FILA: number; PENDENTES: number; FORA_TEMA: number; TEMAS: number }
 
 const statusInfo: Record<string, { label: string; v: 'success' | 'warning' | 'neutral' | 'danger' }> = {
-  ESTUDADO: { label: 'Estudado', v: 'success' }, FILA: { label: 'Na fila', v: 'neutral' }, PENDENTE: { label: 'Pendente', v: 'warning' }, FORA_TEMA: { label: 'Fora do tema', v: 'neutral' },
+  ESTUDADO: { label: 'Estudado', v: 'success' }, FILA: { label: 'Na fila', v: 'neutral' }, PENDENTE: { label: 'Pendente', v: 'warning' }, FORA_TEMA: { label: 'Fora do tema espiritualidade', v: 'neutral' },
 }
 const PAG = 30
 
@@ -124,7 +124,7 @@ export default function VideosPage() {
         <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); limparTudo() }} />
         {painel && (
           <div className="flex gap-2 flex-wrap">
-            {[['', 'Todos'], ['ESTUDADO', `${painel.ESTUDADOS || 0} estudados`], ['FILA', `${painel.FILA || 0} na fila`], ['PENDENTE', `${painel.PENDENTES || 0} pendentes`], ...(Number(painel.FORA_TEMA) ? [['FORA_TEMA', `${painel.FORA_TEMA} fora do tema`]] : [])].map(([k, l]) => (
+            {[['', 'Todos'], ['ESTUDADO', `${painel.ESTUDADOS || 0} estudados`], ['FILA', `${painel.FILA || 0} na fila`], ['PENDENTE', `${painel.PENDENTES || 0} pendentes`], ...(Number(painel.FORA_TEMA) ? [['FORA_TEMA', `${painel.FORA_TEMA} fora do tema espiritualidade`]] : [])].map(([k, l]) => (
               <button key={k} onClick={() => filtro('status', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
                 style={status === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
           </div>
