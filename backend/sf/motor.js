@@ -601,7 +601,7 @@ try {
       if (!pf.length || vistosP.has(pf[0].ID)) break;
       vistosP.add(pf[0].ID);
       try { const n = await lerPraticas(cfg, pf[0]); praticasLidas++; log.push('praticas ' + pf[0].ID + ': ' + n); }
-      catch (e) { log.push('praticas ' + pf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosP >= 5) break; }
+      catch (e) { const motivo = String(e.message || e).slice(0, 150); log.push('praticas ' + pf[0].ID + ': erro ' + motivo); if (!IA_SEM_COTA) await sql('praticasErroAnotar', { id: pf[0].ID, motivo: agora() + ' ' + motivo.replace(/[^\w\s:().,-]/g, ' ') }).catch(() => {}); if (IA_SEM_COTA || ++errosP >= 5) break; }
     }
   }
   let livroDisparado = false;
