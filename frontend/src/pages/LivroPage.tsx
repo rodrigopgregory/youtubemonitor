@@ -62,7 +62,7 @@ export default function LivroPage() {
     <div className="flex flex-col gap-5">
       <div>
         <h1 className="text-[22px] font-semibold flex items-center gap-2"><BookOpen size={22} />Livro Vivo</h1>
-        <p className="text-[13.5px]" style={muted}>Os ensinamentos dos canais reunidos por tema. {prontos} de {temas.length} capítulos escritos.</p>
+        <p className="text-[13.5px]" style={muted}>Os ensinamentos dos canais reunidos por tema. {prontos} de {temas.length} capítulos escritos.{prontos < temas.length ? ' Toda madrugada escrevo até 2 novos sozinho, quando sobra cota da IA.' : ''}</p>
       </div>
       <div className="grid gap-4 md:grid-cols-[260px_1fr]">
         <Card className="p-2 flex flex-col gap-1 md:max-h-[75vh] overflow-y-auto">

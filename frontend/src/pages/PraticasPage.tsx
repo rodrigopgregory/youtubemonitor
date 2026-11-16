@@ -1,4 +1,4 @@
-import { Brain, CloudRain, Shield, ShieldAlert, Moon, Rocket, HeartPulse, Coins, Users, Home, Sparkles, Ban, PlayCircle, Search, X, Film } from 'lucide-react'
+import { Brain, CloudRain, Shield, ShieldAlert, Moon, Rocket, HeartPulse, Coins, Users, Home, Sparkles, Ban, PlayCircle, Search, X, Film, CheckCircle2 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -7,9 +7,10 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import VideoDetalhe from '../components/VideoDetalhe'
-import { linhas, linkYt, mmss } from '../lib/api'
+import FizHoje from '../components/FizHoje'
+import { linhas, linkYt, mmss, dataBr } from '../lib/api'
 
-interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; FINS: string | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
+interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; FINS: string | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES?: number; ULTIMA?: string | null }
 interface Qtd { COD?: string; TIPO?: string; QTD: number }
 
 const FINS: { cod: string; nome: string; desc: string; icon: LucideIcon }[] = [
@@ -43,6 +44,7 @@ export default function PraticasPage() {
   const [carregando, setCarregando] = useState(false)
   const [aberta, setAberta] = useState<number | null>(null)
   const [video, setVideo] = useState<number | null>(null)
+  const [fazendo, setFazendo] = useState<Pratica | null>(null)
   const [totais, setTotais] = useState<{ N: number; MARCADAS: number } | null>(null)
 
   const mudar = (k: string, v: string) => { const n = new URLSearchParams(sp); if (v) n.set(k, v); else n.delete(k); if (k === 'fin') n.delete('tipo'); setSp(n) }
@@ -140,11 +142,16 @@ export default function PraticasPage() {
                   <a href={linkYt(p.YT_VIDEO_ID, p.SEGUNDO || 0)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium" style={{ color: 'var(--accent-text)' }}><PlayCircle size={14} />Assistir{p.SEGUNDO ? ' em ' + mmss(p.SEGUNDO) : ''}</a>
                   <button onClick={() => setVideo(p.VIDEO_ID)} className="inline-flex items-center gap-1" style={{ color: 'var(--fg-muted)' }}><Film size={13} />Ver o vídeo</button>
                 </div>
+                <div className="flex items-center gap-3 flex-wrap">
+                  <Button size="sm" variant="secondary" onClick={() => setFazendo(p)}><CheckCircle2 size={14} />Fiz hoje</Button>
+                  {Number(p.VEZES || 0) > 0 && <span className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Você já fez {Number(p.VEZES)} {Number(p.VEZES) === 1 ? 'vez' : 'vezes'} · última em {dataBr(p.ULTIMA)}</span>}
+                </div>
               </Card>)
           })}
           {!fim && lista.length > 0 && <Button variant="secondary" onClick={() => carregar(lista.length)} disabled={carregando}>{carregando ? 'Carregando…' : 'Ver mais'}</Button>}
         </div>
       )}
+      {fazendo && <FizHoje pratica={fazendo} onClose={() => setFazendo(null)} onSalvo={() => setLista(l => l.map(x => x.ID === fazendo.ID ? { ...x, VEZES: Number(x.VEZES || 0) + 1, ULTIMA: new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10) } : x))} />}
       {video && <VideoDetalhe id={video} onClose={() => setVideo(null)} onMudou={() => {}} />}
     </div>
   )

@@ -1,4 +1,4 @@
-import { Check, Download, SlidersHorizontal, X } from 'lucide-react'
+import { Check, Download, SlidersHorizontal, X, Star, Eye } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Badge from '../components/ui/Badge'
@@ -7,12 +7,12 @@ import Button from '../components/ui/Button'
 import VideoDetalhe from '../components/VideoDetalhe'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import EstadoIA from '../components/EstadoIA'
-import { linhas, dataBr, duracao } from '../lib/api'
+import { linhas, chamar, dataBr, duracao } from '../lib/api'
 import { exportarVideosFiltro } from '../lib/exportar'
 
 interface Tema { ID: number; NOME: string; QTD: number }
 interface Playlist { ID: number; TITULO: string; CANAL_ID: number; CANAL: string; QTD: number; ESTUDADOS: number }
-interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; CANAL: string; TEMAS: string | null; PLAYLISTS: string | null; PRATICAS: string | null }
+interface Video { ID: number; FAVORITO: number | boolean; ASSISTIDO_EM: string | null; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; THUMB: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; CANAL: string; TEMAS: string | null; PLAYLISTS: string | null; PRATICAS: string | null }
 interface PraticaTipo { TIPO: string; QTD: number }
 const GRUPOS_PRATICA: [string, string[]][] = [
   ['Técnicas de energia e consciência', ['projeção astral', 'chakras e exercício energético', 'meditação', 'respiração', 'visualização', 'limpeza e proteção energética', 'mantra e decreto', 'mediunidade e percepção']],
@@ -43,6 +43,8 @@ export default function VideosPage() {
   const [leitura, setLeitura] = useState<{ N: number; LIDOS: number } | null>(null)
   const status = sp.get('status') || ''
   const origem = sp.get('origem') || ''
+  const meu = sp.get('meu') || ''
+  const [meus, setMeus] = useState<{ FAV: number; VISTOS: number } | null>(null)
   const [temas, setTemas] = useState<Tema[]>([])
   const [mentores, setMentores] = useState<Tema[]>([])
   const [videos, setVideos] = useState<Video[]>([])
@@ -57,7 +59,7 @@ export default function VideosPage() {
 
   const filtros = useCallback(() => {
     const t = [...(sp.get('tema') || '').split(','), ...(sp.get('mentor') || '').split(',')].filter(Boolean), p = (sp.get('playlist') || '').split(',').filter(Boolean), r = (sp.get('pratica') || '').split(',').filter(Boolean)
-    return { canalId, status: sp.get('status') || '', temas: t.join(','), nTemas: t.length, playlists: p.join(','), nPlay: p.length, praticas: r.join(',').replace(/'/g, ''), nPrat: r.length, origem: ['YOUTUBE', 'AUDIO'].includes(sp.get('origem') || '') ? sp.get('origem') || '' : '' }
+    return { canalId, status: sp.get('status') || '', temas: t.join(','), nTemas: t.length, playlists: p.join(','), nPlay: p.length, praticas: r.join(',').replace(/'/g, ''), nPrat: r.length, origem: ['YOUTUBE', 'AUDIO'].includes(sp.get('origem') || '') ? sp.get('origem') || '' : '', meu: ['FAV', 'VISTO', 'NAOVISTO'].includes(sp.get('meu') || '') ? sp.get('meu') || '' : '' }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chaveFiltro, canalId])
 
@@ -73,7 +75,7 @@ export default function VideosPage() {
   }, [temas, mentores, playlists])
 
   async function baixarPlanilha() {
-    const partes = ['Vídeos', ...playSel.map(id => nomeDe('playlist', id)), ...temasSel.map(id => nomeDe('tema', id)), ...mentSel.map(id => nomeDe('mentor', id)), ...pratSel, status ? statusInfo[status]?.label : '', origem === 'AUDIO' ? 'Transcrito pelo áudio' : origem === 'YOUTUBE' ? 'Legenda do YouTube' : ''].filter(Boolean)
+    const partes = ['Vídeos', ...playSel.map(id => nomeDe('playlist', id)), ...temasSel.map(id => nomeDe('tema', id)), ...mentSel.map(id => nomeDe('mentor', id)), ...pratSel, status ? statusInfo[status]?.label : '', origem === 'AUDIO' ? 'Transcrito pelo áudio' : origem === 'YOUTUBE' ? 'Legenda do YouTube' : '', meu === 'FAV' ? 'Favoritos' : meu === 'VISTO' ? 'Já assisti' : meu === 'NAOVISTO' ? 'Não assisti' : ''].filter(Boolean)
     setExportMsg({ rodando: true, msg: 'Buscando os vídeos…' })
     try {
       const n = await exportarVideosFiltro(filtros(), partes.join(' - '), m => setExportMsg({ rodando: true, msg: m }))
@@ -94,6 +96,7 @@ export default function VideosPage() {
     linhas<Playlist>('playlistsListar', f).then(setPlaylists).catch(() => setPlaylists([]))
     linhas<PraticaTipo>('praticasTipos', f).then(setPraticas).catch(() => setPraticas([]))
     linhas<Painel>('painelResumo', { canalId }).then(r => setPainel(r[0] || null))
+    linhas<{ FAV: number; VISTOS: number }>('meusContar', { canalId }).then(r => setMeus(r[0] || null)).catch(() => {})
     linhas<{ N: number; LIDOS: number }>('praticasResumo').then(r => setLeitura(r[0] || null)).catch(() => {})
   }, [filtros, canalId])
 
@@ -109,7 +112,14 @@ export default function VideosPage() {
   const limparTudo = () => { const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); n.delete('pratica'); n.delete('mentor'); setSp(n) }
   const mostrarCanal = !canalId && new Set(playlists.map(p => p.CANAL_ID)).size > 1
   const algum = temasSel.length + mentSel.length + playSel.length + pratSel.length
-  const nFiltros = algum + (status ? 1 : 0) + (origem ? 1 : 0) + (canalId ? 1 : 0)
+  const nFiltros = algum + (status ? 1 : 0) + (origem ? 1 : 0) + (meu ? 1 : 0) + (canalId ? 1 : 0)
+  async function marcar(v: Video, campo: 'fav' | 'visto') {
+    const novo = campo === 'fav' ? !Number(v.FAVORITO) : !v.ASSISTIDO_EM
+    setVideos(l => l.map(x => x.ID !== v.ID ? x : campo === 'fav' ? { ...x, FAVORITO: novo ? 1 : 0 } : { ...x, ASSISTIDO_EM: novo ? 'agora' : null }))
+    setMeus(m => m && (campo === 'fav' ? { ...m, FAV: Number(m.FAV || 0) + (novo ? 1 : -1) } : { ...m, VISTOS: Number(m.VISTOS || 0) + (novo ? 1 : -1) }))
+    try { await chamar(campo === 'fav' ? 'videoFavorito' : 'videoAssistido', campo === 'fav' ? { id: v.ID, fav: novo ? 1 : 0 } : { id: v.ID, visto: novo ? 1 : 0 }) }
+    catch { carregar(0) }
+  }
   const marcado = { background: 'var(--accent-soft)', color: 'var(--accent-text)' }
   const caixa = (on: boolean) => <span className="w-3.5 h-3.5 rounded border shrink-0 inline-flex items-center justify-center" style={on ? { background: 'var(--accent)', borderColor: 'var(--accent)', color: 'var(--accent-fg)' } : { borderColor: 'var(--border)' }}>{on && <Check size={10} strokeWidth={3} />}</span>
   const playlistsMostrar = [...playlists.filter(p => playSel.includes(p.ID)), ...playlists.filter(p => !playSel.includes(p.ID))]
@@ -138,6 +148,12 @@ export default function VideosPage() {
           {[['', 'Todas'], ['YOUTUBE', 'Legenda do YouTube'], ['AUDIO', 'Pelo áudio']].map(([k, l]) => (
             <button key={'o' + k} onClick={() => filtro('origem', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
               style={origem === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
+        </div>
+        <div className="flex gap-2 flex-wrap items-center">
+          <span className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>Meus:</span>
+          {[['', 'Todos'], ['FAV', `Favoritos${meus ? ' ' + Number(meus.FAV || 0) : ''}`], ['VISTO', `Já assisti${meus ? ' ' + Number(meus.VISTOS || 0) : ''}`], ['NAOVISTO', 'Não assisti']].map(([k, l]) => (
+            <button key={'m' + k} onClick={() => filtro('meu', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
+              style={meu === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
         </div>
         </div>
         <Button variant="secondary" size="sm" className="lg:hidden" onClick={() => setFiltrosAbertos(a => !a)}>
@@ -242,6 +258,12 @@ export default function VideosPage() {
                     {v.TIPO === 'LIVE' && <Badge variant="info">Live</Badge>}
                     {v.ORIGEM === 'AUDIO' && <Badge variant="accent">Transcrito pelo áudio</Badge>}
                     {!!v.INDISPONIVEL && <Badge variant="warning">Indisponível no YouTube</Badge>}
+                    <span className="ml-auto flex items-center gap-0.5 shrink-0">
+                      <button onClick={e => { e.stopPropagation(); marcar(v, 'visto') }} className="h-8 w-8 inline-flex items-center justify-center rounded-lg" aria-pressed={!!v.ASSISTIDO_EM}
+                        style={{ color: v.ASSISTIDO_EM ? 'var(--success)' : 'var(--fg-subtle)' }} aria-label={v.ASSISTIDO_EM ? 'Tirar "já assisti"' : 'Marcar como já assisti'} title={v.ASSISTIDO_EM ? 'Já assisti (toque para tirar)' : 'Marcar como já assisti'}><Eye size={17} /></button>
+                      <button onClick={e => { e.stopPropagation(); marcar(v, 'fav') }} className="h-8 w-8 inline-flex items-center justify-center rounded-lg" aria-pressed={!!Number(v.FAVORITO)}
+                        style={{ color: Number(v.FAVORITO) ? 'var(--warning)' : 'var(--fg-subtle)' }} aria-label={Number(v.FAVORITO) ? 'Tirar dos favoritos' : 'Marcar como favorito'} title={Number(v.FAVORITO) ? 'Favorito (toque para tirar)' : 'Marcar como favorito'}><Star size={17} fill={Number(v.FAVORITO) ? 'currentColor' : 'none'} /></button>
+                    </span>
                   </div>
                   <div className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>
                     {v.CANAL}{v.PUBLICADO_EM ? ' · ' + dataBr(v.PUBLICADO_EM) : ''} · {duracao(v.DURACAO_SEG)}

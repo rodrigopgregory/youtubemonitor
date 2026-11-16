@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf, CheckCircle2 } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -11,6 +11,7 @@ const abas = [
   { to: '/', label: 'Pesquisar', icon: Search, end: true },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/praticas', label: 'Práticas', icon: Leaf, end: false },
+  { to: '/minhas-praticas', label: 'Minhas práticas', icon: CheckCircle2, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
@@ -110,8 +111,8 @@ export default function Layout() {
             {instalar && <button onClick={() => { instalar.prompt().finally(() => setInstalar(null)) }} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Instalar o Monitor como aplicativo neste aparelho">
               <Download size={16} /><span className="hidden sm:inline">Instalar app</span>
             </button>}
-            <button onClick={buscarNovos} disabled={busca?.rodando} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Procurar agora vídeos novos em todos os canais">
-              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
+            <button onClick={buscarNovos} disabled={busca?.rodando} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Procurar agora vídeos novos em todos os canais" aria-label="Buscar vídeos novos">
+              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline lg:hidden 2xl:inline whitespace-nowrap">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
             </button>
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}

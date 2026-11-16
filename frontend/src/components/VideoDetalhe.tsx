@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Pencil, X, Plus, Check, PlayCircle } from 'lucide-react'
+import { Pencil, X, Plus, Check, PlayCircle, Star, Eye } from 'lucide-react'
 import Modal from './ui/Modal'
 import Badge from './ui/Badge'
 import Button from './ui/Button'
 import { linhas, chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
-interface Det { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; RESUMO: string | null; CANAL: string }
+interface Det { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; RESUMO: string | null; CANAL: string; FAVORITO?: number | boolean; ASSISTIDO_EM?: string | null }
 interface Tema { ID: number; NOME: string; ORIGEM: string; MOMENTOS: string }
 interface Trecho { SEGUNDO: number; TEXTO: string }
 interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number }
@@ -22,6 +22,14 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
   const [erro, setErro] = useState('')
   const [salvando, setSalvando] = useState(false)
   const [movendo, setMovendo] = useState(false)
+
+  async function marcar(campo: 'fav' | 'visto') {
+    if (!d) return
+    const novo = campo === 'fav' ? !Number(d.FAVORITO) : !d.ASSISTIDO_EM
+    setD({ ...d, ...(campo === 'fav' ? { FAVORITO: novo ? 1 : 0 } : { ASSISTIDO_EM: novo ? 'agora' : null }) })
+    try { await chamar(campo === 'fav' ? 'videoFavorito' : 'videoAssistido', campo === 'fav' ? { id, fav: novo ? 1 : 0 } : { id, visto: novo ? 1 : 0 }); onMudou() }
+    catch (e) { setErro((e as Error).message) }
+  }
 
   async function foraTema(fora: boolean) {
     setErro(''); setMovendo(true)
@@ -63,6 +71,10 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
             {d.ORIGEM && <Badge variant={d.ORIGEM === 'AUDIO' ? 'accent' : 'neutral'}>{d.ORIGEM === 'AUDIO' ? 'Transcrito pelo áudio' : 'Legenda do YouTube'}</Badge>}
             {!!d.INDISPONIVEL && <Badge variant="warning">Indisponível no YouTube</Badge>}
             <a href={linkYt(d.YT_VIDEO_ID)} target="_blank" rel="noreferrer" className="font-medium hover:underline" style={{ color: 'var(--accent-text)' }}>Assistir no YouTube</a>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <Button size="sm" variant={Number(d.FAVORITO) ? 'primary' : 'secondary'} onClick={() => marcar('fav')} aria-pressed={!!Number(d.FAVORITO)}><Star size={14} fill={Number(d.FAVORITO) ? 'currentColor' : 'none'} />{Number(d.FAVORITO) ? 'Favorito' : 'Marcar como favorito'}</Button>
+            <Button size="sm" variant={d.ASSISTIDO_EM ? 'primary' : 'secondary'} onClick={() => marcar('visto')} aria-pressed={!!d.ASSISTIDO_EM}><Eye size={14} />{d.ASSISTIDO_EM ? 'Já assisti' + (d.ASSISTIDO_EM !== 'agora' ? ' em ' + dataBr(d.ASSISTIDO_EM) : '') : 'Marcar como já assisti'}</Button>
           </div>
           {d.STATUS === 'PENDENTE' && <p className="text-[13.5px]" style={{ color: 'var(--warning-text)' }}>Pendente: {d.MOTIVO}. O sistema tenta de novo na próxima checagem diária.</p>}
           {(d.STATUS === 'ESTUDADO' || d.STATUS === 'FORA_TEMA') && (
