@@ -135,6 +135,16 @@
  "livroTemas": 168,
  "livroCapitulo": 169,
  "exportTabLivro": 170,
+ "videoFavorito": 180,
+ "videoAssistido": 181,
+ "meusContar": 182,
+ "diarioInserir": 183,
+ "diarioApagar": 184,
+ "diarioListar": 185,
+ "diarioPraticas": 186,
+ "diarioResumo": 187,
+ "livroProximo": 188,
+ "livroHoje": 189,
  "motor": 65,
  "canalCadastrar": 87,
  "temaEditar": 88,
@@ -145,5 +155,6 @@
  "canaisAtualizar": 151,
  "buscaTermos": 152,
  "configEditar": 157,
- "livroGerar": 171
+ "livroGerar": 171,
+ "diarioEditar": 190
 }

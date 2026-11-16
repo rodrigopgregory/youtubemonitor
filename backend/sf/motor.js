@@ -591,6 +591,20 @@ try {
       catch (e) { log.push('praticas ' + pf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); break; }
     }
   }
+  let livroDisparado = false;
+  const livroNoite = Number(cfg.LIVRO_POR_NOITE || 2);
+  if (cfg.GEMINI_OK && livroNoite > 0 && !IA_SEM_COTA && horaBR >= 1 && horaBR < 7 && !(cfg.IA_PAUSADA_ATE && cfg.IA_PAUSADA_ATE > agora())) {
+    const ultimaTentativa = Number(cfg.LIVRO_TENTOU_EM || 0);
+    if (Date.now() - ultimaTentativa > 25 * 60e3) {
+      const feitos = Number((((await sql('livroHoje', { dia: hojeBR })).rows || [{}])[0] || {}).N || 0);
+      const prox = ((await sql('livroProximo', {})).rows || [])[0];
+      if (prox && feitos < livroNoite) {
+        await sql('configTelaGravar', { chave: 'LIVRO_TENTOU_EM', valor: String(Date.now()) });
+        await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.livroGerar, input: { temaId: Number(prox.ID), automatico: true } });
+        livroDisparado = true; log.push('livro: escrevendo ' + prox.NOME);
+      }
+    }
+  }
   await fecharAvisos(hojeBR);
   if (IA_SEM_COTA) {
     const d = new Date(); let t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 8, 0, 0);
@@ -601,7 +615,7 @@ try {
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
   const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
   const restaFin = Number((((await sql('finContar', {})).rows || [{}])[0] || {}).N || 0);
-  resultado = { finMarcadas, restaFin, estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
+  resultado = { livroDisparado, finMarcadas, restaFin, estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
 } finally {
   await sql('lockLiberar', { ate: String(ate) }).catch(() => {});
 }
