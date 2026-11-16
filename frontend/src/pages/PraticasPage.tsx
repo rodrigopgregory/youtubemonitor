@@ -154,6 +154,7 @@ export default function PraticasPage() {
           {!fim && lista.length > 0 && <Button variant="secondary" onClick={() => carregar(lista.length)} disabled={carregando}>{carregando ? 'Carregando…' : 'Ver mais'}</Button>}
         </div>
       )}
+      <p className="text-[11.5px] text-center" style={{ color: 'var(--fg-subtle)' }}>Práticas ensinadas nos vídeos, para estudo. Não substituem orientação médica ou de um profissional de saúde.</p>
       {video && <VideoDetalhe id={video} onClose={() => setVideo(null)} onMudou={() => {}} />}
     </div>
   )
