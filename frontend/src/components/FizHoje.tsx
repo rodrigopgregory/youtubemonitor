@@ -14,24 +14,27 @@ export const humorDe = (n?: number | null) => HUMORES.find(h => h.n === Math.rou
 
 const hojeBr = () => new Date(Date.now() - 3 * 3600e3).toISOString().slice(0, 10)
 
-export default function FizHoje({ pratica, onClose, onSalvo }: { pratica: { ID: number; TITULO: string }; onClose: () => void; onSalvo: () => void }) {
-  const [humor, setHumor] = useState(0)
-  const [sentiu, setSentiu] = useState('')
-  const [dia, setDia] = useState(hojeBr())
+export interface RegistroEd { ID: number; DIA: string; HUMOR: number | null; SENTIU: string | null }
+export interface Contagem { praticaId: number; vezes: number; ultima: string | null; id?: number }
+
+export default function FizHoje({ pratica, registro, onClose, onSalvo }: { pratica: { ID: number; TITULO: string }; registro?: RegistroEd; onClose: () => void; onSalvo: (c: Contagem) => void }) {
+  const [humor, setHumor] = useState(Number(registro?.HUMOR || 0))
+  const [sentiu, setSentiu] = useState(registro?.SENTIU || '')
+  const [dia, setDia] = useState(registro?.DIA || hojeBr())
   const [salvando, setSalvando] = useState(false)
   const [erro, setErro] = useState('')
 
   async function salvar() {
     setErro(''); setSalvando(true)
     try {
-      const r = await chamar<{ ok: boolean; erro?: string }>('diarioEditar', { acao: 'fiz', praticaId: pratica.ID, humor, sentiu, dia })
+      const r = await chamar<Contagem & { ok: boolean; erro?: string }>('diarioEditar', registro ? { acao: 'editar', id: registro.ID, humor, sentiu, dia } : { acao: 'fiz', praticaId: pratica.ID, humor, sentiu, dia })
       if (!r.ok) setErro(r.erro || 'Não foi possível salvar.')
-      else { onSalvo(); onClose() }
+      else { onSalvo(r); onClose() }
     } catch (e) { setErro((e as Error).message) } finally { setSalvando(false) }
   }
 
   return (
-    <Modal isOpen onClose={onClose} title="Fiz esta prática" size="md">
+    <Modal isOpen onClose={onClose} title={registro ? 'Editar registro' : 'Fiz esta prática'} size="md">
       <div className="p-5 flex flex-col gap-4">
         <p className="text-[14px] font-medium first-letter:uppercase">{pratica.TITULO}</p>
         <div className="flex flex-col gap-2">

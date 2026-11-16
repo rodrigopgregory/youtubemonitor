@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { CheckCircle2, PlayCircle, Trash2, Plus } from 'lucide-react'
+import { PlayCircle, Trash2, Pencil } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import FizHoje, { humorDe } from '../components/FizHoje'
+import type { RegistroEd } from '../components/FizHoje'
+import Contador from '../components/Contador'
 import { chamar, linhas, linkYt, mmss, dataBr } from '../lib/api'
 
 interface Feita { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string; HUMOR: number | null }
@@ -19,7 +21,7 @@ export default function MinhasPraticasPage() {
   const [fim, setFim] = useState(true)
   const [carregando, setCarregando] = useState(true)
   const [aba, setAba] = useState<'diario' | 'praticas'>('diario')
-  const [fazendo, setFazendo] = useState<Feita | null>(null)
+  const [editando, setEditando] = useState<(RegistroEd & { TITULO: string; PRATICA_ID: number }) | null>(null)
   const [apagando, setApagando] = useState<number | null>(null)
 
   const carregar = useCallback(async () => {
@@ -85,7 +87,10 @@ export default function MinhasPraticasPage() {
                       <span className="text-[14.5px] font-medium first-letter:uppercase">{r.TITULO}</span>
                       <Badge variant="success">{r.TIPO}</Badge>
                     </div>
+                    <span className="flex shrink-0">
+                    <button onClick={() => setEditando(r)} className="h-8 w-8 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-subtle)' }} aria-label="Editar este registro" title="Editar este registro"><Pencil size={15} /></button>
                     <button onClick={() => apagar(r.ID)} disabled={apagando === r.ID} className="h-8 w-8 shrink-0 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-subtle)' }} aria-label="Apagar este registro" title="Apagar este registro"><Trash2 size={15} /></button>
+                    </span>
                   </div>
                   {hm && <span className="text-[13.5px]">{hm.emoji} {hm.nome}</span>}
                   {r.SENTIU && <p className="text-[13.5px] leading-relaxed whitespace-pre-line" style={muted}>{r.SENTIU}</p>}
@@ -102,23 +107,19 @@ export default function MinhasPraticasPage() {
               return (
                 <Card key={p.ID} className="p-4 flex flex-col gap-2">
                   <div className="flex items-start gap-2 flex-wrap"><span className="text-[15px] font-medium first-letter:uppercase">{p.TITULO}</span><Badge variant="success">{p.TIPO}</Badge></div>
-                  <div className="flex items-center gap-x-3 gap-y-1 flex-wrap text-[13px]" style={muted}>
-                    <span className="inline-flex items-center gap-1"><CheckCircle2 size={14} style={{ color: 'var(--success)' }} />{Number(p.VEZES)} {Number(p.VEZES) === 1 ? 'vez' : 'vezes'}</span>
-                    <span>Última: {dataBr(p.ULTIMA)}</span>
-                    {hm && <span>Em média: {hm.emoji} {hm.nome}</span>}
-                  </div>
+                  {hm && <span className="text-[13px]" style={muted}>Em média: {hm.emoji} {hm.nome}</span>}
                   <p className="text-[13.5px] leading-relaxed line-clamp-3" style={muted}>{p.INSTRUCAO}</p>
                   <div className="flex items-center gap-3 flex-wrap text-[12.5px]">
                     <span className="truncate max-w-full" style={muted}>{p.CANAL} · {p.VIDEO}</span>
                     <a href={linkYt(p.YT_VIDEO_ID, p.SEGUNDO || 0)} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 font-medium" style={{ color: 'var(--accent-text)' }}><PlayCircle size={14} />Assistir{p.SEGUNDO ? ' em ' + mmss(p.SEGUNDO) : ''}</a>
                   </div>
-                  <div><Button size="sm" variant="secondary" onClick={() => setFazendo(p)}><Plus size={14} />Fiz de novo</Button></div>
+                  <Contador pratica={p} vezes={Number(p.VEZES)} ultima={p.ULTIMA} onMudou={() => carregar()} />
                 </Card>)
             })}
           </div>
         )}
       </>)}
-      {fazendo && <FizHoje pratica={fazendo} onClose={() => setFazendo(null)} onSalvo={carregar} />}
+      {editando && <FizHoje pratica={{ ID: editando.PRATICA_ID, TITULO: editando.TITULO }} registro={editando} onClose={() => setEditando(null)} onSalvo={() => carregar()} />}
     </div>
   )
 }
