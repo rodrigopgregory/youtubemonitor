@@ -109,11 +109,11 @@ export default function ChatPage() {
 
       <div className="flex-1 overflow-y-auto rounded-2xl border p-4 flex flex-col gap-4" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
         {msgs.length === 0 && (
-          <div className="m-auto flex flex-col items-center gap-4 text-center max-w-md">
-            <MessageSquare size={28} style={{ color: 'var(--accent)' }} />
-            <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Experimente:</p>
-            <div className="flex flex-wrap justify-center gap-2">
-              {exemplos.map(e => <button key={e} onClick={() => enviar(e)} className="px-3 py-1.5 rounded-full border text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{e}</button>)}
+          <div className="mt-auto sm:m-auto w-full sm:w-auto flex flex-col sm:items-center gap-2 sm:gap-4 sm:text-center sm:max-w-md">
+            <MessageSquare size={28} className="hidden sm:block" style={{ color: 'var(--accent)' }} />
+            <p className="text-[13px] sm:text-[14px]" style={{ color: 'var(--fg-muted)' }}>Experimente:</p>
+            <div className="flex sm:flex-wrap sm:justify-center gap-2 overflow-x-auto sm:overflow-visible -mx-4 px-4 sm:mx-0 sm:px-0 pb-1 sm:pb-0 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              {exemplos.map(e => <button key={e} onClick={() => enviar(e)} className="shrink-0 whitespace-nowrap sm:whitespace-normal px-3 py-1.5 rounded-full border text-[12.5px] sm:text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{e}</button>)}
             </div>
           </div>
         )}
