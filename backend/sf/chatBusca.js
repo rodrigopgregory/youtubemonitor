@@ -44,7 +44,20 @@ try {
     '- ordem: "recentes" se a pessoa pedir os mais novos/recentes/ultimos; senao "relevancia".\n' +
     '- tipo "fora" so se o pedido nao tiver nada a ver com procurar assuntos nos videos.\n' +
     'Temas que ja existem na base (use quando servir): ' + temas.join('; ') + '\n\nCONVERSA ANTERIOR:\n' + (conversa || '(nenhuma)') + '\n\nPEDIDO: ' + pedido, true));
-} catch (e) { return { ok: false, erro: 'Não consegui entender o pedido agora. Tente de novo em instantes.' }; }
+} catch (e) {
+  const semAcento = x => String(x || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+  const p = semAcento(pedido);
+  if (/quantos|andamento|como esta o estudo|o que falta/.test(p)) plano = { tipo: 'andamento' };
+  else if (/\b(estud|rod|process|carreg)\w*\s+mais\b/.test(p)) plano = { tipo: 'estudar', quantidade: Number((p.match(/\d+/) || [50])[0]) };
+  else {
+    const canaisLista = ((await sql('canaisNomes', {})).rows || []);
+    const canal = canaisLista.find(c => semAcento(c.NOME).split(/[^a-z0-9]+/).filter(w => w.length >= 4).some(w => p.includes(w)));
+    const doCanal = new Set(canal ? semAcento(canal.NOME).split(/[^a-z0-9]+/) : []);
+    const pare = new Set('a o e de da do das dos em no na nos nas um uma uns umas que se por para pra com sem sobre como qual quais quando onde porque quero queria me te ele ela eles elas isso esse essa este esta aquele aquela fala falou falam explica explique mostra mostre diga conta conte pratica praticas video videos live lives canal ele dele dela tem existe sabe pode poderia algum alguma mais muito quero entender'.split(' '));
+    const palavras = [...new Set(p.split(/[^a-z0-9]+/).filter(w => w.length >= 4 && !pare.has(w) && !doCanal.has(w)))];
+    plano = { tipo: 'busca', termos: palavras.sort((a, b) => b.length - a.length).slice(0, 5), ordem: /recente|ultim|novo/.test(p) ? 'recentes' : 'relevancia', somenteLives: /\blives?\b/.test(p) && /so (as )?lives|nas lives/.test(p), canalId: canal ? Number(canal.ID) : 0, semIA: true };
+  }
+}
 
 if (plano.tipo === 'andamento') {
   const linhas = ((await sql('estudoAndamento', {})).rows || []);
@@ -68,17 +81,20 @@ const canalBusca = Math.floor(Number(event.canalId || 0)) || Math.floor(Number(p
 
 const vids = {}; const trechos = []; const resumos = {};
 for (const tema of termos) {
-  for (const v of ((await sql('buscarTema', { tema, ordem: 'relevancia', limit: 30, offset: 0, canalId: canalBusca })).rows || [])) {
+  const achados = ((await sql('buscarTema', { tema, ordem: 'relevancia', limit: 30, offset: 0, canalId: canalBusca })).rows || []);
+  const maior = Math.max(1, ...achados.map(v => Number(v.SCORE || 0)));
+  const peso = 30 / Math.max(1, achados.length);
+  for (const v of achados) {
     if (plano.somenteLives && v.TIPO !== 'LIVE') continue;
-    const a = vids[v.ID] || (vids[v.ID] = Object.assign({}, v, { SCORE: 0, MOMS: '' }));
-    a.SCORE += Number(v.SCORE || 0); a.MOMS = [a.MOMS, v.MOMS].filter(Boolean).join(',');
+    const a = vids[v.ID] || (vids[v.ID] = Object.assign({}, v, { SCORE: 0, MOMS: '', ACHOU: 0 }));
+    a.SCORE += Number(v.SCORE || 0) / maior * 100 * peso; a.ACHOU++; a.MOMS = [a.MOMS, v.MOMS].filter(Boolean).join(',');
   }
   for (const t of ((await sql('buscaTrechos', { tema, canalId: canalBusca })).rows || []).slice(0, 25)) trechos.push(t);
   for (const r of ((await sql('buscaResumos', { tema, canalId: canalBusca })).rows || [])) resumos[r.TITULO] = r.RESUMO;
 }
 let lista = Object.values(vids);
-lista.sort((a, b) => ordem === 'recentes' ? String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')) || b.SCORE - a.SCORE : b.SCORE - a.SCORE || String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')));
-lista = lista.slice(0, 30);
+lista.sort((a, b) => ordem === 'recentes' ? String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')) || b.SCORE - a.SCORE : b.SCORE - a.SCORE || b.ACHOU - a.ACHOU || String(b.PUBLICADO_EM || '').localeCompare(String(a.PUBLICADO_EM || '')));
+lista = lista.slice(0, 30).map(v => Object.assign({}, v, { SCORE: Math.round(v.SCORE) }));
 const titulos = new Set(lista.map(v => v.TITULO));
 if (!lista.length) return { ok: true, vazio: true, resposta: 'Nenhum vídeo da base trata disso' + (plano.somenteLives ? ' nas lives' : '') + (canalBusca ? ' neste canal' : '') + '. Procurei por: ' + termos.join(', ') + '.', videos: [], termos, ordem };
 
@@ -92,5 +108,5 @@ try {
     'Responda ao pedido da pessoa em portugues usando SOMENTE o material abaixo, tirado das transcricoes dos videos da base dela. ' +
     'Nao use conhecimento de fora. Cite o titulo do video e o minuto de onde tirou cada ponto, copiando o tempo como aparece no material (ex.: 1:45:04). Seja direto: de 1 a 4 paragrafos curtos, sem markdown. ' +
     'Se o material nao responder ao pedido, diga isso claramente e nao invente.\n\nCONVERSA ANTERIOR:\n' + (conversa || '(nenhuma)') + '\n\nPEDIDO: ' + pedido + '\n\nMATERIAL:\n' + material.slice(0, 150000), false);
-} catch (e) { resposta = 'Encontrei os vídeos abaixo, mas não consegui montar o resumo agora.'; }
+} catch (e) { resposta = 'A IA do Google chegou ao limite de uso de hoje, então não deu para escrever o resumo agora. Encontrei os vídeos abaixo pelas palavras ' + termos.join(', ') + '; clique num vídeo para ver os momentos em que o assunto aparece. O resumo volta quando o limite renovar (por volta das 5h).'; }
 return { ok: true, resposta: resposta.replace(/\*\*?/g, ''), videos: lista, termos, ordem };
