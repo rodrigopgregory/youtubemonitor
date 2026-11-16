@@ -110,7 +110,7 @@ export default function InicioPage() {
                 <div key={p.ID} className="flex flex-col gap-2 pb-3 border-b last:border-b-0 last:pb-0" style={{ borderColor: 'var(--border)' }}>
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-[14px] font-medium">{p.TITULO}</span>
-                    <Badge>{p.TIPO}</Badge>
+                    <Badge variant="neutral">{p.TIPO}</Badge>
                   </div>
                   <Contador pratica={p} vezes={p.VEZES} ultima={p.ULTIMA} onMudou={c => atualizarMinha(p.ID, c.vezes, c.ultima)} />
                 </div>
@@ -130,7 +130,7 @@ export default function InicioPage() {
               : <>
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-[15px] font-semibold">{doDia.TITULO}</span>
-                  <Badge>{doDia.TIPO}</Badge>
+                  <Badge variant="neutral">{doDia.TIPO}</Badge>
                 </div>
                 <p className="text-[14px] leading-relaxed whitespace-pre-line">{doDia.INSTRUCAO}</p>
                 <a href={linkYt(doDia.YT_VIDEO_ID, doDia.SEGUNDO || 0)} target="_blank" rel="noreferrer" className="text-[13px] inline-flex items-center gap-1.5 underline" style={muted}>
