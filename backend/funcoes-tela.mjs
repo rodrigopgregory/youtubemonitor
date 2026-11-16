@@ -59,7 +59,7 @@ export const tela = [
   S('exportTabPraticas', `SELECT * FROM PRATICAS WHERE ID > {{depois}} ORDER BY ID LIMIT 5000`, 'Exporta PRATICAS'),
   S('exportTabConfig', `SELECT CHAVE, VALOR FROM CONFIG WHERE CHAVE <> 'LOCK' ORDER BY CHAVE`, 'Exporta CONFIG'),
   S('mentoresGerir', `SELECT T.ID, SUBSTRING(T.NOME, 9) NOME, COUNT(VT.ID) QTD FROM TEMAS T LEFT JOIN VIDEO_TEMAS VT ON VT.TEMA_ID = T.ID WHERE T.NOME LIKE 'mentor: %' GROUP BY T.ID, T.NOME HAVING QTD > 0 OR SUBSTRING(T.NOME, 9) IN (SELECT NOME FROM MENTOR_REGRAS WHERE TIPO = 'MENTOR') ORDER BY QTD DESC, NOME`, 'Mentores com quantos vídeos têm, para a tela de gestão'),
-  S('configTelaLer', `SELECT CHAVE, VALOR FROM CONFIG WHERE CHAVE IN ('DURACAO_MIN_SEG', 'HORA_CHECAGEM', 'AUDIO_LIGADO', 'PRATICAS_LIGADO', 'CONFERIR_MENTOR')`, 'Ajustes do estudo que a tela mostra'),
+  S('configTelaLer', `SELECT CHAVE, VALOR FROM CONFIG WHERE CHAVE IN ('DURACAO_MIN_SEG', 'HORA_CHECAGEM', 'AUDIO_LIGADO', 'PRATICAS_LIGADO', 'CONFERIR_MENTOR', 'FINALIDADE_LIGADO', 'LIVRO_LIGADO', 'LIVRO_POR_NOITE', 'LIVRO_PAUSA_ATE', 'IA_PAUSADA_ATE')`, 'Ajustes do estudo que a tela mostra'),
   S('configTelaGravar', `INSERT INTO CONFIG (CHAVE, VALOR) VALUES ('{{chave}}', '{{valor}}') ON DUPLICATE KEY UPDATE VALOR = VALUES(VALOR)`, 'Grava um ajuste do estudo'),
   S('canaisMentorLer', `SELECT ID, NOME, TEM_MENTOR FROM CANAIS ORDER BY ID`, 'Canais e se o estudo procura mentor neles'),
   S('canalMentorGravar', `UPDATE CANAIS SET TEM_MENTOR = {{tem}} WHERE ID = {{id}}`, 'Liga ou desliga a busca de mentor no canal'),

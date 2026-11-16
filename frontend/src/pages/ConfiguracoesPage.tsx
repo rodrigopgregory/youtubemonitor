@@ -11,7 +11,7 @@ interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
 interface Canal { ID: number; NOME: string; TEM_MENTOR: number }
 type Config = Record<string, string>
-type Res = { ok: boolean; msg?: string; erro?: string; config?: Config; canais?: Canal[] }
+type Res = { ok: boolean; msg?: string; erro?: string; config?: Config; canais?: Canal[]; agora?: string }
 type Aviso = { t: string; erro?: boolean } | null
 
 const muted = { color: 'var(--fg-muted)' }
@@ -60,7 +60,9 @@ export default function ConfiguracoesPage() {
     linhas<Mentor>('mentoresGerir').then(setMentores)
     linhas<Regra>('mentorRegrasListar').then(setRegras)
   }, [])
+  const [agoraBR, setAgoraBR] = useState('')
   const aplicar = (r: Res) => {
+    if (r.agora) setAgoraBR(r.agora)
     if (r.config) { setConfig(r.config); setMinutos(String(Math.round(Number(r.config.DURACAO_MIN_SEG || 600) / 60))) }
     if (r.canais) setCanais(r.canais)
   }
@@ -109,6 +111,9 @@ export default function ConfiguracoesPage() {
   }
   const naoSao = regras.filter(r => r.TIPO === 'NAO')
   const liga = (k: string) => config?.[k] !== '0'
+  const dataHora = (iso: string) => { const [d, h] = iso.split('T'); const [, mes, dia] = d.split('-'); return `${dia}/${mes} às ${h.slice(0, 5)}` }
+  const livroPausa = config?.LIVRO_PAUSA_ATE && agoraBR && config.LIVRO_PAUSA_ATE > agoraBR ? config.LIVRO_PAUSA_ATE : ''
+  const iaPausa = config?.IA_PAUSADA_ATE && agoraBR && config.IA_PAUSADA_ATE > agoraBR ? config.IA_PAUSADA_ATE : ''
   const minAtual = config ? String(Math.round(Number(config.DURACAO_MIN_SEG || 600) / 60)) : ''
 
   return (
@@ -184,8 +189,34 @@ export default function ConfiguracoesPage() {
             <Linha titulo="Conferir mentores já marcados" nota="Revê com a IA os mentores marcados nos vídeos antigos e tira os que não conduzem a live.">
               <Chave ligado={liga('CONFERIR_MENTOR')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'CONFERIR_MENTOR', valor: v })} />
             </Linha>
+            <Linha titulo="Marcar para que serve cada prática" nota="A IA diz a finalidade de cada prática (sono, proteção, ansiedade…), usada no mapa de Práticas.">
+              <Chave ligado={liga('FINALIDADE_LIGADO')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'FINALIDADE_LIGADO', valor: v })} />
+            </Linha>
+            <Linha titulo="Situação da IA" nota={iaPausa ? `Sem cota grátis por hoje. Volta a trabalhar em ${dataHora(iaPausa)}.` : 'Trabalhando normalmente.'}>
+              <span className="text-[12.5px] px-2 py-0.5 rounded-full shrink-0" style={{ background: iaPausa ? 'var(--warning-soft)' : 'var(--success-soft)', color: iaPausa ? 'var(--warning-text)' : 'var(--success-text)' }}>{iaPausa ? 'Em pausa' : 'Ativa'}</span>
+            </Linha>
           </>}
         </Card>
+        {config && (
+          <Card className="px-5 py-2">
+            <p className="pt-3 text-[13.5px] font-medium">Livro Vivo</p>
+            <Linha titulo="Escrever sozinho de madrugada" nota={config.LIVRO_LIGADO === '0' ? 'Desligado. Fica assim até você ligar de novo.' : livroPausa ? `Pausado até ${dataHora(livroPausa)}. Depois volta sozinho.` : 'Ligado. A IA escreve capítulos novos entre 1h e 7h.'}>
+              <Chave ligado={liga('LIVRO_LIGADO')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'LIVRO_LIGADO', valor: v })} />
+            </Linha>
+            {config.LIVRO_LIGADO !== '0' && <>
+              <Linha titulo="Capítulos por madrugada" nota="Mais capítulos gastam mais cota da IA.">
+                <div className="w-20"><Select value={config.LIVRO_POR_NOITE || '2'} searchThreshold={99} disabled={salvando}
+                  onChange={v => ajuste({ acao: 'gravar', chave: 'LIVRO_POR_NOITE', valor: v })}
+                  options={Array.from({ length: 5 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) }))} /></div>
+              </Linha>
+              <Linha titulo="Pausar por 24 horas" nota={livroPausa ? 'Pausa ativa.' : 'Não escreve nas próximas 24 horas e depois volta sozinho.'}>
+                {livroPausa
+                  ? <Button size="sm" variant="secondary" disabled={salvando} onClick={() => ajuste({ acao: 'gravar', chave: 'LIVRO_PAUSA_ATE', valor: '' })}>Tirar pausa</Button>
+                  : <Button size="sm" variant="secondary" disabled={salvando} onClick={() => ajuste({ acao: 'gravar', chave: 'LIVRO_PAUSA_ATE', valor: '24h' })}>Pausar 24h</Button>}
+              </Linha>
+            </>}
+          </Card>
+        )}
         {canais.length > 0 && (
           <Card className="px-5 py-2">
             <p className="pt-3 text-[13.5px] font-medium">Canais com mentores</p>

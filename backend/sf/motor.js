@@ -575,7 +575,7 @@ try {
     }
   }
   let finMarcadas = 0;
-  if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
+  if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0' && cfg.FINALIDADE_LIGADO !== '0') {
     for (let i = 0; i < 15 && Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3; i++) {
       try { const n = await marcarFinalidades(cfg); if (!n) break; finMarcadas += n; }
       catch (e) { log.push('finalidades: erro ' + String(e.message || e).slice(0, 150)); break; }
@@ -593,7 +593,7 @@ try {
   }
   let livroDisparado = false;
   const livroNoite = Number(cfg.LIVRO_POR_NOITE || 2);
-  if (cfg.GEMINI_OK && livroNoite > 0 && !IA_SEM_COTA && horaBR >= 1 && horaBR < 7 && !(cfg.IA_PAUSADA_ATE && cfg.IA_PAUSADA_ATE > agora())) {
+  if (cfg.GEMINI_OK && cfg.LIVRO_LIGADO !== '0' && !(cfg.LIVRO_PAUSA_ATE && cfg.LIVRO_PAUSA_ATE > agora()) && livroNoite > 0 && !IA_SEM_COTA && horaBR >= 1 && horaBR < 7 && !(cfg.IA_PAUSADA_ATE && cfg.IA_PAUSADA_ATE > agora())) {
     const ultimaTentativa = Number(cfg.LIVRO_TENTOU_EM || 0);
     if (Date.now() - ultimaTentativa > 25 * 60e3) {
       const feitos = Number((((await sql('livroHoje', { dia: hojeBR })).rows || [{}])[0] || {}).N || 0);
