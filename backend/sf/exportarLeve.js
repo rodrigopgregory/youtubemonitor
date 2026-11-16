@@ -80,6 +80,7 @@ function ordenarTabelas(tabs, fks) {
   [...tabs].sort().forEach(visita);
   return out;
 }
+const MARC = '__' + 'SF' + '__';
 const OPC = Object.assign({ praticas: true, livro: true }, (event && event.opcoes) || {});
 const acao = String(event.acao || 'estado');
 const SEGREDO = /AIza[0-9A-Za-z_-]{30,}|ghp_[A-Za-z0-9]{20,}|github_pat_[A-Za-z0-9_]{20,}|-----BEGIN [A-Z ]*PRIVATE KEY-----|eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{5,}|Bearer [A-Za-z0-9._~+\/-]{30,}|MITRA_TOKEN=[^\s'"`]{8,}|sk-[A-Za-z0-9]{30,}/g;
@@ -292,14 +293,14 @@ async function main() {
     if (/userId|user_id|\{\{user|CURRENT_USER|usuario_logado|currentUser|loggedUser/i.test(code)) usuarioLogado.push(f.name);
     const repo = base.repoFuncoes[f.name];
     if (!repo) { diff.soMitra.push({ nome: f.name, id: f.id, tipo: f.type }); continue; }
-    const pub = f.type === 'SQL' ? code.trim() : code.replace(/const SF = \{[^\n]*\};/, 'const SF = __SF__;').trim();
+    const pub = f.type === 'SQL' ? code.trim() : code.replace(/const SF = \{[^\n]*\};/, 'const SF = ' + MARC + ';').trim();
     const loc = repo.code.trim();
     if (pub === loc) diff.iguais.push(f.name); else diff.diferentes.push({ nome: f.name, id: f.id, tipo: f.type, d: linhasDiff(pub, loc) });
   }
   for (const nome of Object.keys(base.repoFuncoes)) if (!nomesFn.has(nome)) diff.soRepo.push(nome);
   await zadd('funcoes/INDICE_FUNCOES.csv', csvLinha(['numero', 'nome', 'tipo', 'parametros', 'perfis_com_permissao', 'cron', 'descricao', 'tamanho_bytes', 'sha256'], '') + indice.map(r => csvLinha(r, '')).join(''));
   await zadd('funcoes/INDICE_FUNCOES.json', JSON.stringify(indiceJson, null, 1));
-  const DF = ['# Diferenças entre as funções publicadas no Mitra e os scripts do repositório', '', 'Commit do repositório usado: `' + base.commit + '` (código guardado em ' + base.geradoEm + '). Funções JavaScript são comparadas com o marcador `__SF__` no lugar da tabela de números que o publicador injeta. Funções SQL são comparadas texto a texto (sem espaços nas pontas).', '',
+  const DF = ['# Diferenças entre as funções publicadas no Mitra e os scripts do repositório', '', 'Commit do repositório usado: `' + base.commit + '` (código guardado em ' + base.geradoEm + '). Funções JavaScript são comparadas com o marcador `' + MARC + '` no lugar da tabela de números que o publicador injeta. Funções SQL são comparadas texto a texto (sem espaços nas pontas).', '',
     '- Publicadas no Mitra: ' + fns.length + '. Iguais ao repositório: ' + diff.iguais.length + '. Diferentes: ' + diff.diferentes.length + '. Só no Mitra: ' + diff.soMitra.length + '. Só no repositório: ' + diff.soRepo.length + '.', '', '## Só existem no Mitra (não têm script no repositório)', '', ...(diff.soMitra.length ? diff.soMitra.map(x => '- ' + x.id + ' `' + x.nome + '` (' + x.tipo + ')') : ['Nenhuma.']), '', '## Só existem no repositório (não estão publicadas)', '', ...(diff.soRepo.length ? diff.soRepo.map(x => '- `' + x + '`') : ['Nenhuma.']), '', '## Diferentes', ''];
   if (!diff.diferentes.length) DF.push('Nenhuma.');
   for (const x of diff.diferentes) { DF.push('### ' + x.id + ' `' + x.nome + '` (' + x.tipo + '): ' + x.d.total + ' linhas no Mitra, ' + x.d.totalRepo + ' no repositório', '', '```', ...x.d.amostra, '```', ''); }
