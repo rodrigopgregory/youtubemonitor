@@ -164,6 +164,8 @@
  "livroHoje": 189,
  "livrosLista": 213,
  "livrosTotais": 214,
+ "livrosRelacao": 215,
+ "livrosDoTitulo": 216,
  "motor": 65,
  "canalCadastrar": 87,
  "temaEditar": 88,

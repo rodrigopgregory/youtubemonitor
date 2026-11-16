@@ -4,6 +4,7 @@ import { initMitra } from './lib/mitra-auth'
 import LoginPage from './pages/LoginPage'
 import Layout from './components/Layout'
 import PraticasPage from './pages/PraticasPage'
+import RelacaoLivrosPage from './pages/RelacaoLivrosPage'
 import LivrosPage from './pages/LivrosPage'
 import MinhasPraticasPage from './pages/MinhasPraticasPage'
 import VideosPage from './pages/VideosPage'
@@ -26,6 +27,7 @@ function App() {
         <Route path="/chat" element={<Navigate to="/pesquisar" replace />} />
         <Route path="/videos" element={<VideosPage />} />
         <Route path="/praticas" element={<PraticasPage />} />
+        <Route path="/livros-relacao" element={<RelacaoLivrosPage />} />
         <Route path="/livros-indicados" element={<LivrosPage />} />
         <Route path="/minhas-praticas" element={<MinhasPraticasPage />} />
         <Route path="/livro" element={<LivroPage />} />
