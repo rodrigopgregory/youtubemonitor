@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf, CheckCircle2 } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf, CheckCircle2, Home } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -8,7 +8,8 @@ interface Aviso { ID: number; DIA: string; CRIADO_EM: string; QTD: number; LIDO:
 interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; STATUS: string; CANAL: string }
 
 const abas = [
-  { to: '/', label: 'Pesquisar', icon: Search, end: true },
+  { to: '/', label: 'Início', icon: Home, end: true },
+  { to: '/pesquisar', label: 'Pesquisar', icon: Search, end: false },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/praticas', label: 'Práticas', icon: Leaf, end: false },
   { to: '/minhas-praticas', label: 'Minhas práticas', icon: CheckCircle2, end: false },

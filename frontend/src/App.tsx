@@ -11,6 +11,7 @@ import ChatPage from './pages/ChatPage'
 import MentoresPage from './pages/MentoresPage'
 import ConfiguracoesPage from './pages/ConfiguracoesPage'
 import LivroPage from './pages/LivroPage'
+import InicioPage from './pages/InicioPage'
 
 function App() {
   const [configured, setConfigured] = useState(initMitra)
@@ -19,8 +20,9 @@ function App() {
     <Routes>
       <Route path="/login" element={<LoginPage onLogin={() => setConfigured(true)} />} />
       <Route element={configured ? <Layout /> : <Navigate to="/login" replace />}>
-        <Route path="/" element={<ChatPage />} />
-        <Route path="/chat" element={<Navigate to="/" replace />} />
+        <Route path="/" element={<InicioPage />} />
+        <Route path="/pesquisar" element={<ChatPage />} />
+        <Route path="/chat" element={<Navigate to="/pesquisar" replace />} />
         <Route path="/videos" element={<VideosPage />} />
         <Route path="/praticas" element={<PraticasPage />} />
         <Route path="/minhas-praticas" element={<MinhasPraticasPage />} />

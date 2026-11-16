@@ -67,6 +67,7 @@ export default function ChatPage() {
     try { r.start(); setOuvindo(true) } catch { setAvisoVoz('Não consegui ligar o microfone. Tente de novo.') }
   }
   useEffect(() => () => rec.current?.stop(), [])
+  const pedido = useRef(false)
 
   useEffect(() => { localStorage.setItem(CHAVE, JSON.stringify(msgs.slice(-40))) }, [msgs])
   useEffect(() => { fim.current?.scrollIntoView({ behavior: 'smooth' }) }, [msgs, pensando])
@@ -83,6 +84,13 @@ export default function ChatPage() {
       setMsgs(m => [...m, { papel: 'agente', texto: (e as Error).message, erro: true }])
     } finally { setPensando(false) }
   }
+
+  useEffect(() => {
+    if (pedido.current) return
+    pedido.current = true
+    const q = new URLSearchParams(window.location.search).get('q')
+    if (q) { window.history.replaceState(null, '', window.location.pathname); enviar(q) }
+  })
 
   function marcar(i: number, estado: 'feito' | 'cancelado') {
     setMsgs(m => m.map((x, j) => j === i && x.acao ? { ...x, acao: { ...x.acao, estado } } : x))

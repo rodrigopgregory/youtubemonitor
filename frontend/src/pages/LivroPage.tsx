@@ -41,7 +41,11 @@ export default function LivroPage() {
     setCap(r[0] ?? null)
   }, [])
 
-  useEffect(() => { if (atual === null && temas.length) abrir((temas.find(t => t.GERADO_EM) ?? temas[0]).ID) }, [temas, atual, abrir])
+  useEffect(() => {
+    if (atual !== null || !temas.length) return
+    const pedido = Number(new URLSearchParams(window.location.search).get('tema') || 0)
+    abrir((temas.find(t => t.ID === pedido) ?? temas.find(t => t.GERADO_EM) ?? temas[0]).ID)
+  }, [temas, atual, abrir])
 
   async function escrever() {
     if (!atual) return
