@@ -179,6 +179,7 @@ function agruparLegenda(j3) {
 }
 
 const ESGOTADO = new Set();
+const ESPEROU = new Set();
 async function gemini(cfg, modelos, body) {
   let ultimo = '';
   const conexoes = String(cfg.GEMINI_CONEXOES || 'gemini').split(',').map(x => x.trim()).filter(Boolean);
@@ -191,7 +192,24 @@ async function gemini(cfg, modelos, body) {
         const st = r.result ? r.result.statusCode : r.statusCode;
         const b = (r.result ? r.result.body : r.body) || {};
         if ((st && st >= 400) || b.error) {
-          if (st === 429 || (b.error && b.error.code === 429)) ESGOTADO.add(k);
+          if (st === 429 || (b.error && b.error.code === 429)) {
+            const msg = JSON.stringify(b).slice(0, 3000);
+            const porDia = /per day|PerDay/i.test(msg);
+            const espera = Number((msg.match(/retry in ([\d.]+)s/) || [])[1] || 0);
+            if (!porDia && espera > 0 && espera <= 40 && !ESPEROU.has(k)) {
+              ESPEROU.add(k);
+              await new Promise(res => setTimeout(res, (espera + 1) * 1000));
+              const r2 = await m.callIntegrationMitra({ projectId: pid, connection: conexao, method: 'POST', endpoint: '/v1beta/models/' + modelo + ':generateContent', body });
+              const st2 = r2.result ? r2.result.statusCode : r2.statusCode;
+              const b2 = (r2.result ? r2.result.body : r2.body) || {};
+              if (!((st2 && st2 >= 400) || b2.error)) {
+                ESPEROU.delete(k);
+                const txt2 = ((((b2.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('');
+                if (txt2) return txt2;
+              }
+            }
+            if (porDia) ESGOTADO.add(k);
+          }
           ultimo = 'Gemini (' + modelo + '): ' + String((b.error && b.error.message) || st).slice(0, 200); continue;
         }
         const parts = (((b.candidates || [])[0] || {}).content || {}).parts || [];
