@@ -50,6 +50,7 @@ export default function Layout() {
     const el = document.documentElement
     el.dataset.theme = escuro ? 'dark' : 'light'
     el.classList.toggle('dark', escuro)
+    try { localStorage.setItem('monitor-tema', escuro ? 'dark' : 'light') } catch { /* sem armazenamento */ }
   }, [escuro])
 
   const [instalar, setInstalar] = useState<{ prompt: () => Promise<void> } | null>(null)
