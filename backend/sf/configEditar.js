@@ -9,13 +9,13 @@ async function sql(nome, input) {
   return o;
 }
 const rows = o => (o && o.rows) || [];
-const PADRAO = { DURACAO_MIN_SEG: '600', HORA_CHECAGEM: '6', AUDIO_LIGADO: '1', PRATICAS_LIGADO: '1', CONFERIR_MENTOR: '1', FINALIDADE_LIGADO: '1', LIVRO_LIGADO: '1', LIVRO_POR_NOITE: '2', LIVRO_PAUSA_ATE: '', IA_PAUSADA_ATE: '' };
+const PADRAO = { DURACAO_MIN_SEG: '600', HORA_CHECAGEM: '6', AUDIO_LIGADO: '1', PRATICAS_LIGADO: '1', LIVROS_LIGADO: '1', CONFERIR_MENTOR: '1', FINALIDADE_LIGADO: '1', LIVRO_LIGADO: '1', LIVRO_POR_NOITE: '2', LIVRO_PAUSA_ATE: '', IA_PAUSADA_ATE: '' };
 const agoraBR = (ms) => new Date(Date.now() + (ms || 0) - 3 * 3600e3).toISOString().slice(0, 19);
 const liga = v => (v === true || v === 1 || v === '1') ? '1' : (v === false || v === 0 || v === '0') ? '0' : null;
 const REGRA = {
   DURACAO_MIN_SEG: v => { const n = Math.round(Number(v)); return Number.isFinite(n) && n >= 0 && n <= 7200 ? String(n) : null; },
   HORA_CHECAGEM: v => { const n = Math.round(Number(v)); return Number.isFinite(n) && n >= 0 && n <= 23 ? String(n) : null; },
-  AUDIO_LIGADO: liga, PRATICAS_LIGADO: liga, CONFERIR_MENTOR: liga, FINALIDADE_LIGADO: liga, LIVRO_LIGADO: liga,
+  AUDIO_LIGADO: liga, PRATICAS_LIGADO: liga, LIVROS_LIGADO: liga, CONFERIR_MENTOR: liga, FINALIDADE_LIGADO: liga, LIVRO_LIGADO: liga,
   LIVRO_POR_NOITE: v => { const n = Math.round(Number(v)); return Number.isFinite(n) && n >= 1 && n <= 10 ? String(n) : null; },
   LIVRO_PAUSA_ATE: v => v === '24h' ? agoraBR(24 * 3600e3) : (v === '' || v === null || v === false) ? '' : null,
 };

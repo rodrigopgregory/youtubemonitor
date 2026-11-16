@@ -341,6 +341,37 @@ async function lerPraticas(cfg, v) {
   return lista.length;
 }
 
+const PROMPT_LIVROS = 'Em "livros" liste TODO livro que a pessoa que fala indica, recomenda, sugere ler ou cita como fonte de estudo (inclua obras espirituais, romances mediunicos, biografias e livros de autoria do proprio palestrante). Nao inclua o que e so um nome solto sem ser livro. Para cada um: "titulo" (titulo do livro como foi dito), "autor" (nome do autor se foi dito ou for evidente pelo titulo; senao vazio), "trecho" (o que foi dito sobre o livro, com as palavras do video, ate 3 frases) e "momento" ("mm:ss" em que o livro e citado). Lista vazia se o video nao cita nenhum livro.\n';
+
+function limparLivros(lista, dur) {
+  const seg = t => { const p = String(t || '').split(':').map(Number); return p.some(isNaN) ? 0 : p.reduce((a, b) => a * 60 + b, 0); };
+  const vistos = new Set();
+  return (Array.isArray(lista) ? lista : []).filter(l => l && String(l.titulo || '').trim()).slice(0, 30).map(l => {
+    const s = seg(l.momento);
+    return { titulo: String(l.titulo).trim().slice(0, 290), autor: String(l.autor || '').trim().slice(0, 190), trecho: String(l.trecho || '').trim().slice(0, 3900), seg: s >= 0 && s <= Number(dur || 1e9) ? s : 0 };
+  }).filter(l => { const k = l.titulo.toLowerCase() + '|' + l.seg; if (vistos.has(k)) return false; vistos.add(k); return true; });
+}
+
+async function gravarLivros(v, lista) {
+  const chave = 'L:' + v.ID;
+  await sql('livrosLimpar', { videoId: v.ID });
+  if (lista.length) { await lote(chave, lista); await sql('livrosGravar', { chave, videoId: v.ID }); await sql('loteApagar', { chave }); }
+  await sql('videoLivrosFeito', { id: v.ID, quando: agora() });
+}
+
+async function lerLivros(cfg, v) {
+  const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
+  if (!tr.length) { await gravarLivros(v, []); return 0; }
+  const texto = tr.map(x => '[' + mmss(x.SEGUNDO) + '] ' + x.TEXTO).join('\n').slice(0, 600000);
+  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+    contents: [{ parts: [{ text: 'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\nResponda so JSON: {"livros":[{"titulo":"...","autor":"...","trecho":"...","momento":"mm:ss"}]}\n' + PROMPT_LIVROS + 'Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
+    generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
+  });
+  const lista = limparLivros(jsonDe(txt).livros, v.DURACAO_SEG);
+  await gravarLivros(v, lista);
+  return lista.length;
+}
+
 const NAO_MENTOR = new Set(['shirlene', 'monicademedeiros', 'monica', 'maemaria', 'jesus', 'mariamadalena', 'chicoxavier', 'kardec', 'allankardec', 'emmanuel', 'margareteaquila', 'margarete', 'oxala', 'pava', 'freiluiz', 'marioschenberg', 'mario']);
 
 const capMentor = s => String(s || '').trim().replace(/\s+/g, ' ').split(' ').map((w, i) => { const lw = w.toLowerCase(); if (i > 0 && ['de', 'da', 'do', 'das', 'dos', 'e', 'd'].includes(lw)) return lw; return lw.charAt(0).toLocaleUpperCase('pt-BR') + lw.slice(1); }).join(' ');
@@ -604,6 +635,16 @@ try {
       catch (e) { const motivo = String(e.message || e).slice(0, 150); log.push('praticas ' + pf[0].ID + ': erro ' + motivo); if (!IA_SEM_COTA) await sql('praticasErroAnotar', { id: pf[0].ID, motivo: agora() + ' ' + motivo.replace(/[^\w\s:().,-]/g, ' ') }).catch(() => {}); if (IA_SEM_COTA || ++errosP >= 5) break; }
     }
   }
+  let livrosLidos = 0; const vistosL = new Set(); let errosL = 0;
+  if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0') {
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const lf = ((await sql('livrosFila', { pular: [0, ...vistosL].join(',') })).rows || []);
+      if (!lf.length || vistosL.has(lf[0].ID)) break;
+      vistosL.add(lf[0].ID);
+      try { const n = await lerLivros(cfg, lf[0]); livrosLidos++; log.push('livros ' + lf[0].ID + ': ' + n); }
+      catch (e) { const motivo = String(e.message || e).slice(0, 150); log.push('livros ' + lf[0].ID + ': erro ' + motivo); if (!IA_SEM_COTA) await sql('livrosErroAnotar', { id: lf[0].ID, motivo: agora() + ' ' + motivo.replace(/[^\w\s:().,-]/g, ' ') }).catch(() => {}); if (IA_SEM_COTA || ++errosL >= 5) break; }
+    }
+  }
   let livroDisparado = false;
   const livroNoite = Number(cfg.LIVRO_POR_NOITE || 2);
   if (cfg.GEMINI_OK && cfg.LIVRO_LIGADO !== '0' && !(cfg.LIVRO_PAUSA_ATE && cfg.LIVRO_PAUSA_ATE > agora()) && livroNoite > 0 && !IA_SEM_COTA && horaBR >= 1 && horaBR < 7 && !(cfg.IA_PAUSADA_ATE && cfg.IA_PAUSADA_ATE > agora())) {
@@ -627,12 +668,13 @@ try {
   await sql('canaisAtualizarStatus', {});
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
   const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
+  const restaLivros = Number((((await sql('livrosResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('livrosResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
   const restaFin = Number((((await sql('finContar', {})).rows || [{}])[0] || {}).N || 0);
-  resultado = { livroDisparado, finMarcadas, restaFin, estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
+  resultado = { livroDisparado, finMarcadas, restaFin, estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, livrosLidos, restaLivros, resta, restaPraticas, log, ms: Date.now() - T0 };
 } finally {
   await sql('lockLiberar', { ate: String(ate) }).catch(() => {});
 }
-if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaFin > 0 && resultado.finMarcadas > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0 || resultado.restaMentores > 0 && resultado.mentoresConferidos > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
+if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaFin > 0 && resultado.finMarcadas > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0 || resultado.restaLivros > 0 && resultado.livrosLidos > 0 || resultado.restaMentores > 0 && resultado.mentoresConferidos > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
   await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.motor, input: { modo: 'continuar', rodada: Number(event.rodada || 0) + 1 } });
 }
 return resultado;
