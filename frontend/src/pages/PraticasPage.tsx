@@ -1,4 +1,4 @@
-import { Brain, Image, Rocket, Wind, Zap, Heart, Droplets, Flame, Gem, Leaf, Utensils, HeartPulse, BookOpen, Star, Music, Eye, Sparkles, PlayCircle, Search, X, Film } from 'lucide-react'
+import { Brain, Image, Rocket, Wind, Zap, Heart, Droplets, Flame, Gem, Leaf, Pill, Utensils, HeartPulse, BookOpen, Star, Music, Eye, Sparkles, PlayCircle, Search, X, Film } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
@@ -14,7 +14,7 @@ import { JEITOS, SERVE, QUANDO, nomeEt, lista as listaEt } from '../lib/etiqueta
 interface Pratica { ID: number; TIPO: string; JEITO: string | null; SERVE: string | null; QUANDO: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES?: number; ULTIMA?: string | null }
 interface Qtd { COD: string; QTD: number }
 
-const ICONES: Record<string, LucideIcon> = { med: Brain, vis: Image, saida: Rocket, resp: Wind, energia: Zap, prece: Heart, banho: Droplets, defum: Flame, agua: Gem, chas: Leaf, alim: Utensils, corpo: HeartPulse, reflexao: BookOpen, ritual: Star, musica: Music, percepcao: Eye, outra: Sparkles }
+const ICONES: Record<string, LucideIcon> = { med: Brain, vis: Image, saida: Rocket, resp: Wind, energia: Zap, prece: Heart, banho: Droplets, defum: Flame, agua: Gem, chas: Leaf, homeo: Pill, alim: Utensils, corpo: HeartPulse, reflexao: BookOpen, ritual: Star, musica: Music, percepcao: Eye, outra: Sparkles }
 const PAG = 20
 const paraMapa = (r: Qtd[]) => Object.fromEntries(r.map(x => [x.COD || '', Number(x.QTD)]))
 

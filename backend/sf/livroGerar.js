@@ -8,7 +8,7 @@ async function sql(nome, input) {
   let o = res.output; if (typeof o === 'string') { try { o = JSON.parse(o); } catch (e) {} }
   return o;
 }
-const JEITOS = { med: 'Meditação e mantras', vis: 'Visualização', saida: 'Técnicas de saída do corpo', resp: 'Respiração', energia: 'Exercícios de energia e chakras', prece: 'Preces, orações e decretos', banho: 'Banhos', defum: 'Defumação e velas', agua: 'Água, sal e cristais', chas: 'Chás, florais, óleos e remédios naturais', alim: 'Alimentação e receitas', corpo: 'Cuidados com o corpo', reflexao: 'Reflexão e autoconhecimento', ritual: 'Rituais e oferendas', musica: 'Músicas e sons', percepcao: 'Treinos de percepção e clarividência', outra: 'Outras' };
+const JEITOS = { med: 'Meditação e mantras', vis: 'Visualização', saida: 'Técnicas de saída do corpo', resp: 'Respiração', energia: 'Exercícios de energia e chakras', prece: 'Preces, orações e decretos', banho: 'Banhos', defum: 'Defumação e velas', agua: 'Água, sal e cristais', chas: 'Chás, florais, óleos e remédios naturais', homeo: 'Homeopatia, medicação e suplementos', alim: 'Alimentação e receitas', corpo: 'Cuidados com o corpo', reflexao: 'Reflexão e autoconhecimento', ritual: 'Rituais e oferendas', musica: 'Músicas e sons', percepcao: 'Treinos de percepção e clarividência', outra: 'Outras' };
 const GRUPOS = Object.values(JEITOS);
 const temaId = Number(event.temaId || 0);
 if (!temaId) return { ok: false, erro: 'Escolha um tema.' };
