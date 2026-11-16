@@ -28,6 +28,14 @@ if (acao === 'apagar' || acao === 'editar') {
   else await sql('diarioAtualizar', { id, dia: diaOk(event.dia), humor: humorOk(event.humor), sentiu: textoOk(event.sentiu) });
   return { ok: true, praticaId: Number(reg.PRATICA_ID), ...(await contagem(Number(reg.PRATICA_ID))) };
 }
+if (acao === 'desfazer' || acao === 'ultimo') {
+  const praticaId = Math.floor(Number(event.praticaId));
+  if (!(praticaId > 0)) return { ok: false, erro: 'Prática não informada.' };
+  if (acao === 'desfazer') await sql('diarioApagarUltimo', { praticaId });
+  const u = ((await sql('diarioUltimo', { praticaId })).rows || [])[0];
+  if (acao === 'ultimo') return u ? { ok: true, registro: { ID: Number(u.ID), DIA: u.DIA, HUMOR: u.HUMOR, SENTIU: u.SENTIU } } : { ok: false, erro: 'Nenhum registro ainda.' };
+  return { ok: true, praticaId, ...(await contagem(praticaId)) };
+}
 if (acao !== 'fiz') return { ok: false, erro: 'Ação desconhecida.' };
 const praticaId = Math.floor(Number(event.praticaId));
 if (!(praticaId > 0)) return { ok: false, erro: 'Prática não informada.' };

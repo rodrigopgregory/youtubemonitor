@@ -143,6 +143,7 @@
  "diarioContagem": 192,
  "diarioAtualizar": 193,
  "diarioUm": 194,
+ "diarioApagarUltimo": 195,
  "diarioApagar": 184,
  "diarioListar": 185,
  "diarioPraticas": 186,
