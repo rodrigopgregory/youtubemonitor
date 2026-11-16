@@ -110,6 +110,7 @@ export default function VideosPage() {
     filtro(k, novo.join(','))
   }
   const limparTudo = () => { const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); n.delete('pratica'); n.delete('mentor'); setSp(n) }
+  const limparFiltros = () => { setCanalId(0); setSp(new URLSearchParams()) }
   const mostrarCanal = !canalId && new Set(playlists.map(p => p.CANAL_ID)).size > 1
   const algum = temasSel.length + mentSel.length + playSel.length + pratSel.length
   const nFiltros = algum + (status ? 1 : 0) + (origem ? 1 : 0) + (meu ? 1 : 0) + (canalId ? 1 : 0)
@@ -159,6 +160,11 @@ export default function VideosPage() {
         <Button variant="secondary" size="sm" className="lg:hidden" onClick={() => setFiltrosAbertos(a => !a)}>
           <SlidersHorizontal size={14} />{filtrosAbertos ? 'Fechar filtros' : 'Filtrar'}{nFiltros > 0 && <span className="text-[11px] px-1.5 rounded-full" style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>{nFiltros}</span>}
         </Button>
+        {nFiltros > 0 && (
+          <Button variant="secondary" size="sm" onClick={limparFiltros} title="Tira todos os filtros marcados e mostra todos os vídeos">
+            <X size={14} />Limpar filtros
+          </Button>
+        )}
         <div className="flex flex-col items-end gap-1">
           <Button variant="secondary" size="sm" disabled={!!exportMsg?.rodando} onClick={baixarPlanilha} title="Baixa uma planilha com os vídeos que estão aparecendo agora, com os filtros marcados">
             <Download size={14} />{exportMsg?.rodando ? 'Montando a planilha…' : 'Exportar planilha'}
@@ -241,7 +247,7 @@ export default function VideosPage() {
               {mentSel.map(id => <button key={'m' + id} onClick={() => alternar('mentor', String(id))} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={marcado} title="Tirar este filtro">Mentor: {nomeDe('mentor', id)} <X size={14} /></button>)}
               {temasSel.map(id => <button key={'t' + id} onClick={() => alternar('tema', String(id))} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={marcado} title="Tirar este filtro">Tema: {nomeDe('tema', id)} <X size={14} /></button>)}
               {pratSel.map(t => <button key={'r' + t} onClick={() => alternar('pratica', t)} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={marcado} title="Tirar este filtro">Prática: {t} <X size={14} /></button>)}
-              {algum > 1 && <button onClick={limparTudo} className="text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Limpar filtros</button>}
+              {algum > 1 && <button onClick={limparFiltros} className="text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Limpar filtros</button>}
             </div>
           )}
           {status === 'FORA_TEMA' && <p className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>Vídeos que não tratam de espiritualidade (jogo, programação, estudo de medicina). Ficam guardados aqui, com resumo e transcrição, mas não aparecem nas outras listas, nos temas nem na Pesquisar. Para trazer um de volta, abra o vídeo.</p>}
