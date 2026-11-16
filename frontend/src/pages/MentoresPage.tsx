@@ -51,7 +51,7 @@ export default function MentoresPage() {
 
       <Card className="p-5 flex flex-col gap-3">
         <form onSubmit={e => { e.preventDefault(); agir({ acao: 'criar', nome: novo, marcarTitulos: marcar }, () => setNovo('')) }} className="flex flex-col sm:flex-row gap-2">
-          <input className="controle flex-1" placeholder="Nome do novo mentor, ex.: Vovó Cambinda" value={novo} onChange={e => setNovo(e.target.value)} />
+          <input className="controle w-full sm:w-auto sm:flex-1 min-w-0" placeholder="Nome do novo mentor, ex.: Vovó Cambinda" value={novo} onChange={e => setNovo(e.target.value)} />
           <Button variant="primary" type="submit" disabled={salvando || novo.trim().length < 2}><Plus size={15} />Cadastrar mentor</Button>
         </form>
         <label className="flex items-center gap-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>

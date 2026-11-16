@@ -95,13 +95,13 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-8.5rem)] min-h-[480px]">
-      <div className="flex items-end justify-between gap-3 pb-4">
-        <div>
+    <div className="flex flex-col h-[calc(100dvh-7rem)] sm:h-[calc(100dvh-8.5rem)] min-h-[420px]">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4">
+        <div className="min-w-0">
           <h1 className="text-[22px] font-semibold">Pesquisar</h1>
-          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Escreva um tema ou uma pergunta com as suas palavras (ex.: "chakra coronário" ou "o que a Mônica fala sobre medo nas lives?"). A pesquisa procura também os sinônimos, mostra os vídeos com os momentos e resume o que foi falado. Dá para continuar a conversa e pedir para estudar mais vídeos.</p>
+          <p className="text-[14px] mt-1 line-clamp-2 sm:line-clamp-none" style={{ color: 'var(--fg-muted)' }}>Escreva um tema ou uma pergunta com as suas palavras (ex.: "chakra coronário" ou "o que a Mônica fala sobre medo nas lives?"). A pesquisa procura também os sinônimos, mostra os vídeos com os momentos e resume o que foi falado. Dá para continuar a conversa e pedir para estudar mais vídeos.</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <CanalFiltro valor={canalId} onChange={setCanalId} />
           {msgs.length > 0 && <Button variant="ghost" size="sm" onClick={() => setMsgs([])}><Trash2 size={14} />Nova conversa</Button>}
         </div>

@@ -121,7 +121,7 @@ export default function ConfiguracoesPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-[16px] font-semibold">Mentores</h2>
         <Aviso a={avisoMent} />
-        <div className="grid gap-3 md:grid-cols-2">
+        <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
           <Card className="p-5 flex flex-col gap-2">
             <h3 className="text-[15px] font-medium">Outros jeitos de escrever</h3>
             <p className="text-[12.5px]" style={muted}>Quando o estudo achar o nome da esquerda, marca o mentor da direita.</p>

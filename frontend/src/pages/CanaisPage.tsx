@@ -70,12 +70,12 @@ export default function CanaisPage() {
       </div>
       <Card className="p-5">
         <form onSubmit={cadastrar} className="flex flex-col sm:flex-row gap-2">
-          <input className="controle flex-1" placeholder="Cole o link do canal, ex.: https://www.youtube.com/@NomeDoCanal" value={url} onChange={e => setUrl(e.target.value)} />
+          <input className="controle w-full sm:w-auto sm:flex-1 min-w-0" placeholder="Cole o link do canal, ex.: https://www.youtube.com/@NomeDoCanal" value={url} onChange={e => setUrl(e.target.value)} />
           <Button variant="primary" type="submit" disabled={salvando || !url.trim()}><Plus size={15} />{salvando ? 'Cadastrando…' : 'Cadastrar canal'}</Button>
         </form>
         {msg && <p className="text-[13.5px] mt-2" style={{ color: msg.erro ? 'var(--danger)' : 'var(--success-text)' }}>{msg.t}</p>}
       </Card>
-      <div className="grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2 [&>*]:min-w-0">
         {canais.map(c => {
           const s = st[c.CARGA_STATUS] || { l: c.CARGA_STATUS, v: 'neutral' as const }
           const tot = Number(c.TOTAL || 0), est = Number(c.ESTUDADOS || 0)
@@ -99,7 +99,7 @@ export default function CanaisPage() {
                 {Number(c.PENDENTES) > 0 && <span style={{ color: 'var(--warning-text)' }}>{c.PENDENTES} pendentes</span>}
                 <span>Última checagem: {c.ULTIMA_CHECAGEM ? dataBr(c.ULTIMA_CHECAGEM) + ' ' + c.ULTIMA_CHECAGEM.slice(11, 16) : 'ainda não'}</span>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button size="sm" variant="secondary" onClick={() => { setCanalId(c.ID); navegar('/videos') }}>Ver vídeos do canal</Button>
                 <Button size="sm" variant="ghost" onClick={() => { setCanalId(c.ID); navegar('/') }}>Perguntar sobre este canal</Button>
               </div>
