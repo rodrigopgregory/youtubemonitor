@@ -179,5 +179,6 @@
  "livroGerar": 171,
  "diarioEditar": 190,
  "exportarGerar": 205,
- "exportarPacote": 206
+ "exportarPacote": 206,
+ "exportarLeve": 217
 }

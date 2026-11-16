@@ -1,4 +1,4 @@
-import { executePublicServerFunctionMitra, executePublicServerFunctionAsyncMitra, getPublicServerFunctionExecutionMitra } from 'mitra-interactions-sdk'
+import { executeServerFunctionMitra, executeServerFunctionAsyncMitra, executePublicServerFunctionMitra, executePublicServerFunctionAsyncMitra, getPublicServerFunctionExecutionMitra } from 'mitra-interactions-sdk'
 import { SF } from './sf'
 
 type Nome = keyof typeof SF
@@ -56,4 +56,17 @@ export function momentos(txt: string | null | undefined, dur: number, max = 10) 
   const out: number[] = []
   for (const v of ord) if (!out.length || v - out[out.length - 1] >= 45) out.push(v)
   return out.slice(0, max)
+}
+
+export async function chamarLogado<T = any>(nome: Nome, input: Record<string, unknown> = {}): Promise<T> {
+  const res = await executeServerFunctionMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input })
+  const r = res.result
+  if (!r || r.executionStatus === 'FAILED') throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
+  let out = r.output
+  if (typeof out === 'string') { try { out = JSON.parse(out) } catch { /* texto */ } }
+  return out as T
+}
+
+export async function iniciarLogado(nome: Nome, input: Record<string, unknown> = {}): Promise<void> {
+  await executeServerFunctionAsyncMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input })
 }
