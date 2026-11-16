@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Plus, X, Trash2, Package, BookOpen } from 'lucide-react'
+import { Plus, X, Trash2, BookOpen } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Select from '../components/ui/Select'
 import { linhas, chamar } from '../lib/api'
-import { exportarTudo, exportarNotebookLM } from '../lib/exportar'
+import { exportarNotebookLM } from '../lib/exportar'
+import PacoteExport from '../components/PacoteExport'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
@@ -90,14 +91,6 @@ export default function ConfiguracoesPage() {
   }
 
   const apelidos = regras.filter(r => r.TIPO === 'APELIDO')
-  const [pacote, setPacote] = useState<{ rodando: boolean; msg: string } | null>(null)
-  async function baixarTudo() {
-    setPacote({ rodando: true, msg: 'Começando…' })
-    try {
-      const r = await exportarTudo(m => setPacote({ rodando: true, msg: m }))
-      setPacote({ rodando: false, msg: `Pacote baixado: ${r.videos.toLocaleString('pt-BR')} vídeos, ${r.trechos.toLocaleString('pt-BR')} trechos de transcrição, o código do app e a estrutura do banco.` })
-    } catch { setPacote({ rodando: false, msg: 'Não foi possível montar o pacote agora. Tente de novo em instantes.' }) }
-  }
   const [nbCanal, setNbCanal] = useState('0')
   const [nb, setNb] = useState<{ rodando: boolean; msg: string } | null>(null)
   async function baixarNotebook() {
@@ -230,15 +223,7 @@ export default function ConfiguracoesPage() {
       </section>
       <section className="flex flex-col gap-3">
         <h2 className="text-[16px] font-semibold">Exportar</h2>
-        <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
-          <p className="text-[13.5px] flex-1" style={muted}>Baixa um ZIP com o código do app, a estrutura do banco e todos os dados (vídeos, transcrições, temas, práticas, mentores, playlists e ajustes), para levar o sistema para outra plataforma ou IA. Chaves e senhas não vão no pacote.</p>
-          <div className="flex flex-col sm:items-end gap-1 sm:max-w-[320px]">
-            <Button variant="secondary" disabled={!!pacote?.rodando} onClick={baixarTudo}>
-              <Package size={15} />{pacote?.rodando ? 'Montando o pacote…' : 'Exportar tudo (app + banco)'}
-            </Button>
-            {pacote && <p className="text-[12.5px] sm:text-right" style={muted}>{pacote.msg}</p>}
-          </div>
-        </Card>
+        <Card className="p-5"><PacoteExport /></Card>
         <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
           <p className="text-[13.5px] flex-1" style={muted}>Baixa as transcrições dos vídeos estudados num ZIP pronto para o NotebookLM: poucos arquivos de texto por canal, cada um abaixo do limite de uma fonte, com título, link, data, temas e resumo de cada vídeo. Depois é só enviar os arquivos em "Adicionar fontes" no NotebookLM.</p>
           <div className="flex flex-col sm:items-end gap-2 sm:max-w-[320px]">

@@ -167,5 +167,7 @@
  "buscaTermos": 152,
  "configEditar": 157,
  "livroGerar": 171,
- "diarioEditar": 190
+ "diarioEditar": 190,
+ "exportarGerar": 205,
+ "exportarPacote": 206
 }
