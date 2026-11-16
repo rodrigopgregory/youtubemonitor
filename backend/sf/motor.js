@@ -297,6 +297,24 @@ async function gravarPraticas(v, lista) {
   await sql('videoPraticasFeito', { id: v.ID, quando: agora() });
 }
 
+const FINALIDADES = 'lucidez (clareza mental, concentracao, discernimento); emocional (ansiedade, tristeza, depressao, medo, panico, equilibrio emocional); negativos (afastar pensamentos negativos, formas-pensamento, pessimismo); protecao (protecao e limpeza energetica, descarrego); obsessao (obsessao, ataques e vampirismo espiritual, magia); sono (dormir bem, insonia); projecao (projecao astral, desdobramento, sonho lucido); saude (saude e cura do corpo, dores, doencas); prosperidade (prosperidade, dinheiro, trabalho, abrir caminhos); relacoes (familia, perdao, relacionamentos, magoas); casa (harmonizar a casa e o ambiente); conexao (conexao com mentores e amparadores, intuicao, mediunidade, gratidao)';
+const FIN_OK = new Set('lucidez emocional negativos protecao obsessao sono projecao saude prosperidade relacoes casa conexao'.split(/[ ;]+/));
+async function marcarFinalidades(cfg) {
+  const fila = ((await sql('finFila', {})).rows || []);
+  if (!fila.length) return 0;
+  const texto = fila.map(p => '#' + p.ID + ' [' + p.TIPO + '] ' + p.TITULO + ': ' + String(p.INSTRUCAO || '').replace(/\s+/g, ' ')).join('\n');
+  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+    contents: [{ parts: [{ text: 'Voce organiza praticas espirituais ensinadas em videos. Para cada pratica abaixo, diga PARA QUE ela serve, escolhendo de 1 a 3 codigos SO desta lista: ' + FINALIDADES + '.\nUse so o que a pratica realmente promete ou indica; se nenhum servir, lista vazia.\nResponda so JSON: {"itens":[{"id":123,"fin":["codigo"]}]}\n\nPRATICAS:\n' + texto }] }],
+    generationConfig: { responseMimeType: 'application/json', temperature: 0.1 }
+  });
+  const j = jsonDe(txt);
+  const porId = new Map((j.itens || []).map(x => [Number(x.id), (Array.isArray(x.fin) ? x.fin : []).map(f => String(f).trim().toLowerCase()).filter(f => FIN_OK.has(f)).slice(0, 3)]));
+  const lista = fila.map(p => ({ id: Number(p.ID), fin: (porId.get(Number(p.ID)) || []).join(',') }));
+  const chave = 'fin-' + Date.now();
+  await lote(chave, lista); await sql('finGravar', { chave }); await sql('loteApagar', { chave });
+  return lista.length;
+}
+
 async function lerPraticas(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   if (!tr.length) { await gravarPraticas(v, []); return 0; }
@@ -556,6 +574,13 @@ try {
       catch (e) { log.push('mentor ' + mf[0].ID + ': erro ' + String(e.message || e).slice(0, 150)); break; }
     }
   }
+  let finMarcadas = 0;
+  if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
+    for (let i = 0; i < 15 && Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3; i++) {
+      try { const n = await marcarFinalidades(cfg); if (!n) break; finMarcadas += n; }
+      catch (e) { log.push('finalidades: erro ' + String(e.message || e).slice(0, 150)); break; }
+    }
+  }
   let praticasLidas = 0; const vistosP = new Set();
   if (cfg.GEMINI_OK && cfg.PRATICAS_LIGADO !== '0') {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
@@ -575,11 +600,12 @@ try {
   await sql('canaisAtualizarStatus', {});
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
   const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
-  resultado = { estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
+  const restaFin = Number((((await sql('finContar', {})).rows || [{}])[0] || {}).N || 0);
+  resultado = { finMarcadas, restaFin, estudados, mentoresConferidos, restaMentores: Number((((await sql('mentorConferirContar', {})).rows || [{}])[0] || {}).N || 0), praticasLidas, resta, restaPraticas, log, ms: Date.now() - T0 };
 } finally {
   await sql('lockLiberar', { ate: String(ate) }).catch(() => {});
 }
-if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0 || resultado.restaMentores > 0 && resultado.mentoresConferidos > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
+if ((resultado.resta > 0 && resultado.estudados > 0 || resultado.restaFin > 0 && resultado.finMarcadas > 0 || resultado.restaPraticas > 0 && resultado.praticasLidas > 0 || resultado.restaMentores > 0 && resultado.mentoresConferidos > 0) && !event.semContinuar && Number(event.rodada || 0) < 400) {
   await m.executeServerFunctionAsyncMitra({ projectId: pid, serverFunctionId: SF.motor, input: { modo: 'continuar', rodada: Number(event.rodada || 0) + 1 } });
 }
 return resultado;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -10,6 +10,7 @@ interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICAD
 const abas = [
   { to: '/', label: 'Pesquisar', icon: Search, end: true },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
+  { to: '/praticas', label: 'Práticas', icon: Leaf, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
