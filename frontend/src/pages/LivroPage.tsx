@@ -1,3 +1,4 @@
+import { JEITOS } from '../lib/etiquetas'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { BookOpen, RefreshCw, Sparkles, ExternalLink, Search } from 'lucide-react'
 import Button from '../components/ui/Button'
@@ -9,7 +10,7 @@ interface Fonte { video: string; canal: string; yt: string; seg: number }
 interface Pratica { grupo: string; titulo: string; quando: string; passos: string; fontes: Fonte[] }
 interface Capitulo { TEMA_ID: number; TEMA: string; TEXTO: string; PRATICAS_JSON: string; VIDEOS: number; GERADO_EM: string }
 
-const GRUPOS = ['Técnicas de energia e consciência', 'Autoconhecimento e conduta', 'Preces e orações', 'Ervas, banhos, velas e rituais', 'Receitas e saúde', 'Outras']
+const GRUPOS = JEITOS.map(([, nome]) => nome)
 const muted = { color: 'var(--fg-muted)' }
 
 function Texto({ txt }: { txt: string }) {
@@ -108,7 +109,7 @@ export default function LivroPage() {
               {aba === 'texto' && <Texto txt={cap.TEXTO} />}
               {aba === 'praticas' && (praticas.length === 0
                 ? <p className="text-[14px]" style={muted}>Nenhuma prática ensinada nos vídeos deste tema.</p>
-                : GRUPOS.map(g => {
+                : [...GRUPOS, ...[...new Set(praticas.map(p => p.grupo))].filter(g => !GRUPOS.includes(g))].map(g => {
                   const itens = praticas.filter(p => p.grupo === g)
                   if (!itens.length) return null
                   return (

@@ -1,3 +1,4 @@
+import { nomeEt } from '../lib/etiquetas'
 import { useCallback, useEffect, useState } from 'react'
 import { Pencil, X, Plus, Check, PlayCircle, Star, Eye } from 'lucide-react'
 import Modal from './ui/Modal'
@@ -8,7 +9,7 @@ import { linhas, chamar, mmss, linkYt, dataBr, duracao, momentos } from '../lib/
 interface Det { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; TIPO: string; STATUS: string; MOTIVO: string | null; ORIGEM: string | null; INDISPONIVEL: boolean | number; RESUMO: string | null; CANAL: string; FAVORITO?: number | boolean; ASSISTIDO_EM?: string | null }
 interface Tema { ID: number; NOME: string; ORIGEM: string; MOMENTOS: string }
 interface Trecho { SEGUNDO: number; TEXTO: string }
-interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number }
+interface Pratica { ID: number; TIPO: string; JEITO?: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number }
 
 export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onClose: () => void; onMudou: () => void }) {
   const [d, setD] = useState<Det | null>(null)
@@ -95,7 +96,7 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
                 {praticas.map(p => (
                   <div key={p.ID} className="rounded-lg p-3 flex flex-col gap-1.5" style={{ background: 'var(--surface-muted)' }}>
                     <div className="flex items-center gap-2 flex-wrap">
-                      <Badge variant="success">{p.TIPO}</Badge>
+                      <Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge>
                       <span className="text-[14px] font-medium">{p.TITULO}</span>
                       <a href={linkYt(d.YT_VIDEO_ID, p.SEGUNDO)} target="_blank" rel="noreferrer" className="text-[12px] inline-flex items-center gap-0.5 hover:underline" style={{ color: 'var(--accent-text)' }}><PlayCircle size={12} />{mmss(p.SEGUNDO)}</a>
                     </div>

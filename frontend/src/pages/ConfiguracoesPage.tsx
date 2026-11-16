@@ -189,7 +189,7 @@ export default function ConfiguracoesPage() {
             <Linha titulo="Conferir mentores já marcados" nota="Revê com a IA os mentores marcados nos vídeos antigos e tira os que não conduzem a live.">
               <Chave ligado={liga('CONFERIR_MENTOR')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'CONFERIR_MENTOR', valor: v })} />
             </Linha>
-            <Linha titulo="Marcar para que serve cada prática" nota="A IA diz a finalidade de cada prática (sono, proteção, ansiedade…), usada no mapa de Práticas.">
+            <Linha titulo="Organizar cada prática" nota="A IA diz o jeito de fazer, para que serve e quando fazer cada prática nova, e esconde os simples conselhos. É o que monta a tela Práticas.">
               <Chave ligado={liga('FINALIDADE_LIGADO')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'FINALIDADE_LIGADO', valor: v })} />
             </Linha>
             <Linha titulo="Situação da IA" nota={iaPausa ? `Sem cota grátis por hoje. Volta a trabalhar em ${dataHora(iaPausa)}.` : 'Trabalhando normalmente.'}>

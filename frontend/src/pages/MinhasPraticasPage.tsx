@@ -1,3 +1,4 @@
+import { nomeEt } from '../lib/etiquetas'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PlayCircle, Trash2, Pencil } from 'lucide-react'
@@ -9,8 +10,8 @@ import type { RegistroEd } from '../components/FizHoje'
 import Contador from '../components/Contador'
 import { chamar, linhas, linkYt, mmss, dataBr } from '../lib/api'
 
-interface Feita { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string; HUMOR: number | null }
-interface Registro { ID: number; PRATICA_ID: number; DIA: string; HUMOR: number | null; SENTIU: string | null; TIPO: string; TITULO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; CANAL: string }
+interface Feita { ID: number; TIPO: string; JEITO?: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string; HUMOR: number | null }
+interface Registro { ID: number; PRATICA_ID: number; DIA: string; HUMOR: number | null; SENTIU: string | null; TIPO: string; JEITO?: string | null; TITULO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; CANAL: string }
 interface Resumo { VEZES: number; PRATICAS: number; DIAS: number; SEMANA: number; HUMOR: number | null }
 const PAG = 30
 
@@ -85,7 +86,7 @@ export default function MinhasPraticasPage() {
                     <div className="flex items-center gap-2 flex-wrap min-w-0">
                       <span className="text-[12.5px] font-medium" style={{ color: 'var(--accent-text)' }}>{dataBr(r.DIA)}</span>
                       <span className="text-[14.5px] font-medium first-letter:uppercase">{r.TITULO}</span>
-                      <Badge variant="success">{r.TIPO}</Badge>
+                      <Badge variant="success">{nomeEt(r.JEITO) || r.TIPO}</Badge>
                     </div>
                     <span className="flex shrink-0">
                     <button onClick={() => setEditando(r)} className="h-8 w-8 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-subtle)' }} aria-label="Editar este registro" title="Editar este registro"><Pencil size={15} /></button>
@@ -106,7 +107,7 @@ export default function MinhasPraticasPage() {
               const hm = humorDe(p.HUMOR)
               return (
                 <Card key={p.ID} className="p-4 flex flex-col gap-2">
-                  <div className="flex items-start gap-2 flex-wrap"><span className="text-[15px] font-medium first-letter:uppercase">{p.TITULO}</span><Badge variant="success">{p.TIPO}</Badge></div>
+                  <div className="flex items-start gap-2 flex-wrap"><span className="text-[15px] font-medium first-letter:uppercase">{p.TITULO}</span><Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge></div>
                   {hm && <span className="text-[13px]" style={muted}>Em média: {hm.emoji} {hm.nome}</span>}
                   <p className="text-[13.5px] leading-relaxed line-clamp-3" style={muted}>{p.INSTRUCAO}</p>
                   <div className="flex items-center gap-3 flex-wrap text-[12.5px]">

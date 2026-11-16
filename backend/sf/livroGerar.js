@@ -8,7 +8,8 @@ async function sql(nome, input) {
   let o = res.output; if (typeof o === 'string') { try { o = JSON.parse(o); } catch (e) {} }
   return o;
 }
-const GRUPOS = ['Técnicas de energia e consciência', 'Autoconhecimento e conduta', 'Preces e orações', 'Ervas, banhos, velas e rituais', 'Receitas e saúde', 'Outras'];
+const JEITOS = { med: 'Meditação e mantras', vis: 'Visualização', saida: 'Técnicas de saída do corpo', resp: 'Respiração', energia: 'Exercícios de energia e chakras', prece: 'Preces, orações e decretos', banho: 'Banhos', defum: 'Defumação e velas', agua: 'Água, sal e cristais', chas: 'Chás, florais, óleos e remédios naturais', alim: 'Alimentação e receitas', corpo: 'Cuidados com o corpo', reflexao: 'Reflexão e autoconhecimento', ritual: 'Rituais e oferendas', musica: 'Músicas e sons', percepcao: 'Treinos de percepção e clarividência', outra: 'Outras' };
+const GRUPOS = Object.values(JEITOS);
 const temaId = Number(event.temaId || 0);
 if (!temaId) return { ok: false, erro: 'Escolha um tema.' };
 const info = ((await sql('livroTemaInfo', { temaId })).rows || [])[0];
@@ -17,7 +18,7 @@ const resumos = (await sql('livroResumos', { temaId })).rows || [];
 const prats = (await sql('livroPraticas', { temaId })).rows || [];
 if (!resumos.length) return { ok: false, erro: 'Tema sem vídeos estudados.' };
 const fonte = 'RESUMOS DOS VIDEOS:\n' + resumos.map(v => '- [' + v.CANAL + '] "' + v.TITULO + '": ' + v.RESUMO).join('\n') +
-  '\n\nPRATICAS ENSINADAS (numeradas):\n' + prats.map((p, i) => 'P' + (i + 1) + ' [' + p.CANAL + ' / ' + p.TIPO + '] ' + (p.TITULO || '') + ': ' + (p.INSTRUCAO || '')).join('\n');
+  '\n\nPRATICAS ENSINADAS (numeradas):\n' + prats.map((p, i) => 'P' + (i + 1) + ' [' + p.CANAL + ' / ' + (JEITOS[p.JEITO] || p.TIPO) + '] ' + (p.TITULO || '') + ': ' + (p.INSTRUCAO || '')).join('\n');
 const prompt = 'Voce escreve um capitulo do "Livro Vivo", um livro de estudo que reune os ensinamentos de canais espiritualistas do YouTube (Wagner Borges, Monica de Medeiros - Casa do Consolador, Saulo Calderon). O capitulo e sobre o tema "' + info.NOME + '".\n' +
   'Use SOMENTE o material abaixo. Nao invente nada de fora.\n' +
   'Responda so JSON: {"texto":"...","praticas":[{"grupo":"...","titulo":"...","quando":"...","passos":"...","fontes":[1,2]}]}\n' +

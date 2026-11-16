@@ -6,22 +6,19 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import Contador from '../components/Contador'
 import EstadoIA from '../components/EstadoIA'
+import { SERVE, nomeEt } from '../lib/etiquetas'
 import { linhas, linkYt, mmss, dataBr } from '../lib/api'
 
-interface Feita { ID: number; TIPO: string; TITULO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; CANAL: string; VEZES: number; ULTIMA: string | null }
-interface Pratica { ID: number; TIPO: string; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string | null }
+interface Feita { ID: number; TIPO: string; JEITO?: string | null; TITULO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; CANAL: string; VEZES: number; ULTIMA: string | null }
+interface Pratica { ID: number; TIPO: string; JEITO?: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string | null }
 interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string; DURACAO_SEG: number; THUMB: string; RESUMO?: string | null; CANAL: string }
 interface Capitulo { TEMA_ID: number; TEMA: string; GERADO_EM: string; TRECHO: string; N: number }
 interface Numeros { ESTUDADOS: number }
 interface Totais { N: number; MARCADAS: number }
 interface Temas { ID: number; GERADO_EM: string | null }
 
-const FINS: [string, string][] = [
-  ['', 'Qualquer finalidade'], ['lucidez', 'Lucidez e clareza mental'], ['emocional', 'Ansiedade, tristeza e depressão'], ['negativos', 'Afastar pensamentos negativos'],
-  ['protecao', 'Proteção e limpeza energética'], ['obsessao', 'Obsessão e ataques espirituais'], ['sono', 'Sono'], ['projecao', 'Projeção astral'],
-  ['saude', 'Saúde do corpo'], ['prosperidade', 'Prosperidade e caminhos'], ['relacoes', 'Família e relações'], ['casa', 'Harmonizar a casa'], ['conexao', 'Conexão com o alto'],
-]
-const CHAVE_FIN = 'monitor-yt-inicio-fin'
+const FINS: [string, string][] = [['', 'Para qualquer coisa'], ...SERVE.map(g => [g.cod, g.nome] as [string, string])]
+const CHAVE_FIN = 'monitor-yt-inicio-serve'
 const hoje = () => new Date(Date.now() - 3 * 3600 * 1000).toISOString().slice(0, 10)
 const muted = { color: 'var(--fg-muted)' }
 const n = (v: unknown) => Number(v || 0).toLocaleString('pt-BR')
@@ -110,7 +107,7 @@ export default function InicioPage() {
                 <div key={p.ID} className="flex flex-col gap-2 pb-3 border-b last:border-b-0 last:pb-0" style={{ borderColor: 'var(--border)' }}>
                   <div className="flex items-start justify-between gap-2">
                     <span className="text-[14px] font-medium">{p.TITULO}</span>
-                    <Badge variant="neutral">{p.TIPO}</Badge>
+                    <Badge variant="neutral">{nomeEt(p.JEITO) || p.TIPO}</Badge>
                   </div>
                   <Contador pratica={p} vezes={p.VEZES} ultima={p.ULTIMA} onMudou={c => atualizarMinha(p.ID, c.vezes, c.ultima)} />
                 </div>
@@ -126,11 +123,11 @@ export default function InicioPage() {
               <Button size="sm" variant="secondary" onClick={() => { setDoDia(undefined); setVez(v => v + 1) }} title="Sortear outra prática"><Shuffle size={14} />Outra</Button>
             </div>
             {doDia === undefined ? <p className="text-[13.5px]" style={muted}>Escolhendo…</p>
-              : !doDia ? <p className="text-[13.5px]" style={muted}>Ainda não há prática marcada com essa finalidade. Escolha outra.</p>
+              : !doDia ? <p className="text-[13.5px]" style={muted}>Ainda não há prática para isso. Escolha outra opção.</p>
               : <>
                 <div className="flex items-start justify-between gap-2">
                   <span className="text-[15px] font-semibold">{doDia.TITULO}</span>
-                  <Badge variant="neutral">{doDia.TIPO}</Badge>
+                  <Badge variant="neutral">{nomeEt(doDia.JEITO) || doDia.TIPO}</Badge>
                 </div>
                 <p className="text-[14px] leading-relaxed whitespace-pre-line">{doDia.INSTRUCAO}</p>
                 <a href={linkYt(doDia.YT_VIDEO_ID, doDia.SEGUNDO || 0)} target="_blank" rel="noreferrer" className="text-[13px] inline-flex items-center gap-1.5 underline" style={muted}>
@@ -167,7 +164,7 @@ export default function InicioPage() {
           {numeros && (
             <Card className="p-5 grid grid-cols-3 gap-3 text-center">
               <div><div className="text-[20px] font-semibold">{n(numeros.estudados)}</div><div className="text-[12px]" style={muted}>vídeos estudados</div></div>
-              <div><div className="text-[20px] font-semibold">{n(numeros.praticas)}</div><div className="text-[12px]" style={muted}>práticas ({n(numeros.marcadas)} com finalidade)</div></div>
+              <div><div className="text-[20px] font-semibold">{n(numeros.praticas)}</div><div className="text-[12px]" style={muted}>práticas ({n(numeros.marcadas)} organizadas)</div></div>
               <div><div className="text-[20px] font-semibold">{n(numeros.caps)}<span className="text-[14px]" style={muted}> de {n(numeros.temas)}</span></div><div className="text-[12px]" style={muted}>capítulos do livro</div></div>
             </Card>
           )}

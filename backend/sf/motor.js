@@ -297,19 +297,32 @@ async function gravarPraticas(v, lista) {
   await sql('videoPraticasFeito', { id: v.ID, quando: agora() });
 }
 
-const FINALIDADES = 'lucidez (clareza mental, concentracao, discernimento); emocional (ansiedade, tristeza, depressao, medo, panico, equilibrio emocional); negativos (afastar pensamentos negativos, formas-pensamento, pessimismo); protecao (protecao e limpeza energetica, descarrego); obsessao (obsessao, ataques e vampirismo espiritual, magia); sono (dormir bem, insonia); projecao (projecao astral, desdobramento, sonho lucido); saude (saude e cura do corpo, dores, doencas); prosperidade (prosperidade, dinheiro, trabalho, abrir caminhos); relacoes (familia, perdao, relacionamentos, magoas); casa (harmonizar a casa e o ambiente); conexao (conexao com mentores e amparadores, intuicao, mediunidade, gratidao)';
-const FIN_OK = new Set('lucidez emocional negativos protecao obsessao sono projecao saude prosperidade relacoes casa conexao'.split(/[ ;]+/));
+const JEITOS_ET = 'med (meditacao, silencio, mantras falados ou mentalizados); vis (visualizacao, mentalizar luz, cilindros, esferas); saida (tecnicas de projecao astral e saida do corpo); resp (exercicios de respiracao); energia (movimentacao de energia, chakras, passes, autopasse, irradiar energia); prece (preces, oracoes, decretos, evangelho no lar); banho (banhos de ervas, sal, chuveirada); defum (defumacao, incenso, aromatizador, velas); agua (agua fluidificada, sal grosso, cristais, objetos de protecao); chas (chas, florais, oleos essenciais, remedios naturais); alim (alimentacao e receitas); corpo (cuidados com o corpo, exercicio fisico, natureza, aterramento); reflexao (reflexao, autoconhecimento, conduta, habitos, perdao); ritual (rituais, oferendas, simpatias, patuas, espada de sao jorge); musica (musicas, cantos, sons); percepcao (treinos de percepcao, clarividencia, leitura energetica, mediunidade); outra';
+const SERVE_ET = 'prot.pes (protecao pessoal), prot.aura (limpeza da aura), prot.laco (cortar lacos e energias de pessoas), prot.obs (obsessao e ataques espirituais), emo.ans (ansiedade, medo, panico), emo.tri (tristeza, desanimo), emo.rai (raiva), emo.neg (pensamentos negativos), emo.auto (autoestima, amor-proprio), con.men (mentores e amparadores), con.eu (eu interior), con.fe (fe e gratidao), con.med (mediunidade), men.foco (foco), men.mem (memoria), men.clar (clareza, discernimento), men.int (intuicao, percepcao), proj.prep (preparar para projetar), proj.saida (sair do corpo), proj.luc (lucidez fora do corpo), proj.lem (lembrar sonhos), proj.prot (protecao na projecao), casa.limp (limpar ambiente), casa.prot (proteger a casa), casa.harm (harmonizar o lar), sau.cura (cura), sau.dor (dores), sau.ener (energia e disposicao), sau.desint (desintoxicar), rel.fam (familia e filhos), rel.casal (casal), rel.perd (perdao e magoas), rel.car (ajudar e doar energia), rel.dist (ajudar a distancia e quem partiu), sono.dorm (dormir bem), sono.ins (insonia), sono.pes (pesadelos e protecao a noite), pros.din (dinheiro), pros.trab (trabalho), pros.cam (abrir caminhos)';
+const QUANDO_ET = 'acordar (ao acordar), dia (todo dia), varias (varias vezes ao dia), dormir (antes de dormir), madrugada, semana (toda semana), vez (de vez em quando), precisa (quando precisar)';
+const ok = t => new Set(t.split(/[;,]/).map(x => x.trim().split(' ')[0]).filter(Boolean));
+const JEITO_OK = ok(JEITOS_ET), SERVE_OK = ok(SERVE_ET), QUANDO_OK = ok(QUANDO_ET);
 async function marcarFinalidades(cfg) {
   const fila = ((await sql('finFila', {})).rows || []);
   if (!fila.length) return 0;
   const texto = fila.map(p => '#' + p.ID + ' [' + p.TIPO + '] ' + p.TITULO + ': ' + String(p.INSTRUCAO || '').replace(/\s+/g, ' ')).join('\n');
   const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
-    contents: [{ parts: [{ text: 'Voce organiza praticas espirituais ensinadas em videos. Para cada pratica abaixo, diga PARA QUE ela serve, escolhendo de 1 a 3 codigos SO desta lista: ' + FINALIDADES + '.\nUse so o que a pratica realmente promete ou indica; se nenhum servir, lista vazia.\nResponda so JSON: {"itens":[{"id":123,"fin":["codigo"]}]}\n\nPRATICAS:\n' + texto }] }],
+    contents: [{ parts: [{ text: 'Voce organiza praticas espirituais ensinadas em videos. Para cada pratica abaixo de 3 etiquetas.\n' +
+      '"jeito": o jeito de fazer, UM codigo desta lista: ' + JEITOS_ET + '.\n' +
+      '"serve": para que serve, de 1 a 3 codigos SO desta lista: ' + SERVE_ET + '. Use so o que a pratica promete ou indica.\n' +
+      '"quando": quando fazer, codigos desta lista (0 a 2): ' + QUANDO_ET + '. Lista vazia se a pratica nao diz quando.\n' +
+      '"conselho": 1 se NAO e uma pratica para a pessoa fazer em casa: conselho generico sem tecnica (ex.: "mantenha a fe", "seja feliz"), encaminhamento para buscar ajuda fora (ir a um centro, pedir cirurgia espiritual, mandar nomes para tratamento, procurar grupo), assunto que nao e espiritual (higiene, golpes, financas, estoque de comida), causa ou evento pontual (abaixo-assinado, inscricao em evento), ou rito guiado por outra pessoa que nao da para repetir em casa. Senao 0.\n' +
+      'Responda so JSON: {"itens":[{"id":123,"jeito":"med","serve":["emo.ans"],"quando":["dormir"],"conselho":0}]}\n\nPRATICAS:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.1 }
   });
   const j = jsonDe(txt);
-  const porId = new Map((j.itens || []).map(x => [Number(x.id), (Array.isArray(x.fin) ? x.fin : []).map(f => String(f).trim().toLowerCase()).filter(f => FIN_OK.has(f)).slice(0, 3)]));
-  const lista = fila.map(p => ({ id: Number(p.ID), fin: (porId.get(Number(p.ID)) || []).join(',') }));
+  const lim = (v, okSet, n) => (Array.isArray(v) ? v : [v]).map(x => String(x || '').trim().toLowerCase()).filter(x => okSet.has(x)).filter((x, i, a) => a.indexOf(x) === i).slice(0, n).join(',');
+  const porId = new Map((j.itens || []).map(x => [Number(x.id), x]));
+  const lista = fila.filter(p => porId.has(Number(p.ID))).map(p => {
+    const x = porId.get(Number(p.ID));
+    return { id: Number(p.ID), jeito: lim(x.jeito, JEITO_OK, 1) || 'outra', serve: lim(x.serve, SERVE_OK, 3), quando: lim(x.quando, QUANDO_OK, 2), conselho: Number(x.conselho) === 1 ? 1 : 0 };
+  });
+  if (!lista.length) return 0;
   const chave = 'fin-' + Date.now();
   await lote(chave, lista); await sql('finGravar', { chave }); await sql('loteApagar', { chave });
   return lista.length;
