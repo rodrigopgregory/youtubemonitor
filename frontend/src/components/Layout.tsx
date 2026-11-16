@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen } from 'lucide-react'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -32,6 +32,17 @@ export default function Layout() {
     } catch (er) { setBusca({ rodando: false, msg: (er as Error).message, erro: true }) }
   }
   const [escuro, setEscuro] = useState(() => document.documentElement.dataset.theme === 'dark')
+  const [gaveta, setGaveta] = useState(false)
+  const local = useLocation()
+  useEffect(() => { setGaveta(false) }, [local.pathname])
+  useEffect(() => {
+    if (!gaveta) return
+    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setGaveta(false) }
+    window.addEventListener('keydown', esc)
+    const antes = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { window.removeEventListener('keydown', esc); document.body.style.overflow = antes }
+  }, [gaveta])
 
   const carregar = useCallback(() => { linhas<Aviso>('avisosListar').then(setAvisos).catch(() => {}) }, [])
   useEffect(() => { carregar(); const t = setInterval(carregar, 120000); return () => clearInterval(t) }, [carregar])
@@ -79,8 +90,12 @@ export default function Layout() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center gap-2">
-          <nav className="flex items-center gap-1 overflow-x-auto">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2">
+          <button onClick={() => setGaveta(true)} className="lg:hidden h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg)' }} aria-label="Abrir menu" aria-expanded={gaveta}>
+            <Menu size={20} />
+          </button>
+          <span className="lg:hidden text-[14.5px] font-semibold truncate">{abas.find(a => a.end ? local.pathname === a.to : local.pathname.startsWith(a.to))?.label || 'Monitor'}</span>
+          <nav className="hidden lg:flex items-center gap-1">
             {abas.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
                 className="h-9 px-3 rounded-lg inline-flex items-center gap-2 text-[13.5px] font-medium whitespace-nowrap transition-colors"
@@ -111,6 +126,29 @@ export default function Layout() {
         </div>
       </header>
 
+      {gaveta && (
+        <div className="lg:hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Menu">
+          <div className="absolute inset-0" style={{ background: 'var(--bg-overlay)' }} onClick={() => setGaveta(false)} />
+          <aside className="absolute left-0 top-0 h-full w-[280px] max-w-[85vw] border-r flex flex-col" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-pop)' }}>
+            <div className="h-14 px-3 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)' }}>
+              <span className="text-[15px] font-semibold px-1">Monitor de Canais</span>
+              <button onClick={() => setGaveta(false)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Fechar menu">
+                <X size={20} />
+              </button>
+            </div>
+            <nav className="flex-1 overflow-y-auto p-2 flex flex-col gap-1">
+              {abas.map(({ to, label, icon: Icon, end }) => (
+                <NavLink key={to} to={to} end={end} onClick={() => setGaveta(false)}
+                  className="h-11 px-3 rounded-lg flex items-center gap-3 text-[15px] font-medium"
+                  style={({ isActive }) => isActive ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : { color: 'var(--fg)' }}>
+                  <Icon size={18} />{label}
+                </NavLink>
+              ))}
+            </nav>
+          </aside>
+        </div>
+      )}
+
       {busca && !busca.rodando && (
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4">
           <div className="rounded-lg border px-4 py-2.5 text-[13.5px] flex items-start gap-3" style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated, var(--bg))', color: busca.erro ? 'var(--danger)' : 'var(--fg)' }}>
@@ -132,7 +170,7 @@ export default function Layout() {
         </div>
       )}
 
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 py-6"><Outlet /></main>
+      <main className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6"><Outlet /></main>
 
       <Modal isOpen={aberto} onClose={() => setAberto(false)} title={atual ? `${atual.QTD} ${Number(atual.QTD) === 1 ? 'vídeo novo' : 'vídeos novos'} em ${dataBr(atual.DIA)}` : 'Avisos de vídeos novos'} size="lg">
         <div className="p-5">
