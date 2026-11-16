@@ -3,18 +3,18 @@
 | Campo | Valor |
 |---|---|
 | Projeto | Monitor de canais do YouTube |
-| Versão | 2.0 |
-| Data | 12/11/2026 |
-| Elaborado por | Agent (Governador), em entrevista com sledt1006p01@imersao.mitralab.io |
-| Status | Escopo completo |
+| Versão | 3.0 |
+| Data | 16/11/2026 |
+| Elaborado por | Agent (Mitra), em entrevista com sledt1006p01@imersao.mitralab.io |
+| Status | Em uso, atualizado com o que o app faz hoje |
 
 ## 2. Objetivo
 
-Criar uma base de conhecimento interna a partir de um conjunto fechado de canais públicos do YouTube sobre espiritualidade, escolhidos pela pessoa (o primeiro é o canal de Wagner Borges). O sistema estuda cada vídeo desses canais: guarda os dados do vídeo, a transcrição do que foi falado, um resumo e os temas tratados.
+Criar uma base de conhecimento interna a partir de um conjunto fechado de canais públicos do YouTube sobre espiritualidade, escolhidos pela pessoa (hoje: Wagner Borges e Mônica de Medeiros). O sistema estuda cada vídeo desses canais: guarda os dados do vídeo, a transcrição do que foi falado, um resumo e os temas tratados.
 
 O sistema monitora os canais todos os dias e estuda os vídeos novos que ainda não foram estudados. Quando um canal entra na lista, o sistema estuda também todo o histórico dele, do vídeo mais antigo ao mais recente.
 
-Com a base pronta, a pessoa pesquisa por um tema (por exemplo, técnica de meditação, chakra coronário, saída do corpo, banhos de ervas). O sistema responde quais vídeos e lives tratam do tema, com o link para assistir ao vídeo completo, e um resumo do que foi falado, usando somente as transcrições desses canais. No futuro, a base deve servir de material para compilar um livro.
+Com a base pronta, a pessoa pesquisa por um tema (por exemplo, técnica de meditação, chakra coronário, saída do corpo, banhos de ervas). O sistema responde quais vídeos e lives tratam do tema, com o link para assistir ao vídeo completo, e um resumo do que foi falado, usando somente as transcrições desses canais. A base também alimenta o Livro Vivo, um livro escrito pela IA com um capítulo por tema, e o mapa de Práticas, onde a pessoa registra as práticas que fez e como se sentiu.
 
 ## 3. Atores e personas
 
@@ -27,7 +27,7 @@ Com a base pronta, a pessoa pesquisa por um tema (por exemplo, técnica de medit
 
 | ID | Descrição | Tipo |
 |---|---|---|
-| PC-01 | Lista de canais públicos do YouTube a monitorar, informada pela pessoa pelo link do canal. Canais até agora: Wagner Borges (https://www.youtube.com/@WagnerBorges/videos). | Obrigatória |
+| PC-01 | Lista de canais públicos do YouTube a monitorar, informada pela pessoa pelo link do canal. Canais até agora: Wagner Borges (https://www.youtube.com/@WagnerBorges/videos) e Mônica de Medeiros. | Obrigatória |
 | PC-02 | Os canais, vídeos e lives precisam ser públicos, com título, data de publicação, duração e link acessíveis. | Obrigatória |
 | PC-03 | Uma forma de transcrever o áudio dos vídeos que não têm transcrição no YouTube. | Obrigatória |
 | PC-04 | A transcrição pronta do YouTube, quando existir, para acelerar o estudo. | Desejável |
@@ -71,11 +71,33 @@ Com a base pronta, a pessoa pesquisa por um tema (por exemplo, técnica de medit
 
 **RN-10 — Base fechada.** As respostas da busca usam somente as transcrições dos canais cadastrados. Nada de fonte de fora da base.
 
-**RN-11 — Usuária única.** Por enquanto só a pessoa dona da base acessa o produto: cadastra canais, vê os vídeos estudados, edita temas e pesquisa.
+**RN-11 — Usuária única, sem login.** Só a pessoa dona da base usa o produto. O app abre sem login e pode ser instalado no celular e no computador (botão Instalar app).
 
-**RN-12 — Aviso de vídeo novo na tela.** Quando a checagem diária estuda vídeos novos, a tela do produto mostra um aviso com a quantidade e a lista desses vídeos (título, canal e data). O aviso fica marcado como não lido até a pessoa abri-lo. Exemplo: "3 vídeos novos estudados hoje". Não há aviso por e-mail nem pelo Telegram.
+**RN-12 — Avisos.** A cada vídeo novo captado na checagem diária, o sininho do topo acende com o número de avisos não lidos. A pessoa marca como lido ou não lido e arquiva. Não há aviso por e-mail nem pelo Telegram.
 
-**RN-13 — Fora deste escopo.** Compilar um livro a partir da base fica para uma fase futura.
+**RN-13 — Canais separados.** Vídeos, busca e pesquisa podem ser filtrados por canal. As playlists de cada canal são lidas uma vez por dia e servem de filtro. O botão Buscar vídeos novos procura vídeos na hora, sem esperar a checagem diária.
+
+**RN-14 — Ordem de estudo.** O estudo alterna os canais. Primeiro vêm os vídeos com legenda do YouTube, depois os sem legenda, que são transcritos pelo áudio e ganham a etiqueta Transcrito pelo áudio.
+
+**RN-15 — Temas fixos.** Os temas são 32 categorias fixas, e o estudo escolhe só entre elas. Vídeos que não tratam de espiritualidade vão para a área Fora do tema espiritualidade, com botão para mover e trazer de volta.
+
+**RN-16 — Mentores.** Nas lives com incorporação (canal da Mônica), o sistema marca o mentor que conduz a live. O nome no título manda. Sem nome no título, a IA confere na transcrição. A aba Mentores cadastra, renomeia, junta e marca quem não é mentor, e o estudo segue essas regras.
+
+**RN-17 — Pesquisar.** Busca e chat ficam numa aba só, Pesquisar. A resposta usa só a base, entende sinônimos, aceita ditado por voz e continua funcionando sem a IA quando a cota acaba (aí prioriza o termo mais raro).
+
+**RN-18 — Vídeos e filtros.** A tela de vídeos tem filtros combinados (temas, mentores, playlists, práticas, canal e "Meus": Favoritos, Já assisti, Não assisti). Cada vídeo tem estrela de favorito e olho de já assisti. O botão Exportar planilha leva os filtros da tela.
+
+**RN-19 — Práticas.** O sistema lê nas transcrições as práticas ensinadas (técnicas, preces, ervas e velas, receitas e saúde, autoconhecimento). A tela Práticas mostra o mapa por finalidade, o jeito de fazer e o passo a passo, e a IA marca a finalidade de cada prática.
+
+**RN-20 — Minhas práticas.** Em cada prática, o botão Fiz hoje conta num toque e mostra o contador e a data da última vez. Desfazer apaga o último registro. O lápis abre o registro para anotar o humor (1 a 5), o que sentiu e o dia. A tela Minhas práticas mostra os números, o Diário e a visão Por prática, com editar e apagar em cada registro.
+
+**RN-21 — Livro Vivo.** A aba Livro Vivo tem um capítulo por tema, escrito pela IA a partir dos ensinamentos e práticas. A IA escreve sozinha até 2 capítulos por madrugada, entre 1h e 7h, quando há cota. Os capítulos entram no Exportar tudo.
+
+**RN-22 — Exportar.** Em Configurações ficam o Exportar tudo (ZIP com código, esquema do banco e todos os dados) e o Exportar para o NotebookLM (transcrições juntas em arquivos por canal, abaixo do limite de uma fonte). Também há exportação de temas em planilha e de transcrições por canal.
+
+**RN-23 — Cota da IA.** O estudo usa a cota grátis do Gemini, com várias chaves que se revezam. Quando a cota diária acaba, os vídeos ficam na fila e o estudo continua no dia seguinte. A tela avisa quando a IA está em pausa.
+
+**RN-24 — Aparência.** Modo escuro como padrão, com a escolha guardada. No celular e no tablet, o menu vira uma gaveta lateral.
 
 ## 7. Fluxo principal (caminho feliz)
 
@@ -134,7 +156,26 @@ Com a base pronta, a pessoa pesquisa por um tema (por exemplo, técnica de medit
 | CA-19 | Depois de uma checagem diária que estudou 3 vídeos novos, a tela do produto mostra o aviso "3 vídeos novos" com a lista deles, marcado como não lido. |
 | CA-20 | Ao abrir o aviso, ele passa a lido; num dia sem vídeo novo, nenhum aviso novo aparece. |
 
-## 10. Pontos em aberto
+## 10. Telas do app
 
-Nenhum ponto em aberto. Todas as questões levantadas na entrevista foram respondidas e viraram regras de negócio, fluxos ou critérios de aceite.
+| Tela | Para que serve |
+|---|---|
+| Pesquisar | Pergunta por tema, com resposta só da base e os vídeos com os minutos. |
+| Vídeos e temas | Lista dos vídeos estudados com filtros, favoritos, já assisti e exportar planilha. |
+| Práticas | Mapa das práticas por finalidade, com passo a passo e o botão Fiz hoje. |
+| Minhas práticas | Diário das práticas feitas, com humor e anotações. |
+| Canais | Cadastro dos canais e andamento do estudo. |
+| Mentores | Cadastro e ajuste dos mentores. |
+| Livro Vivo | Capítulos do livro, um por tema. |
+| Configurações | Mentores, estudo e exportações. |
+
+## 11. Andamento (16/11/2026)
+
+- Leitura de práticas: 1.237 de 3.703 vídeos.
+- Finalidade das práticas marcada pela IA: cerca de 115 de 1.640.
+- Livro Vivo: 7 de 32 capítulos.
+
+## 12. Pontos em aberto
+
+Nenhum ponto em aberto.
 
