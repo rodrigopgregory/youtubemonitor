@@ -46,7 +46,7 @@ export default function MentoresPage() {
     <div className="flex flex-col gap-5">
       <div>
         <h1 className="text-[22px] font-semibold">Mentores</h1>
-        <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Cadastre, renomeie, junte ou tire mentores. O que você decidir aqui vira regra: os próximos vídeos estudados já seguem. Os outros jeitos de escrever e os nomes que não são mentores ficam em Configurações.</p>
+        <p className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>Cadastre, renomeie, junte ou tire mentores. Os próximos vídeos já seguem.</p>
       </div>
 
       <Card className="p-5 flex flex-col gap-3">

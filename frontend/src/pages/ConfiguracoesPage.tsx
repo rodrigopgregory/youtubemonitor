@@ -115,7 +115,7 @@ export default function ConfiguracoesPage() {
     <div className="flex flex-col gap-6">
       <div>
         <h1 className="text-[22px] font-semibold">Configurações</h1>
-        <p className="text-[13.5px]" style={muted}>Regras que o estudo dos vídeos segue. O que você muda aqui vale para os próximos vídeos estudados.</p>
+        <p className="text-[13.5px]" style={muted}>Regras que o estudo dos próximos vídeos segue.</p>
       </div>
 
       <section className="flex flex-col gap-3">

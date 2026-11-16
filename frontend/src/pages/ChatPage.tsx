@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Send, PlayCircle, Trash2, MessageSquare, Mic, Square } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Badge from '../components/ui/Badge'
+import EstadoIA from '../components/EstadoIA'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { chamar, chamarDemorado, mmss, linkYt, dataBr, duracao, momentos } from '../lib/api'
 
@@ -106,13 +107,14 @@ export default function ChatPage() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 pb-4">
         <div className="min-w-0">
           <h1 className="text-[22px] font-semibold">Pesquisar</h1>
-          <p className="text-[14px] mt-1 line-clamp-2 sm:line-clamp-none" style={{ color: 'var(--fg-muted)' }}>Escreva um tema ou uma pergunta com as suas palavras (ex.: "chakra coronário" ou "o que a Mônica fala sobre medo nas lives?"). A pesquisa procura também os sinônimos, mostra os vídeos com os momentos e resume o que foi falado. Dá para continuar a conversa e pedir para estudar mais vídeos.</p>
+          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Pergunte com as suas palavras e veja os vídeos e os momentos.</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <CanalFiltro valor={canalId} onChange={setCanalId} />
           {msgs.length > 0 && <Button variant="ghost" size="sm" onClick={() => setMsgs([])}><Trash2 size={14} />Nova conversa</Button>}
         </div>
       </div>
+      <EstadoIA soPausa className="mb-3" />
 
       <div className="flex-1 min-h-0 overflow-y-auto rounded-2xl border p-4 flex flex-col gap-4" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
         {msgs.length === 0 && (

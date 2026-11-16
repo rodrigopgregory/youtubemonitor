@@ -1,4 +1,4 @@
-import { Check, Download, X } from 'lucide-react'
+import { Check, Download, SlidersHorizontal, X } from 'lucide-react'
 import { useCallback, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import Badge from '../components/ui/Badge'
@@ -6,6 +6,7 @@ import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import VideoDetalhe from '../components/VideoDetalhe'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
+import EstadoIA from '../components/EstadoIA'
 import { linhas, dataBr, duracao } from '../lib/api'
 import { exportarVideosFiltro } from '../lib/exportar'
 
@@ -52,6 +53,7 @@ export default function VideosPage() {
   const [canalId, setCanalId] = useCanal()
   const [exportMsg, setExportMsg] = useState<{ rodando: boolean; msg: string } | null>(null)
   const [nomes, setNomes] = useState<Record<string, string>>({})
+  const [filtrosAbertos, setFiltrosAbertos] = useState(false)
 
   const filtros = useCallback(() => {
     const t = [...(sp.get('tema') || '').split(','), ...(sp.get('mentor') || '').split(',')].filter(Boolean), p = (sp.get('playlist') || '').split(',').filter(Boolean), r = (sp.get('pratica') || '').split(',').filter(Boolean)
@@ -107,6 +109,7 @@ export default function VideosPage() {
   const limparTudo = () => { const n = new URLSearchParams(sp); n.delete('tema'); n.delete('playlist'); n.delete('pratica'); n.delete('mentor'); setSp(n) }
   const mostrarCanal = !canalId && new Set(playlists.map(p => p.CANAL_ID)).size > 1
   const algum = temasSel.length + mentSel.length + playSel.length + pratSel.length
+  const nFiltros = algum + (status ? 1 : 0) + (origem ? 1 : 0) + (canalId ? 1 : 0)
   const marcado = { background: 'var(--accent-soft)', color: 'var(--accent-text)' }
   const caixa = (on: boolean) => <span className="w-3.5 h-3.5 rounded border shrink-0 inline-flex items-center justify-center" style={on ? { background: 'var(--accent)', borderColor: 'var(--accent)', color: 'var(--accent-fg)' } : { borderColor: 'var(--border)' }}>{on && <Check size={10} strokeWidth={3} />}</span>
   const playlistsMostrar = [...playlists.filter(p => playSel.includes(p.ID)), ...playlists.filter(p => !playSel.includes(p.ID))]
@@ -119,8 +122,9 @@ export default function VideosPage() {
       <div className="flex items-end justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-[22px] font-semibold">Vídeos e temas</h1>
-          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Marque quantos temas, mentores, playlists e práticas quiser: a lista mostra só os vídeos que têm tudo o que foi marcado, e os números ao lado mostram quantos sobram. Clique num vídeo para ver o resumo, as práticas e a transcrição.</p>
+          <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Marque os filtros: aparecem só os vídeos que têm tudo o que foi marcado.</p>
         </div>
+        <div className={(filtrosAbertos ? 'flex' : 'hidden') + ' w-full flex-col gap-3 lg:contents'}>
         <CanalFiltro valor={canalId} onChange={id => { setCanalId(id); limparTudo() }} />
         {painel && (
           <div className="flex gap-2 flex-wrap">
@@ -135,6 +139,10 @@ export default function VideosPage() {
             <button key={'o' + k} onClick={() => filtro('origem', k)} className="h-8 px-3 rounded-full border text-[13px] font-medium"
               style={origem === k ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>{l}</button>))}
         </div>
+        </div>
+        <Button variant="secondary" size="sm" className="lg:hidden" onClick={() => setFiltrosAbertos(a => !a)}>
+          <SlidersHorizontal size={14} />{filtrosAbertos ? 'Fechar filtros' : 'Filtrar'}{nFiltros > 0 && <span className="text-[11px] px-1.5 rounded-full" style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>{nFiltros}</span>}
+        </Button>
         <div className="flex flex-col items-end gap-1">
           <Button variant="secondary" size="sm" disabled={!!exportMsg?.rodando} onClick={baixarPlanilha} title="Baixa uma planilha com os vídeos que estão aparecendo agora, com os filtros marcados">
             <Download size={14} />{exportMsg?.rodando ? 'Montando a planilha…' : 'Exportar planilha'}
@@ -143,8 +151,9 @@ export default function VideosPage() {
         </div>
       </div>
 
+      <EstadoIA />
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        <Card className="p-3 self-start lg:sticky lg:top-20 max-h-[75vh] overflow-y-auto">
+        <Card className={(filtrosAbertos ? '' : 'hidden ') + 'lg:block p-3 self-start lg:sticky lg:top-20 max-h-[75vh] overflow-y-auto'}>
           <div className="flex gap-1 p-1 mb-2 rounded-lg" style={{ background: 'var(--surface-muted)' }}>
             {([['temas', 'Temas', temasSel.length], ['mentores', 'Mentores', mentSel.length], ['playlists', 'Playlists', playSel.length], ['praticas', 'Práticas', pratSel.length]] as const).map(([k, l, n]) => (
               <button key={k} onClick={() => setAgrupar(k)} className="flex-1 h-7 px-1 rounded-md text-[12.5px] font-medium inline-flex items-center justify-center gap-1"

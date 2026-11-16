@@ -59,7 +59,7 @@ export default function CanaisPage() {
       <div className="flex flex-col sm:flex-row sm:items-start gap-3">
       <div className="flex-1">
         <h1 className="text-[22px] font-semibold">Canais monitorados</h1>
-        <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Cada canal novo tem o acervo estudado, e todo dia o sistema confere se há vídeos novos. Entram vídeos e lives gravadas com mais de 10 minutos.</p>
+        <p className="text-[14px] mt-1" style={{ color: 'var(--fg-muted)' }}>Todo dia o sistema confere os vídeos novos de cada canal.</p>
       </div>
         <div className="flex flex-col sm:items-end gap-1 sm:max-w-[320px]">
           <Button variant="primary" disabled={!!busca?.rodando} onClick={buscarNovos} title="Procura agora, em todos os canais, vídeos novos publicados desde a última conferência">

@@ -179,6 +179,7 @@ function agruparLegenda(j3) {
 }
 
 const ESGOTADO = new Set();
+let IA_RESPONDEU = false, IA_SEM_COTA = false;
 const ESPEROU = new Set();
 async function gemini(cfg, modelos, body) {
   let ultimo = '';
@@ -205,7 +206,7 @@ async function gemini(cfg, modelos, body) {
               if (!((st2 && st2 >= 400) || b2.error)) {
                 ESPEROU.delete(k);
                 const txt2 = ((((b2.candidates || [])[0] || {}).content || {}).parts || []).map(p => p.text || '').join('');
-                if (txt2) return txt2;
+                if (txt2) { IA_RESPONDEU = true; return txt2; }
               }
             }
             if (porDia) ESGOTADO.add(k);
@@ -214,12 +215,13 @@ async function gemini(cfg, modelos, body) {
         }
         const parts = (((b.candidates || [])[0] || {}).content || {}).parts || [];
         const txt = parts.map(p => p.text || '').join('');
-        if (txt) return txt;
+        if (txt) { IA_RESPONDEU = true; return txt; }
         const porque = (b.promptFeedback && b.promptFeedback.blockReason) || (((b.candidates || [])[0] || {}).finishReason) || '';
         ultimo = 'Gemini (' + modelo + ') respondeu vazio' + (porque ? ' (' + porque + ')' : '');
       } catch (e) { ultimo = 'Gemini (' + modelo + '): ' + String(e.message || e).slice(0, 200); }
     }
   }
+  if (ESGOTADO.size) IA_SEM_COTA = true;
   throw new Error(ultimo || 'Gemini sem resposta');
 }
 function jsonDe(txt) {
@@ -565,6 +567,11 @@ try {
     }
   }
   await fecharAvisos(hojeBR);
+  if (IA_SEM_COTA) {
+    const d = new Date(); let t = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 8, 0, 0);
+    if (t <= Date.now()) t += 864e5;
+    await sql('configTelaGravar', { chave: 'IA_PAUSADA_ATE', valor: new Date(t - 3 * 3600e3).toISOString().slice(0, 19) }).catch(() => {});
+  } else if (IA_RESPONDEU) await sql('configTelaGravar', { chave: 'IA_PAUSADA_ATE', valor: '' }).catch(() => {});
   await sql('canaisAtualizarStatus', {});
   const resta = Number((((await sql('filaContar', {})).rows || [{}])[0] || {}).N || 0);
   const restaPraticas = Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).N || 0) - Number((((await sql('praticasResumo', {})).rows || [{}])[0] || {}).LIDOS || 0);
