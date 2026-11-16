@@ -10,9 +10,9 @@ interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICAD
 const abas = [
   { to: '/', label: 'Pesquisar', icon: Search, end: true },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
-  { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
-  { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/canais', label: 'Canais', icon: Radio, end: false },
+  { to: '/mentores', label: 'Mentores', icon: Users, end: false },
+  { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
   { to: '/configuracoes', label: 'Configurações', icon: Settings, end: false },
 ]
 
