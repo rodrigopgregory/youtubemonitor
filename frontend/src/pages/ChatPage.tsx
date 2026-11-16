@@ -31,6 +31,13 @@ export default function ChatPage() {
   const [pensando, setPensando] = useState(false)
   const [canalId, setCanalId] = useCanal()
   const fim = useRef<HTMLDivElement>(null)
+  const caixa = useRef<HTMLTextAreaElement>(null)
+  useEffect(() => {
+    const el = caixa.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = Math.min(el.scrollHeight + 2, Math.round(window.innerHeight * 0.4)) + 'px'
+  }, [texto])
   const [ouvindo, setOuvindo] = useState(false)
   const [avisoVoz, setAvisoVoz] = useState('')
   const rec = useRef<Reconhecedor | null>(null)
@@ -107,7 +114,7 @@ export default function ChatPage() {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto rounded-2xl border p-4 flex flex-col gap-4" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
+      <div className="flex-1 min-h-0 overflow-y-auto rounded-2xl border p-4 flex flex-col gap-4" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
         {msgs.length === 0 && (
           <div className="mt-auto sm:m-auto w-full sm:w-auto flex flex-col sm:items-center gap-2 sm:gap-3 sm:text-center sm:max-w-3xl">
             <MessageSquare size={24} className="hidden sm:block" style={{ color: 'var(--accent)' }} />
@@ -158,14 +165,16 @@ export default function ChatPage() {
         <div ref={fim} />
       </div>
 
-      <form onSubmit={e => { e.preventDefault(); enviar() }} className="flex gap-2 pt-3">
-        <textarea value={texto} onChange={e => setTexto(e.target.value)} rows={1} placeholder={ouvindo ? 'Ouvindo…' : 'Tema ou pergunta. Ex.: chakra coronário'}
-          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviar() } }}
-          className="controle flex-1 resize-none py-2" style={{ height: 'auto', minHeight: 'var(--altura-controle)' }} />
+      <form onSubmit={e => { e.preventDefault(); enviar() }} className="flex flex-wrap sm:flex-nowrap items-end gap-2 pt-3">
+        <textarea ref={caixa} value={texto} onChange={e => setTexto(e.target.value)} rows={3} placeholder={ouvindo ? 'Ouvindo…' : 'Tema ou pergunta. Ex.: chakra coronário'}
+          onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey && window.innerWidth >= 640) { e.preventDefault(); enviar() } }}
+          className="controle w-full sm:flex-1 resize-none py-2.5 leading-relaxed overflow-y-auto" style={{ minHeight: '5.5rem', maxHeight: '40vh' }} />
+        <div className="flex gap-2 ml-auto shrink-0">
         {temVoz && <Button type="button" variant={ouvindo ? 'primary' : 'secondary'} onClick={falar} disabled={pensando} aria-label={ouvindo ? 'Parar de ouvir' : 'Falar por voz'} title={ouvindo ? 'Parar de ouvir' : 'Falar por voz'}>
           {ouvindo ? <><Square size={14} />Parar</> : <Mic size={16} />}
         </Button>}
         <Button variant="primary" type="submit" disabled={pensando || !texto.trim()}><Send size={15} />Enviar</Button>
+        </div>
       </form>
       {(ouvindo || avisoVoz) && <p className="text-[12.5px] pt-1.5" style={{ color: avisoVoz ? 'var(--warning-text)' : 'var(--accent-text)' }}>{avisoVoz || 'Ouvindo… fale a sua pergunta. Toque em Parar quando terminar e depois em Enviar.'}</p>}
     </div>
