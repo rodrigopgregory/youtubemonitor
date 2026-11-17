@@ -657,10 +657,43 @@ try {
       catch (e) { const motivo = String(e.message || e).slice(0, 150); log.push('livros ' + lf[0].ID + ': erro ' + motivo); if (!IA_SEM_COTA) await sql('livrosErroAnotar', { id: lf[0].ID, motivo: agora() + ' ' + motivo.replace(/[^\w\s:().,-]/g, ' ') }).catch(() => {}); if (IA_SEM_COTA || ++errosL >= 5) break; }
     }
   }
+  let casadosLocal = 0;
+  try {
+    const semAcento = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    const parada = new Set(['o', 'a', 'os', 'as', 'de', 'do', 'da', 'dos', 'das', 'e', 'um', 'uma', 'em', 'no', 'na', 'the', 'of', 'livro', 'livros']);
+    const palavras = t => semAcento(t).split(' ').filter(w => w && !parada.has(w));
+    const sobrenomes = t => semAcento(t).split(' ').filter(w => w.length >= 4);
+    const semDecisao = ((await sql('nomesSemDecisao', {})).rows || []);
+    if (semDecisao.length) {
+      const indice = ((await sql('nomesCatalogoLer', {})).rows || []).map(c => ({ c, t: palavras(c.TITULO), tn: semAcento(c.TITULO), a: new Set(sobrenomes(c.AUTOR)) }));
+      const achados = [];
+      for (const f of semDecisao) {
+        const t = palavras(f.NOME), tn = semAcento(f.NOME), an = sobrenomes(f.AUTOR);
+        if (!t.length) continue;
+        let melhor = null;
+        for (const x of indice) {
+          const inter = t.filter(w => x.t.includes(w)).length; if (!inter) continue;
+          const sim = inter / Math.max(t.length, x.t.length), cont = inter / Math.min(t.length, x.t.length);
+          const aut = an.some(w => x.a.has(w));
+          let pts = 0;
+          if (tn === x.tn && aut) pts = 3; else if (aut && sim >= 0.5 && t.length >= 2) pts = 2.5; else if (aut && cont >= 1) pts = 1.2;
+          if (pts && (!melhor || pts + sim > melhor.pts + melhor.sim)) melhor = { c: x.c, pts, sim };
+        }
+        if (melhor) achados.push({ nome: String(f.NOME), titulo: String(melhor.c.TITULO), autor: String(melhor.c.AUTOR || ''), conf: 'baixa', motivo: 'Título e autor parecidos com um livro da biblioteca (casamento automático)' });
+      }
+      if (achados.length) {
+        const chaveL = 'C:' + Date.now();
+        await lote(chaveL, achados);
+        await sql('nomesPendGravar', { chave: chaveL });
+        await sql('loteApagar', { chave: chaveL });
+        casadosLocal = achados.length; log.push('nomes casados com a biblioteca: ' + casadosLocal);
+      }
+    }
+  } catch (e) { log.push('casamento local: erro ' + String(e.message || e).slice(0, 120)); }
   let nomesValidados = 0, errosN = 0;
   if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA) {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
-      const fila = ((await sql('nomesFila', { limit: 15 })).rows || []);
+      const fila = ((await sql('nomesFila', { limit: 25 })).rows || []);
       if (!fila.length) break;
       const chave = 'N:' + Date.now();
       try {
