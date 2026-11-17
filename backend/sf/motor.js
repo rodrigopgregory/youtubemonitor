@@ -359,6 +359,18 @@ async function gravarLivros(v, lista) {
   await sql('videoLivrosFeito', { id: v.ID, quando: agora() });
 }
 
+async function validarNomes(cfg, lista) {
+  const itens = lista.map((x, i) => (i + 1) + '. "' + x.NOME + '"' + (x.AUTOR ? ' (autor ouvido: ' + x.AUTOR + ')' : '') + (x.TRECHO ? ' | contexto: ' + String(x.TRECHO).slice(0, 160) : '')).join('\n');
+  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
+    contents: [{ parts: [{ text: 'Os nomes abaixo foram ouvidos em transcricoes de videos espirituais e podem estar errados, truncados ou ser so tema/oracao. Para cada um, PESQUISE NO GOOGLE se existe um livro real. Se existir, devolva o titulo oficial e o autor, e use o MESMO titulo oficial para variacoes do mesmo livro. Se nao achar com seguranca, conf baixa ou media e, se tiver palpite, coloque em titulo/autor. Se claramente nao for livro, titulo vazio e conf baixa.\nResponda so JSON: [{"nome":"exatamente como recebido","titulo":"...","autor":"...","conf":"alta|media|baixa","motivo":"uma frase"}]\n\n' + itens }] }],
+    tools: [{ google_search: {} }],
+    generationConfig: { temperature: 0 }
+  });
+  const a = txt.indexOf('['), b = txt.lastIndexOf(']');
+  const arr = JSON.parse(txt.slice(a, b + 1));
+  const permitidos = new Set(lista.map(x => String(x.NOME)));
+  return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? x.conf : 'baixa', motivo: String(x.motivo || '').slice(0, 300) }));
+}
 async function lerLivros(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   if (!tr.length) { await gravarLivros(v, []); return 0; }
@@ -643,6 +655,23 @@ try {
       vistosL.add(lf[0].ID);
       try { const n = await lerLivros(cfg, lf[0]); livrosLidos++; log.push('livros ' + lf[0].ID + ': ' + n); }
       catch (e) { const motivo = String(e.message || e).slice(0, 150); log.push('livros ' + lf[0].ID + ': erro ' + motivo); if (!IA_SEM_COTA) await sql('livrosErroAnotar', { id: lf[0].ID, motivo: agora() + ' ' + motivo.replace(/[^\w\s:().,-]/g, ' ') }).catch(() => {}); if (IA_SEM_COTA || ++errosL >= 5) break; }
+    }
+  }
+  let nomesValidados = 0, errosN = 0;
+  if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA) {
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const fila = ((await sql('nomesFila', { limit: 15 })).rows || []);
+      if (!fila.length) break;
+      const chave = 'N:' + Date.now();
+      try {
+        const res = await validarNomes(cfg, fila);
+        const vistos = new Set(res.map(x => x.nome));
+        for (const x of fila) if (!vistos.has(String(x.NOME))) res.push({ nome: String(x.NOME), titulo: '', autor: '', conf: 'baixa', motivo: 'A busca não respondeu sobre este nome' });
+        await lote(chave, res);
+        await sql('nomesCatalogoGravar', { chave }); await sql('nomesOkGravar', { chave }); await sql('nomesPendGravar', { chave });
+        await sql('loteApagar', { chave });
+        nomesValidados += fila.length; log.push('nomes de livros validados: ' + fila.length);
+      } catch (e) { await sql('loteApagar', { chave }).catch(() => {}); log.push('validar livros: erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosN >= 3) break; }
     }
   }
   let livroDisparado = false;

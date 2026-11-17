@@ -6,6 +6,7 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import Contador from '../components/Contador'
 import EstadoIA from '../components/EstadoIA'
+import PendenciasLivros from '../components/PendenciasLivros'
 import { SERVE, nomeEt } from '../lib/etiquetas'
 import { linhas, linkYt, mmss, dataBr } from '../lib/api'
 
@@ -151,6 +152,7 @@ export default function InicioPage() {
         </div>
 
         <div className="flex flex-col gap-5 min-w-0">
+          <PendenciasLivros />
           <Card className="p-5 flex flex-col gap-4">
             <Titulo icon={PlayCircle} texto="Vídeos novos" link="/videos" />
             {novos === null ? <p className="text-[13.5px]" style={muted}>Carregando…</p> : <ListaVideos videos={novos} resumo vazio="Nenhum vídeo estudado ainda." />}
