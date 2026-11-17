@@ -25,3 +25,19 @@ export function casar(idx, nome, autor) {
   }
   return melhor;
 }
+
+const bigramas = s => { const t = ' ' + SEM(s) + ' '; const m = new Map(); for (let i = 0; i < t.length - 1; i++) { const b = t.slice(i, i + 2); m.set(b, (m.get(b) || 0) + 1) } return m };
+export function certeza(nomeOuvido, autorOuvido, titulo, autor) {
+  const a = bigramas(nomeOuvido), b = bigramas(titulo); let comum = 0, ta = 0, tb = 0;
+  for (const v of a.values()) ta += v; for (const v of b.values()) tb += v;
+  for (const [k, v] of a) comum += Math.min(v, b.get(k) || 0);
+  let sim = ta + tb ? (2 * comum) / (ta + tb) : 0;
+  const t1 = toks(nomeOuvido), t2 = toks(titulo);
+  if (t1.length && t2.length) {
+    const [menor, maior] = t1.length <= t2.length ? [t1, t2] : [t2, t1];
+    if (menor.every(w => maior.includes(w))) sim = Math.max(sim, menor.length >= 2 || t1.length === t2.length ? 0.95 : 0.85);
+  }
+  const ouvido = nomes(autorOuvido); const cat = new Set(nomes(autor));
+  const aut = !ouvido.length ? 0.5 : ouvido.some(w => cat.has(w)) ? 1 : 0;
+  return Math.round(100 * (0.6 * sim + 0.4 * aut));
+}

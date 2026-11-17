@@ -5,7 +5,7 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import { linhas, chamar, chamarDemorado, linkYt, mmss } from '../lib/api'
 
-interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null }
+interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null; CERTEZA: number | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; TRANSCRICAO: string | null }
 interface Cat { ID: number; TITULO: string; AUTOR: string | null }
 const PAG = 25
@@ -94,6 +94,8 @@ export default function ValidarLivrosPage() {
         </div>
         <select value={filtro} onChange={e => setFiltro(e.target.value)} className="controle" aria-label="Mostrar">
           <option value="">Todos</option>
+          <option value="alta">Certeza de 90% ou mais</option>
+          <option value="baixa">Abaixo de 90%</option>
           <option value="sug">Com sugestão</option>
           <option value="novo">Ainda não vistos pela IA</option>
         </select>
@@ -111,7 +113,7 @@ export default function ValidarLivrosPage() {
               {it.AUTOR && <span className="text-[13px]" style={muted}>autor ouvido: {it.AUTOR}</span>}
               <Badge variant="neutral">{Number(it.VIDEOS)} {Number(it.VIDEOS) === 1 ? 'vídeo' : 'vídeos'}</Badge>
             </div>
-            {it.SUG_TITULO && <p className="text-[13px]" style={muted}>Sugestão: {it.SUG_TITULO}{it.SUG_AUTOR ? ', de ' + it.SUG_AUTOR : ''}{it.MOTIVO ? ' · ' + it.MOTIVO : ''}</p>}
+            {it.SUG_TITULO && <p className="text-[13px]" style={muted}>{it.CERTEZA != null && <Badge variant={Number(it.CERTEZA) >= 90 ? 'success' : 'neutral'}>{Number(it.CERTEZA)}% de certeza</Badge>} Sugestão: {it.SUG_TITULO}{it.SUG_AUTOR ? ', de ' + it.SUG_AUTOR : ''}{it.MOTIVO ? ' · ' + it.MOTIVO : ''}</p>}
             {aviso[it.ID] && <p className="text-[12.5px]">{aviso[it.ID]}</p>}
             {editando === it.ID ? (
               <div className="flex flex-col gap-2">

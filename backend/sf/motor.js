@@ -14,6 +14,32 @@ async function sql(nome, input) {
   let o = res.output; if (typeof o === 'string') { try { o = JSON.parse(o); } catch (e) {} }
   return o;
 }
+function certezaNome(nomeOuvido, autorOuvido, titulo, autor) {
+  const sem = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const parada = new Set(['o', 'a', 'os', 'as', 'de', 'do', 'da', 'dos', 'das', 'e', 'um', 'uma', 'em', 'no', 'na', 'the', 'of', 'livro', 'livros']);
+  const toks = t => sem(t).split(' ').filter(w => w && !parada.has(w));
+  const nomes = t => sem(t).split(' ').filter(w => w.length >= 4);
+  const bigramas = t => { const x = ' ' + sem(t) + ' '; const mp = new Map(); for (let i = 0; i < x.length - 1; i++) { const b = x.slice(i, i + 2); mp.set(b, (mp.get(b) || 0) + 1); } return mp; };
+  const a = bigramas(nomeOuvido), b = bigramas(titulo); let comum = 0, ta = 0, tb = 0;
+  for (const v of a.values()) ta += v;
+  for (const v of b.values()) tb += v;
+  for (const [k, v] of a) comum += Math.min(v, b.get(k) || 0);
+  let simil = ta + tb ? (2 * comum) / (ta + tb) : 0;
+  const t1 = toks(nomeOuvido), t2 = toks(titulo);
+  if (t1.length && t2.length) {
+    const par = t1.length <= t2.length ? [t1, t2] : [t2, t1];
+    if (par[0].every(w => par[1].includes(w))) simil = Math.max(simil, par[0].length >= 2 || t1.length === t2.length ? 0.95 : 0.85);
+  }
+  const ouvido = nomes(autorOuvido); const cat = new Set(nomes(autor));
+  const aut = !ouvido.length ? 0.5 : ouvido.some(w => cat.has(w)) ? 1 : 0;
+  return Math.round(100 * (0.6 * simil + 0.4 * aut));
+}
+async function gravarCerteza(lista) {
+  for (const x of lista) {
+    if (!x.titulo || /['"\\]/.test(x.nome)) continue;
+    try { await sql('nomesCertezaGravar', { nome: x.nome, certeza: certezaNome(x.nome, x.autorOuvido, x.titulo, x.autor) }); } catch (e) {}
+  }
+}
 async function yt(ep, body, client) {
   const r = await m.callIntegrationMitra({ projectId: pid, connection: 'youtube-web', method: 'POST', endpoint: '/youtubei/v1/' + ep, body: Object.assign({ context: { client } }, body) });
   const st = r.result ? r.result.statusCode : r.statusCode;
@@ -679,13 +705,14 @@ try {
           if (tn === x.tn && aut) pts = 3; else if (aut && sim >= 0.5 && t.length >= 2) pts = 2.5; else if (aut && cont >= 1) pts = 1.2;
           if (pts && (!melhor || pts + sim > melhor.pts + melhor.sim)) melhor = { c: x.c, pts, sim };
         }
-        if (melhor) achados.push({ nome: String(f.NOME), titulo: String(melhor.c.TITULO), autor: String(melhor.c.AUTOR || ''), conf: 'baixa', motivo: 'Título e autor parecidos com um livro da biblioteca (casamento automático)' });
+        if (melhor) achados.push({ autorOuvido: String(f.AUTOR || ''), nome: String(f.NOME), titulo: String(melhor.c.TITULO), autor: String(melhor.c.AUTOR || ''), conf: 'baixa', motivo: 'Título e autor parecidos com um livro da biblioteca (casamento automático)' });
       }
       if (achados.length) {
         const chaveL = 'C:' + Date.now();
         await lote(chaveL, achados);
         await sql('nomesPendGravar', { chave: chaveL });
         await sql('loteApagar', { chave: chaveL });
+        await gravarCerteza(achados);
         casadosLocal = achados.length; log.push('nomes casados com a biblioteca: ' + casadosLocal);
       }
     }
@@ -703,6 +730,8 @@ try {
         await lote(chave, res);
         await sql('nomesCatalogoGravar', { chave }); await sql('nomesOkGravar', { chave }); await sql('nomesPendGravar', { chave });
         await sql('loteApagar', { chave });
+        const autorDe = new Map(fila.map(x => [String(x.NOME), String(x.AUTOR || '')]));
+        await gravarCerteza(res.filter(x => x.conf !== 'alta').map(x => Object.assign({ autorOuvido: autorDe.get(x.nome) || '' }, x)));
         nomesValidados += fila.length; log.push('nomes de livros validados: ' + fila.length);
       } catch (e) { await sql('loteApagar', { chave }).catch(() => {}); log.push('validar livros: erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosN >= 3) break; }
     }
