@@ -204,6 +204,7 @@ function agruparLegenda(j3) {
   return out;
 }
 
+let BUSCA_FALHOU = false;
 const ESGOTADO = new Set();
 let IA_RESPONDEU = false, IA_SEM_COTA = false;
 const ESPEROU = new Set();
@@ -388,15 +389,20 @@ async function gravarLivros(v, lista) {
 
 async function validarNomes(cfg, lista) {
   const itens = lista.map((x, i) => (i + 1) + '. "' + x.NOME + '"' + (x.AUTOR ? ' (autor ouvido: ' + x.AUTOR + ')' : '') + (x.TRECHO ? ' | contexto: ' + String(x.TRECHO).slice(0, 160) : '')).join('\n');
-  const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
-    contents: [{ parts: [{ text: 'Os nomes abaixo foram ouvidos em transcricoes de videos espirituais e podem estar errados, truncados ou ser so tema/oracao. Para cada um, PESQUISE NO GOOGLE se existe um livro real. Se existir, devolva o titulo oficial e o autor, e use o MESMO titulo oficial para variacoes do mesmo livro. Se nao achar com seguranca, conf baixa ou media e, se tiver palpite, coloque em titulo/autor. Se claramente nao for livro, titulo vazio e conf baixa.\nResponda so JSON: [{"nome":"exatamente como recebido","titulo":"...","autor":"...","conf":"alta|media|baixa","motivo":"uma frase"}]\n\n' + itens }] }],
-    tools: [{ google_search: {} }],
+  const montar = (comBusca) => ({
+    contents: [{ parts: [{ text: 'Os nomes abaixo foram ouvidos em transcricoes de videos espirituais e podem estar errados, truncados ou ser so tema/oracao. Para cada um, ' + (comBusca ? 'PESQUISE NO GOOGLE' : 'Sem acesso a busca: use so o que voce sabe com seguranca; na duvida, conf baixa') + ' se existe um livro real. Se existir, devolva o titulo oficial e o autor, e use o MESMO titulo oficial para variacoes do mesmo livro. Se nao achar com seguranca, conf baixa ou media e, se tiver palpite, coloque em titulo/autor. Se claramente nao for livro, titulo vazio e conf baixa.\nResponda so JSON: [{"nome":"exatamente como recebido","titulo":"...","autor":"...","conf":"alta|media|baixa","motivo":"uma frase"}]\n\n' + itens }] }],
     generationConfig: { temperature: 0 }
-  }, cfg.GEMINI_CONEXOES_LIVROS);
+  });
+  let txt, semBusca = BUSCA_FALHOU;
+  if (!semBusca) {
+    try { const c = montar(true); c.tools = [{ google_search: {} }]; txt = await gemini(cfg, cfg.MODELO_ANALISE, c, cfg.GEMINI_CONEXOES_LIVROS); }
+    catch (e) { if (!/429/.test(String(e.message))) throw e; BUSCA_FALHOU = true; semBusca = true; }
+  }
+  if (semBusca) txt = await gemini(cfg, cfg.MODELO_ANALISE, montar(false), cfg.GEMINI_CONEXOES_LIVROS);
   const a = txt.indexOf('['), b = txt.lastIndexOf(']');
   const arr = JSON.parse(txt.slice(a, b + 1));
   const permitidos = new Set(lista.map(x => String(x.NOME)));
-  return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? x.conf : 'baixa', motivo: String(x.motivo || '').slice(0, 300) }));
+  return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? (semBusca && x.conf === 'alta' ? 'media' : x.conf) : 'baixa', motivo: String(x.motivo || '').slice(0, 300) }));
 }
 async function lerLivros(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
