@@ -4,6 +4,7 @@ import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import { chamar, linhas, linkYt, mmss } from '../lib/api'
+import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 
 interface Relacao { ID: number; TITULO: string; AUTOR: string | null; STATUS: string | null; INDICACOES: number; VIDEOS: number; CANAIS: string }
 interface Indicacao { ID: number; TRECHO: string | null; SEGUNDO: number | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
@@ -15,6 +16,7 @@ const limpaEdicao = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, '
 
 export default function RelacaoLivrosPage() {
   const [canalId, setCanalId] = useCanal()
+  const fav = useFavoritosTipo('LIVRO')
   const [busca, setBusca] = useState('')
   const [q, setQ] = useState('')
   const [titulo, setTitulo] = useState('')
@@ -137,7 +139,8 @@ export default function RelacaoLivrosPage() {
           const on = aberto === l.ID
           return (
             <Card key={l.ID} className="px-4 py-2.5 flex flex-col gap-1.5">
-              <button onClick={() => abrir(l.ID)} className="text-left flex items-start gap-2">
+              <div className="flex items-start gap-1">
+              <button onClick={() => abrir(l.ID)} className="text-left flex items-start gap-2 flex-1 min-w-0">
                 <BookMarked size={16} className="mt-1 shrink-0" style={{ color: 'var(--accent-text)' }} />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2 flex-wrap"><span className="text-[15px] font-medium">{l.TITULO}</span>{l.AUTOR && <span className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>de {l.AUTOR}</span>}{l.STATUS && STATUS[l.STATUS] && <span className="text-[11.5px] font-medium px-2 py-0.5 rounded-full" style={{ background: 'var(--surface-muted)', color: 'var(--accent-text)' }}>{STATUS[l.STATUS]}</span>}</div>
@@ -145,6 +148,8 @@ export default function RelacaoLivrosPage() {
                 </div>
                 {on ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
               </button>
+              <EstrelaItem favorito={fav.ehFavorito(l.TITULO)} onAlternar={() => fav.alternar(l.TITULO)} />
+              </div>
               {on && (
                 <div className="flex flex-col gap-2 pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
                   <div className="flex items-center gap-2 flex-wrap">

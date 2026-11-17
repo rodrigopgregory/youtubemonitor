@@ -5,6 +5,7 @@ import LoginPage from './pages/LoginPage'
 import Layout from './components/Layout'
 import PraticasPage from './pages/PraticasPage'
 import LivrosSecaoPage from './pages/LivrosSecaoPage'
+import FavoritosPage from './pages/FavoritosPage'
 import MinhasPraticasPage from './pages/MinhasPraticasPage'
 import VideosPage from './pages/VideosPage'
 import CanaisPage from './pages/CanaisPage'
@@ -27,6 +28,7 @@ function App() {
         <Route path="/videos" element={<VideosPage />} />
         <Route path="/praticas" element={<PraticasPage />} />
         <Route path="/livros/*" element={<LivrosSecaoPage />} />
+        <Route path="/favoritos" element={<FavoritosPage />} />
         <Route path="/livros-indicados" element={<Navigate to="/livros/indicados" replace />} />
         <Route path="/livros-relacao" element={<Navigate to="/livros/relacao" replace />} />
         <Route path="/minhas-praticas" element={<MinhasPraticasPage />} />

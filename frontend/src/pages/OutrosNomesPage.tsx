@@ -3,6 +3,7 @@ import { Search, Undo2, PlayCircle, Trash2 } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
+import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 
 interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
@@ -12,6 +13,7 @@ const muted = { color: 'var(--fg-muted)' }
 const limpa = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
 
 export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
+  const fav = useFavoritosTipo(estado)
   const [lista, setLista] = useState<Item[]>([])
   const [busca, setBusca] = useState('')
   const [q, setQ] = useState('')
@@ -67,7 +69,8 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
               <span className="text-[15px] font-medium">{it.NOME}</span>
               <span className="text-[12.5px] ml-2" style={muted}>{it.VIDEOS} {it.VIDEOS === 1 ? 'vídeo' : 'vídeos'}</span>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-center">
+              <EstrelaItem favorito={fav.ehFavorito(it.NOME)} onAlternar={() => fav.alternar(it.NOME)} />
               <Button size="sm" variant="secondary" onClick={() => verOnde(it)}>{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
               <Button size="sm" variant="secondary" onClick={() => voltar(it)}><Undo2 size={14} />Voltar para livros</Button>
               <Button size="sm" variant="secondary" onClick={() => remover(it)}><Trash2 size={14} />Remover</Button>

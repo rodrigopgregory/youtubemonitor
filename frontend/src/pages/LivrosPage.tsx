@@ -6,6 +6,7 @@ import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import VideoDetalhe from '../components/VideoDetalhe'
 import { linhas, linkYt, mmss } from '../lib/api'
+import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 
 interface Livro { ID: number; TITULO: string; AUTOR: string | null; TRECHO: string | null; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
 interface Totais { N: number; LIVROS: number; VIDEOS: number }
@@ -14,6 +15,7 @@ const PAG = 20
 export default function LivrosPage() {
   const [sp, setSp] = useSearchParams()
   const [canalId, setCanalId] = useCanal()
+  const fav = useFavoritosTipo('LIVRO')
   const [busca, setBusca] = useState(sp.get('q') || '')
   const q = (sp.get('q') || '').replace(/'/g, '').trim()
   const [lista, setLista] = useState<Livro[]>([])
@@ -63,6 +65,7 @@ export default function LivrosPage() {
               <BookMarked size={16} className="mt-1 shrink-0" style={{ color: 'var(--accent-text)' }} />
               <span className="text-[15px] font-medium">{l.TITULO}</span>
               {l.AUTOR && <span className="text-[13.5px]" style={{ color: 'var(--fg-muted)' }}>de {l.AUTOR}</span>}
+              <span className="ml-auto"><EstrelaItem favorito={fav.ehFavorito(l.TITULO)} onAlternar={() => fav.alternar(l.TITULO)} /></span>
             </div>
             {l.TRECHO && <p className="text-[13.5px] leading-relaxed" style={{ color: 'var(--fg-muted)' }}>{l.TRECHO}</p>}
             <div className="flex items-center gap-2 flex-wrap text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>
