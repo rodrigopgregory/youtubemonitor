@@ -186,6 +186,9 @@ export default function ConfiguracoesPage() {
             <Linha titulo="Organizar cada prática" nota="A IA diz o jeito de fazer, para que serve e quando fazer cada prática nova, e esconde os simples conselhos. É o que monta a tela Práticas.">
               <Chave ligado={liga('FINALIDADE_LIGADO')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'FINALIDADE_LIGADO', valor: v })} />
             </Linha>
+            <Linha titulo="Validar livros automaticamente com a IA" nota={config?.VALIDAR_LIVROS === '0' ? 'Desligado. Os livros novos ficam em Livros, na aba Livros a validar, esperando você.' : 'Ligado. A IA confere no Google cada livro novo que aparecer. O que não achar vai para Livros a validar.'}>
+              <Chave ligado={liga('VALIDAR_LIVROS')} disabled={salvando} onChange={v => ajuste({ acao: 'gravar', chave: 'VALIDAR_LIVROS', valor: v })} />
+            </Linha>
             <Linha titulo="Situação da IA" nota={iaPausa ? `Sem cota grátis por hoje. Volta a trabalhar em ${dataHora(iaPausa)}.` : 'Trabalhando normalmente.'}>
               <span className="text-[12.5px] px-2 py-0.5 rounded-full shrink-0" style={{ background: iaPausa ? 'var(--warning-soft)' : 'var(--success-soft)', color: iaPausa ? 'var(--warning-text)' : 'var(--success-text)' }}>{iaPausa ? 'Em pausa' : 'Ativa'}</span>
             </Linha>

@@ -1,10 +1,12 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import LivrosPage from './LivrosPage'
 import RelacaoLivrosPage from './RelacaoLivrosPage'
+import ValidarLivrosPage from './ValidarLivrosPage'
 
 const sub = [
   { to: '/livros/indicados', label: 'Livros indicados' },
   { to: '/livros/relacao', label: 'Relação de livros' },
+  { to: '/livros/validar', label: 'Livros a validar' },
 ]
 
 export default function LivrosSecaoPage() {
@@ -22,6 +24,7 @@ export default function LivrosSecaoPage() {
       <Routes>
         <Route path="indicados" element={<LivrosPage />} />
         <Route path="relacao" element={<RelacaoLivrosPage />} />
+        <Route path="validar" element={<ValidarLivrosPage />} />
         <Route path="*" element={<Navigate to="indicados" replace />} />
       </Routes>
     </div>

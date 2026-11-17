@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { BookOpen } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Card } from './ui/Card'
 import Badge from './ui/Badge'
 import Button from './ui/Button'
@@ -72,7 +73,7 @@ export default function PendenciasLivros() {
           </div>
         ))}
       </div>
-      {total > 5 && <span className="text-[12.5px]" style={muted}>Mais {total - 5} aguardando. Aparecem conforme você decide.</span>}
+      <Link to="/livros/validar" className="text-[13px] underline" style={muted}>Ver todos os livros a validar</Link>
     </Card>
   )
 }
