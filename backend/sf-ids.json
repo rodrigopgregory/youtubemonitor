@@ -183,6 +183,7 @@
  "livroCatDe": 241,
  "livroCatOutro": 242,
  "livroCatEditar": 243,
+ "livroStatusGravar": 244,
  "catalogoAchar": 234,
  "nomeOkCat": 235,
  "nomeNaoLivro": 236,
