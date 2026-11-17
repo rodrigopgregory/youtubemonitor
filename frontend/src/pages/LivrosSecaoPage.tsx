@@ -7,7 +7,7 @@ import OutrosNomesPage from './OutrosNomesPage'
 const sub = [
   { to: '/livros/indicados', label: 'Livros indicados' },
   { to: '/livros/relacao', label: 'Relação de livros' },
-  { to: '/livros/validar', label: 'Livros a validar' },
+  { to: '/livros/validar', label: 'Validar entradas' },
   { to: '/livros/musicas', label: 'Músicas' },
   { to: '/livros/audiovisuais', label: 'Audiovisuais' },
 ]

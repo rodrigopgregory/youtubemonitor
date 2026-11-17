@@ -61,7 +61,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         <Button type="submit">Buscar</Button>
       </form>
       {erro && <p className="text-[13px]" style={{ color: 'var(--danger-text)' }}>{erro}</p>}
-      {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada aqui ainda. Em "Livros a validar", use "É música" ou "É filme ou série" para mandar nomes para cá.</p></Card>}
+      {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada aqui ainda. Em "Validar entradas", use "É música" ou "É filme ou série" para mandar nomes para cá.</p></Card>}
       {lista.map(it => (
         <Card key={it.ID} className="p-4 flex flex-col gap-2">
           <div className="flex items-start justify-between gap-2 flex-wrap">

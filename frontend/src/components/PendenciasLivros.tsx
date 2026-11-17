@@ -43,7 +43,7 @@ export default function PendenciasLivros() {
   return (
     <Card className="p-5 flex flex-col gap-3">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-[15.5px] font-semibold inline-flex items-center gap-2"><BookOpen size={17} />Livros para decidir</h2>
+        <h2 className="text-[15.5px] font-semibold inline-flex items-center gap-2"><BookOpen size={17} />Entradas para validar</h2>
         <Badge variant="neutral">{total}</Badge>
       </div>
       <p className="text-[13px]" style={muted}>A busca no Google não confirmou estes nomes. Diga o que fazer com cada um.</p>
@@ -73,7 +73,7 @@ export default function PendenciasLivros() {
           </div>
         ))}
       </div>
-      <Link to="/livros/validar" className="text-[13px] underline" style={muted}>Ver todos os livros a validar</Link>
+      <Link to="/livros/validar" className="text-[13px] underline" style={muted}>Ver todas as entradas a validar</Link>
     </Card>
   )
 }

@@ -107,8 +107,8 @@ export default function ValidarLivrosPage() {
   return (
     <div className="flex flex-col gap-5">
       <div>
-        <h1 className="text-[22px] font-semibold">Livros a validar</h1>
-        <p className="text-[14px] mt-1" style={muted}>Nomes de livros ouvidos nos vídeos que ainda não foram confirmados. Valide com a IA (que pesquisa no Google) ou escreva o nome certo. Livros já confirmados entram na Relação.</p>
+        <h1 className="text-[22px] font-semibold">Validar entradas</h1>
+        <p className="text-[14px] mt-1" style={muted}>Nomes ouvidos nos vídeos que ainda não foram confirmados. Decida se cada um é livro, música ou filme/série. Valide com a IA (que pesquisa no Google) ou escreva o nome certo. Livros confirmados entram na Relação.</p>
       </div>
 
       <form className="flex flex-col sm:flex-row gap-2" onSubmit={e => { e.preventDefault(); setQ(busca.trim()) }}>
