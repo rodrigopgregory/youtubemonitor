@@ -49,6 +49,9 @@ export default function VideosPage() {
   const [exportMsg, setExportMsg] = useState<{ rodando: boolean; msg: string } | null>(null)
   const [nomes, setNomes] = useState<Record<string, string>>({})
   const [filtrosAbertos, setFiltrosAbertos] = useState(false)
+  const [busca, setBusca] = useState('')
+  const norm = (x: string) => x.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+  const casa = (x: string) => !busca.trim() || norm(x).includes(norm(busca.trim()))
 
   const filtros = useCallback(() => {
     const t = [...(sp.get('tema') || '').split(','), ...(sp.get('mentor') || '').split(',')].filter(Boolean), p = (sp.get('playlist') || '').split(',').filter(Boolean), r = (sp.get('pratica') || '').split(',').filter(Boolean)
@@ -116,10 +119,10 @@ export default function VideosPage() {
   }
   const marcado = { background: 'var(--accent-soft)', color: 'var(--accent-text)' }
   const caixa = (on: boolean) => <span className="w-3.5 h-3.5 rounded border shrink-0 inline-flex items-center justify-center" style={on ? { background: 'var(--accent)', borderColor: 'var(--accent)', color: 'var(--accent-fg)' } : { borderColor: 'var(--border)' }}>{on && <Check size={10} strokeWidth={3} />}</span>
-  const playlistsMostrar = [...playlists.filter(p => playSel.includes(p.ID)), ...playlists.filter(p => !playSel.includes(p.ID))]
-  const temasMostrar = [...temas.filter(t => temasSel.includes(t.ID)), ...temas.filter(t => !temasSel.includes(t.ID))]
-  const mentoresMostrar = [...mentores.filter(t => mentSel.includes(t.ID)), ...mentores.filter(t => !mentSel.includes(t.ID))]
-  const praticasMostrar = [...praticas.filter(p => pratSel.includes(p.TIPO)), ...praticas.filter(p => !pratSel.includes(p.TIPO))]
+  const playlistsMostrar = [...playlists.filter(p => playSel.includes(p.ID)), ...playlists.filter(p => !playSel.includes(p.ID) && casa(p.TITULO))]
+  const temasMostrar = [...temas.filter(t => temasSel.includes(t.ID)), ...temas.filter(t => !temasSel.includes(t.ID) && casa(t.NOME))]
+  const mentoresMostrar = [...mentores.filter(t => mentSel.includes(t.ID)), ...mentores.filter(t => !mentSel.includes(t.ID) && casa(t.NOME))]
+  const praticasMostrar = [...praticas.filter(p => pratSel.includes(p.TIPO)), ...praticas.filter(p => !pratSel.includes(p.TIPO) && casa(nomeEt(p.TIPO)))]
 
   return (
     <div className="flex flex-col gap-6">
@@ -171,9 +174,11 @@ export default function VideosPage() {
         <Card className={(filtrosAbertos ? '' : 'hidden ') + 'lg:block p-3 self-start lg:sticky lg:top-20 max-h-[75vh] overflow-y-auto'}>
           <div className="flex gap-1 p-1 mb-2 rounded-lg" style={{ background: 'var(--surface-muted)' }}>
             {([['temas', 'Temas', temasSel.length], ['mentores', 'Mentores', mentSel.length], ['playlists', 'Playlists', playSel.length], ['praticas', 'Práticas', pratSel.length]] as const).map(([k, l, n]) => (
-              <button key={k} onClick={() => setAgrupar(k)} className="flex-1 h-7 px-1 rounded-md text-[12.5px] font-medium inline-flex items-center justify-center gap-1"
+              <button key={k} onClick={() => { setAgrupar(k); setBusca('') }} className="flex-1 h-7 px-1 rounded-md text-[12.5px] font-medium inline-flex items-center justify-center gap-1"
                 style={agrupar === k ? { background: 'var(--surface)', color: 'var(--fg)', boxShadow: 'var(--shadow-sm)' } : { color: 'var(--fg-muted)' }}>{l}{n > 0 && <span className="text-[11px] px-1.5 rounded-full" style={{ background: 'var(--accent)', color: 'var(--accent-fg)' }}>{n}</span>}</button>))}
           </div>
+          <input type="search" value={busca} onChange={e => setBusca(e.target.value)} placeholder={'Buscar ' + ({ temas: 'tema', mentores: 'mentor', playlists: 'playlist', praticas: 'prática' } as const)[agrupar] + '…'} aria-label="Buscar na lista" className="w-full h-9 px-3 mb-2 rounded-lg text-[13.5px] outline-none" style={{ background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--fg)' }} />
+          {busca.trim() && ({ temas: temasMostrar.length, mentores: mentoresMostrar.length, playlists: playlistsMostrar.length, praticas: praticasMostrar.length })[agrupar] === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>Nada com “{busca}”.</p>}
           {agrupar === 'temas' && <>
             {temasSel.length > 0 && <button onClick={() => filtro('tema', '')} className="w-full text-left px-2 py-1 text-[12.5px] underline" style={{ color: 'var(--fg-muted)' }}>Desmarcar temas</button>}
             {temas.length === 0 && <p className="px-2 py-2 text-[13px]" style={{ color: 'var(--fg-muted)' }}>{algum ? 'Nenhum vídeo estudado com essa combinação.' : 'Os temas aparecem quando os vídeos forem estudados.'}</p>}
