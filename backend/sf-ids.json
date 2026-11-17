@@ -179,6 +179,8 @@
  "pendDecidir": 225,
  "pendNaoLivro": 226,
  "validarLista": 231,
+ "validarAltaTotal": 246,
+ "validarAceitarAlta": 247,
  "validarTotal": 232,
  "catalogoBusca": 233,
  "livroCatDe": 241,

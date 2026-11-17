@@ -28,6 +28,7 @@ export default function ValidarLivrosPage() {
   const [ocupado, setOcupado] = useState<number | null>(null)
   const [onde, setOnde] = useState<number | null>(null)
   const [ondeLista, setOndeLista] = useState<Onde[] | null>(null)
+  const [massa, setMassa] = useState('')
   const [aviso, setAviso] = useState<Record<number, string>>({})
 
   async function carregar(offset: number) {
@@ -48,6 +49,16 @@ export default function ValidarLivrosPage() {
     return () => clearTimeout(h)
   }, [titulo, editando, catId])
 
+  async function aceitarAlta() {
+    setMassa('...')
+    try {
+      const n = Number((await linhas<{ N: number }>('validarAltaTotal'))[0]?.N || 0)
+      if (!n) { setMassa('Nenhuma sugestão com 90% ou mais para aceitar.'); return }
+      if (!window.confirm('Aceitar ' + n + ' sugestões com 90% ou mais de certeza? Cada nome será ligado ao livro sugerido da sua biblioteca.')) { setMassa(''); return }
+      await chamar('validarAceitarAlta')
+      setMassa(n + ' sugestões aceitas.'); carregar(0); totais()
+    } catch { setMassa('Não deu certo agora. Tente de novo.') }
+  }
   function sair(id: number) { setLista(l => l.filter(x => x.ID !== id)); totais(); setEditando(null) }
   async function executar(it: Item, fn: () => Promise<void>) {
     setOcupado(it.ID); setAviso(a => ({ ...a, [it.ID]: '' }))
@@ -103,6 +114,11 @@ export default function ValidarLivrosPage() {
       </form>
 
       <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{total.N.toLocaleString('pt-BR')} nomes para validar, {total.PEND.toLocaleString('pt-BR')} com sugestão. Os mais citados vêm primeiro.</p>
+
+      <div className="flex items-center gap-3 flex-wrap">
+        <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
+        {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
+      </div>
 
       <div className="flex flex-col gap-2">
         {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada para validar agora.</p></Card>}
