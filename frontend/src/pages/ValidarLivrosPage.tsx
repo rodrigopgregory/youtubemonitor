@@ -14,7 +14,7 @@ const limpa = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').tr
 
 export default function ValidarLivrosPage() {
   const [lista, setLista] = useState<Item[]>([])
-  const [total, setTotal] = useState({ N: 0, PEND: 0 })
+  const [total, setTotal] = useState({ N: 0, PEND: 0, COM_AUTOR: 0 })
   const [busca, setBusca] = useState('')
   const [q, setQ] = useState('')
   const [filtro, setFiltro] = useState('')
@@ -39,7 +39,7 @@ export default function ValidarLivrosPage() {
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < (filtro === 'grupo' ? 300 : PAG))
     } finally { setCarregando(false) }
   }
-  function totais() { linhas<{ N: number; PEND: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0) })).catch(() => {}) }
+  function totais() { linhas<{ N: number; PEND: number; COM_AUTOR: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0), COM_AUTOR: Number(r[0]?.COM_AUTOR || 0) })).catch(() => {}) }
   useEffect(() => { carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, filtro])
   useEffect(totais, [])
@@ -118,12 +118,14 @@ export default function ValidarLivrosPage() {
           <option value="baixa">Abaixo de 90%</option>
           <option value="grupo">Agrupados por livro</option>
           <option value="sug">Com sugestão</option>
+          <option value="novoautor">Sem sugestão, com autor ouvido</option>
+          <option value="novosolo">Sem sugestão, só o nome</option>
           <option value="novo">Ainda não vistos pela IA</option>
         </select>
         <Button type="submit">Buscar</Button>
       </form>
 
-      <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{total.N.toLocaleString('pt-BR')} nomes para validar, {total.PEND.toLocaleString('pt-BR')} com sugestão. Os mais citados vêm primeiro.</p>
+      <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{total.N.toLocaleString('pt-BR')} nomes para validar, {total.PEND.toLocaleString('pt-BR')} com sugestão e {total.COM_AUTOR.toLocaleString('pt-BR')} sem sugestão, mas com autor ouvido. Os mais citados vêm primeiro.</p>
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
