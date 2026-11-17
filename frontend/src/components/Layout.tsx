@@ -10,13 +10,13 @@ interface AvisoVideo { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICAD
 const abas = [
   { to: '/', label: 'Início', icon: Home, end: true },
   { to: '/pesquisar', label: 'Pesquisar', icon: Search, end: false },
+  { to: '/canais', label: 'Canais', icon: Radio, end: false },
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/praticas', label: 'Práticas', icon: Leaf, end: false },
   { to: '/minhas-praticas', label: 'Minhas práticas', icon: CheckCircle2, end: false },
   { to: '/livros', label: 'Livros', icon: BookMarked, end: false },
-  { to: '/canais', label: 'Canais', icon: Radio, end: false },
-  { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
+  { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/configuracoes', label: 'Configurações', icon: Settings, end: false },
 ]
 
