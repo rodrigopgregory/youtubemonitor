@@ -727,7 +727,7 @@ try {
   let nomesValidados = 0, errosN = 0;
   if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA) {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
-      const fila = ((await sql('nomesFila', { limit: 25 })).rows || []);
+      const fila = ((await sql('nomesFila', { limit: 40 })).rows || []);
       if (!fila.length) break;
       const chave = 'N:' + Date.now();
       try {
