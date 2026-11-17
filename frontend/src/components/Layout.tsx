@@ -14,7 +14,7 @@ const abas = [
   { to: '/videos', label: 'Vídeos e temas', icon: Film, end: false },
   { to: '/praticas', label: 'Práticas', icon: Leaf, end: false },
   { to: '/minhas-praticas', label: 'Minhas práticas', icon: CheckCircle2, end: false },
-  { to: '/livros', label: 'Livros', icon: BookMarked, end: false },
+  { to: '/livros', label: 'Biblioteca', icon: BookMarked, end: false },
   { to: '/favoritos', label: 'Meus favoritos', icon: Star, end: false },
   { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
