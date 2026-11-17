@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Search, Undo2, PlayCircle } from 'lucide-react'
+import { Search, Undo2, PlayCircle, Trash2 } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
@@ -35,6 +35,10 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
     setErro('')
     try { await chamar('outrosVoltar', { id: it.ID }); setLista(l => l.filter(x => x.ID !== it.ID)) } catch { setErro('Não deu certo agora. Tente de novo.') }
   }
+  async function remover(it: Item) {
+    setErro('')
+    try { await chamar('pendNaoLivro', { id: it.ID }); setLista(l => l.filter(x => x.ID !== it.ID)) } catch { setErro('Não deu certo agora. Tente de novo.') }
+  }
   async function verOnde(it: Item) {
     if (onde === it.ID) { setOnde(null); return }
     setOnde(it.ID); setOndeLista(null)
@@ -45,7 +49,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
     <div className="flex flex-col gap-4">
       <div>
         <h1 className="text-[22px] font-semibold">{titulo}</h1>
-        <p className="text-[14px] mt-1" style={muted}>{texto} Se algum foi parar aqui por engano, use "Voltar para livros".</p>
+        <p className="text-[14px] mt-1" style={muted}>{texto} Se algum foi parar aqui por engano, use "Voltar para livros". "Remover" tira o nome da lista de vez, sem apagar os vídeos.</p>
       </div>
       <form className="flex gap-2" onSubmit={e => { e.preventDefault(); setQ(busca.trim()) }}>
         <div className="relative flex-1">
@@ -66,6 +70,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
             <div className="flex gap-2">
               <Button size="sm" variant="secondary" onClick={() => verOnde(it)}>{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
               <Button size="sm" variant="secondary" onClick={() => voltar(it)}><Undo2 size={14} />Voltar para livros</Button>
+              <Button size="sm" variant="secondary" onClick={() => remover(it)}><Trash2 size={14} />Remover</Button>
             </div>
           </div>
           {it.MOTIVO && <p className="text-[13.5px]" style={muted}>{it.MOTIVO}</p>}
