@@ -8,10 +8,11 @@ import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import VideoDetalhe from '../components/VideoDetalhe'
 import Contador from '../components/Contador'
+import FavoritaPratica from '../components/FavoritaPratica'
 import { linhas, linkYt, mmss } from '../lib/api'
 import { JEITOS, SERVE, QUANDO, nomeEt, lista as listaEt } from '../lib/etiquetas'
 
-interface Pratica { ID: number; TIPO: string; JEITO: string | null; SERVE: string | null; QUANDO: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES?: number; ULTIMA?: string | null }
+interface Pratica { FAVORITA?: number | boolean; ID: number; TIPO: string; JEITO: string | null; SERVE: string | null; QUANDO: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES?: number; ULTIMA?: string | null }
 interface Qtd { COD: string; QTD: number }
 
 const ICONES: Record<string, LucideIcon> = { med: Brain, vis: Image, saida: Rocket, resp: Wind, energia: Zap, prece: Heart, banho: Droplets, defum: Flame, agua: Gem, chas: Leaf, homeo: Pill, alim: Utensils, corpo: HeartPulse, reflexao: BookOpen, ritual: Star, musica: Music, percepcao: Eye, outra: Sparkles }
@@ -25,6 +26,7 @@ export default function PraticasPage() {
   const quando = sp.get('quando') || ''
   const [canalId, setCanalId] = useCanal()
   const [busca, setBusca] = useState(sp.get('q') || '')
+  const soFav = sp.get('fav') === '1'
   const q = (sp.get('q') || '').replace(/'/g, '').trim()
   const [qtdJeito, setQtdJeito] = useState<Record<string, number>>({})
   const [qtdServe, setQtdServe] = useState<Record<string, number>>({})
@@ -37,7 +39,7 @@ export default function PraticasPage() {
   const [totais, setTotais] = useState<{ N: number; MARCADAS: number; FALTAM: number } | null>(null)
 
   const mudar = (k: string, v: string) => { const n = new URLSearchParams(sp); if (v) n.set(k, v); else n.delete(k); setSp(n) }
-  const base = { canalId, busca: q.slice(0, 80) }
+  const base = { canalId, busca: q.slice(0, 80), fav: soFav ? 1 : 0 }
 
   useEffect(() => { linhas<{ N: number; MARCADAS: number; FALTAM: number }>('praticasTotais').then(r => setTotais(r[0] || null)).catch(() => {}) }, [])
   useEffect(() => {
@@ -45,7 +47,7 @@ export default function PraticasPage() {
     linhas<Qtd>('praticasServe', { ...base, jeito, quando }).then(r => setQtdServe(paraMapa(r))).catch(() => setQtdServe({}))
     linhas<Qtd>('praticasQuando', { ...base, jeito, serve }).then(r => setQtdQuando(paraMapa(r))).catch(() => setQtdQuando({}))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canalId, q, jeito, serve, quando])
+  }, [canalId, q, jeito, serve, quando, soFav])
 
   async function carregar(offset: number) {
     setCarregando(true)
@@ -54,9 +56,9 @@ export default function PraticasPage() {
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
-  const mostrandoLista = !!(jeito || serve || quando || q)
+  const mostrandoLista = !!(jeito || serve || quando || q || soFav)
   useEffect(() => { if (mostrandoLista) carregar(0); else setLista([]) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canalId, q, jeito, serve, quando])
+  }, [canalId, q, jeito, serve, quando, soFav])
 
   const chip = (on: boolean) => on ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }
   const grupoAtivo = serve.split('.')[0]
@@ -80,12 +82,14 @@ export default function PraticasPage() {
         </div>
         <Button type="submit" variant="secondary">Procurar</Button>
       </form>
+      <div className="flex"><button onClick={() => mudar('fav', soFav ? '' : '1')} aria-pressed={soFav} className="h-8 px-3 rounded-full border text-[13px] font-medium inline-flex items-center gap-1.5" style={chip(soFav)}><Star size={14} fill={soFav ? 'currentColor' : 'none'} />Só as favoritas</button></div>
 
       {mostrandoLista && (
         <div className="flex items-center gap-2 flex-wrap">
           {jeito && tirar('jeito', nomeEt(jeito))}
           {serve && tirar('serve', nomeEt(serve))}
           {quando && tirar('quando', nomeEt(quando))}
+          {soFav && tirar('fav', 'Favoritas')}
           {q && <button onClick={() => { setBusca(''); mudar('q', '') }} className="h-8 px-3 rounded-full text-[13px] font-medium inline-flex items-center gap-1.5" style={{ background: 'var(--accent-soft)', color: 'var(--accent-text)' }}>"{q}" <X size={14} /></button>}
           <button onClick={() => { setBusca(''); setSp(new URLSearchParams()) }} className="text-[13px] underline" style={{ color: 'var(--fg-muted)' }}>Ver todos os jeitos</button>
         </div>
@@ -138,10 +142,11 @@ export default function PraticasPage() {
             const on = aberta === p.ID
             return (
               <Card key={p.ID} className="p-4 flex flex-col gap-2">
-                <button onClick={() => setAberta(on ? null : p.ID)} className="text-left flex flex-col gap-1.5">
+                <div className="flex items-start gap-2"><FavoritaPratica id={p.ID} favorita={!!Number(p.FAVORITA)} onMudou={f => setLista(l => soFav && !f ? l.filter(x => x.ID !== p.ID) : l.map(x => x.ID === p.ID ? { ...x, FAVORITA: f ? 1 : 0 } : x))} />
+                <button onClick={() => setAberta(on ? null : p.ID)} className="text-left flex flex-col gap-1.5 flex-1 min-w-0">
                   <div className="flex items-start gap-2 flex-wrap"><span className="text-[15px] font-medium first-letter:uppercase">{p.TITULO}</span><Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge></div>
                   <p className={'text-[13.5px] leading-relaxed ' + (on ? '' : 'line-clamp-2')} style={{ color: 'var(--fg-muted)' }}>{p.INSTRUCAO}</p>
-                </button>
+                </button></div>
                 {(p.SERVE || p.QUANDO) && <div className="flex flex-wrap gap-1">{listaEt(p.SERVE).map(c => <Badge key={c} variant="accent">{nomeEt(c)}</Badge>)}{listaEt(p.QUANDO).map(c => <Badge key={c} variant="neutral">{nomeEt(c)}</Badge>)}</div>}
                 <div className="flex items-center gap-2 flex-wrap text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>
                   <span className="truncate max-w-full">{p.CANAL} · {p.VIDEO}</span>

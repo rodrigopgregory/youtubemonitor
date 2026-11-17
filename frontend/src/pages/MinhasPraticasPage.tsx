@@ -8,9 +8,11 @@ import Button from '../components/ui/Button'
 import FizHoje, { humorDe } from '../components/FizHoje'
 import type { RegistroEd } from '../components/FizHoje'
 import Contador from '../components/Contador'
+import FavoritaPratica from '../components/FavoritaPratica'
+import PraticaDetalhe from '../components/PraticaDetalhe'
 import { chamar, linhas, linkYt, mmss, dataBr } from '../lib/api'
 
-interface Feita { ID: number; TIPO: string; JEITO?: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string; HUMOR: number | null }
+interface Feita { FAVORITA?: number | boolean; ID: number; TIPO: string; JEITO?: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; VIDEO_ID: number; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string; HUMOR: number | null }
 interface Registro { ID: number; PRATICA_ID: number; DIA: string; HUMOR: number | null; SENTIU: string | null; TIPO: string; JEITO?: string | null; TITULO: string; SEGUNDO: number | null; YT_VIDEO_ID: string; CANAL: string }
 interface Resumo { VEZES: number; PRATICAS: number; DIAS: number; SEMANA: number; HUMOR: number | null }
 const PAG = 30
@@ -21,15 +23,17 @@ export default function MinhasPraticasPage() {
   const [registros, setRegistros] = useState<Registro[]>([])
   const [fim, setFim] = useState(true)
   const [carregando, setCarregando] = useState(true)
-  const [aba, setAba] = useState<'diario' | 'praticas'>('diario')
+  const [aba, setAba] = useState<'diario' | 'praticas' | 'favoritas'>('diario')
+  const [favoritas, setFavoritas] = useState<Feita[]>([])
+  const [aberta, setAberta] = useState<number | null>(null)
   const [editando, setEditando] = useState<(RegistroEd & { TITULO: string; PRATICA_ID: number }) | null>(null)
   const [apagando, setApagando] = useState<number | null>(null)
 
   const carregar = useCallback(async () => {
     setCarregando(true)
     try {
-      const [r, f, d] = await Promise.all([linhas<Resumo>('diarioResumo'), linhas<Feita>('diarioPraticas'), linhas<Registro>('diarioListar', { praticaId: 0, limit: PAG, offset: 0 })])
-      setResumo(r[0] || null); setFeitas(f); setRegistros(d); setFim(d.length < PAG)
+      const [r, f, d, fv] = await Promise.all([linhas<Resumo>('diarioResumo'), linhas<Feita>('diarioPraticas'), linhas<Registro>('diarioListar', { praticaId: 0, limit: PAG, offset: 0 }), linhas<Feita>('praticasFavoritas')])
+      setResumo(r[0] || null); setFeitas(f); setFavoritas(fv); setRegistros(d); setFim(d.length < PAG)
     } finally { setCarregando(false) }
   }, [])
   useEffect(() => { carregar() }, [carregar])
@@ -44,7 +48,7 @@ export default function MinhasPraticasPage() {
   }
 
   const muted = { color: 'var(--fg-muted)' }
-  const vazio = !carregando && !Number(resumo?.VEZES || 0)
+  const vazio = !carregando && !Number(resumo?.VEZES || 0) && favoritas.length === 0
   const aspas = (on: boolean) => on ? { background: 'var(--accent)', color: 'var(--accent-fg)', borderColor: 'var(--accent)' } : { borderColor: 'var(--border)', color: 'var(--fg-muted)' }
   const h = humorDe(resumo?.HUMOR)
 
@@ -61,7 +65,7 @@ export default function MinhasPraticasPage() {
           <Link to="/praticas"><Button size="sm">Ir para Práticas</Button></Link>
         </Card>
       ) : (<>
-        {resumo && (
+        {resumo && Number(resumo.VEZES) > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[['Vezes que pratiquei', Number(resumo.VEZES)], ['Nos últimos 7 dias', Number(resumo.SEMANA || 0)], ['Práticas diferentes', Number(resumo.PRATICAS)], ['Como fiquei, em média', h ? h.emoji + ' ' + h.nome : '—']].map(([r, v]) => (
               <Card key={String(r)} className="p-3 flex flex-col gap-1">
@@ -74,6 +78,7 @@ export default function MinhasPraticasPage() {
         <div className="flex gap-2">
           <button onClick={() => setAba('diario')} className="h-8 px-3 rounded-full border text-[13px] font-medium" style={aspas(aba === 'diario')}>Diário</button>
           <button onClick={() => setAba('praticas')} className="h-8 px-3 rounded-full border text-[13px] font-medium" style={aspas(aba === 'praticas')}>Por prática</button>
+          <button onClick={() => setAba('favoritas')} className="h-8 px-3 rounded-full border text-[13px] font-medium" style={aspas(aba === 'favoritas')}>Favoritas{favoritas.length ? ' ' + favoritas.length : ''}</button>
         </div>
 
         {aba === 'diario' && (
@@ -85,7 +90,7 @@ export default function MinhasPraticasPage() {
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2 flex-wrap min-w-0">
                       <span className="text-[12.5px] font-medium" style={{ color: 'var(--accent-text)' }}>{dataBr(r.DIA)}</span>
-                      <span className="text-[14.5px] font-medium first-letter:uppercase">{r.TITULO}</span>
+                      <button onClick={() => setAberta(r.PRATICA_ID)} className="text-[14.5px] font-medium first-letter:uppercase text-left hover:underline" title="Abrir a prática">{r.TITULO}</button>
                       <Badge variant="success">{nomeEt(r.JEITO) || r.TIPO}</Badge>
                     </div>
                     <span className="flex shrink-0">
@@ -107,7 +112,7 @@ export default function MinhasPraticasPage() {
               const hm = humorDe(p.HUMOR)
               return (
                 <Card key={p.ID} className="p-4 flex flex-col gap-2">
-                  <div className="flex items-start gap-2 flex-wrap"><span className="text-[15px] font-medium first-letter:uppercase">{p.TITULO}</span><Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge></div>
+                  <div className="flex items-start gap-2 flex-wrap"><button onClick={() => setAberta(p.ID)} className="text-[15px] font-medium first-letter:uppercase text-left hover:underline" title="Abrir a prática">{p.TITULO}</button><Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge><span className="ml-auto"><FavoritaPratica id={p.ID} favorita={!!Number(p.FAVORITA)} onMudou={() => carregar()} /></span></div>
                   {hm && <span className="text-[13px]" style={muted}>Em média: {hm.emoji} {hm.nome}</span>}
                   <p className="text-[13.5px] leading-relaxed line-clamp-3" style={muted}>{p.INSTRUCAO}</p>
                   <div className="flex items-center gap-3 flex-wrap text-[12.5px]">
@@ -119,7 +124,19 @@ export default function MinhasPraticasPage() {
             })}
           </div>
         )}
+        {aba === 'favoritas' && (
+          <div className="flex flex-col gap-3">
+            {favoritas.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nenhuma favorita ainda. Na tela Práticas, toque na estrela de uma prática.</p></Card>}
+            {favoritas.map(p => (
+              <Card key={p.ID} className="p-4 flex flex-col gap-2">
+                <div className="flex items-start gap-2 flex-wrap"><button onClick={() => setAberta(p.ID)} className="text-[15px] font-medium first-letter:uppercase text-left hover:underline" title="Abrir a prática">{p.TITULO}</button><Badge variant="success">{nomeEt(p.JEITO) || p.TIPO}</Badge><span className="ml-auto"><FavoritaPratica id={p.ID} favorita onMudou={() => carregar()} /></span></div>
+                <p className="text-[13.5px] leading-relaxed line-clamp-3" style={muted}>{p.INSTRUCAO}</p>
+                <Contador pratica={p} vezes={Number(p.VEZES)} ultima={p.ULTIMA} onMudou={() => carregar()} />
+              </Card>))}
+          </div>
+        )}
       </>)}
+      {aberta && <PraticaDetalhe id={aberta} onClose={() => setAberta(null)} onMudou={() => carregar()} />}
       {editando && <FizHoje pratica={{ ID: editando.PRATICA_ID, TITULO: editando.TITULO }} registro={editando} onClose={() => setEditando(null)} onSalvo={() => carregar()} />}
     </div>
   )
