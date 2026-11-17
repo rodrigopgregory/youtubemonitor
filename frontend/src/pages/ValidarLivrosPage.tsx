@@ -102,6 +102,14 @@ export default function ValidarLivrosPage() {
     setOnde(it.ID); setOndeLista(null)
     setOndeLista(await linhas<Onde>('validarOnde', { id: it.ID }).catch(() => []))
   }
+  function lerTextoColado(texto: string) {
+    const achouTitulo = texto.match(/[“"«]([^”"»]{3,200})[”"»]/)
+    if (!achouTitulo) return
+    const resto = texto.slice((achouTitulo.index || 0) + achouTitulo[0].length)
+    const achouAutor = resto.match(/(?:escrit[ao]s?|publicad[ao]s?|assinad[ao]s?)\s+(?:pel[oa]\s+)?(?:(?:brasileir[oa]|escritor(?:a)?|autor(?:a)?|professor(?:a)?)\s+)*([^,.;()\n]{3,120})/i) || resto.match(/(?:de autoria de|autor(?:a)?:?|\bpor|\bde)\s+([^,.;()\n]{3,120})/i)
+    setTitulo(achouTitulo[1].trim()); setCatId(0); setAchados([])
+    if (achouAutor) setAutor(achouAutor[1].trim())
+  }
   function abrir(it: Item) { setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
 
   return (
@@ -172,6 +180,9 @@ export default function ValidarLivrosPage() {
             {aviso[it.ID] && <p className="text-[12.5px]">{aviso[it.ID]}</p>}
             {editando === it.ID ? (
               <div className="flex flex-col gap-2">
+                <label className="text-[12px] font-medium" style={muted}>Colar texto da internet (preenche título e autor)</label>
+                <textarea className="controle" rows={2} placeholder='Ex.: A obra é "Título do livro", escrita por Fulano de Tal' onChange={e => lerTextoColado(e.target.value)} />
+                <label className="text-[12px] font-medium" style={muted}>Título do livro</label>
                 <input className="controle" placeholder="Título certo do livro" value={titulo} onChange={e => { setTitulo(e.target.value); setCatId(0) }} />
                 {achados.length > 0 && (
                   <div className="flex flex-col gap-1">
@@ -179,6 +190,7 @@ export default function ValidarLivrosPage() {
                     {achados.map(c => <button key={c.ID} type="button" className="text-left text-[13px] underline" onClick={() => { setTitulo(c.TITULO); setAutor(c.AUTOR || ''); setCatId(c.ID); setAchados([]) }}>{c.TITULO}{c.AUTOR ? ' (' + c.AUTOR + ')' : ''}</button>)}
                   </div>
                 )}
+                <label className="text-[12px] font-medium" style={muted}>Autor (opcional)</label>
                 <input className="controle" placeholder="Autor (opcional)" value={autor} onChange={e => setAutor(e.target.value)} />
                 <div className="flex gap-2">
                   <Button size="sm" disabled={ocupado === it.ID || !limpa(titulo)} onClick={() => gravar(it, titulo, autor, catId)}><Check size={14} />Salvar</Button>
