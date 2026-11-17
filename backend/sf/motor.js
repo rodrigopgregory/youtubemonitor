@@ -37,7 +37,7 @@ function certezaNome(nomeOuvido, autorOuvido, titulo, autor) {
 async function gravarCerteza(lista) {
   for (const x of lista) {
     if (!x.titulo || /['"\\]/.test(x.nome)) continue;
-    try { await sql('nomesCertezaGravar', { nome: x.nome, certeza: certezaNome(x.nome, x.autorOuvido, x.titulo, x.autor) }); } catch (e) {}
+    try { const c = certezaNome(x.nome, x.autorOuvido, x.titulo, x.autor); await sql('nomesCertezaGravar', { nome: x.nome, certeza: x.verif ? c : Math.min(c, 94) }); } catch (e) {}
   }
 }
 async function yt(ep, body, client) {
@@ -402,7 +402,7 @@ async function validarNomes(cfg, lista) {
   const a = txt.indexOf('['), b = txt.lastIndexOf(']');
   const arr = JSON.parse(txt.slice(a, b + 1));
   const permitidos = new Set(lista.map(x => String(x.NOME)));
-  return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? (semBusca && x.conf === 'alta' ? 'media' : x.conf) : 'baixa', motivo: String(x.motivo || '').slice(0, 300) }));
+  return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? (semBusca && x.conf === 'alta' ? 'media' : x.conf) : 'baixa', achouNaBusca: !semBusca && x.conf === 'alta', motivo: String(x.motivo || '').slice(0, 300) }));
 }
 async function lerLivros(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
@@ -712,7 +712,7 @@ try {
           if (tn === x.tn && aut) pts = 3; else if (aut && sim >= 0.5 && t.length >= 2) pts = 2.5; else if (aut && cont >= 1) pts = 1.2;
           if (pts && (!melhor || pts + sim > melhor.pts + melhor.sim)) melhor = { c: x.c, pts, sim };
         }
-        if (melhor) achados.push({ autorOuvido: String(f.AUTOR || ''), nome: String(f.NOME), titulo: String(melhor.c.TITULO), autor: String(melhor.c.AUTOR || ''), conf: 'baixa', motivo: 'Título e autor parecidos com um livro da biblioteca (casamento automático)' });
+        if (melhor) achados.push({ autorOuvido: String(f.AUTOR || ''), nome: String(f.NOME), titulo: String(melhor.c.TITULO), autor: String(melhor.c.AUTOR || ''), conf: 'baixa', verif: true, motivo: 'Título e autor parecidos com um livro da biblioteca (casamento automático)' });
       }
       if (achados.length) {
         const chaveL = 'C:' + Date.now();
@@ -732,8 +732,14 @@ try {
       const chave = 'N:' + Date.now();
       try {
         const res = await validarNomes(cfg, fila);
+        const normT = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim();
+        const naBiblioteca = new Set(((await sql('nomesCatalogoLer', {})).rows || []).map(c => normT(c.TITULO)));
         const autorPrev = new Map(fila.map(x => [String(x.NOME), String(x.AUTOR || '')]));
-        for (const x of res) if (x.conf !== 'alta' && x.conf !== 'baixa' && x.titulo && !/['"\\]/.test(x.nome) && certezaNome(x.nome, autorPrev.get(x.nome) || '', x.titulo, x.autor) >= 95) { x.conf = 'alta'; x.motivo = ('Aprovado: nome e autor batem (certeza 95% ou mais). ' + x.motivo).slice(0, 300); }
+        for (const x of res) {
+          const naCat = !!x.titulo && naBiblioteca.has(normT(x.titulo));
+          x.verif = !!x.achouNaBusca || naCat;
+          if (naCat && x.conf !== 'alta' && x.conf !== 'baixa' && !/['"\\]/.test(x.nome) && certezaNome(x.nome, autorPrev.get(x.nome) || '', x.titulo, x.autor) >= 95) { x.conf = 'alta'; x.motivo = ('Aprovado: o livro já está na biblioteca e nome e autor batem. ' + x.motivo).slice(0, 300); }
+        }
         const vistos = new Set(res.map(x => x.nome));
         for (const x of fila) if (!vistos.has(String(x.NOME))) res.push({ nome: String(x.NOME), titulo: '', autor: '', conf: 'baixa', motivo: 'A busca não respondeu sobre este nome' });
         await lote(chave, res);

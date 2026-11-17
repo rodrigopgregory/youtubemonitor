@@ -3,6 +3,7 @@ import { Search, Sparkles, PenLine, Ban, Check, PlayCircle, FileText } from 'luc
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
+import InstrucaoIA from '../components/InstrucaoIA'
 import { linhas, chamar, chamarDemorado, linkYt, mmss } from '../lib/api'
 
 interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null; CERTEZA: number | null }
@@ -13,6 +14,7 @@ const muted = { color: 'var(--fg-muted)' }
 const limpa = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 250)
 
 export default function ValidarLivrosPage() {
+  const [instrucao, setInstrucao] = useState('')
   const [lista, setLista] = useState<Item[]>([])
   const [total, setTotal] = useState({ N: 0, PEND: 0, COM_AUTOR: 0 })
   const [busca, setBusca] = useState('')
@@ -75,7 +77,7 @@ export default function ValidarLivrosPage() {
     setOcupado(null)
   }
   const validarIA = (it: Item) => executar(it, async () => {
-    const r = await chamarDemorado<{ ok: boolean; estado?: string; titulo?: string; autor?: string; motivo?: string; erro?: string }>('livroValidar', { id: it.ID }, 120)
+    const r = await chamarDemorado<{ ok: boolean; estado?: string; titulo?: string; autor?: string; motivo?: string; erro?: string }>('livroValidar', { id: it.ID, instrucao: instrucao.trim() }, 120)
     if (!r?.ok) { setAviso(a => ({ ...a, [it.ID]: r?.erro || 'Não consegui validar agora.' })); return }
     if (r.estado === 'OK') { sair(it.ID); return }
     setLista(l => l.map(x => x.ID === it.ID ? { ...x, NID: x.NID || 1, SUG_TITULO: r.titulo || null, SUG_AUTOR: r.autor || null, MOTIVO: r.motivo || null } : x))
@@ -126,6 +128,8 @@ export default function ValidarLivrosPage() {
       </form>
 
       <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{total.N.toLocaleString('pt-BR')} nomes para validar, {total.PEND.toLocaleString('pt-BR')} com sugestão e {total.COM_AUTOR.toLocaleString('pt-BR')} sem sugestão, mas com autor ouvido. Os mais citados vêm primeiro.</p>
+
+      <InstrucaoIA valor={instrucao} onChange={setInstrucao} />
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
