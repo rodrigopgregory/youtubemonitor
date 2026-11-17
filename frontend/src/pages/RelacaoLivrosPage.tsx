@@ -1,15 +1,16 @@
-import { PlayCircle, Search, BookMarked, ChevronDown, ChevronUp } from 'lucide-react'
+import { PlayCircle, Search, BookMarked, ChevronDown, ChevronUp, Pencil } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
-import { linhas, linkYt, mmss } from '../lib/api'
+import { chamar, linhas, linkYt, mmss } from '../lib/api'
 
 interface Relacao { ID: number; TITULO: string; AUTOR: string | null; INDICACOES: number; VIDEOS: number; CANAIS: string }
 interface Indicacao { ID: number; TRECHO: string | null; SEGUNDO: number | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
 interface Totais { N: number; LIVROS: number; VIDEOS: number }
 const PAG = 50
 const limpa = (v: string) => v.replace(/['"\\{}]/g, '').slice(0, 80)
+const limpaEdicao = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 250)
 
 export default function RelacaoLivrosPage() {
   const [canalId, setCanalId] = useCanal()
@@ -26,6 +27,11 @@ export default function RelacaoLivrosPage() {
   const [aberto, setAberto] = useState<number | null>(null)
   const [detalhe, setDetalhe] = useState<Indicacao[]>([])
   const [totais, setTotais] = useState<Totais | null>(null)
+  const [editando, setEditando] = useState(false)
+  const [novoTitulo, setNovoTitulo] = useState('')
+  const [novoAutor, setNovoAutor] = useState('')
+  const [salvando, setSalvando] = useState(false)
+  const [erroEdicao, setErroEdicao] = useState('')
 
   useEffect(() => { linhas<Totais>('livrosTotais', { canalId }).then(r => setTotais(r[0] || null)).catch(() => setTotais(null)) }, [canalId])
 
@@ -42,8 +48,31 @@ export default function RelacaoLivrosPage() {
 
   async function abrir(id: number) {
     if (aberto === id) { setAberto(null); return }
-    setAberto(id); setDetalhe([])
+    setAberto(id); setDetalhe([]); setEditando(false); setErroEdicao('')
     setDetalhe(await linhas<Indicacao>('livrosDoTitulo', { canalId, id }).catch(() => []))
+  }
+
+  function iniciarEdicao(l: Relacao) { setNovoTitulo(l.TITULO); setNovoAutor(l.AUTOR || ''); setErroEdicao(''); setEditando(true) }
+
+  async function salvarEdicao(l: Relacao) {
+    const titulo = limpaEdicao(novoTitulo); const autor = limpaEdicao(novoAutor)
+    if (!titulo) { setErroEdicao('O título não pode ficar vazio.'); return }
+    setSalvando(true); setErroEdicao('')
+    try {
+      const atual = (await linhas<{ NOME: string; CAT: number | null }>('livroCatDe', { id: l.ID }))[0]
+      if (atual?.CAT) {
+        const outro = await linhas<{ ID: number }>('livroCatOutro', { titulo, catId: atual.CAT })
+        if (outro.length) { setErroEdicao('Já existe outro livro com esse título na biblioteca.'); return }
+        await chamar('livroCatEditar', { catId: atual.CAT, titulo, autor })
+      } else {
+        await chamar('pendCatalogoCriar', { titulo, autor })
+        const cat = (await linhas<{ ID: number }>('catalogoAchar', { titulo }))[0]
+        if (!cat) throw new Error('sem livro')
+        await chamar('nomeOkCat', { id: l.ID, catId: cat.ID })
+      }
+      setEditando(false); setAberto(null); await carregar(0)
+    } catch { setErroEdicao('Não foi possível salvar agora. Tente de novo.') }
+    finally { setSalvando(false) }
   }
 
   return (
@@ -91,6 +120,19 @@ export default function RelacaoLivrosPage() {
               </button>
               {on && (
                 <div className="flex flex-col gap-2 pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+                  {editando ? (
+                    <div className="flex flex-col gap-2">
+                      <input value={novoTitulo} onChange={e => setNovoTitulo(e.target.value)} placeholder="Título do livro" className="controle w-full" aria-label="Título do livro" />
+                      <input value={novoAutor} onChange={e => setNovoAutor(e.target.value)} placeholder="Autor" className="controle w-full" aria-label="Autor" />
+                      {erroEdicao && <p className="text-[13px]" style={{ color: 'var(--danger, #b42318)' }}>{erroEdicao}</p>}
+                      <div className="flex gap-2">
+                        <Button onClick={() => salvarEdicao(l)} disabled={salvando}>{salvando ? 'Salvando…' : 'Salvar'}</Button>
+                        <Button variant="secondary" onClick={() => setEditando(false)} disabled={salvando}>Cancelar</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button onClick={() => iniciarEdicao(l)} className="inline-flex items-center gap-1 text-[13px] font-medium self-start" style={{ color: 'var(--accent-text)' }}><Pencil size={13} />Editar título e autor</button>
+                  )}
                   {detalhe.length === 0 && <p className="text-[13px]" style={{ color: 'var(--fg-muted)' }}>Carregando…</p>}
                   {detalhe.map(d => (
                     <div key={d.ID} className="flex flex-col gap-1">
