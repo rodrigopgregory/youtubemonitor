@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { Search, Sparkles, PenLine, Ban, Check } from 'lucide-react'
+import { Search, Sparkles, PenLine, Ban, Check, PlayCircle, FileText } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
-import { linhas, chamar, chamarDemorado } from '../lib/api'
+import { linhas, chamar, chamarDemorado, linkYt, mmss } from '../lib/api'
 
 interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null }
+interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; TRANSCRICAO: string | null }
 interface Cat { ID: number; TITULO: string; AUTOR: string | null }
 const PAG = 25
 const muted = { color: 'var(--fg-muted)' }
@@ -25,6 +26,8 @@ export default function ValidarLivrosPage() {
   const [catId, setCatId] = useState(0)
   const [achados, setAchados] = useState<Cat[]>([])
   const [ocupado, setOcupado] = useState<number | null>(null)
+  const [onde, setOnde] = useState<number | null>(null)
+  const [ondeLista, setOndeLista] = useState<Onde[] | null>(null)
   const [aviso, setAviso] = useState<Record<number, string>>({})
 
   async function carregar(offset: number) {
@@ -70,6 +73,11 @@ export default function ValidarLivrosPage() {
     await chamar('nomeOkCat', { id: it.ID, catId: id }); sair(it.ID)
   })
   const naoLivro = (it: Item) => executar(it, async () => { await chamar('nomeNaoLivro', { id: it.ID }); sair(it.ID) })
+  async function verOnde(it: Item) {
+    if (onde === it.ID) { setOnde(null); return }
+    setOnde(it.ID); setOndeLista(null)
+    setOndeLista(await linhas<Onde>('validarOnde', { id: it.ID }).catch(() => []))
+  }
   function abrir(it: Item) { setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
 
   return (
@@ -126,6 +134,20 @@ export default function ValidarLivrosPage() {
                 {it.SUG_TITULO && <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => gravar(it, it.SUG_TITULO || '', it.SUG_AUTOR || '', 0)}>Aceitar sugestão</Button>}
                 <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => abrir(it)}><PenLine size={14} />Validar manual</Button>
                 <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => naoLivro(it)}><Ban size={14} />Não é livro</Button>
+                <Button size="sm" variant="secondary" onClick={() => verOnde(it)}><FileText size={14} />{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
+              </div>
+            )}
+            {onde === it.ID && (
+              <div className="flex flex-col gap-3 pt-2 border-t" style={{ borderColor: 'var(--border)' }}>
+                {ondeLista === null && <p className="text-[13px]" style={muted}>Carregando…</p>}
+                {ondeLista !== null && ondeLista.length === 0 && <p className="text-[13px]" style={muted}>Não achei o trecho.</p>}
+                {ondeLista?.map(o => (
+                  <div key={o.ID} className="flex flex-col gap-1">
+                    <span className="text-[12.5px]" style={muted}>{o.CANAL} · {o.VIDEO}{o.SEGUNDO ? ' · ' + mmss(o.SEGUNDO) : ''}</span>
+                    {o.TRANSCRICAO ? <p className="text-[13.5px] leading-relaxed">{o.TRANSCRICAO}</p> : o.TRECHO && <p className="text-[13.5px] leading-relaxed">{o.TRECHO}</p>}
+                    <a href={linkYt(o.YT_VIDEO_ID, Math.max(0, (o.SEGUNDO || 0) - 5))} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-[13px] font-medium" style={{ color: 'var(--accent-text)' }}><PlayCircle size={14} />Ouvir no YouTube{o.SEGUNDO ? ' em ' + mmss(Math.max(0, o.SEGUNDO - 5)) : ''}</a>
+                  </div>
+                ))}
               </div>
             )}
           </Card>
