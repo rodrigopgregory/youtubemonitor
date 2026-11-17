@@ -207,9 +207,10 @@ function agruparLegenda(j3) {
 const ESGOTADO = new Set();
 let IA_RESPONDEU = false, IA_SEM_COTA = false;
 const ESPEROU = new Set();
-async function gemini(cfg, modelos, body) {
+async function gemini(cfg, modelos, body, prioritarias) {
   let ultimo = '';
-  const conexoes = String(cfg.GEMINI_CONEXOES || 'gemini').split(',').map(x => x.trim()).filter(Boolean);
+  const lista = (v) => String(v || '').split(',').map(x => x.trim()).filter(Boolean);
+  const conexoes = Array.from(new Set(lista(prioritarias).concat(lista(cfg.GEMINI_CONEXOES || 'gemini'))));
   for (const conexao of conexoes) {
     for (const modelo of String(modelos).split(',').map(x => x.trim()).filter(Boolean)) {
       const k = conexao + '|' + modelo;
@@ -391,7 +392,7 @@ async function validarNomes(cfg, lista) {
     contents: [{ parts: [{ text: 'Os nomes abaixo foram ouvidos em transcricoes de videos espirituais e podem estar errados, truncados ou ser so tema/oracao. Para cada um, PESQUISE NO GOOGLE se existe um livro real. Se existir, devolva o titulo oficial e o autor, e use o MESMO titulo oficial para variacoes do mesmo livro. Se nao achar com seguranca, conf baixa ou media e, se tiver palpite, coloque em titulo/autor. Se claramente nao for livro, titulo vazio e conf baixa.\nResponda so JSON: [{"nome":"exatamente como recebido","titulo":"...","autor":"...","conf":"alta|media|baixa","motivo":"uma frase"}]\n\n' + itens }] }],
     tools: [{ google_search: {} }],
     generationConfig: { temperature: 0 }
-  });
+  }, cfg.GEMINI_CONEXOES_LIVROS);
   const a = txt.indexOf('['), b = txt.lastIndexOf(']');
   const arr = JSON.parse(txt.slice(a, b + 1));
   const permitidos = new Set(lista.map(x => String(x.NOME)));
@@ -404,7 +405,7 @@ async function lerLivros(cfg, v) {
   const txt = await gemini(cfg, cfg.MODELO_ANALISE, {
     contents: [{ parts: [{ text: 'Voce organiza uma base de estudo sobre espiritualidade. Abaixo esta a transcricao do video "' + v.TITULO + '" com o tempo de cada trecho.\nResponda so JSON: {"livros":[{"titulo":"...","autor":"...","trecho":"...","momento":"mm:ss"}]}\n' + PROMPT_LIVROS + 'Use so a transcricao.\n\nTRANSCRICAO:\n' + texto }] }],
     generationConfig: { responseMimeType: 'application/json', temperature: 0.2 }
-  });
+  }, cfg.GEMINI_CONEXOES_LIVROS);
   const lista = limparLivros(jsonDe(txt).livros, v.DURACAO_SEG);
   await gravarLivros(v, lista);
   return lista.length;
