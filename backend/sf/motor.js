@@ -732,6 +732,8 @@ try {
       const chave = 'N:' + Date.now();
       try {
         const res = await validarNomes(cfg, fila);
+        const autorPrev = new Map(fila.map(x => [String(x.NOME), String(x.AUTOR || '')]));
+        for (const x of res) if (x.conf !== 'alta' && x.conf !== 'baixa' && x.titulo && !/['"\\]/.test(x.nome) && certezaNome(x.nome, autorPrev.get(x.nome) || '', x.titulo, x.autor) >= 95) { x.conf = 'alta'; x.motivo = ('Aprovado: nome e autor batem (certeza 95% ou mais). ' + x.motivo).slice(0, 300); }
         const vistos = new Set(res.map(x => x.nome));
         for (const x of fila) if (!vistos.has(String(x.NOME))) res.push({ nome: String(x.NOME), titulo: '', autor: '', conf: 'baixa', motivo: 'A busca não respondeu sobre este nome' });
         await lote(chave, res);
