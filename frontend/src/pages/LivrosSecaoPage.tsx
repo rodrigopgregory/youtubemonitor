@@ -1,13 +1,11 @@
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
-import LivrosPage from './LivrosPage'
 import RelacaoLivrosPage from './RelacaoLivrosPage'
 import ValidarLivrosPage from './ValidarLivrosPage'
 import OutrosNomesPage from './OutrosNomesPage'
 
 const sub = [
-  { to: '/livros/indicados', label: 'Livros indicados' },
-  { to: '/livros/relacao', label: 'Relação de livros' },
   { to: '/livros/validar', label: 'Validar entradas' },
+  { to: '/livros/relacao', label: 'Relação de livros' },
   { to: '/livros/musicas', label: 'Músicas' },
   { to: '/livros/audiovisuais', label: 'Audiovisuais' },
 ]
@@ -25,12 +23,12 @@ export default function LivrosSecaoPage() {
         ))}
       </div>
       <Routes>
-        <Route path="indicados" element={<LivrosPage />} />
+        <Route path="indicados" element={<Navigate to="/livros/relacao" replace />} />
         <Route path="relacao" element={<RelacaoLivrosPage />} />
         <Route path="validar" element={<ValidarLivrosPage />} />
         <Route path="musicas" element={<OutrosNomesPage estado="MUSICA" titulo="Músicas, álbuns e bandas" texto="Nomes citados nos vídeos que são música, álbum ou banda e não livro." />} />
         <Route path="audiovisuais" element={<OutrosNomesPage estado="AUDIOVISUAL" titulo="Filmes, séries e vídeos" texto="Nomes citados nos vídeos que são filme, série ou vídeo e não livro." />} />
-        <Route path="*" element={<Navigate to="indicados" replace />} />
+        <Route path="*" element={<Navigate to="validar" replace />} />
       </Routes>
     </div>
   )

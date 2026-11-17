@@ -29,7 +29,7 @@ function App() {
         <Route path="/praticas" element={<PraticasPage />} />
         <Route path="/livros/*" element={<LivrosSecaoPage />} />
         <Route path="/favoritos" element={<FavoritosPage />} />
-        <Route path="/livros-indicados" element={<Navigate to="/livros/indicados" replace />} />
+        <Route path="/livros-indicados" element={<Navigate to="/livros/relacao" replace />} />
         <Route path="/livros-relacao" element={<Navigate to="/livros/relacao" replace />} />
         <Route path="/minhas-praticas" element={<MinhasPraticasPage />} />
         <Route path="/livro" element={<LivroPage />} />
