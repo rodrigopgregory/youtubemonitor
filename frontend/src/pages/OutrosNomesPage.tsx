@@ -5,9 +5,15 @@ import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 
-interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null }
+interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
-interface Props { estado: 'MUSICA' | 'AUDIOVISUAL'; titulo: string; texto: string }
+interface Props { estado: 'MUSICA' | 'AUDIOVISUAL' | 'SAGRADO'; titulo: string; texto: string }
+const STATUS: Record<string, string[]> = {
+  MUSICA: ['Já ouvi', 'Ouvindo', 'Tenho, não ouvi', 'Quero ouvir'],
+  AUDIOVISUAL: ['Já vi', 'Vendo', 'Tenho, não vi', 'Quero ver'],
+  SAGRADO: ['Já li', 'Lendo', 'Tenho, não li', 'Quero ler'],
+}
+const CODIGOS = ['LIDO', 'LENDO', 'TENHO', 'QUERO']
 const PAG = 30
 const muted = { color: 'var(--fg-muted)' }
 const limpa = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
@@ -17,6 +23,8 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const [lista, setLista] = useState<Item[]>([])
   const [busca, setBusca] = useState('')
   const [q, setQ] = useState('')
+  const [statusF, setStatusF] = useState('')
+  const [ordem, setOrdem] = useState('mais')
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(false)
   const [onde, setOnde] = useState<number | null>(null)
@@ -26,12 +34,12 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), limit: PAG, offset })
+      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setOnde(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estado, q])
+  }, [estado, q, statusF, ordem])
 
   async function voltar(it: Item) {
     setErro('')
@@ -40,6 +48,10 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function remover(it: Item) {
     setErro('')
     try { await chamar('pendNaoLivro', { id: it.ID }); setLista(l => l.filter(x => x.ID !== it.ID)) } catch { setErro('Não deu certo agora. Tente de novo.') }
+  }
+  async function mudarStatus(it: Item, valor: string) {
+    setErro('')
+    try { await chamar('itemStatusGravar', { tipo: estado, nome: limpa(it.NOME), status: valor }); setLista(l => l.map(x => x.ID === it.ID ? { ...x, STATUS: valor } : x)) } catch { setErro('Não deu certo agora. Tente de novo.') }
   }
   async function verOnde(it: Item) {
     if (onde === it.ID) { setOnde(null); return }
@@ -51,7 +63,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
     <div className="flex flex-col gap-4">
       <div>
         <h1 className="text-[22px] font-semibold">{titulo}</h1>
-        <p className="text-[14px] mt-1" style={muted}>{texto} Se algum foi parar aqui por engano, use "Voltar para livros". "Remover" tira o nome da lista de vez, sem apagar os vídeos.</p>
+        <p className="text-[14px] mt-1" style={muted}>{texto} Se algum foi parar aqui por engano, use "Voltar para validar". "Remover" tira o nome da lista de vez, sem apagar os vídeos.</p>
       </div>
       <form className="flex gap-2" onSubmit={e => { e.preventDefault(); setQ(busca.trim()) }}>
         <div className="relative flex-1">
@@ -60,8 +72,19 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         </div>
         <Button type="submit">Buscar</Button>
       </form>
+      <div className="grid gap-2 sm:grid-cols-2">
+        <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação">
+          <option value="">Todas as situações</option>
+          {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
+          <option value="NENHUM">Sem marca</option>
+        </select>
+        <select value={ordem} onChange={e => setOrdem(e.target.value)} className="controle w-full" aria-label="Ordem">
+          <option value="mais">Mais citados primeiro</option>
+          <option value="az">Ordem alfabética</option>
+        </select>
+      </div>
       {erro && <p className="text-[13px]" style={{ color: 'var(--danger-text)' }}>{erro}</p>}
-      {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada aqui ainda. Em "Validar entradas", use "É música" ou "É filme ou série" para mandar nomes para cá.</p></Card>}
+      {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada aqui ainda. Em "Validar entradas", use "É música", "É filme ou série" ou "É texto sagrado" para mandar nomes para cá.</p></Card>}
       {lista.map(it => (
         <Card key={it.ID} className="p-4 flex flex-col gap-2">
           <div className="flex items-start justify-between gap-2 flex-wrap">
@@ -72,9 +95,16 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
             <div className="flex gap-2 items-center">
               <EstrelaItem favorito={fav.ehFavorito(it.NOME)} onAlternar={() => fav.alternar(it.NOME)} />
               <Button size="sm" variant="secondary" onClick={() => verOnde(it)}>{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
-              <Button size="sm" variant="secondary" onClick={() => voltar(it)}><Undo2 size={14} />Voltar para livros</Button>
+              <Button size="sm" variant="secondary" onClick={() => voltar(it)}><Undo2 size={14} />Voltar para validar</Button>
               <Button size="sm" variant="secondary" onClick={() => remover(it)}><Trash2 size={14} />Remover</Button>
             </div>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[13px]" style={muted}>Minha situação:</span>
+            <select value={it.STATUS || ''} onChange={e => mudarStatus(it, e.target.value)} className="controle" aria-label="Minha situação">
+              <option value="">Sem marca</option>
+              {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
+            </select>
           </div>
           {it.MOTIVO && <p className="text-[13.5px]" style={muted}>{it.MOTIVO}</p>}
           {onde === it.ID && (

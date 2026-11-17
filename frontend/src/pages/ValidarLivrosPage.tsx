@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Search, Sparkles, PenLine, Ban, Check, PlayCircle, FileText, Music, Clapperboard } from 'lucide-react'
+import { Search, Sparkles, PenLine, Ban, Check, PlayCircle, FileText, Music, Clapperboard, BookOpen } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
@@ -96,6 +96,7 @@ export default function ValidarLivrosPage() {
   })
   const naoLivro = (it: Item) => executar(it, async () => { await chamar('nomeNaoLivro', { id: it.ID }); sair(it.ID) })
   const musica = (it: Item) => executar(it, async () => { await chamar('nomeMusica', { id: it.ID }); sair(it.ID) })
+  const sagrado = (it: Item) => executar(it, async () => { await chamar('nomeSagrado', { id: it.ID }); sair(it.ID) })
   const audiovisual = (it: Item) => executar(it, async () => { await chamar('nomeAudiovisual', { id: it.ID }); sair(it.ID) })
   async function verOnde(it: Item) {
     if (onde === it.ID) { setOnde(null); return }
@@ -205,6 +206,7 @@ export default function ValidarLivrosPage() {
                 <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => naoLivro(it)}><Ban size={14} />Não é livro</Button>
                 <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => musica(it)}><Music size={14} />É música</Button>
                 <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => audiovisual(it)}><Clapperboard size={14} />É filme ou série</Button>
+                <Button size="sm" variant="secondary" disabled={ocupado === it.ID} onClick={() => sagrado(it)}><BookOpen size={14} />É texto sagrado</Button>
                 <Button size="sm" variant="secondary" onClick={() => verOnde(it)}><FileText size={14} />{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
               </div>
             )}

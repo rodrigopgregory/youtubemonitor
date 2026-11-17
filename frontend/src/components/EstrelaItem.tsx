@@ -4,7 +4,7 @@ import { chamar, linhas } from '../lib/api'
 
 export const limpaNome = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 250)
 
-export function useFavoritosTipo(tipo: 'LIVRO' | 'MUSICA' | 'AUDIOVISUAL') {
+export function useFavoritosTipo(tipo: 'LIVRO' | 'MUSICA' | 'AUDIOVISUAL' | 'SAGRADO') {
   const [nomes, setNomes] = useState<Set<string>>(new Set())
   useEffect(() => { linhas<{ NOME: string }>('favItensTipo', { tipo }).then(r => setNomes(new Set(r.map(x => x.NOME.toLowerCase())))).catch(() => setNomes(new Set())) }, [tipo])
   const alternar = useCallback(async (nome: string) => {

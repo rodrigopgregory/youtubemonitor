@@ -7,8 +7,8 @@ import FavoritaPratica from '../components/FavoritaPratica'
 import EstrelaItem from '../components/EstrelaItem'
 import { linhas, chamar, linkYt, dataBr, duracao } from '../lib/api'
 
-type Aba = 'VIDEOS' | 'PRATICAS' | 'LIVRO' | 'MUSICA' | 'AUDIOVISUAL'
-interface Contagens { VIDEOS: number; PRATICAS: number; LIVROS: number; MUSICAS: number; AUDIOVISUAIS: number }
+type Aba = 'VIDEOS' | 'PRATICAS' | 'LIVRO' | 'MUSICA' | 'AUDIOVISUAL' | 'SAGRADO'
+interface Contagens { VIDEOS: number; PRATICAS: number; LIVROS: number; MUSICAS: number; AUDIOVISUAIS: number; SAGRADOS: number }
 interface Video { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string | null; DURACAO_SEG: number | null; CANAL: string }
 interface Pratica { ID: number; TITULO: string; JEITO: string | null; TIPO: string; INSTRUCAO: string | null; VIDEO: string; CANAL: string }
 interface Item { NOME: string; VIDEOS: number; AUTOR: string | null }
@@ -19,6 +19,7 @@ const ABAS: { k: Aba; rotulo: string; campo: keyof Contagens }[] = [
   { k: 'LIVRO', rotulo: 'Livros', campo: 'LIVROS' },
   { k: 'MUSICA', rotulo: 'Músicas', campo: 'MUSICAS' },
   { k: 'AUDIOVISUAL', rotulo: 'Audiovisuais', campo: 'AUDIOVISUAIS' },
+  { k: 'SAGRADO', rotulo: 'Textos sagrados', campo: 'SAGRADOS' },
 ]
 
 export default function FavoritosPage() {

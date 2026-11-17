@@ -203,6 +203,8 @@
  "nomeAudiovisual": 253,
  "outrosTotais": 254,
  "outrosLista": 255,
+ "itemStatusGravar": 263,
+ "nomeSagrado": 264,
  "outrosVoltar": 256,
  "favItemMarcar": 257,
  "favItemTirar": 258,
