@@ -28,14 +28,15 @@ export default function ValidarLivrosPage() {
   const [ocupado, setOcupado] = useState<number | null>(null)
   const [onde, setOnde] = useState<number | null>(null)
   const [ondeLista, setOndeLista] = useState<Onde[] | null>(null)
+  const [marcados, setMarcados] = useState<Set<number>>(new Set())
   const [massa, setMassa] = useState('')
   const [aviso, setAviso] = useState<Record<number, string>>({})
 
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, limit: PAG, offset })
-      setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
+      const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, limit: filtro === 'grupo' ? 300 : PAG, offset })
+      setLista(l => offset ? [...l, ...r] : r); setFim(r.length < (filtro === 'grupo' ? 300 : PAG))
     } finally { setCarregando(false) }
   }
   function totais() { linhas<{ N: number; PEND: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0) })).catch(() => {}) }
@@ -59,6 +60,14 @@ export default function ValidarLivrosPage() {
       setMassa(n + ' sugestões aceitas.'); carregar(0); totais()
     } catch { setMassa('Não deu certo agora. Tente de novo.') }
   }
+  function marcar(id: number) { setMarcados(m => { const n = new Set(m); if (n.has(id)) n.delete(id); else n.add(id); return n }) }
+  async function ligarGrupo(itens: Item[]) {
+    const alvo = itens.filter(x => marcados.has(x.ID))
+    if (!alvo.length || !window.confirm('Ligar ' + alvo.length + ' nomes ao livro "' + (alvo[0].SUG_TITULO || '') + '"?')) return
+    for (const it of alvo) await gravar(it, it.SUG_TITULO || '', it.SUG_AUTOR || '', 0)
+    setMarcados(m => { const n = new Set(m); alvo.forEach(x => n.delete(x.ID)); return n })
+  }
+  const grupos = filtro === 'grupo' ? Object.values(lista.reduce<Record<string, Item[]>>((acc, it) => { const k = it.SUG_TITULO || ''; (acc[k] = acc[k] || []).push(it); return acc }, {})) : []
   function sair(id: number) { setLista(l => l.filter(x => x.ID !== id)); totais(); setEditando(null) }
   async function executar(it: Item, fn: () => Promise<void>) {
     setOcupado(it.ID); setAviso(a => ({ ...a, [it.ID]: '' }))
@@ -107,6 +116,7 @@ export default function ValidarLivrosPage() {
           <option value="">Todos</option>
           <option value="alta">Certeza de 90% ou mais</option>
           <option value="baixa">Abaixo de 90%</option>
+          <option value="grupo">Agrupados por livro</option>
           <option value="sug">Com sugestão</option>
           <option value="novo">Ainda não vistos pela IA</option>
         </select>
@@ -122,7 +132,28 @@ export default function ValidarLivrosPage() {
 
       <div className="flex flex-col gap-2">
         {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada para validar agora.</p></Card>}
-        {lista.map(it => (
+        {grupos.map(itens => (
+          <Card key={itens[0].SUG_TITULO} className="px-4 py-3 flex flex-col gap-2">
+            <div className="flex items-baseline gap-2 flex-wrap">
+              <span className="text-[15px] font-medium">{itens[0].SUG_TITULO}</span>
+              {itens[0].SUG_AUTOR && <span className="text-[13px]" style={muted}>{itens[0].SUG_AUTOR}</span>}
+              <Badge variant="neutral">{itens.length} nomes parecidos</Badge>
+            </div>
+            {itens.map(it => (
+              <label key={it.ID} className="flex items-center gap-2 text-[13.5px]">
+                <input type="checkbox" checked={marcados.has(it.ID)} onChange={() => marcar(it.ID)} />
+                <span>“{it.NOME}”</span>
+                {it.CERTEZA != null && <span className="text-[12px]" style={muted}>{Number(it.CERTEZA)}%</span>}
+                {aviso[it.ID] && <span className="text-[12px]">{aviso[it.ID]}</span>}
+              </label>
+            ))}
+            <div className="flex gap-2 flex-wrap">
+              <Button size="sm" onClick={() => ligarGrupo(itens)} disabled={!itens.some(x => marcados.has(x.ID))}><Check size={14} />Ligar marcados a este livro</Button>
+              <Button size="sm" variant="secondary" onClick={() => setMarcados(m => { const n = new Set(m); itens.forEach(x => n.add(x.ID)); return n })}>Marcar todos</Button>
+            </div>
+          </Card>
+        ))}
+        {filtro !== 'grupo' && lista.map(it => (
           <Card key={it.ID} className="px-4 py-3 flex flex-col gap-2">
             <div className="flex items-baseline gap-2 flex-wrap">
               <span className="text-[15px] font-medium">“{it.NOME}”</span>
