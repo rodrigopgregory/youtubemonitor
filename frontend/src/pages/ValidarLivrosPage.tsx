@@ -21,6 +21,7 @@ export default function ValidarLivrosPage() {
   const [q, setQ] = useState('')
   const [filtro, setFiltro] = useState('')
   const [tipo, setTipo] = useState('')
+  const [origem, setOrigem] = useState('')
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(false)
   const [editando, setEditando] = useState<number | null>(null)
@@ -44,12 +45,12 @@ export default function ValidarLivrosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const tudo = !!(filtro || tipo || q)
+      const tudo = !!(filtro || tipo || origem || q)
       const passo = tudo ? 300 : PAG
       let achados: Item[] = []
       let ultimo = 0
       do {
-        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, tipo, limit: passo, offset: offset + achados.length })
+        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, tipo, origem, limit: passo, offset: offset + achados.length })
         achados = achados.concat(r); ultimo = r.length
       } while (tudo && ultimo === passo && achados.length < 6000)
       setLista(l => offset ? [...l, ...achados] : achados); setFim(tudo ? true : ultimo < passo)
@@ -57,7 +58,7 @@ export default function ValidarLivrosPage() {
   }
   function totais() { linhas<{ N: number; PEND: number; COM_AUTOR: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0), COM_AUTOR: Number(r[0]?.COM_AUTOR || 0) })).catch(() => {}) }
   useEffect(() => { carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, filtro, tipo])
+  }, [q, filtro, tipo, origem])
   useEffect(totais, [])
   useEffect(() => {
     const t = limpa(titulo)
@@ -92,6 +93,20 @@ export default function ValidarLivrosPage() {
       try { await chamar('nomeNaoLivro', { id: it.ID }); feitos++; setLista(l => l.filter(x => x.ID !== it.ID)); setMarcados(m => { const n = new Set(m); n.delete(it.ID); return n }) } catch { break }
     }
     setMassa(feitos === alvo.length ? feitos + ' nomes marcados como não é livro.' : 'Marquei ' + feitos + ' de ' + alvo.length + '. Tente de novo para o resto.')
+    totais()
+  }
+  async function aceitarMarcados() {
+    const alvo = lista.filter(x => marcados.has(x.ID))
+    const prontos = alvo.filter(x => x.SUG_TITULO && (!x.TIPO || x.TIPO === 'livro'))
+    const pulados = alvo.length - prontos.length
+    if (!prontos.length) { setMassa('Nenhum dos marcados tem sugestão de livro para aceitar.'); return }
+    if (!window.confirm('Aceitar a sugestão de ' + prontos.length + ' nomes? Cada um será ligado ao livro sugerido' + (pulados ? ' (' + pulados + ' ficam de fora: sem sugestão ou de outro tipo)' : '') + '.')) return
+    setMassa('...')
+    let feitos = 0
+    for (const it of prontos) {
+      try { await gravar(it, it.SUG_TITULO || '', it.SUG_AUTOR || '', 0); feitos++; setMarcados(m => { const n = new Set(m); n.delete(it.ID); return n }) } catch { break }
+    }
+    setMassa(feitos + ' sugestões aceitas' + (feitos < prontos.length ? '. Algumas deram erro: tente de novo' : '') + '.')
     totais()
   }
   async function tipoMarcados(acao: 'nomeMusica' | 'nomeAudiovisual' | 'nomeSagrado', rotulo: string) {
@@ -176,7 +191,7 @@ export default function ValidarLivrosPage() {
       type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null; TIPO: string | null }
       const todos: Linha[] = []
       for (let offset = 0; offset < 6000; offset += 300) {
-        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, tipo, limit: 300, offset })
+        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, tipo, origem, limit: 300, offset })
         todos.push(...r)
         if (r.length < 300) break
       }
@@ -231,7 +246,7 @@ export default function ValidarLivrosPage() {
       if (!nome) continue
       const tp = ({ livro: 'livro', musica: 'musica', 'música': 'musica', audiovisual: 'audiovisual', sagrado: 'sagrado', outro: 'outro' } as Record<string, string>)[String(x.tipo || '').toLowerCase().trim()] || ''
       if (!tit && !(tp && tp !== 'livro')) { vazios++; continue }
-      const cert = Math.max(0, Math.min(80, Math.round(Number(x.certeza) || 0)))
+      const cert = Math.max(0, Math.min(100, Math.round(Number(x.certeza) || 0)))
       try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
@@ -263,6 +278,11 @@ export default function ValidarLivrosPage() {
           <option value="novo">Ainda não vistos pela IA</option>
           <option value="semautor">Sem nenhum autor (nem ouvido, nem sugerido)</option>
         </select>
+        <select value={origem} onChange={e => setOrigem(e.target.value)} className="controle" aria-label="Origem da sugestão">
+          <option value="">Qualquer origem</option>
+          <option value="claude">Validados pelo Claude</option>
+          <option value="app">Validados pela IA do app</option>
+        </select>
         <select value={tipo} onChange={e => setTipo(e.target.value)} className="controle" aria-label="Tipo sugerido">
           <option value="">Qualquer tipo</option>
           <option value="livro">Sugerido: livro</option>
@@ -281,7 +301,7 @@ export default function ValidarLivrosPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
-        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || tipo || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
+        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || tipo || origem || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
         <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
@@ -290,6 +310,7 @@ export default function ValidarLivrosPage() {
           <Button size="sm" variant="secondary" onClick={() => setMarcados(m => { const n = new Set(m); lista.forEach(x => n.add(x.ID)); return n })}>Marcar todos os {lista.length} da tela</Button>
           <Button size="sm" variant="secondary" disabled={!marcados.size} onClick={() => setMarcados(new Set())}>Desmarcar</Button>
           <Button size="sm" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={naoLivroMarcados}><Ban size={14} />Não é livro nos marcados ({lista.filter(x => marcados.has(x.ID)).length})</Button>
+          <Button size="sm" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={aceitarMarcados}><Check size={14} />Aceitar sugestão nos marcados</Button>
           <Button size="sm" variant="secondary" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={() => tipoMarcados('nomeMusica', 'música')}><Music size={14} />É música</Button>
           <Button size="sm" variant="secondary" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={() => tipoMarcados('nomeAudiovisual', 'filme ou série')}><Clapperboard size={14} />É filme ou série</Button>
           <Button size="sm" variant="secondary" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={() => tipoMarcados('nomeSagrado', 'texto sagrado')}><BookOpen size={14} />É texto sagrado</Button>
