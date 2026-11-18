@@ -32,6 +32,8 @@ export default function ValidarLivrosPage() {
   const [ondeLista, setOndeLista] = useState<Onde[] | null>(null)
   const [marcados, setMarcados] = useState<Set<number>>(new Set())
   const [massa, setMassa] = useState('')
+  const [colado, setColado] = useState('')
+  const [leitura, setLeitura] = useState('')
   const [aviso, setAviso] = useState<Record<number, string>>({})
 
   async function carregar(offset: number) {
@@ -104,15 +106,37 @@ export default function ValidarLivrosPage() {
     setOnde(it.ID); setOndeLista(null)
     setOndeLista(await linhas<Onde>('validarOnde', { id: it.ID }).catch(() => []))
   }
-  function lerTextoColado(texto: string) {
-    const achouTitulo = texto.match(/[“"«]([^”"»]{3,200})[”"»]/)
-    if (!achouTitulo) return
-    const resto = texto.slice((achouTitulo.index || 0) + achouTitulo[0].length)
-    const achouAutor = resto.match(/(?:escrit[ao]s?|publicad[ao]s?|assinad[ao]s?)\s+(?:pel[oa]\s+)?(?:(?:brasileir[oa]|escritor(?:a)?|autor(?:a)?|professor(?:a)?)\s+)*([^,.;()\n]{3,120})/i) || resto.match(/(?:de autoria de|autor(?:a)?:?|\bpor|\bde)\s+([^,.;()\n]{3,120})/i)
-    setTitulo(achouTitulo[1].trim()); setCatId(0); setAchados([])
-    if (achouAutor) setAutor(achouAutor[1].trim())
+  function lerTextoColado(texto: string): boolean {
+    const limpo = texto.replace(/\s+/g, ' ').trim()
+    let achouTit = ''
+    let achouAut = ''
+    const rotuloTit = limpo.match(/t[ií]tulo\s*[:\-–]\s*([^|;\n]+?)(?=\s+(?:autor(?:a)?|escrit[oa]|publicad[oa])\b|[|;]|$)/i)
+    const rotuloAut = limpo.match(/autor(?:a)?\s*[:\-–]\s*([^|;,.\n]{3,120})/i)
+    const aspas = limpo.match(/[“"«'‘]([^”"»’]{3,200})[”"»'’]/)
+    if (rotuloTit) { achouTit = rotuloTit[1] }
+    else if (aspas) { achouTit = aspas[1] }
+    const base = aspas && !rotuloTit ? limpo.slice((aspas.index || 0) + aspas[0].length) : limpo
+    const porAutor = rotuloAut || base.match(/(?:escrit[ao]s?|publicad[ao]s?|assinad[ao]s?)\s+(?:pel[oa]\s+)?(?:(?:brasileir[oa]|escritor(?:a)?|autor(?:a)?|professor(?:a)?)\s+)*([^,.;()\n]{3,120})/i) || base.match(/(?:de autoria de|\bpor|\bde)\s+([^,.;()\n]{3,120})/i)
+    if (porAutor) achouAut = porAutor[1]
+    if (!achouTit && !limpo.includes('\n') && texto.split('\n').length === 1) {
+      const par = limpo.match(/^(.{3,160}?)\s+(?:[-–—]|,\s*de|\bde)\s+([^,.;()]{3,100})$/i)
+      if (par) { achouTit = par[1]; achouAut = par[2] }
+    }
+    if (!achouTit) {
+      const linhasTxt = texto.split('\n').map(x => x.trim()).filter(Boolean)
+      if (linhasTxt.length >= 1 && linhasTxt[0].length <= 160 && linhasTxt.length <= 3) { achouTit = linhasTxt[0]; if (linhasTxt[1] && !achouAut) achouAut = linhasTxt[1].replace(/^(?:de|por|autor(?:a)?:?)\s+/i, '') }
+    }
+    achouTit = achouTit.trim().replace(/^["“«]|["”»]$/g, '')
+    if (!achouTit) return false
+    setTitulo(achouTit); setCatId(0); setAchados([])
+    if (achouAut) setAutor(achouAut.trim())
+    return true
   }
-  function abrir(it: Item) { setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
+  function lerAgora() {
+    const ok = lerTextoColado(colado)
+    setLeitura(ok ? 'Li o texto: confira título e autor abaixo e clique em Salvar.' : 'Não consegui achar o título nesse texto. Escreva o título abaixo à mão, ou cole algo como: Título: ... Autor: ...')
+  }
+  function abrir(it: Item) { setColado(''); setLeitura(''); setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
 
   return (
     <div className="flex flex-col gap-5">
@@ -183,7 +207,11 @@ export default function ValidarLivrosPage() {
             {editando === it.ID ? (
               <div className="flex flex-col gap-2">
                 <label className="text-[12px] font-medium" style={muted}>Colar texto da internet (preenche título e autor)</label>
-                <textarea className="controle" rows={2} placeholder='Ex.: A obra é "Título do livro", escrita por Fulano de Tal' onChange={e => lerTextoColado(e.target.value)} />
+                <textarea className="controle" rows={3} value={colado} placeholder='Ex.: A obra é "Título do livro", escrita por Fulano de Tal' onChange={e => { setColado(e.target.value); setLeitura('') }} />
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Button size="sm" variant="secondary" disabled={!colado.trim()} onClick={lerAgora}><Check size={14} />OK, ler texto</Button>
+                  {leitura && <span className="text-[12.5px]">{leitura}</span>}
+                </div>
                 <label className="text-[12px] font-medium" style={muted}>Título do livro</label>
                 <input className="controle" placeholder="Título certo do livro" value={titulo} onChange={e => { setTitulo(e.target.value); setCatId(0) }} />
                 {achados.length > 0 && (
