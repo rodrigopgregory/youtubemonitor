@@ -77,11 +77,12 @@ export default function ValidarLivrosPage() {
     setOcupado(null)
   }
   const validarIA = (it: Item) => executar(it, async () => {
-    const r = await chamarDemorado<{ ok: boolean; estado?: string; titulo?: string; autor?: string; motivo?: string; erro?: string }>('livroValidar', { id: it.ID, instrucao: instrucao.trim() }, 120)
+    const r = await chamarDemorado<{ ok: boolean; semBusca?: boolean; estado?: string; titulo?: string; autor?: string; motivo?: string; erro?: string }>('livroValidar', { id: it.ID, instrucao: instrucao.trim() }, 120)
     if (!r?.ok) { setAviso(a => ({ ...a, [it.ID]: r?.erro || 'Não consegui validar agora.' })); return }
     if (r.estado === 'OK') { sair(it.ID); return }
     setLista(l => l.map(x => x.ID === it.ID ? { ...x, NID: x.NID || 1, SUG_TITULO: r.titulo || null, SUG_AUTOR: r.autor || null, MOTIVO: r.motivo || null } : x))
-    setAviso(a => ({ ...a, [it.ID]: r.titulo ? 'A IA não teve certeza. Veja a sugestão.' : 'A IA não achou esse livro.' }))
+    const so = r.semBusca ? ' (sem a busca do Google, que está sem cota: confira)' : ' (busca do Google usada)'
+    setAviso(a => ({ ...a, [it.ID]: (r.titulo ? 'A IA sugeriu: ' + r.titulo + (r.autor ? ', de ' + r.autor : '') + '. Não teve certeza' : 'A IA não achou esse livro') + so + '.' }))
   })
   const gravar = (it: Item, t: string, a: string, cat: number) => executar(it, async () => {
     const tit = limpa(t); if (!tit) throw new Error('vazio')
