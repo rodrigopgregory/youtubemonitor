@@ -196,6 +196,8 @@
  "livroStatusGravar": 244,
  "catalogoAchar": 234,
  "nomeOkCat": 235,
+ "validarExportar": 276,
+ "validarSugerir": 277,
  "nomeNaoLivro": 236,
  "validarOnde": 238,
  "livrosLista": 213,

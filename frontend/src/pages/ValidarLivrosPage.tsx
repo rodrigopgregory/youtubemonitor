@@ -34,6 +34,10 @@ export default function ValidarLivrosPage() {
   const [massa, setMassa] = useState('')
   const [colado, setColado] = useState('')
   const [leitura, setLeitura] = useState('')
+  const [exportando, setExportando] = useState(false)
+  const [importar, setImportar] = useState(false)
+  const [textoImportar, setTextoImportar] = useState('')
+  const [msgImportar, setMsgImportar] = useState('')
   const [aviso, setAviso] = useState<Record<number, string>>({})
 
   async function carregar(offset: number) {
@@ -136,6 +140,42 @@ export default function ValidarLivrosPage() {
     const ok = lerTextoColado(colado)
     setLeitura(ok ? 'Li o texto: confira título e autor abaixo e clique em Salvar.' : 'Não consegui achar o título nesse texto. Escreva o título abaixo à mão, ou cole algo como: Título: ... Autor: ...')
   }
+  async function exportarPendentes() {
+    setExportando(true); setMassa('')
+    try {
+      const todos: { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null }[] = []
+      for (let offset = 0; offset < 5000; offset += 500) {
+        const r = await linhas<{ NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null }>('validarExportar', { limit: 500, offset })
+        todos.push(...r)
+        if (r.length < 500) break
+      }
+      const itens = todos.map(x => ({ nome: x.NOME, autor_ouvido: x.AUTOR || '', videos: Number(x.VIDEOS), contexto: (x.TRECHO || '').replace(/\s+/g, ' ').trim() }))
+      const instrucao = 'Voce vai validar nomes de livros ouvidos em transcricoes de videos espiritas/espiritualistas (portugues). Os nomes podem estar errados, truncados ou nem ser livros. Para CADA item da lista abaixo, pesquise na internet se existe um livro real com esse nome ou parecido e responda o titulo oficial e o autor. Se nao for livro ou nao achar, deixe titulo vazio. Nao invente: na duvida, certeza baixa.\nResponda SOMENTE com um array JSON, um objeto por item, na mesma ordem, copiando "nome" exatamente como veio: [{"nome":"...","titulo":"...","autor":"...","certeza":0-100,"motivo":"uma frase"}]\nFaca em lotes de 50 itens e continue ate o fim.\n\nLISTA (' + itens.length + ' itens):\n'
+      const blob = new Blob([instrucao + itens.map(x => JSON.stringify(x)).join('\n')], { type: 'text/plain;charset=utf-8' })
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(blob); a.download = 'validar-livros.txt'; a.click(); URL.revokeObjectURL(a.href)
+      setMassa(itens.length + ' nomes exportados no arquivo validar-livros.txt.')
+    } catch { setMassa('Não deu certo agora. Tente de novo.') }
+    setExportando(false)
+  }
+  async function importarRespostas() {
+    setMsgImportar('Lendo...')
+    const bruto = textoImportar.trim()
+    const ini = bruto.indexOf('['), fim2 = bruto.lastIndexOf(']')
+    let lista2: { nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string }[] = []
+    try { lista2 = JSON.parse(bruto.slice(ini, fim2 + 1)) } catch { setMsgImportar('Não consegui ler. Cole o array JSON que o Claude devolveu, começando em [ e terminando em ].'); return }
+    let gravados = 0, vazios = 0, falhas = 0
+    for (const x of lista2) {
+      const nome = limpa(String(x.nome || '')), tit = limpa(String(x.titulo || ''))
+      if (!nome) continue
+      if (!tit) { vazios++; continue }
+      const cert = Math.max(0, Math.min(80, Math.round(Number(x.certeza) || 0)))
+      try { await chamar('validarSugerir', { nome, titulo: tit, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '')) }); gravados++ } catch { falhas++ }
+      setMsgImportar('Gravando... ' + gravados)
+    }
+    setMsgImportar(gravados + ' sugestões gravadas' + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
+    carregar(0); totais()
+  }
   function abrir(it: Item) { setColado(''); setLeitura(''); setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
 
   return (
@@ -169,8 +209,20 @@ export default function ValidarLivrosPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
+        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : 'Exportar pendentes para o Claude'}</Button>
+        <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
+      {importar && (
+        <Card className="p-4 flex flex-col gap-2">
+          <label className="text-[12px] font-medium" style={muted}>Cole aqui o array JSON que o Claude devolveu</label>
+          <textarea className="controle" rows={6} value={textoImportar} onChange={e => setTextoImportar(e.target.value)} placeholder='[{"nome":"...","titulo":"...","autor":"...","certeza":70,"motivo":"..."}]' />
+          <div className="flex items-center gap-2 flex-wrap">
+            <Button size="sm" disabled={!textoImportar.trim()} onClick={importarRespostas}><Check size={14} />Gravar sugestões</Button>
+            {msgImportar && <span className="text-[12.5px]">{msgImportar}</span>}
+          </div>
+        </Card>
+      )}
 
       <div className="flex flex-col gap-2">
         {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada para validar agora.</p></Card>}
