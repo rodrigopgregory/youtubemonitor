@@ -157,7 +157,7 @@ export default function ValidarLivrosPage() {
       type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null }
       const todos: Linha[] = []
       for (let offset = 0; offset < 6000; offset += 300) {
-        const r = await linhas<Linha>('validarExportar', { limit: 300, offset })
+        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, limit: 300, offset })
         todos.push(...r)
         if (r.length < 300) break
       }
@@ -250,7 +250,7 @@ export default function ValidarLivrosPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
-        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : 'Exportar pendentes para o Claude'}</Button>
+        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
         <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
