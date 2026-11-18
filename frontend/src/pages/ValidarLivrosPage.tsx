@@ -21,6 +21,7 @@ export default function ValidarLivrosPage() {
   const [q, setQ] = useState('')
   const [filtro, setFiltro] = useState('')
   const [faixa, setFaixa] = useState('')
+  const [campos, setCampos] = useState('')
   const [grupo, setGrupo] = useState(false)
   const [tipo, setTipo] = useState('')
   const [origem, setOrigem] = useState('')
@@ -47,12 +48,12 @@ export default function ValidarLivrosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const tudo = !!(filtro || faixa || grupo || tipo || origem || q)
+      const tudo = !!(filtro || faixa || campos || grupo || tipo || origem || q)
       const passo = tudo ? 300 : PAG
       let achados: Item[] = []
       let ultimo = 0
       do {
-        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, faixa, grupo: grupo ? '1' : '', tipo, origem, limit: passo, offset: offset + achados.length })
+        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, faixa, campos, grupo: grupo ? '1' : '', tipo, origem, limit: passo, offset: offset + achados.length })
         achados = achados.concat(r); ultimo = r.length
       } while (tudo && ultimo === passo && achados.length < 6000)
       setLista(l => offset ? [...l, ...achados] : achados); setFim(tudo ? true : ultimo < passo)
@@ -60,7 +61,7 @@ export default function ValidarLivrosPage() {
   }
   function totais() { linhas<{ N: number; PEND: number; COM_AUTOR: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0), COM_AUTOR: Number(r[0]?.COM_AUTOR || 0) })).catch(() => {}) }
   useEffect(() => { carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, filtro, faixa, grupo, tipo, origem])
+  }, [q, filtro, faixa, campos, grupo, tipo, origem])
   useEffect(totais, [])
   useEffect(() => {
     const t = limpa(titulo)
@@ -193,7 +194,7 @@ export default function ValidarLivrosPage() {
       type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null; TIPO: string | null }
       const todos: Linha[] = []
       for (let offset = 0; offset < 6000; offset += 300) {
-        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, faixa, grupo: grupo ? '1' : '', tipo, origem, limit: 300, offset })
+        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, faixa, campos, grupo: grupo ? '1' : '', tipo, origem, limit: 300, offset })
         todos.push(...r)
         if (r.length < 300) break
       }
@@ -282,6 +283,13 @@ export default function ValidarLivrosPage() {
           <option value="alta">Certeza de 90% ou mais</option>
           <option value="baixa">Abaixo de 90%</option>
         </select>
+        <select value={campos} onChange={e => setCampos(e.target.value)} className="controle" aria-label="Título e autor">
+          <option value="">Título e autor: qualquer</option>
+          <option value="ambos">Com título e autor</option>
+          <option value="titulo">Só título (sem autor)</option>
+          <option value="autor">Só autor (sem título)</option>
+          <option value="nenhum">Sem título e sem autor</option>
+        </select>
         <label className="controle flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={grupo} onChange={e => setGrupo(e.target.checked)} />Agrupar por livro</label>
         <select value={origem} onChange={e => setOrigem(e.target.value)} className="controle" aria-label="Origem da sugestão">
           <option value="">Qualquer origem</option>
@@ -306,7 +314,7 @@ export default function ValidarLivrosPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
-        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || faixa || grupo || tipo || origem || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
+        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || faixa || campos || grupo || tipo || origem || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
         <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
