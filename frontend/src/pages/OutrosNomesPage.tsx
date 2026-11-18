@@ -7,7 +7,7 @@ import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 import EditarNome from '../components/EditarNome'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 
-interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null; CONFERIDO: string | null; CONF_NOTA: string | null }
+interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null; CONFERIDO: string | null; CONF_NOTA: string | null; SUBTIPO: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
 interface Props { estado: 'MUSICA' | 'AUDIOVISUAL' | 'SAGRADO'; titulo: string; texto: string }
 const STATUS: Record<string, string[]> = {
@@ -17,6 +17,7 @@ const STATUS: Record<string, string[]> = {
 }
 const CODIGOS = ['LIDO', 'LENDO', 'TENHO', 'QUERO']
 const PAG = 30
+const SUBTIPOS: Record<string, string> = { filme: 'Filme', serie: 'Série ou anime', documentario: 'Documentário', jogo: 'Jogo' }
 const muted = { color: 'var(--fg-muted)' }
 const limpa = (v: string) => v.replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
 
@@ -29,6 +30,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const [statusF, setStatusF] = useState('')
   const [ordem, setOrdem] = useState('mais')
   const [conf, setConf] = useState('')
+  const [subtipoF, setSubtipoF] = useState('')
   const [soFav, setSoFav] = useState(false)
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(false)
@@ -40,12 +42,12 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('outrosLista', { estado, canalId, busca: limpa(q), status: statusF, ordem, conf, fav: soFav ? '1' : '', limit: PAG, offset })
+      const r = await linhas<Item>('outrosLista', { estado, canalId, busca: limpa(q), status: statusF, ordem, conf, subtipo: subtipoF, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setOnde(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estado, canalId, q, statusF, ordem, soFav, conf])
+  }, [estado, canalId, q, statusF, ordem, soFav, conf, subtipoF])
 
   async function voltar(it: Item) {
     setErro('')
@@ -100,6 +102,13 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
           <option value="ACEITO">Aceitos por mim</option>
           <option value="NOVO">Ainda não conferidos</option>
         </select>
+        {estado === 'AUDIOVISUAL' && (
+          <select value={subtipoF} onChange={e => setSubtipoF(e.target.value)} className="controle w-full" aria-label="Categoria">
+            <option value="">Todas as categorias</option>
+            {Object.entries(SUBTIPOS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+            <option value="nenhum">Sem categoria</option>
+          </select>
+        )}
         <label className="controle w-full inline-flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={soFav} onChange={e => setSoFav(e.target.checked)} />Só favoritos</label>
       </div>
       {erro && <p className="text-[13px]" style={{ color: 'var(--danger-text)' }}>{erro}</p>}
@@ -126,6 +135,15 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
               {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
             </select>
           </div>
+          {estado === 'AUDIOVISUAL' && (
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[13px]" style={muted}>Categoria:</span>
+              <select value={it.SUBTIPO || ''} onChange={async e => { const v = e.target.value; await chamar('outrosSubtipo', { id: it.ID, subtipo: v }); setLista(l => l.map(x => x.ID === it.ID ? { ...x, SUBTIPO: v || null } : x)) }} className="controle" aria-label="Categoria">
+                <option value="">Sem categoria</option>
+                {Object.entries(SUBTIPOS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              </select>
+            </div>
+          )}
           {editando === it.ID && <EditarNome id={it.ID} estado={estado} motivo={it.MOTIVO} onCancelar={() => setEditando(null)} onSalvo={(novo, nota) => { setEditando(null); setLista(l => novo === estado ? l.map(x => x.ID === it.ID ? { ...x, MOTIVO: nota || null } : x) : l.filter(x => x.ID !== it.ID)) }} />}
           {it.CONFERIDO === 'DUVIDA' && <div className="flex items-center gap-2 flex-wrap"><span className="text-[13.5px] font-medium">A IA ficou em dúvida:</span><span className="text-[13.5px]">{it.CONF_NOTA}</span><Button size="sm" onClick={() => aceitar(it)}>Aceitar como está</Button></div>}
           {it.CONFERIDO === 'OK' && <p className="text-[13px]" style={muted}>Conferido pela IA{it.CONF_NOTA ? ': ' + it.CONF_NOTA : ''}</p>}

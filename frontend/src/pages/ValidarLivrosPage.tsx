@@ -217,6 +217,7 @@ export default function ValidarLivrosPage() {
         'REGRAS',
         '- Nao invente. Se nao achar em nenhuma fonte, deixe "titulo" vazio e "certeza" 0.',
         '- "tipo": classifique cada nome como "livro", "musica", "audiovisual" (filme, serie, documentario) ou "sagrado" (texto sagrado, como Biblia, Bhagavad Gita, Tao Te King, Alcorao). Se nao for nenhum desses, use "outro". Se o trecho falar de filme e nao do livro, use "audiovisual".',
+        '- Se "tipo" for "audiovisual", acrescente o campo "subtipo": "filme", "serie" (series e animes), "documentario" ou "jogo" (video game).',
         '- Se "tipo" nao for "livro", deixe "titulo" com o nome correto da obra mesmo assim, para eu conferir.',
         '- "titulo" deve ser o titulo oficial completo do livro e "autor" o autor como esta na capa.',
         '- "certeza" de 0 a 100: so acima de 85 se encontrou o livro em pelo menos uma loja ou catalogo.',
@@ -225,7 +226,7 @@ export default function ValidarLivrosPage() {
         '',
         'FORMATO DA RESPOSTA',
         'Responda SOMENTE com um array JSON (sem texto antes ou depois), na mesma ordem da lista:',
-        '[{"nome":"...","tipo":"livro","titulo":"...","autor":"...","certeza":0,"fonte":"...","motivo":"..."}]',
+        '[{"nome":"...","tipo":"livro","subtipo":"","titulo":"...","autor":"...","certeza":0,"fonte":"...","motivo":"..."}]',
         'Faca em lotes de 50 itens. Ao terminar cada lote, devolva o array JSON dele e espere eu pedir o proximo.',
         '',
         'LISTA (' + itens.length + ' itens, um por linha, em JSON):'
@@ -241,7 +242,7 @@ export default function ValidarLivrosPage() {
     setMsgImportar('Lendo...')
     const bruto = textoImportar.trim()
     const ini = bruto.indexOf('['), fim2 = bruto.lastIndexOf(']')
-    let lista2: { tipo?: string; nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string; fonte?: string }[] = []
+    let lista2: { tipo?: string; subtipo?: string; nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string; fonte?: string }[] = []
     try { lista2 = JSON.parse(bruto.slice(ini, fim2 + 1)) } catch { setMsgImportar('Não consegui ler. Cole o array JSON que o Claude devolveu, começando em [ e terminando em ].'); return }
     let gravados = 0, vazios = 0, falhas = 0
     for (const x of lista2) {
@@ -249,8 +250,10 @@ export default function ValidarLivrosPage() {
       if (!nome) continue
       const tp = ({ livro: 'livro', musica: 'musica', 'música': 'musica', audiovisual: 'audiovisual', sagrado: 'sagrado', outro: 'outro' } as Record<string, string>)[String(x.tipo || '').toLowerCase().trim()] || ''
       if (!tit && !(tp && tp !== 'livro')) { vazios++; continue }
+      const st = String(x.subtipo || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+      const sub = tp !== 'audiovisual' ? '' : /anime|serie/.test(st) ? 'serie' : /document/.test(st) ? 'documentario' : /jogo|game/.test(st) ? 'jogo' : /filme/.test(st) ? 'filme' : ''
       const cert = Math.max(0, Math.min(100, Math.round(Number(x.certeza) || 0)))
-      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
+      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, subtipo: sub, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
     setMsgImportar(gravados + ' sugestões gravadas' + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
