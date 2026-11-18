@@ -143,18 +143,47 @@ export default function ValidarLivrosPage() {
   async function exportarPendentes() {
     setExportando(true); setMassa('')
     try {
-      const todos: { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null }[] = []
-      for (let offset = 0; offset < 5000; offset += 500) {
-        const r = await linhas<{ NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null }>('validarExportar', { limit: 500, offset })
+      type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null }
+      const todos: Linha[] = []
+      for (let offset = 0; offset < 6000; offset += 300) {
+        const r = await linhas<Linha>('validarExportar', { limit: 300, offset })
         todos.push(...r)
-        if (r.length < 500) break
+        if (r.length < 300) break
       }
-      const itens = todos.map(x => ({ nome: x.NOME, autor_ouvido: x.AUTOR || '', videos: Number(x.VIDEOS), contexto: (x.TRECHO || '').replace(/\s+/g, ' ').trim() }))
-      const instrucao = 'Voce vai validar nomes de livros ouvidos em transcricoes de videos espiritas/espiritualistas (portugues). Os nomes podem estar errados, truncados ou nem ser livros. Para CADA item da lista abaixo, pesquise na internet se existe um livro real com esse nome ou parecido e responda o titulo oficial e o autor. Se nao for livro ou nao achar, deixe titulo vazio. Nao invente: na duvida, certeza baixa.\nResponda SOMENTE com um array JSON, um objeto por item, na mesma ordem, copiando "nome" exatamente como veio: [{"nome":"...","titulo":"...","autor":"...","certeza":0-100,"motivo":"uma frase"}]\nFaca em lotes de 50 itens e continue ate o fim.\n\nLISTA (' + itens.length + ' itens):\n'
-      const blob = new Blob([instrucao + itens.map(x => JSON.stringify(x)).join('\n')], { type: 'text/plain;charset=utf-8' })
+      const validos = todos.filter(x => !/['"\\{}]/.test(x.NOME))
+      const itens = validos.map(x => ({
+        nome: x.NOME,
+        autor_ouvido: x.AUTOR || '',
+        videos: Number(x.VIDEOS),
+        trecho_da_transcricao: (x.TRECHO || '').replace(/\s+/g, ' ').trim(),
+        sugestao_atual: x.SUG_TITULO ? { titulo: x.SUG_TITULO, autor: x.SUG_AUTOR || '', certeza_pct: x.CERTEZA == null ? null : Number(x.CERTEZA), motivo: x.MOTIVO || '' } : null
+      }))
+      const instrucao = [
+        'CONTEXTO',
+        'Tenho um aplicativo que monitora canais do YouTube espiritas e espiritualistas (em portugues do Brasil). Ele transcreve os videos e, por IA, detecta citacoes de livros. Como a transcricao e feita por voz, os nomes saem errados, truncados, com grafia trocada, ou nem sao livros (podem ser musicas, filmes, textos sagrados ou frases soltas).',
+        '',
+        'SUA TAREFA',
+        'Para CADA item da lista abaixo, valide na internet se existe um livro real. Pesquise em fontes confiaveis: Estante Virtual, Sebos, Amazon, Skoob, Google Livros, sites de editoras (FEB, Lachatre, Petit, EME, IDE, Conscienciologia etc.). Use o trecho da transcricao para entender o contexto e o autor ouvido como pista.',
+        'Cada item traz: o nome ouvido, o autor ouvido, em quantos videos apareceu, o trecho da transcricao e, quando existe, a sugestao atual do app (titulo, autor, certeza e motivo). Confirme, corrija ou rejeite a sugestao atual.',
+        '',
+        'REGRAS',
+        '- Nao invente. Se nao achar em nenhuma fonte, deixe "titulo" vazio e "certeza" 0.',
+        '- "titulo" deve ser o titulo oficial completo do livro e "autor" o autor como esta na capa.',
+        '- "certeza" de 0 a 100: so acima de 85 se encontrou o livro em pelo menos uma loja ou catalogo.',
+        '- "fonte": o nome do site ou a URL onde achou. "motivo": uma frase curta.',
+        '- Copie "nome" exatamente como veio na lista, para eu conseguir casar a resposta.',
+        '',
+        'FORMATO DA RESPOSTA',
+        'Responda SOMENTE com um array JSON (sem texto antes ou depois), na mesma ordem da lista:',
+        '[{"nome":"...","titulo":"...","autor":"...","certeza":0,"fonte":"...","motivo":"..."}]',
+        'Faca em lotes de 50 itens. Ao terminar cada lote, devolva o array JSON dele e espere eu pedir o proximo.',
+        '',
+        'LISTA (' + itens.length + ' itens, um por linha, em JSON):'
+      ].join('\n')
+      const blob = new Blob([instrucao + '\n' + itens.map(x => JSON.stringify(x)).join('\n')], { type: 'text/plain;charset=utf-8' })
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob); a.download = 'validar-livros.txt'; a.click(); URL.revokeObjectURL(a.href)
-      setMassa(itens.length + ' nomes exportados no arquivo validar-livros.txt.')
+      setMassa(itens.length + ' nomes exportados no arquivo validar-livros.txt.' + (todos.length > validos.length ? ' ' + (todos.length - validos.length) + ' ficaram de fora por terem aspas ou barras no nome.' : ''))
     } catch { setMassa('Não deu certo agora. Tente de novo.') }
     setExportando(false)
   }
@@ -162,7 +191,7 @@ export default function ValidarLivrosPage() {
     setMsgImportar('Lendo...')
     const bruto = textoImportar.trim()
     const ini = bruto.indexOf('['), fim2 = bruto.lastIndexOf(']')
-    let lista2: { nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string }[] = []
+    let lista2: { nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string; fonte?: string }[] = []
     try { lista2 = JSON.parse(bruto.slice(ini, fim2 + 1)) } catch { setMsgImportar('Não consegui ler. Cole o array JSON que o Claude devolveu, começando em [ e terminando em ].'); return }
     let gravados = 0, vazios = 0, falhas = 0
     for (const x of lista2) {
@@ -170,7 +199,7 @@ export default function ValidarLivrosPage() {
       if (!nome) continue
       if (!tit) { vazios++; continue }
       const cert = Math.max(0, Math.min(80, Math.round(Number(x.certeza) || 0)))
-      try { await chamar('validarSugerir', { nome, titulo: tit, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '')) }); gravados++ } catch { falhas++ }
+      try { await chamar('validarSugerir', { nome, titulo: tit, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
     setMsgImportar(gravados + ' sugestões gravadas' + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
