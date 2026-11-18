@@ -423,7 +423,7 @@ async function conferirOutros(cfg, lista) {
     try { const c = montar(true); c.tools = [{ google_search: {} }]; txt = await gemini(cfg, cfg.MODELO_ANALISE, c, cfg.GEMINI_CONEXOES_LIVROS); }
     catch (e) { if (!/429/.test(String(e.message))) throw e; BUSCA_FALHOU = true; semBusca = true; }
   }
-  if (semBusca) txt = await gemini(cfg, cfg.MODELO_ANALISE, montar(false), cfg.GEMINI_CONEXOES_LIVROS);
+  if (semBusca) throw new Error('busca do Google sem cota: conferência adiada');
   const arr = JSON.parse(txt.slice(txt.indexOf('['), txt.lastIndexOf(']') + 1));
   const porNome = new Map(arr.filter(x => x && x.nome).map(x => [String(x.nome), x]));
   let ok = 0;
