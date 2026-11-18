@@ -196,6 +196,9 @@ export default function Layout() {
                     <button onClick={() => arquivar(a)} className="h-8 px-2 rounded-md inline-flex items-center gap-1 text-[12.5px]" style={{ color: 'var(--fg-muted)' }} title="Arquivar: sai da lista">
                       <Archive size={14} /><span className="hidden sm:inline">Arquivar</span>
                     </button>
+                    <button onClick={() => arquivar(a)} className="h-8 px-2 rounded-md inline-flex items-center gap-1 text-[12.5px] font-medium" style={{ color: 'var(--accent-text)' }} title="Marcar como lido e arquivar: sai da lista">
+                      <CheckCircle2 size={14} /><span className="hidden sm:inline">Lido e arquivar</span>
+                    </button>
                   </li>))}</ul>
               </div>)}
           {atual && (
@@ -207,6 +210,9 @@ export default function Layout() {
                 </button>
                 <button onClick={() => arquivar(atual)} className="h-8 px-2.5 rounded-md border inline-flex items-center gap-1.5 text-[13px]" style={{ borderColor: 'var(--border)', color: 'var(--fg-muted)' }}>
                   <Archive size={14} />Arquivar
+                </button>
+                <button onClick={() => arquivar(atual)} className="h-8 px-2.5 rounded-md border inline-flex items-center gap-1.5 text-[13px] font-medium" style={{ borderColor: 'var(--accent-border)', color: 'var(--accent-text)' }}>
+                  <CheckCircle2 size={14} />Lido e arquivar
                 </button>
               </div>
               {vids.length === 0 ? <p className="text-[14px]" style={{ color: 'var(--fg-muted)' }}>Carregando…</p> :
