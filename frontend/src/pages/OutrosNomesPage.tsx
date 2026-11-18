@@ -6,7 +6,7 @@ import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 import EditarNome from '../components/EditarNome'
 
-interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null }
+interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null; CONFERIDO: string | null; CONF_NOTA: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
 interface Props { estado: 'MUSICA' | 'AUDIOVISUAL' | 'SAGRADO'; titulo: string; texto: string }
 const STATUS: Record<string, string[]> = {
@@ -26,6 +26,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const [q, setQ] = useState('')
   const [statusF, setStatusF] = useState('')
   const [ordem, setOrdem] = useState('mais')
+  const [conf, setConf] = useState('')
   const [soFav, setSoFav] = useState(false)
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(false)
@@ -37,16 +38,20 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, fav: soFav ? '1' : '', limit: PAG, offset })
+      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, conf, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setOnde(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estado, q, statusF, ordem, soFav])
+  }, [estado, q, statusF, ordem, soFav, conf])
 
   async function voltar(it: Item) {
     setErro('')
     try { await chamar('outrosVoltar', { id: it.ID }); setLista(l => l.filter(x => x.ID !== it.ID)) } catch { setErro('Não deu certo agora. Tente de novo.') }
+  }
+  async function aceitar(it: Item) {
+    setErro('')
+    try { await chamar('outrosAceitar', { id: it.ID }); setLista(l => l.map(x => x.ID === it.ID ? { ...x, CONFERIDO: 'ACEITO' } : x)) } catch { setErro('Não deu certo agora. Tente de novo.') }
   }
   async function remover(it: Item) {
     setErro('')
@@ -75,7 +80,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         </div>
         <Button type="submit">Buscar</Button>
       </form>
-      <div className="grid gap-2 sm:grid-cols-3">
+      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
         <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação">
           <option value="">Todas as situações</option>
           {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
@@ -84,6 +89,13 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         <select value={ordem} onChange={e => setOrdem(e.target.value)} className="controle w-full" aria-label="Ordem">
           <option value="mais">Mais citados primeiro</option>
           <option value="az">Ordem alfabética</option>
+        </select>
+        <select value={conf} onChange={e => setConf(e.target.value)} className="controle w-full" aria-label="Conferência">
+          <option value="">Toda conferência</option>
+          <option value="DUVIDA">Com dúvida</option>
+          <option value="OK">Conferidos pela IA</option>
+          <option value="ACEITO">Aceitos por mim</option>
+          <option value="NOVO">Ainda não conferidos</option>
         </select>
         <label className="controle w-full inline-flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={soFav} onChange={e => setSoFav(e.target.checked)} />Só favoritos</label>
       </div>
@@ -112,6 +124,9 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
             </select>
           </div>
           {editando === it.ID && <EditarNome id={it.ID} estado={estado} motivo={it.MOTIVO} onCancelar={() => setEditando(null)} onSalvo={(novo, nota) => { setEditando(null); setLista(l => novo === estado ? l.map(x => x.ID === it.ID ? { ...x, MOTIVO: nota || null } : x) : l.filter(x => x.ID !== it.ID)) }} />}
+          {it.CONFERIDO === 'DUVIDA' && <div className="flex items-center gap-2 flex-wrap"><span className="text-[13.5px] font-medium">A IA ficou em dúvida:</span><span className="text-[13.5px]">{it.CONF_NOTA}</span><Button size="sm" onClick={() => aceitar(it)}>Aceitar como está</Button></div>}
+          {it.CONFERIDO === 'OK' && <p className="text-[13px]" style={muted}>Conferido pela IA{it.CONF_NOTA ? ': ' + it.CONF_NOTA : ''}</p>}
+          {it.CONFERIDO === 'ACEITO' && <p className="text-[13px]" style={muted}>Aceito por você</p>}
           {it.MOTIVO && <p className="text-[13.5px]" style={muted}>{it.MOTIVO}</p>}
           {onde === it.ID && (
             <div className="flex flex-col gap-2 text-[13px]">

@@ -411,6 +411,37 @@ async function validarNomes(cfg, lista) {
   const permitidos = new Set(lista.map(x => String(x.NOME)));
   return arr.filter(x => x && permitidos.has(String(x.nome))).map(x => ({ nome: String(x.nome), titulo: String(x.titulo || '').slice(0, 300), autor: String(x.autor || '').slice(0, 200), conf: ['alta', 'media', 'baixa'].includes(x.conf) ? (semBusca && x.conf === 'alta' ? 'media' : x.conf) : 'baixa', achouNaBusca: !semBusca && x.conf === 'alta', motivo: String(x.motivo || '').slice(0, 300) }));
 }
+async function conferirOutros(cfg, lista) {
+  const rot = { MUSICA: 'musica', AUDIOVISUAL: 'audiovisual', SAGRADO: 'sagrado' };
+  const itens = lista.map((x, i) => (i + 1) + '. "' + x.NOME + '" (classificado como ' + rot[x.ESTADO] + ')' + (x.AUTOR ? ' (autor ouvido: ' + x.AUTOR + ')' : '') + (x.TRECHO ? ' | contexto: ' + String(x.TRECHO).slice(0, 160) : '')).join('\n');
+  const montar = (comBusca) => ({
+    contents: [{ parts: [{ text: 'Os nomes abaixo foram ouvidos em transcricoes de videos espirituais e classificados como musica, audiovisual (filme, serie, video) ou texto sagrado. Podem estar errados, truncados ou na classe errada. Para cada um, ' + (comBusca ? 'PESQUISE NO GOOGLE' : 'Sem acesso a busca: use so o que voce sabe com seguranca; na duvida, conf baixa') + ' o que e de verdade. Devolva o titulo oficial, o autor (artista, diretor ou tradicao), o tipo certo (musica, audiovisual, sagrado ou livro) e conf (alta so se tiver certeza do nome e do tipo; media ou baixa se houver duvida).\nResponda so JSON: [{"nome":"exatamente como veio","titulo":"...","autor":"...","tipo":"musica|audiovisual|sagrado|livro","conf":"alta|media|baixa","motivo":"uma frase curta"}]\n\n' + itens }] }],
+    generationConfig: { temperature: 0 }
+  });
+  let txt, semBusca = BUSCA_FALHOU;
+  if (!semBusca) {
+    try { const c = montar(true); c.tools = [{ google_search: {} }]; txt = await gemini(cfg, cfg.MODELO_ANALISE, c, cfg.GEMINI_CONEXOES_LIVROS); }
+    catch (e) { if (!/429/.test(String(e.message))) throw e; BUSCA_FALHOU = true; semBusca = true; }
+  }
+  if (semBusca) txt = await gemini(cfg, cfg.MODELO_ANALISE, montar(false), cfg.GEMINI_CONEXOES_LIVROS);
+  const arr = JSON.parse(txt.slice(txt.indexOf('['), txt.lastIndexOf(']') + 1));
+  const porNome = new Map(arr.filter(x => x && x.nome).map(x => [String(x.nome), x]));
+  let ok = 0;
+  for (const it of lista) {
+    const x = porNome.get(String(it.NOME));
+    const limpo = t => String(t || '').replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim();
+    const quem = x ? [limpo(x.titulo), limpo(x.autor)].filter(Boolean).join(' — ') : '';
+    const tipoOk = x && rot[it.ESTADO] === x.tipo;
+    const certo = x && !semBusca && x.conf === 'alta' && tipoOk;
+    let nota = quem;
+    if (!x) nota = 'A conferência não respondeu sobre este nome';
+    else if (!tipoOk) nota = ('Pode ser ' + x.tipo + (quem ? ': ' + quem : '') + '. ' + limpo(x.motivo)).slice(0, 300);
+    else if (!certo) nota = ((quem ? quem + '. ' : '') + (semBusca ? 'Sem busca do Google. ' : '') + limpo(x.motivo)).slice(0, 300);
+    await sql('outrosConferirGravar', { id: it.ID, conferido: certo ? 'OK' : 'DUVIDA', nota });
+    ok++;
+  }
+  return ok;
+}
 async function lerLivros(cfg, v) {
   const tr = ((await sql('trechosDoVideo', { videoId: v.ID, limit: 2000, offset: 0 })).rows || []);
   if (!tr.length) { await gravarLivros(v, []); return 0; }
@@ -731,6 +762,15 @@ try {
       }
     }
   } catch (e) { log.push('casamento local: erro ' + String(e.message || e).slice(0, 120)); }
+  let outrosConferidos = 0, errosO = 0;
+  if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA) {
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const filaO = ((await sql('outrosFila', { limit: 20 })).rows || []);
+      if (!filaO.length) break;
+      try { outrosConferidos += await conferirOutros(cfg, filaO); log.push('músicas, audiovisuais e textos sagrados conferidos: ' + filaO.length); }
+      catch (e) { log.push('conferir outros: erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosO >= 3) break; }
+    }
+  }
   let nomesValidados = 0, errosN = 0;
   if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA) {
     while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
