@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Search, Undo2, PlayCircle, Trash2, Unlink, Link2 } from 'lucide-react'
+import { Search, Undo2, PlayCircle, Trash2, Unlink, Link2, Pencil } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
+import EditarNome from '../components/EditarNome'
 
 interface Obra { NOME: string; VIDEOS: number; PARTES: number; STATUS: string | null }
 interface Parte { ID: number; NOME: string; VIDEOS: number; INDICADO_ID: number | null }
@@ -31,6 +32,7 @@ export default function SagradosPage() {
   const [juntando, setJuntando] = useState<number | null>(null)
   const [destino, setDestino] = useState('')
   const [erro, setErro] = useState('')
+  const [editando, setEditando] = useState<number | null>(null)
 
   async function carregar(offset: number) {
     setCarregando(true)
@@ -132,10 +134,12 @@ export default function SagradosPage() {
                       <Button size="sm" variant="secondary" onClick={() => verOnde(pt)}>{onde === pt.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
                       {pt.NOME !== ob.NOME && <Button size="sm" variant="secondary" onClick={() => tirar(pt, ob.NOME)}><Unlink size={14} />Tirar do grupo</Button>}
                       <Button size="sm" variant="secondary" onClick={() => { setJuntando(juntando === pt.ID ? null : pt.ID); setDestino('') }}><Link2 size={14} />Juntar com…</Button>
+                      <Button size="sm" variant="secondary" onClick={() => setEditando(editando === pt.ID ? null : pt.ID)}><Pencil size={14} />Editar</Button>
                       <Button size="sm" variant="secondary" onClick={() => voltar(pt, ob.NOME)}><Undo2 size={14} />Voltar para validar</Button>
                       <Button size="sm" variant="secondary" onClick={() => remover(pt, ob.NOME)}><Trash2 size={14} />Remover</Button>
                     </div>
                   </div>
+                  {editando === pt.ID && <EditarNome id={pt.ID} estado="SAGRADO" motivo={null} onCancelar={() => setEditando(null)} onSalvo={() => { setEditando(null); setAberta(null); recarregar(ob.NOME) }} />}
                   {juntando === pt.ID && (
                     <form className="flex gap-2" onSubmit={e => { e.preventDefault(); if (limpa(destino)) juntar(pt, ob.NOME) }}>
                       <input list="obras-sagradas" value={destino} onChange={e => setDestino(e.target.value)} placeholder="Nome da obra (escolha ou escreva)" className="controle flex-1" />

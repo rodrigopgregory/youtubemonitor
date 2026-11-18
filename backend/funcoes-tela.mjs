@@ -142,6 +142,7 @@ export const tela = [
   S('sagradoJuntar', `INSERT INTO OBRA_DE (NOME, OBRA) VALUES ('{{nome}}', '{{obra}}') ON DUPLICATE KEY UPDATE OBRA = '{{obra}}'`, 'Junta um nome a uma obra sagrada'),
   S('sagradoSeparar', `DELETE FROM OBRA_DE WHERE NOME = '{{nome}}'`, 'Tira um nome do grupo de uma obra'),
   S('nomeSagrado', `INSERT INTO LIVROS_NOMES (NOME, ESTADO, MOTIVO, CRIADO_EM) SELECT X.TITULO, 'SAGRADO', 'Decidido pela pessoa', DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s') FROM LIVROS_INDICADOS X WHERE X.ID = {{id}} ON DUPLICATE KEY UPDATE ESTADO = 'SAGRADO'`, 'Marca um nome como texto sagrado ou clássico'),
+  S('outrosEditar', `UPDATE LIVROS_NOMES SET ESTADO = '{{estado}}', MOTIVO = NULLIF(LEFT('{{motivo}}', 300), ''), CATALOGO_ID = NULL WHERE ID = {{id}} AND ESTADO IN ('MUSICA', 'AUDIOVISUAL', 'SAGRADO') AND '{{estado}}' IN ('MUSICA', 'AUDIOVISUAL', 'SAGRADO', 'PENDENTE')`, 'Muda o tipo de um nome (música, audiovisual, texto sagrado ou voltar para validar) e a nota'),
   S('outrosVoltar', `UPDATE LIVROS_NOMES SET ESTADO = 'PENDENTE' WHERE ID = {{id}} AND ESTADO IN ('MUSICA', 'AUDIOVISUAL', 'SAGRADO')`, 'Devolve um nome para Validar entradas'),
   S('favItemMarcar', `INSERT IGNORE INTO ITENS_FAVORITOS (TIPO, NOME, CRIADO_EM) VALUES ('{{tipo}}', '{{nome}}', DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s'))`, 'Marca um livro, música ou audiovisual como favorito'),
   S('favItemTirar', `DELETE FROM ITENS_FAVORITOS WHERE TIPO = '{{tipo}}' AND NOME = '{{nome}}'`, 'Tira um item dos favoritos'),

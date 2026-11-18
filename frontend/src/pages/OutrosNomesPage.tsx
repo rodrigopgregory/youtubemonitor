@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
-import { Search, Undo2, PlayCircle, Trash2 } from 'lucide-react'
+import { Search, Undo2, PlayCircle, Trash2, Pencil } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
+import EditarNome from '../components/EditarNome'
 
 interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
@@ -31,6 +32,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const [onde, setOnde] = useState<number | null>(null)
   const [ondeLista, setOndeLista] = useState<Onde[] | null>(null)
   const [erro, setErro] = useState('')
+  const [editando, setEditando] = useState<number | null>(null)
 
   async function carregar(offset: number) {
     setCarregando(true)
@@ -97,6 +99,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
             <div className="flex gap-2 items-center">
               <EstrelaItem favorito={fav.ehFavorito(it.NOME)} onAlternar={() => fav.alternar(it.NOME)} />
               <Button size="sm" variant="secondary" onClick={() => verOnde(it)}>{onde === it.ID ? 'Esconder onde foi dito' : 'Ver onde foi dito'}</Button>
+              <Button size="sm" variant="secondary" onClick={() => setEditando(editando === it.ID ? null : it.ID)}><Pencil size={14} />Editar</Button>
               <Button size="sm" variant="secondary" onClick={() => voltar(it)}><Undo2 size={14} />Voltar para validar</Button>
               <Button size="sm" variant="secondary" onClick={() => remover(it)}><Trash2 size={14} />Remover</Button>
             </div>
@@ -108,6 +111,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
               {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
             </select>
           </div>
+          {editando === it.ID && <EditarNome id={it.ID} estado={estado} motivo={it.MOTIVO} onCancelar={() => setEditando(null)} onSalvo={(novo, nota) => { setEditando(null); setLista(l => novo === estado ? l.map(x => x.ID === it.ID ? { ...x, MOTIVO: nota || null } : x) : l.filter(x => x.ID !== it.ID)) }} />}
           {it.MOTIVO && <p className="text-[13.5px]" style={muted}>{it.MOTIVO}</p>}
           {onde === it.ID && (
             <div className="flex flex-col gap-2 text-[13px]">
