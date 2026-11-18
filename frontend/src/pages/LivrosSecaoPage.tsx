@@ -2,6 +2,7 @@ import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import RelacaoLivrosPage from './RelacaoLivrosPage'
 import ValidarLivrosPage from './ValidarLivrosPage'
 import OutrosNomesPage from './OutrosNomesPage'
+import SagradosPage from './SagradosPage'
 
 const sub = [
   { to: '/livros/validar', label: 'Validar entradas' },
@@ -29,7 +30,7 @@ export default function LivrosSecaoPage() {
         <Route path="validar" element={<ValidarLivrosPage />} />
         <Route path="musicas" element={<OutrosNomesPage estado="MUSICA" titulo="Músicas, álbuns e bandas" texto="Nomes citados nos vídeos que são música, álbum ou banda e não livro." />} />
         <Route path="audiovisuais" element={<OutrosNomesPage estado="AUDIOVISUAL" titulo="Filmes, séries e vídeos" texto="Nomes citados nos vídeos que são filme, série ou vídeo e não livro." />} />
-        <Route path="sagrados" element={<OutrosNomesPage estado="SAGRADO" titulo="Textos sagrados e clássicos" texto="Bíblia, Gita, Alcorão e outros textos citados nos vídeos, fora da lista de livros." />} />
+        <Route path="sagrados" element={<SagradosPage />} />
         <Route path="*" element={<Navigate to="validar" replace />} />
       </Routes>
     </div>
