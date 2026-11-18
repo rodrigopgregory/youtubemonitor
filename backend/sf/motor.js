@@ -798,6 +798,27 @@ try {
       } catch (e) { await sql('loteApagar', { chave }).catch(() => {}); log.push('validar livros: erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosN >= 3) break; }
     }
   }
+  let refinados = 0, errosR = 0; const vistosR = new Set();
+  if (cfg.GEMINI_OK && cfg.LIVROS_LIGADO !== '0' && cfg.VALIDAR_LIVROS !== '0' && !IA_SEM_COTA && !BUSCA_FALHOU) {
+    const limpoR = t => String(t || '').replace(/['"\\{}]/g, ' ').replace(/\s+/g, ' ').trim();
+    while (Date.now() - T0 < Number(cfg.ORCAMENTO_SEG || 230) * 1000 - 60e3) {
+      const filaR = ((await sql('pendRefinoFila', { limit: 20 })).rows || []);
+      const novosR = filaR.filter(x => !vistosR.has(String(x.NOME)));
+      if (!novosR.length) break;
+      filaR.forEach(x => vistosR.add(String(x.NOME)));
+      try {
+        const res = await validarNomes(cfg, novosR);
+        if (BUSCA_FALHOU) { log.push('refino dos pendentes adiado: busca do Google sem cota'); break; }
+        const autorR = new Map(novosR.map(x => [String(x.NOME), String(x.AUTOR || '')]));
+        for (const x of res) {
+          if (/['"\\]/.test(x.nome)) continue;
+          await sql('pendRefinoGravar', { nome: x.nome, titulo: limpoR(x.titulo), autor: limpoR(x.autor), motivo: limpoR(x.motivo) || 'Refinado com a busca do Google' });
+          if (x.titulo) await gravarCerteza([Object.assign({ autorOuvido: autorR.get(x.nome) || '', verif: !!x.achouNaBusca }, x)]);
+        }
+        refinados += res.length; log.push('pendentes refinados com a busca do Google: ' + res.length);
+      } catch (e) { log.push('refinar pendentes: erro ' + String(e.message || e).slice(0, 150)); if (IA_SEM_COTA || ++errosR >= 3) break; }
+    }
+  }
   let livroDisparado = false;
   const livroNoite = Number(cfg.LIVRO_POR_NOITE || 2);
   if (cfg.GEMINI_OK && cfg.LIVRO_LIGADO !== '0' && !(cfg.LIVRO_PAUSA_ATE && cfg.LIVRO_PAUSA_ATE > agora()) && livroNoite > 0 && !IA_SEM_COTA && horaBR >= 1 && horaBR < 7 && !(cfg.IA_PAUSADA_ATE && cfg.IA_PAUSADA_ATE > agora())) {
