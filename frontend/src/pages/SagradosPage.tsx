@@ -5,6 +5,7 @@ import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 import EditarNome from '../components/EditarNome'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 
 interface Obra { NOME: string; VIDEOS: number; PARTES: number; STATUS: string | null }
 interface Parte { ID: number; NOME: string; VIDEOS: number; INDICADO_ID: number | null }
@@ -19,6 +20,7 @@ export default function SagradosPage() {
   const fav = useFavoritosTipo('SAGRADO')
   const [lista, setLista] = useState<Obra[]>([])
   const [busca, setBusca] = useState('')
+  const [canalId, setCanalId] = useCanal()
   const [q, setQ] = useState('')
   const [statusF, setStatusF] = useState('')
   const [ordem, setOrdem] = useState('mais')
@@ -37,15 +39,15 @@ export default function SagradosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Obra>('sagradoObras', { busca: limpa(q), status: statusF, ordem, fav: soFav ? '1' : '', limit: PAG, offset })
+      const r = await linhas<Obra>('sagradoObras', { canalId, busca: limpa(q), status: statusF, ordem, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setAberta(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, statusF, ordem, soFav])
+  }, [canalId, q, statusF, ordem, soFav])
 
   async function carregarPartes(obra: string) {
-    setPartes(await linhas<Parte>('sagradoPartes', { obra }).catch(() => []))
+    setPartes(await linhas<Parte>('sagradoPartes', { obra, canalId }).catch(() => []))
   }
   async function abrir(obra: string) {
     if (aberta === obra) { setAberta(null); return }
@@ -87,6 +89,7 @@ export default function SagradosPage() {
         <Button type="submit">Buscar</Button>
       </form>
       <div className="grid gap-2 sm:grid-cols-3">
+        <div className="sm:col-span-full"><CanalFiltro valor={canalId} onChange={setCanalId} /></div>
         <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação">
           <option value="">Todas as situações</option>
           {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[i]}</option>)}

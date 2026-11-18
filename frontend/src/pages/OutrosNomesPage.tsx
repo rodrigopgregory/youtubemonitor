@@ -5,6 +5,7 @@ import Button from '../components/ui/Button'
 import { linhas, chamar, linkYt, mmss } from '../lib/api'
 import EstrelaItem, { useFavoritosTipo } from '../components/EstrelaItem'
 import EditarNome from '../components/EditarNome'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 
 interface Item { ID: number; NOME: string; MOTIVO: string | null; VIDEOS: number; INDICADO_ID: number | null; STATUS: string | null; CONFERIDO: string | null; CONF_NOTA: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string }
@@ -23,6 +24,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const fav = useFavoritosTipo(estado)
   const [lista, setLista] = useState<Item[]>([])
   const [busca, setBusca] = useState('')
+  const [canalId, setCanalId] = useCanal()
   const [q, setQ] = useState('')
   const [statusF, setStatusF] = useState('')
   const [ordem, setOrdem] = useState('mais')
@@ -38,12 +40,12 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, conf, fav: soFav ? '1' : '', limit: PAG, offset })
+      const r = await linhas<Item>('outrosLista', { estado, canalId, busca: limpa(q), status: statusF, ordem, conf, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setOnde(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estado, q, statusF, ordem, soFav, conf])
+  }, [estado, canalId, q, statusF, ordem, soFav, conf])
 
   async function voltar(it: Item) {
     setErro('')
@@ -81,6 +83,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         <Button type="submit">Buscar</Button>
       </form>
       <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="sm:col-span-full"><CanalFiltro valor={canalId} onChange={setCanalId} /></div>
         <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação">
           <option value="">Todas as situações</option>
           {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
