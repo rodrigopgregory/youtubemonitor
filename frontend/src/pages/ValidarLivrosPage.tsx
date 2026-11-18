@@ -75,6 +75,17 @@ export default function ValidarLivrosPage() {
     for (const it of alvo) await gravar(it, it.SUG_TITULO || '', it.SUG_AUTOR || '', 0)
     setMarcados(m => { const n = new Set(m); alvo.forEach(x => n.delete(x.ID)); return n })
   }
+  async function naoLivroMarcados() {
+    const alvo = lista.filter(x => marcados.has(x.ID))
+    if (!alvo.length || !window.confirm('Marcar ' + alvo.length + ' nomes como "não é livro"? Eles saem desta lista.')) return
+    setMassa('...')
+    let feitos = 0
+    for (const it of alvo) {
+      try { await chamar('nomeNaoLivro', { id: it.ID }); feitos++; setLista(l => l.filter(x => x.ID !== it.ID)); setMarcados(m => { const n = new Set(m); n.delete(it.ID); return n }) } catch { break }
+    }
+    setMassa(feitos === alvo.length ? feitos + ' nomes marcados como não é livro.' : 'Marquei ' + feitos + ' de ' + alvo.length + '. Tente de novo para o resto.')
+    totais()
+  }
   const grupos = filtro === 'grupo' ? Object.values(lista.reduce<Record<string, Item[]>>((acc, it) => { const k = it.SUG_TITULO || ''; (acc[k] = acc[k] || []).push(it); return acc }, {})) : []
   function sair(id: number) { setLista(l => l.filter(x => x.ID !== id)); totais(); setEditando(null) }
   async function executar(it: Item, fn: () => Promise<void>) {
@@ -228,6 +239,7 @@ export default function ValidarLivrosPage() {
           <option value="novoautor">Sem sugestão, com autor ouvido</option>
           <option value="novosolo">Sem sugestão, só o nome</option>
           <option value="novo">Ainda não vistos pela IA</option>
+          <option value="semautor">Sem nenhum autor (nem ouvido, nem sugerido)</option>
         </select>
         <Button type="submit">Buscar</Button>
       </form>
@@ -242,6 +254,13 @@ export default function ValidarLivrosPage() {
         <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
+      {filtro !== 'grupo' && lista.length > 0 && (
+        <div className="flex items-center gap-3 flex-wrap">
+          <Button size="sm" variant="secondary" onClick={() => setMarcados(m => { const n = new Set(m); lista.forEach(x => n.add(x.ID)); return n })}>Marcar todos os {lista.length} da tela</Button>
+          <Button size="sm" variant="secondary" disabled={!marcados.size} onClick={() => setMarcados(new Set())}>Desmarcar</Button>
+          <Button size="sm" disabled={!lista.some(x => marcados.has(x.ID)) || massa === '...'} onClick={naoLivroMarcados}><Ban size={14} />Não é livro nos marcados ({lista.filter(x => marcados.has(x.ID)).length})</Button>
+        </div>
+      )}
       {importar && (
         <Card className="p-4 flex flex-col gap-2">
           <label className="text-[12px] font-medium" style={muted}>Cole aqui o array JSON que o Claude devolveu</label>
@@ -279,6 +298,7 @@ export default function ValidarLivrosPage() {
         {filtro !== 'grupo' && lista.map(it => (
           <Card key={it.ID} className="px-4 py-3 flex flex-col gap-2">
             <div className="flex items-baseline gap-2 flex-wrap">
+              <input type="checkbox" checked={marcados.has(it.ID)} onChange={() => marcar(it.ID)} aria-label="Marcar este nome" />
               <span className="text-[15px] font-medium">“{it.NOME}”</span>
               {it.AUTOR && <span className="text-[13px]" style={muted}>autor ouvido: {it.AUTOR}</span>}
               <Badge variant="neutral">{Number(it.VIDEOS)} {Number(it.VIDEOS) === 1 ? 'vídeo' : 'vídeos'}</Badge>
