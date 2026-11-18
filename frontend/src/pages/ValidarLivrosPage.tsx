@@ -244,19 +244,22 @@ export default function ValidarLivrosPage() {
     const ini = bruto.indexOf('['), fim2 = bruto.lastIndexOf(']')
     let lista2: { tipo?: string; subtipo?: string; nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string; fonte?: string }[] = []
     try { lista2 = JSON.parse(bruto.slice(ini, fim2 + 1)) } catch { setMsgImportar('Não consegui ler. Cole o array JSON que o Claude devolveu, começando em [ e terminando em ].'); return }
-    let gravados = 0, vazios = 0, falhas = 0
+    let gravados = 0, vazios = 0, falhas = 0, movidos = 0
     for (const x of lista2) {
       const nome = limpa(String(x.nome || '')), tit = limpa(String(x.titulo || ''))
       if (!nome) continue
-      const tp = ({ livro: 'livro', musica: 'musica', 'música': 'musica', audiovisual: 'audiovisual', sagrado: 'sagrado', outro: 'outro' } as Record<string, string>)[String(x.tipo || '').toLowerCase().trim()] || ''
+      let tp = ({ livro: 'livro', musica: 'musica', 'música': 'musica', audiovisual: 'audiovisual', sagrado: 'sagrado', outro: 'outro' } as Record<string, string>)[String(x.tipo || '').toLowerCase().trim()] || ''
+      const dica = (String(x.motivo || '').match(/n[aã]o [eé] livro:\s*([^.]*)/i)?.[1] || '').toLowerCase()
+      if (!tp && dica) tp = /m[uú]sica|can[cç][aã]o/.test(dica) ? 'musica' : /jogo|filme|s[eé]rie|anime|document|anima|desenho|especial|franquia|tv/.test(dica) ? 'audiovisual' : ''
       if (!tit && !(tp && tp !== 'livro')) { vazios++; continue }
-      const st = String(x.subtipo || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-      const sub = tp !== 'audiovisual' ? '' : /anime|serie/.test(st) ? 'serie' : /document/.test(st) ? 'documentario' : /jogo|game/.test(st) ? 'jogo' : /filme/.test(st) ? 'filme' : ''
+      const st = String(x.subtipo || dica).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+      const cats = [/jogo|game/.test(st) && 'jogo', /document/.test(st) && 'documentario', /anime|serie|desenho/.test(st) && 'serie', /filme|animacao/.test(st) && 'filme'].filter(Boolean)
+      const sub = tp !== 'audiovisual' ? '' : cats.length === 1 ? String(cats[0]) : cats.includes('documentario') ? 'documentario' : ''
       const cert = Math.max(0, Math.min(100, Math.round(Number(x.certeza) || 0)))
-      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, subtipo: sub, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
+      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, subtipo: sub, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++; if (tp === 'musica' || tp === 'audiovisual' || tp === 'sagrado') { await chamar('nomeTipoPorNome', { padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), estado: tp === 'musica' ? 'MUSICA' : tp === 'sagrado' ? 'SAGRADO' : 'AUDIOVISUAL', subtipo: sub }); movidos++ } } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
-    setMsgImportar(gravados + ' sugestões gravadas' + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
+    setMsgImportar(gravados + ' sugestões gravadas' + (movidos ? ', ' + movidos + ' já levados para a aba de música, filmes e séries ou textos sagrados' : '') + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
     carregar(0); totais()
   }
   function abrir(it: Item) { setColado(''); setLeitura(''); setEditando(it.ID); setTitulo(it.SUG_TITULO || ''); setAutor(it.SUG_AUTOR || it.AUTOR || ''); setCatId(0); setAchados([]) }
