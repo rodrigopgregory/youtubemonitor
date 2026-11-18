@@ -99,7 +99,8 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
           <option value="">Toda conferência</option>
           <option value="DUVIDA">Com dúvida</option>
           <option value="OK">Conferidos pela IA</option>
-          <option value="ACEITO">Aceitos por mim</option>
+          <option value="IMPORTADO">Validados pelo Claude</option>
+          <option value="ACEITO">Validados por mim</option>
           <option value="NOVO">Ainda não conferidos</option>
         </select>
         {estado === 'AUDIOVISUAL' && (
@@ -147,7 +148,8 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
           {editando === it.ID && <EditarNome id={it.ID} estado={estado} motivo={it.MOTIVO} onCancelar={() => setEditando(null)} onSalvo={(novo, nota) => { setEditando(null); setLista(l => novo === estado ? l.map(x => x.ID === it.ID ? { ...x, MOTIVO: nota || null } : x) : l.filter(x => x.ID !== it.ID)) }} />}
           {it.CONFERIDO === 'DUVIDA' && <div className="flex items-center gap-2 flex-wrap"><span className="text-[13.5px] font-medium">A IA ficou em dúvida:</span><span className="text-[13.5px]">{it.CONF_NOTA}</span><Button size="sm" onClick={() => aceitar(it)}>Aceitar como está</Button></div>}
           {it.CONFERIDO === 'OK' && <p className="text-[13px]" style={muted}>Conferido pela IA{it.CONF_NOTA ? ': ' + it.CONF_NOTA : ''}</p>}
-          {it.CONFERIDO === 'ACEITO' && <p className="text-[13px]" style={muted}>Aceito por você</p>}
+          {it.CONFERIDO === 'ACEITO' && <p className="text-[13px]" style={muted}>Validado por você</p>}
+          {it.CONFERIDO === 'IMPORTADO' && <div className="flex items-center gap-2 flex-wrap"><span className="text-[13px]" style={muted}>Validado pelo Claude</span><Button size="sm" variant="secondary" onClick={() => aceitar(it)}>Marcar como validado por mim</Button></div>}
           {it.MOTIVO && <p className="text-[13.5px]" style={muted}>{it.MOTIVO}</p>}
           {onde === it.ID && (
             <div className="flex flex-col gap-2 text-[13px]">
