@@ -150,7 +150,7 @@ export default function ValidarLivrosPage() {
         todos.push(...r)
         if (r.length < 300) break
       }
-      const validos = todos.filter(x => !/['"\\{}]/.test(x.NOME))
+      const validos = todos
       const itens = validos.map(x => ({
         nome: x.NOME,
         autor_ouvido: x.AUTOR || '',
@@ -183,7 +183,7 @@ export default function ValidarLivrosPage() {
       const blob = new Blob([instrucao + '\n' + itens.map(x => JSON.stringify(x)).join('\n')], { type: 'text/plain;charset=utf-8' })
       const a = document.createElement('a')
       a.href = URL.createObjectURL(blob); a.download = 'validar-livros.txt'; a.click(); URL.revokeObjectURL(a.href)
-      setMassa(itens.length + ' nomes exportados no arquivo validar-livros.txt.' + (todos.length > validos.length ? ' ' + (todos.length - validos.length) + ' ficaram de fora por terem aspas ou barras no nome.' : ''))
+      setMassa(itens.length + ' nomes exportados no arquivo validar-livros.txt.')
     } catch { setMassa('Não deu certo agora. Tente de novo.') }
     setExportando(false)
   }
@@ -199,7 +199,7 @@ export default function ValidarLivrosPage() {
       if (!nome) continue
       if (!tit) { vazios++; continue }
       const cert = Math.max(0, Math.min(80, Math.round(Number(x.certeza) || 0)))
-      try { await chamar('validarSugerir', { nome, titulo: tit, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
+      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++ } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
     setMsgImportar(gravados + ' sugestões gravadas' + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
