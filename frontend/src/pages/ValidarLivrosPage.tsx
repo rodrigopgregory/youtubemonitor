@@ -43,8 +43,15 @@ export default function ValidarLivrosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, limit: filtro === 'grupo' ? 300 : PAG, offset })
-      setLista(l => offset ? [...l, ...r] : r); setFim(r.length < (filtro === 'grupo' ? 300 : PAG))
+      const tudo = !!(filtro || q)
+      const passo = tudo ? 300 : PAG
+      let achados: Item[] = []
+      let ultimo = 0
+      do {
+        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, limit: passo, offset: offset + achados.length })
+        achados = achados.concat(r); ultimo = r.length
+      } while (tudo && ultimo === passo && achados.length < 6000)
+      setLista(l => offset ? [...l, ...achados] : achados); setFim(tudo ? true : ultimo < passo)
     } finally { setCarregando(false) }
   }
   function totais() { linhas<{ N: number; PEND: number; COM_AUTOR: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0), COM_AUTOR: Number(r[0]?.COM_AUTOR || 0) })).catch(() => {}) }
