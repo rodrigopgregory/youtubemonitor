@@ -20,6 +20,8 @@ export default function ValidarLivrosPage() {
   const [busca, setBusca] = useState('')
   const [q, setQ] = useState('')
   const [filtro, setFiltro] = useState('')
+  const [faixa, setFaixa] = useState('')
+  const [grupo, setGrupo] = useState(false)
   const [tipo, setTipo] = useState('')
   const [origem, setOrigem] = useState('')
   const [fim, setFim] = useState(false)
@@ -45,12 +47,12 @@ export default function ValidarLivrosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const tudo = !!(filtro || tipo || origem || q)
+      const tudo = !!(filtro || faixa || grupo || tipo || origem || q)
       const passo = tudo ? 300 : PAG
       let achados: Item[] = []
       let ultimo = 0
       do {
-        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, tipo, origem, limit: passo, offset: offset + achados.length })
+        const r = await linhas<Item>('validarLista', { busca: limpa(q), filtro, faixa, grupo: grupo ? '1' : '', tipo, origem, limit: passo, offset: offset + achados.length })
         achados = achados.concat(r); ultimo = r.length
       } while (tudo && ultimo === passo && achados.length < 6000)
       setLista(l => offset ? [...l, ...achados] : achados); setFim(tudo ? true : ultimo < passo)
@@ -58,7 +60,7 @@ export default function ValidarLivrosPage() {
   }
   function totais() { linhas<{ N: number; PEND: number; COM_AUTOR: number }>('validarTotal').then(r => setTotal({ N: Number(r[0]?.N || 0), PEND: Number(r[0]?.PEND || 0), COM_AUTOR: Number(r[0]?.COM_AUTOR || 0) })).catch(() => {}) }
   useEffect(() => { carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [q, filtro, tipo, origem])
+  }, [q, filtro, faixa, grupo, tipo, origem])
   useEffect(totais, [])
   useEffect(() => {
     const t = limpa(titulo)
@@ -120,7 +122,7 @@ export default function ValidarLivrosPage() {
     setMassa(feitos === alvo.length ? feitos + ' nomes marcados como ' + rotulo + '.' : 'Marquei ' + feitos + ' de ' + alvo.length + '. Tente de novo para o resto.')
     totais()
   }
-  const grupos = filtro === 'grupo' ? Object.values(lista.reduce<Record<string, Item[]>>((acc, it) => { const k = it.SUG_TITULO || ''; (acc[k] = acc[k] || []).push(it); return acc }, {})) : []
+  const grupos = grupo ? Object.values(lista.reduce<Record<string, Item[]>>((acc, it) => { const k = it.SUG_TITULO || ''; (acc[k] = acc[k] || []).push(it); return acc }, {})) : []
   function sair(id: number) { setLista(l => l.filter(x => x.ID !== id)); totais(); setEditando(null) }
   async function executar(it: Item, fn: () => Promise<void>) {
     setOcupado(it.ID); setAviso(a => ({ ...a, [it.ID]: '' }))
@@ -191,7 +193,7 @@ export default function ValidarLivrosPage() {
       type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null; TIPO: string | null }
       const todos: Linha[] = []
       for (let offset = 0; offset < 6000; offset += 300) {
-        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, tipo, origem, limit: 300, offset })
+        const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, faixa, grupo: grupo ? '1' : '', tipo, origem, limit: 300, offset })
         todos.push(...r)
         if (r.length < 300) break
       }
@@ -269,15 +271,18 @@ export default function ValidarLivrosPage() {
         </div>
         <select value={filtro} onChange={e => setFiltro(e.target.value)} className="controle" aria-label="Mostrar">
           <option value="">Todos</option>
-          <option value="alta">Certeza de 90% ou mais</option>
-          <option value="baixa">Abaixo de 90%</option>
-          <option value="grupo">Agrupados por livro</option>
           <option value="sug">Com sugestão</option>
           <option value="novoautor">Sem sugestão, com autor ouvido</option>
           <option value="novosolo">Sem sugestão, só o nome</option>
           <option value="novo">Ainda não vistos pela IA</option>
           <option value="semautor">Sem nenhum autor (nem ouvido, nem sugerido)</option>
         </select>
+        <select value={faixa} onChange={e => setFaixa(e.target.value)} className="controle" aria-label="Certeza">
+          <option value="">Qualquer certeza</option>
+          <option value="alta">Certeza de 90% ou mais</option>
+          <option value="baixa">Abaixo de 90%</option>
+        </select>
+        <label className="controle flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={grupo} onChange={e => setGrupo(e.target.checked)} />Agrupar por livro</label>
         <select value={origem} onChange={e => setOrigem(e.target.value)} className="controle" aria-label="Origem da sugestão">
           <option value="">Qualquer origem</option>
           <option value="claude">Validados pelo Claude</option>
@@ -301,11 +306,11 @@ export default function ValidarLivrosPage() {
 
       <div className="flex items-center gap-3 flex-wrap">
         <Button variant="secondary" disabled={massa === '...'} onClick={aceitarAlta}><Check size={14} />Aceitar todos com 90% ou mais</Button>
-        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || tipo || origem || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
+        <Button variant="secondary" disabled={exportando} onClick={exportarPendentes}><FileText size={14} />{exportando ? 'Exportando…' : (filtro || faixa || grupo || tipo || origem || q ? 'Exportar o filtro atual para o Claude' : 'Exportar pendentes para o Claude')}</Button>
         <Button variant="secondary" onClick={() => setImportar(v => !v)}><PenLine size={14} />Colar respostas do Claude</Button>
         {massa && massa !== '...' && <span className="text-[13px]" style={muted}>{massa}</span>}
       </div>
-      {filtro !== 'grupo' && lista.length > 0 && (
+      {!grupo && lista.length > 0 && (
         <div className="flex items-center gap-3 flex-wrap">
           <Button size="sm" variant="secondary" onClick={() => setMarcados(m => { const n = new Set(m); lista.forEach(x => n.add(x.ID)); return n })}>Marcar todos os {lista.length} da tela</Button>
           <Button size="sm" variant="secondary" disabled={!marcados.size} onClick={() => setMarcados(new Set())}>Desmarcar</Button>
@@ -350,7 +355,7 @@ export default function ValidarLivrosPage() {
             </div>
           </Card>
         ))}
-        {filtro !== 'grupo' && lista.map(it => (
+        {!grupo && lista.map(it => (
           <Card key={it.ID} className="px-4 py-3 flex flex-col gap-2">
             <div className="flex items-baseline gap-2 flex-wrap">
               <input type="checkbox" checked={marcados.has(it.ID)} onChange={() => marcar(it.ID)} aria-label="Marcar este nome" />
