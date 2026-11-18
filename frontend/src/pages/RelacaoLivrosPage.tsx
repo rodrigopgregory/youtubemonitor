@@ -22,6 +22,7 @@ export default function RelacaoLivrosPage() {
   const [titulo, setTitulo] = useState('')
   const [autor, setAutor] = useState('')
   const [ordem, setOrdem] = useState('mais')
+  const [soFav, setSoFav] = useState(false)
   const [statusF, setStatusF] = useState('')
   const [tq, setTq] = useState('')
   const [aq, setAq] = useState('')
@@ -42,13 +43,13 @@ export default function RelacaoLivrosPage() {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Relacao>('livrosRelacao', { canalId, busca: limpa(q), titulo: limpa(tq), autor: limpa(aq), status: statusF, ordem, limit: PAG, offset })
+      const r = await linhas<Relacao>('livrosRelacao', { canalId, busca: limpa(q), titulo: limpa(tq), autor: limpa(aq), status: statusF, ordem, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { const t = setTimeout(() => { setTq(titulo.trim()); setAq(autor.trim()) }, 400); return () => clearTimeout(t) }, [titulo, autor])
   useEffect(() => { setAberto(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [canalId, q, tq, aq, ordem, statusF])
+  }, [canalId, q, tq, aq, ordem, statusF, soFav])
 
   async function abrir(id: number) {
     if (aberto === id) { setAberto(null); return }
@@ -114,7 +115,7 @@ export default function RelacaoLivrosPage() {
         <Button type="submit">Buscar</Button>
       </form>
 
-      <div className="grid gap-2 sm:grid-cols-4">
+      <div className="grid gap-2 sm:grid-cols-5">
         <input value={titulo} onChange={e => setTitulo(e.target.value)} placeholder="Filtrar por título" className="controle w-full" aria-label="Filtrar por título" />
         <input value={autor} onChange={e => setAutor(e.target.value)} placeholder="Filtrar por autor" className="controle w-full" aria-label="Filtrar por autor" />
         <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação de leitura">
@@ -129,6 +130,7 @@ export default function RelacaoLivrosPage() {
           <option value="mais">Mais citados primeiro</option>
           <option value="az">Ordem alfabética</option>
         </select>
+        <label className="controle w-full inline-flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={soFav} onChange={e => setSoFav(e.target.checked)} />Só favoritos</label>
       </div>
 
       {totais && <p className="text-[12.5px]" style={{ color: 'var(--fg-subtle)' }}>{Number(totais.LIVROS).toLocaleString('pt-BR')} livros diferentes, {Number(totais.N).toLocaleString('pt-BR')} indicações em {Number(totais.VIDEOS).toLocaleString('pt-BR')} vídeos. A IA lê os vídeos aos poucos, então a relação cresce a cada hora.</p>}

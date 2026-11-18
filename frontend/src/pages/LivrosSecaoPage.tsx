@@ -14,10 +14,10 @@ const sub = [
 export default function LivrosSecaoPage() {
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center gap-1 border-b" style={{ borderColor: 'var(--border)' }}>
+      <div className="flex items-center gap-1 border-b overflow-x-auto" style={{ borderColor: 'var(--border)' }}>
         {sub.map(s => (
           <NavLink key={s.to} to={s.to}
-            className="h-10 px-3 inline-flex items-center text-[14px] font-medium border-b-2 -mb-px"
+            className="h-10 px-3 inline-flex items-center text-[14px] font-medium border-b-2 -mb-px whitespace-nowrap shrink-0"
             style={({ isActive }) => isActive ? { borderColor: 'var(--accent)', color: 'var(--accent-text)' } : { borderColor: 'transparent', color: 'var(--fg-muted)' }}>
             {s.label}
           </NavLink>

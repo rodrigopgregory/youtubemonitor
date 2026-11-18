@@ -25,6 +25,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   const [q, setQ] = useState('')
   const [statusF, setStatusF] = useState('')
   const [ordem, setOrdem] = useState('mais')
+  const [soFav, setSoFav] = useState(false)
   const [fim, setFim] = useState(false)
   const [carregando, setCarregando] = useState(false)
   const [onde, setOnde] = useState<number | null>(null)
@@ -34,12 +35,12 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
   async function carregar(offset: number) {
     setCarregando(true)
     try {
-      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, limit: PAG, offset })
+      const r = await linhas<Item>('outrosLista', { estado, busca: limpa(q), status: statusF, ordem, fav: soFav ? '1' : '', limit: PAG, offset })
       setLista(l => offset ? [...l, ...r] : r); setFim(r.length < PAG)
     } finally { setCarregando(false) }
   }
   useEffect(() => { setOnde(null); carregar(0) // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [estado, q, statusF, ordem])
+  }, [estado, q, statusF, ordem, soFav])
 
   async function voltar(it: Item) {
     setErro('')
@@ -72,7 +73,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
         </div>
         <Button type="submit">Buscar</Button>
       </form>
-      <div className="grid gap-2 sm:grid-cols-2">
+      <div className="grid gap-2 sm:grid-cols-3">
         <select value={statusF} onChange={e => setStatusF(e.target.value)} className="controle w-full" aria-label="Situação">
           <option value="">Todas as situações</option>
           {CODIGOS.map((c, i) => <option key={c} value={c}>{STATUS[estado][i]}</option>)}
@@ -82,6 +83,7 @@ export default function OutrosNomesPage({ estado, titulo, texto }: Props) {
           <option value="mais">Mais citados primeiro</option>
           <option value="az">Ordem alfabética</option>
         </select>
+        <label className="controle w-full inline-flex items-center gap-2 cursor-pointer"><input type="checkbox" checked={soFav} onChange={e => setSoFav(e.target.checked)} />Só favoritos</label>
       </div>
       {erro && <p className="text-[13px]" style={{ color: 'var(--danger-text)' }}>{erro}</p>}
       {!carregando && lista.length === 0 && <Card className="p-6"><p className="text-[14px]" style={muted}>Nada aqui ainda. Em "Validar entradas", use "É música", "É filme ou série" ou "É texto sagrado" para mandar nomes para cá.</p></Card>}
