@@ -215,12 +215,12 @@ export default function ValidarLivrosPage() {
         'Cada item traz: o nome ouvido, o autor ouvido, em quantos videos apareceu, o trecho da transcricao e, quando existe, a sugestao atual do app (tipo, titulo, autor, certeza e motivo). Confirme, corrija ou rejeite a sugestao atual.',
         '',
         'REGRAS',
-        '- "tipo" e OBRIGATORIO em todos os itens, sem excecao. Valores permitidos: "livro", "musica", "audiovisual", "sagrado" ou "outro".',
+        '- "tipo" e OBRIGATORIO em todos os itens, sem excecao. Valores permitidos: "livro", "musica", "audiovisual", "sagrado" ou "outro". Decida NESTA ORDEM: (1) e livro? (2) se nao, e musica, album ou letra de musica? (3) se nao, e texto sagrado? (4) se nao, e filme, serie, anime, desenho, documentario, especial ou jogo? Isso e "audiovisual". (5) so use "outro" se nao se encaixar em NENHUM dos anteriores.',
         '  * "livro": livro real (inclui apostilas e obras impressas).',
         '  * "musica": cancao, album ou artista citado como musica.',
         '  * "audiovisual": filme, serie, anime, desenho, documentario, especial de TV ou jogo. Se o trecho falar do filme e nao do livro (mesmo existindo livro com o mesmo nome), use "audiovisual".',
         '  * "sagrado": texto sagrado ou escritura (Biblia, Evangelho, Bhagavad Gita, Tao Te King, Alcorao, Dhammapada, Salmos etc.).',
-        '  * "outro": frase solta, tema, nome sem obra identificavel.',
+        '  * "outro": frase solta, tema, expressao, nome de pessoa ou lugar, ou trecho sem obra identificavel. Em "outro", o campo "motivo" e OBRIGATORIO e deve dizer em uma frase o que esta sendo dito (ex.: "expressao sobre meditacao, nao e obra", "nome de uma palestrante", "trecho truncado, parece falar de reencarnacao").',
         '- "subtipo": preencha SO quando "tipo" for "audiovisual", com "filme", "serie" (series, animes e desenhos), "documentario" ou "jogo" (video game). Nos demais tipos deixe "".',
         '- Para "livro": "titulo" e o titulo oficial completo, "autor" e o autor como esta na capa, "certeza" de 0 a 100 (so acima de 85 se achou o livro em pelo menos uma loja ou catalogo). Se nao achar em nenhuma fonte, deixe "titulo" vazio e "certeza" 0, mas mantenha "tipo".',
         '- Para "musica", "audiovisual" e "sagrado": "titulo" e o nome correto da obra, "autor" e o artista, diretor ou tradicao quando souber (ou ""), e "certeza" e a sua confianca na CLASSIFICACAO.',
@@ -383,6 +383,7 @@ export default function ValidarLivrosPage() {
               <Badge variant="neutral">{Number(it.VIDEOS)} {Number(it.VIDEOS) === 1 ? 'vídeo' : 'vídeos'}</Badge>
               {it.TIPO && <Badge variant="neutral">{({ livro: 'livro', musica: 'música', audiovisual: 'filme ou série', sagrado: 'texto sagrado', outro: 'outro' } as Record<string, string>)[it.TIPO] || it.TIPO}</Badge>}
             </div>
+            {it.TIPO === 'outro' && !it.SUG_TITULO && it.MOTIVO && <p className="text-[13px]" style={muted}><Badge variant="neutral">Não identificado</Badge> {it.MOTIVO}</p>}
             {it.SUG_TITULO && <p className="text-[13px]" style={muted}>{it.CERTEZA != null && <Badge variant={Number(it.CERTEZA) >= 90 ? 'success' : 'neutral'}>{Number(it.CERTEZA)}% de certeza</Badge>} Sugestão: {it.SUG_TITULO}{it.SUG_AUTOR ? ', de ' + it.SUG_AUTOR : ''}{it.MOTIVO ? ' · ' + it.MOTIVO : ''}</p>}
             {aviso[it.ID] && <p className="text-[12.5px]">{aviso[it.ID]}</p>}
             {editando === it.ID ? (
