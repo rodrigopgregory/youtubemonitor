@@ -1,5 +1,5 @@
 -- Estrutura do banco reconstruída a partir do information_schema do MySQL 8.3.0 (SHOW CREATE foi recusado pelo Mitra).
--- Schema de origem: tenant_67241 | gerado em 2026-11-18T21:58:37 (horário de Brasília)
+-- Schema de origem: tenant_67241 | gerado em 2026-11-18T22:59:32 (horário de Brasília)
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -282,6 +282,7 @@ CREATE TABLE `LIVROS_NOMES` (
   `CONF_NOTA` varchar(300) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `TIPO_SUG` varchar(12) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `SUBTIPO` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `CERTEZA_CLAUDE` int NULL DEFAULT NULL,
   KEY `CATALOGO_ID` (`CATALOGO_ID`),
   KEY `IX_LN_ESTADO` (`ESTADO`),
   PRIMARY KEY (`ID`),

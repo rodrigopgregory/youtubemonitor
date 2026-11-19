@@ -41,9 +41,18 @@ export default function ExportGit() {
       }
       if (!pronto) throw new Error('A exportação leve demorou demais. Tente de novo.')
       setFase('git')
-      const r = await chamarLogado<{ ok: boolean; erro?: string; arquivos?: number }>('exportarGit', { acao: 'enviar' })
-      if (!r.ok) throw new Error(r.erro || 'O envio falhou.')
-      setMsg({ t: `Enviado: ${r.arquivos} arquivos.` })
+      const antes = (await chamarLogado<Estado>('exportarGit', { acao: 'estado' })).commit || ''
+      await iniciarLogado('exportarGit', { acao: 'enviar' })
+      let fim: Estado | null = null
+      for (let i = 0; i < 90 && !fim; i++) {
+        await new Promise(r => window.setTimeout(r, 3000))
+        let e: Estado | null = null
+        try { e = await chamarLogado<Estado>('exportarGit', { acao: 'estado' }) } catch { continue }
+        if (e.estado === 'ERRO') throw new Error(e.erro || 'O envio falhou.')
+        if (e.estado === 'PRONTO' && e.commit && e.commit !== antes) fim = e
+      }
+      if (!fim) throw new Error('O envio está demorando. Veja o estado abaixo em instantes.')
+      setMsg({ t: `Enviado: ${fim.arquivos} arquivos.` })
     } catch (e) {
       setMsg({ t: e instanceof Error ? e.message : 'Não foi possível enviar agora.', erro: true })
     } finally { setFase(''); atualizar() }
@@ -59,6 +68,7 @@ export default function ExportGit() {
       <div className="flex flex-wrap items-center gap-2">
         <Button variant="primary" disabled={enviando || est?.configurado === false} onClick={enviar}><GitBranch size={15} />{rotulo}</Button>
         {enviando && est?.etapa && <span className="text-[13px]" style={muted}>{est.etapa}</span>}
+        {est?.repo && <a className="text-[13px] underline" href={'https://github.com/' + est.repo} target="_blank" rel="noreferrer">Abrir o repositório</a>}
         {est?.link && <a className="text-[13px] underline" href={est.link} target="_blank" rel="noreferrer">Ver o último commit</a>}
       </div>
       {est?.quando && est.estado === 'PRONTO' && <p className="text-[12.5px]" style={muted}>Último envio: {dh(est.quando)} · {est.arquivos} arquivos · commit {est.commit?.slice(0, 7)}</p>}

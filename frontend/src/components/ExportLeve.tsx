@@ -36,7 +36,7 @@ export default function ExportLeve() {
       await iniciarLogado('exportarLeve', { acao: 'gerar', opcoes: { praticas, livro } })
       setMsg({ t: 'Geração iniciada. Pode ficar nesta tela: ela acompanha sozinha.' })
       window.setTimeout(atualizar, 2500)
-    } catch { setMsg({ t: 'Não foi possível iniciar agora.', erro: true }) } finally { setOcupado(false) }
+    } catch (e) { setMsg({ t: e instanceof Error ? e.message : 'Não foi possível iniciar agora.', erro: true }) } finally { setOcupado(false) }
   }
   async function baixar() {
     setMsg(null)
@@ -44,7 +44,7 @@ export default function ExportLeve() {
       const r = await chamarLogado<Estado>('exportarLeve', { acao: 'link' })
       if (!r.ok || !r.url) { setMsg({ t: r.erro || 'Não foi possível gerar o link.', erro: true }); return }
       const a = document.createElement('a'); a.href = r.url; a.download = r.nome || 'exportacao-leve.zip'; document.body.appendChild(a); a.click(); a.remove()
-    } catch { setMsg({ t: 'Não foi possível gerar o link agora.', erro: true }) }
+    } catch (e) { setMsg({ t: e instanceof Error ? e.message : 'Não foi possível gerar o link agora.', erro: true }) }
   }
 
   const u = est?.ultimo

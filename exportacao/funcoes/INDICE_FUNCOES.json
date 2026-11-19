@@ -3641,8 +3641,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Nomes de livros que ainda precisam de validação",
-  "tamanho_bytes": 2882,
-  "sha256": "19f7cc5e017d8dd2c1b2020ffc5c118e8d66720cc0fbd2848e928f3ed424502a",
+  "tamanho_bytes": 3164,
+  "sha256": "759fd37f118e1a8eb0357ab7c2aacb1af5c4f959dd41a2b560c65a55d80250d1",
   "telas_que_chamam": [
    "frontend/src/pages/ValidarLivrosPage.tsx"
   ]
@@ -3923,8 +3923,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Quantas sugestões com 90% ou mais de certeza podem ser aceitas em massa",
-  "tamanho_bytes": 219,
-  "sha256": "c287f0c9c26b795993a1933a420300aa8a4a8b6676b2fa38cd0c739de84aab66",
+  "tamanho_bytes": 273,
+  "sha256": "d948ab5b624ae9b9a6e9c9aaddf809997172eda46df155269874324a4d287ed3",
   "telas_que_chamam": [
    "frontend/src/pages/ValidarLivrosPage.tsx"
   ]
@@ -3940,8 +3940,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Aceita em massa as sugestões com 90% ou mais de certeza",
-  "tamanho_bytes": 426,
-  "sha256": "edaf17c44af2c84dc0c34733d5d0db1aefb20b2d68fd6ae111f7e9a58245c445",
+  "tamanho_bytes": 480,
+  "sha256": "e34993ae7d11701548f066efb5579182b065bc04621c4586b8b1c8f69d159218",
   "telas_que_chamam": [
    "frontend/src/pages/ValidarLivrosPage.tsx"
   ]
@@ -4512,8 +4512,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Pendentes de validação para exportar",
-  "tamanho_bytes": 2780,
-  "sha256": "235d61f3034d16d894c82b974537ea41e401718705d3223526c0e5587d4166ea",
+  "tamanho_bytes": 3008,
+  "sha256": "f09a79aa4bf33c957c66cd92992ee2a079c3d8d49a65a492b835305a6a8a1b03",
   "telas_que_chamam": [
    "frontend/src/pages/ValidarLivrosPage.tsx"
   ]
@@ -4537,8 +4537,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Grava uma sugestão vinda de fora, sem aprovar nada",
-  "tamanho_bytes": 891,
-  "sha256": "10422f1d2dc9242ce25a901f325dab456381fd7b5ab6d8e01bc6d1fbfcc8aa70",
+  "tamanho_bytes": 919,
+  "sha256": "9a9c89a9c01151d366b857c8712108d06781a1ea89eca05d4f860ebb2107a1c5",
   "telas_que_chamam": []
  },
  {
@@ -4560,8 +4560,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Grava sugestão vinda de fora para nomes com aspas ou barras",
-  "tamanho_bytes": 997,
-  "sha256": "fe0fffc401f67024c7213a98708eaab9fc5cb3cdb16cab409cf95104e99614a5",
+  "tamanho_bytes": 1025,
+  "sha256": "bf2f7b4874fae45c455fb261a42f0fa6fbea23ac0660dfab53f103c967dabf7a",
   "telas_que_chamam": []
  },
  {

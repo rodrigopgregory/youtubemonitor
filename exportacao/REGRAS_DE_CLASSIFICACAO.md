@@ -1,6 +1,6 @@
 # Regras de classificação do Monitor de Canais do YouTube
 
-Escrito a partir do código publicado (commit 719ba04), não de memória. Os trechos de código abaixo são cópias literais dos arquivos em `codigo/`. Onde não há evidência está escrito **NÃO SEI**.
+Escrito a partir do código publicado (commit e889ad4), não de memória. Os trechos de código abaixo são cópias literais dos arquivos em `codigo/`. Onde não há evidência está escrito **NÃO SEI**.
 
 ## 0. Visão geral
 
@@ -572,7 +572,7 @@ export const lista = (v: string | null | undefined) => String(v || '').split(','
 - Configurações da conexão do Gemini feitas só no Mitra (chave, URL, cabeçalhos, qualquer limite ou política de segurança da conexão): **NÃO SEI**. O código nunca manda `safetySettings` nem `maxOutputTokens` (exceto o Livro Vivo), então valem os padrões do Gemini.
 - Qual modelo respondeu cada vez: **NÃO SEI**. Só se grava o texto; o modelo vem do rodízio da seção 1 e não é registrado.
 - Cotas, preços e limites das chaves Gemini: **NÃO SEI** (ficam na conta do Google).
-- Prompts de versões anteriores ao commit 719ba04: estão só no histórico Git (`historico/repo.bundle`). Nenhum resultado guarda qual versão do prompt o gerou.
+- Prompts de versões anteriores ao commit e889ad4: estão só no histórico Git (`historico/repo.bundle`). Nenhum resultado guarda qual versão do prompt o gerou.
 - Tabela `TEMA_MAPA(ID, NOME, CATEGORIA, ...)`: existe e tem linhas, mas **NÃO SEI** o que a preenche nem quem a lê: não achei nenhuma referência a ela no código do app.
 - Tabela `MENTOR_REGRAS`: é editada pela tela de mentores (`mentorEditar`) e lida pelo motor; o conteúdo vai no ZIP porque é pequena.
 - Regras que valem só nas telas (textos, ordenação, cortes de tela) estão em `codigo/frontend/src`; não foram resumidas aqui.

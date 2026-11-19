@@ -1,6 +1,6 @@
 # Diferenças entre as funções publicadas no Mitra e os scripts do repositório
 
-Commit do repositório usado: `719ba0459cd18af6218e2674a4638d07df46cfdd` (código guardado em 2026-11-18T21:58:31). Funções JavaScript são comparadas com o marcador `__SF__` no lugar da tabela de números que o publicador injeta. Funções SQL são comparadas texto a texto (sem espaços nas pontas).
+Commit do repositório usado: `e889ad4c1b08ebeb4cc5db03e38465d9da6699d6` (código guardado em 2026-11-18T22:57:04). Funções JavaScript são comparadas com o marcador `__SF__` no lugar da tabela de números que o publicador injeta. Funções SQL são comparadas texto a texto (sem espaços nas pontas).
 
 - Publicadas no Mitra: 256. Iguais ao repositório: 253. Diferentes: 0. Só no Mitra: 3. Só no repositório: 0.
 

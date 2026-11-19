@@ -6,7 +6,7 @@ import Button from '../components/ui/Button'
 import InstrucaoIA from '../components/InstrucaoIA'
 import { linhas, chamar, chamarDemorado, linkYt, mmss } from '../lib/api'
 
-interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null; CERTEZA: number | null; TIPO?: string | null }
+interface Item { ID: number; NOME: string; AUTOR: string | null; VIDEOS: number; NID: number | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; MOTIVO: string | null; CERTEZA_CLAUDE?: number | null; CERTEZA: number | null; TIPO?: string | null }
 interface Onde { ID: number; SEGUNDO: number | null; TRECHO: string | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; TRANSCRICAO: string | null }
 interface Cat { ID: number; TITULO: string; AUTOR: string | null }
 const PAG = 25
@@ -191,7 +191,7 @@ export default function ValidarLivrosPage() {
   async function exportarPendentes() {
     setExportando(true); setMassa('')
     try {
-      type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; MOTIVO: string | null; TIPO: string | null }
+      type Linha = { NOME: string; AUTOR: string | null; VIDEOS: number; TRECHO: string | null; SUG_TITULO: string | null; SUG_AUTOR: string | null; CERTEZA: number | null; CERTEZA_CLAUDE?: number | null; MOTIVO: string | null; TIPO: string | null }
       const todos: Linha[] = []
       for (let offset = 0; offset < 6000; offset += 300) {
         const r = await linhas<Linha>('validarExportar', { busca: limpa(q), filtro, faixa, campos, grupo: grupo ? '1' : '', tipo, origem, limit: 300, offset })
@@ -204,7 +204,7 @@ export default function ValidarLivrosPage() {
         autor_ouvido: x.AUTOR || '',
         videos: Number(x.VIDEOS),
         trecho_da_transcricao: (x.TRECHO || '').replace(/\s+/g, ' ').trim(),
-        sugestao_atual: x.SUG_TITULO ? { tipo: x.TIPO || '', titulo: x.SUG_TITULO, autor: x.SUG_AUTOR || '', certeza_pct: x.CERTEZA == null ? null : Number(x.CERTEZA), motivo: x.MOTIVO || '' } : null
+        sugestao_atual: x.SUG_TITULO ? { tipo: x.TIPO || '', titulo: x.SUG_TITULO, autor: x.SUG_AUTOR || '', certeza_app_pct: x.CERTEZA == null ? null : Number(x.CERTEZA), certeza_claude_pct: x.CERTEZA_CLAUDE == null ? null : Number(x.CERTEZA_CLAUDE), motivo: x.MOTIVO || '' } : null
       }))
       const instrucao = [
         'CONTEXTO',
@@ -222,16 +222,16 @@ export default function ValidarLivrosPage() {
         '  * "sagrado": texto sagrado ou escritura (Biblia, Evangelho, Bhagavad Gita, Tao Te King, Alcorao, Dhammapada, Salmos etc.).',
         '  * "outro": frase solta, tema, expressao, nome de pessoa ou lugar, ou trecho sem obra identificavel. Em "outro", o campo "motivo" e OBRIGATORIO e deve dizer em uma frase o que esta sendo dito (ex.: "expressao sobre meditacao, nao e obra", "nome de uma palestrante", "trecho truncado, parece falar de reencarnacao").',
         '- "subtipo": preencha SO quando "tipo" for "audiovisual", com "filme", "serie" (series, animes e desenhos), "documentario" ou "jogo" (video game). Nos demais tipos deixe "".',
-        '- Para "livro": "titulo" e o titulo oficial completo, "autor" e o autor como esta na capa, "certeza" de 0 a 100 (so acima de 85 se achou o livro em pelo menos uma loja ou catalogo). Se nao achar em nenhuma fonte, deixe "titulo" vazio e "certeza" 0, mas mantenha "tipo".',
-        '- Para "musica", "audiovisual" e "sagrado": "titulo" e o nome correto da obra, "autor" e o artista, diretor ou tradicao quando souber (ou ""), e "certeza" e a sua confianca na CLASSIFICACAO.',
+        '- Para "livro": "titulo" e o titulo oficial completo, "autor" e o autor como esta na capa, "certeza_claude" de 0 a 100, a SUA certeza (so acima de 85 se achou o livro em pelo menos uma loja ou catalogo). Se nao achar em nenhuma fonte, deixe "titulo" vazio e "certeza" 0, mas mantenha "tipo".',
+        '- Para "musica", "audiovisual" e "sagrado": "titulo" e o nome correto da obra, "autor" e o artista, diretor ou tradicao quando souber (ou ""), e "certeza_claude" e a sua confianca na CLASSIFICACAO.',
         '- Nao invente. Se estiver em duvida entre duas categorias, escolha a mais provavel e explique em "motivo".',
         '- "fonte": o nome do site ou a URL onde achou (ou ""). "motivo": uma frase curta.',
         '- Copie "nome" exatamente como veio na lista, para eu conseguir casar a resposta.',
         '',
         'FORMATO DA RESPOSTA',
         'Responda SOMENTE com um array JSON (sem texto antes ou depois), na mesma ordem da lista, com TODOS estes campos em cada objeto:',
-        '[{"nome":"...","tipo":"livro","subtipo":"","titulo":"...","autor":"...","certeza":0,"fonte":"...","motivo":"..."}]',
-        'Exemplos: {"nome":"Matrix","tipo":"audiovisual","subtipo":"filme","titulo":"Matrix","autor":"Irmas Wachowski","certeza":95,"fonte":"","motivo":"Filme de 1999"} ; {"nome":"o livro dos espiritos","tipo":"livro","subtipo":"","titulo":"O Livro dos Espiritos","autor":"Allan Kardec","certeza":99,"fonte":"FEB","motivo":"Obra basica do espiritismo"}.',
+        '[{"nome":"...","tipo":"livro","subtipo":"","titulo":"...","autor":"...","certeza_claude":0,"fonte":"...","motivo":"..."}]',
+        'Exemplos: {"nome":"Matrix","tipo":"audiovisual","subtipo":"filme","titulo":"Matrix","autor":"Irmas Wachowski","certeza_claude":95,"fonte":"","motivo":"Filme de 1999"} ; {"nome":"o livro dos espiritos","tipo":"livro","subtipo":"","titulo":"O Livro dos Espiritos","autor":"Allan Kardec","certeza_claude":99,"fonte":"FEB","motivo":"Obra basica do espiritismo"}.',
         'Faca em lotes de 50 itens. Ao terminar cada lote, devolva o array JSON dele e espere eu pedir o proximo.',
         '',
         'LISTA (' + itens.length + ' itens, um por linha, em JSON):'
@@ -247,7 +247,7 @@ export default function ValidarLivrosPage() {
     setMsgImportar('Lendo...')
     const bruto = textoImportar.trim()
     const ini = bruto.indexOf('['), fim2 = bruto.lastIndexOf(']')
-    let lista2: { tipo?: string; subtipo?: string; nome?: string; titulo?: string; autor?: string; certeza?: number; motivo?: string; fonte?: string }[] = []
+    let lista2: { tipo?: string; subtipo?: string; nome?: string; titulo?: string; autor?: string; certeza?: number; certeza_claude?: number; motivo?: string; fonte?: string }[] = []
     try { lista2 = JSON.parse(bruto.slice(ini, fim2 + 1)) } catch { setMsgImportar('Não consegui ler. Cole o array JSON que o Claude devolveu, começando em [ e terminando em ].'); return }
     let gravados = 0, vazios = 0, falhas = 0, movidos = 0
     for (const x of lista2) {
@@ -260,8 +260,8 @@ export default function ValidarLivrosPage() {
       const st = String(x.subtipo || dica).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
       const cats = [/jogo|game/.test(st) && 'jogo', /document/.test(st) && 'documentario', /anime|serie|desenho/.test(st) && 'serie', /filme|animacao/.test(st) && 'filme'].filter(Boolean)
       const sub = tp !== 'audiovisual' ? '' : cats.length === 1 ? String(cats[0]) : cats.includes('documentario') ? 'documentario' : ''
-      const cert = Math.max(0, Math.min(100, Math.round(Number(x.certeza) || 0)))
-      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, subtipo: sub, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++; if (tp === 'musica' || tp === 'audiovisual' || tp === 'sagrado') { await chamar('nomeTipoPorNome', { padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), estado: tp === 'musica' ? 'MUSICA' : tp === 'sagrado' ? 'SAGRADO' : 'AUDIOVISUAL', subtipo: sub, motivo: 'Claude: ' + limpa(String(x.motivo || '')) }); movidos++ } } catch { falhas++ }
+      const cert = Math.max(0, Math.min(100, Math.round(Number(x.certeza_claude ?? x.certeza) || 0)))
+      try { await chamar(/['"\\{}]/.test(String(x.nome || '')) ? 'validarSugerirEsp' : 'validarSugerir', { nome, subtipo: sub, padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), titulo: tit, tipo: tp, autor: limpa(String(x.autor || '')), certeza: cert, motivo: 'Claude: ' + limpa(String(x.motivo || '') + (x.fonte ? ' (fonte: ' + String(x.fonte) + ')' : '')) }); gravados++; if ((tp === 'musica' || tp === 'audiovisual' || tp === 'sagrado') && cert >= 70) { await chamar('nomeTipoPorNome', { padrao: String(x.nome || '').replace(/['"\\{}]/g, '_').replace(/\s+/g, ' ').trim().slice(0, 250), estado: tp === 'musica' ? 'MUSICA' : tp === 'sagrado' ? 'SAGRADO' : 'AUDIOVISUAL', subtipo: sub, motivo: 'Claude: ' + limpa(String(x.motivo || '')) }); movidos++ } } catch { falhas++ }
       setMsgImportar('Gravando... ' + gravados)
     }
     setMsgImportar(gravados + ' sugestões gravadas' + (movidos ? ', ' + movidos + ' já levados para a aba de música, filmes e séries ou textos sagrados' : '') + (vazios ? ', ' + vazios + ' sem livro achado (ignorados)' : '') + (falhas ? ', ' + falhas + ' com erro' : '') + '. Nada foi aprovado: confira na lista.')
@@ -384,7 +384,7 @@ export default function ValidarLivrosPage() {
               {it.TIPO && <Badge variant="neutral">{({ livro: 'livro', musica: 'música', audiovisual: 'filme ou série', sagrado: 'texto sagrado', outro: 'outro' } as Record<string, string>)[it.TIPO] || it.TIPO}</Badge>}
             </div>
             {it.TIPO === 'outro' && !it.SUG_TITULO && it.MOTIVO && <p className="text-[13px]" style={muted}><Badge variant="neutral">Não identificado</Badge> {it.MOTIVO}</p>}
-            {it.SUG_TITULO && <p className="text-[13px]" style={muted}>{it.CERTEZA != null && <Badge variant={Number(it.CERTEZA) >= 90 ? 'success' : 'neutral'}>{Number(it.CERTEZA)}% de certeza</Badge>} Sugestão: {it.SUG_TITULO}{it.SUG_AUTOR ? ', de ' + it.SUG_AUTOR : ''}{it.MOTIVO ? ' · ' + it.MOTIVO : ''}</p>}
+            {it.SUG_TITULO && <p className="text-[13px]" style={muted}>{it.CERTEZA != null && <Badge variant={Number(it.CERTEZA) >= 90 ? 'success' : 'neutral'}>{Number(it.CERTEZA)}% de certeza do app</Badge>} {it.CERTEZA_CLAUDE != null && <Badge variant={Number(it.CERTEZA_CLAUDE) >= 90 ? 'success' : 'neutral'}>{Number(it.CERTEZA_CLAUDE)}% de certeza do Claude</Badge>} Sugestão: {it.SUG_TITULO}{it.SUG_AUTOR ? ', de ' + it.SUG_AUTOR : ''}{it.MOTIVO ? ' · ' + it.MOTIVO : ''}</p>}
             {aviso[it.ID] && <p className="text-[12.5px]">{aviso[it.ID]}</p>}
             {editando === it.ID ? (
               <div className="flex flex-col gap-2">

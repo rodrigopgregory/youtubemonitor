@@ -1,3 +1,8 @@
+e889ad4c1b08ebeb4cc5db03e38465d9da6699d6 | 2026-11-19 01:57:00 +0000 | sledt1006p01 | Exportacoes: mostra o motivo real do erro e avisa quando a sessao acabou
+a34cfb178c7aa20ed9176efb13d172c732f15f79 | 2026-11-19 01:52:53 +0000 | sledt1006p01 | Botao do GitHub: envio em segundo plano com acompanhamento
+2100abff083313e9fa1f008235236759c94f1e36 | 2026-11-19 01:50:09 +0000 | sledt1006p01 | Menu do topo: so icones, nome so na pagina aberta
+d2cfd6beb9188ee900512d3a7319a635859741f9 | 2026-11-19 01:27:46 +0000 | sledt1006p01 | Certeza do Claude separada; abas so com certeza 70+
+d07dae4bc8d62261271052318a27d8a64d6c0a16 | 2026-11-19 01:08:09 +0000 | sledt1006p01 | Botão GitHub: link do repositório
 719ba0459cd18af6218e2674a4638d07df46cfdd | 2026-11-19 00:58:28 +0000 | sledt1006p01 | Configurações: botão Enviar tudo para o GitHub
 e04a124ad3b1e1b24b7e8a2f7aadfc87457b6191 | 2026-11-19 00:11:31 +0000 | sledt1006p01 | Minhas práticas: Fiz hoje e Desfazer no diário
 e1dca633869da69bbbfff5c396b057470600b273 | 2026-11-19 00:10:11 +0000 | sledt1006p01 | Aba Mapa mental: temas, práticas e vídeos ligados

@@ -58,8 +58,18 @@ export function momentos(txt: string | null | undefined, dur: number, max = 10) 
   return out.slice(0, max)
 }
 
+function erroLogado(e: unknown): Error {
+  if (e instanceof Error) return e
+  const o = e as { status?: number; message?: unknown; details?: { error?: { message?: string } } } | null
+  const status = Number(o?.status || 0)
+  if (status === 401 || status === 403) return new Error('Sua sessão no Mitra acabou. Saia, entre de novo e tente outra vez.')
+  const m = o?.details?.error?.message || (typeof o?.message === 'string' ? o.message : (o?.message as { message?: string } | undefined)?.message)
+  return new Error('Não foi possível concluir agora' + (status ? ' (erro ' + status + ')' : '') + (m ? ': ' + String(m).slice(0, 160) : '') + '.')
+}
+
 export async function chamarLogado<T = any>(nome: Nome, input: Record<string, unknown> = {}): Promise<T> {
-  const res = await executeServerFunctionMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input })
+  let res: Awaited<ReturnType<typeof executeServerFunctionMitra>>
+  try { res = await executeServerFunctionMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input }) } catch (e) { throw erroLogado(e) }
   const r = res.result
   if (!r || r.executionStatus === 'FAILED') throw new Error('Não foi possível concluir agora. Tente de novo em instantes.')
   let out = r.output
@@ -68,5 +78,5 @@ export async function chamarLogado<T = any>(nome: Nome, input: Record<string, un
 }
 
 export async function iniciarLogado(nome: Nome, input: Record<string, unknown> = {}): Promise<void> {
-  await executeServerFunctionAsyncMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input })
+  try { await executeServerFunctionAsyncMitra({ projectId: PROJECT_ID, serverFunctionId: SF[nome], input }) } catch (e) { throw erroLogado(e) }
 }

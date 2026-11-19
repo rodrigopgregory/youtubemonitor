@@ -106,18 +106,18 @@ export default function Layout() {
             {abas.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
                 title={label} aria-label={label}
-                className="h-9 px-2.5 2xl:px-3 rounded-lg inline-flex items-center gap-2 text-[13.5px] font-medium whitespace-nowrap transition-colors"
+                className="h-9 px-2.5 rounded-lg inline-flex items-center gap-2 text-[13.5px] font-medium whitespace-nowrap transition-colors"
                 style={({ isActive }) => isActive ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : { color: 'var(--fg-muted)' }}>
-                {({ isActive }) => (<><Icon size={16} /><span className={isActive ? '' : 'hidden 2xl:inline'}>{label}</span></>)}
+                {({ isActive }) => (<><Icon size={16} />{isActive && <span>{label}</span>}</>)}
               </NavLink>
             ))}
           </nav>
           <div className="ml-auto flex items-center gap-1">
             {instalar && <button onClick={() => { instalar.prompt().finally(() => setInstalar(null)) }} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Instalar o Monitor como aplicativo neste aparelho">
-              <Download size={16} /><span className="hidden sm:inline">Instalar app</span>
+              <Download size={16} /><span className="hidden sm:inline xl:hidden">Instalar app</span>
             </button>}
             <button onClick={buscarNovos} disabled={busca?.rodando} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Procurar agora vídeos novos em todos os canais" aria-label="Buscar vídeos novos">
-              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline xl:hidden 2xl:inline whitespace-nowrap">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
+              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline xl:hidden whitespace-nowrap">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
             </button>
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}

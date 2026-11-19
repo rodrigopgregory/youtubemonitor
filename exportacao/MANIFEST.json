@@ -1,7 +1,7 @@
 {
- "gerado_em": "2026-11-18T21:58:37",
- "commit": "719ba0459cd18af6218e2674a4638d07df46cfdd",
- "codigo_guardado_em": "2026-11-18T21:58:31",
+ "gerado_em": "2026-11-18T22:59:32",
+ "commit": "e889ad4c1b08ebeb4cc5db03e38465d9da6699d6",
+ "codigo_guardado_em": "2026-11-18T22:57:04",
  "versao_mysql": "8.3.0",
  "esquema": "tenant_67241",
  "opcoes": {
@@ -51,7 +51,7 @@
   },
   {
    "tabela": "EXPORT_BASE",
-   "linhas": 4,
+   "linhas": 9,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
@@ -71,22 +71,22 @@
   },
   {
    "tabela": "EXPORT_LEVE",
-   "linhas": 4,
-   "motivo": "só estrutura (tabela de controle)"
-  },
-  {
-   "tabela": "EXPORT_LOG",
-   "linhas": 23,
-   "motivo": "só estrutura (tabela de controle)"
-  },
-  {
-   "tabela": "EXPORT_PACOTES",
    "linhas": 5,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
+   "tabela": "EXPORT_LOG",
+   "linhas": 26,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_PACOTES",
+   "linhas": 6,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
    "tabela": "EXPORT_PARTES",
-   "linhas": 20,
+   "linhas": 26,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
@@ -96,7 +96,7 @@
   },
   {
    "tabela": "GIT_CONFIG",
-   "linhas": 3,
+   "linhas": 10,
    "motivo": "dados de movimento (grande ou pessoal)"
   },
   {
@@ -188,13 +188,13 @@
  "arquivos": [
   {
    "nome": "banco/schema.sql",
-   "tamanho": 34054,
-   "sha256": "4f5c587b95beed16c0c1917d4a59a464f5021a7372e2d7a25a7b765be1d5ae24"
+   "tamanho": 34096,
+   "sha256": "d7acc94436bf7f07622eaee79201c0dc7a6317ae108ca9ee67c45284e80f06e6"
   },
   {
    "nome": "dados-pequenos/CANAIS.csv",
    "tamanho": 1426,
-   "sha256": "febf13e412c7b016dea023aac13f8b06e1ec39714806df50e4b0c469b618547a"
+   "sha256": "e20fedee73ca7df59f526264958a0875db241d90b64e01ebf634d486494f240a"
   },
   {
    "nome": "dados-pequenos/CONFIG.csv",
@@ -224,7 +224,7 @@
   {
    "nome": "dados-pequenos/CARGA_PEQUENAS.sql",
    "tamanho": 43498,
-   "sha256": "bb976fe6e221a82ba32c58d7e39988dd3af0120b5326d91846362f74e458b89f"
+   "sha256": "65152a7d1749c5b533b908998adf7a88bf7b168388134416530b5a36261c3311"
   },
   {
    "nome": "praticas/praticas.csv",
@@ -358,8 +358,8 @@
   },
   {
    "nome": "codigo/backend/funcoes-tela.mjs",
-   "tamanho": 66661,
-   "sha256": "95f87c607035a721469ec69196913bf7f22ceeded48a34f6a356dd96d9615c8a"
+   "tamanho": 67335,
+   "sha256": "173bd638c826b41e2159ec3355d3273e38b3fabb2dfc5447364e1fd383b7a64f"
   },
   {
    "nome": "codigo/backend/gravar-etiquetas.mjs",
@@ -658,13 +658,13 @@
   },
   {
    "nome": "codigo/frontend/src/components/ExportGit.tsx",
-   "tamanho": 4326,
-   "sha256": "1b6f2df2efb4e183c6a63f0d0d8598582c67f5dbfbb8b4dc4d4602dea7117a2f"
+   "tamanho": 4996,
+   "sha256": "5bf724510ded2d9fbe7634dd239bd29a88cec4384b331780483aaf90245ed3e0"
   },
   {
    "nome": "codigo/frontend/src/components/ExportLeve.tsx",
-   "tamanho": 5403,
-   "sha256": "529e4912395108d0c9749934df415aa69e3e809789aab39b4093937f411c3557"
+   "tamanho": 5477,
+   "sha256": "05145342235779406df5076eacb95bf462884bab327ece17fd22f68fd3ca404d"
   },
   {
    "nome": "codigo/frontend/src/components/FavoritaPratica.tsx",
@@ -683,8 +683,8 @@
   },
   {
    "nome": "codigo/frontend/src/components/Layout.tsx",
-   "tamanho": 16842,
-   "sha256": "a5ad8fd2a0d864511c678d3b3c7807380e81957478a8febefe65c1ffa91d4538"
+   "tamanho": 16798,
+   "sha256": "4eaffe49e3bd3f19447f93d73894acb8c880e5ca798536a4511aa51adab1e85b"
   },
   {
    "nome": "codigo/frontend/src/components/PacoteExport.tsx",
@@ -803,8 +803,8 @@
   },
   {
    "nome": "codigo/frontend/src/lib/api.ts",
-   "tamanho": 3962,
-   "sha256": "1d6342afc1f258838060cc1b4895577483cb09ee8a72208ed2923c60004c03ac"
+   "tamanho": 4756,
+   "sha256": "e1f1ecea7d23158937549c4c11834343a68f73ff72534fb7e52d0f72bf07c2c5"
   },
   {
    "nome": "codigo/frontend/src/lib/etiquetas.ts",
@@ -918,8 +918,8 @@
   },
   {
    "nome": "codigo/frontend/src/pages/ValidarLivrosPage.tsx",
-   "tamanho": 35729,
-   "sha256": "dc201024ad45daee7129fcf9c580ae2c3d07c53d304eb5ff2d506896416a7002"
+   "tamanho": 36157,
+   "sha256": "f4f96c8a18d231f0b5d3eaf62bd79c9830acf56aba99393a4656d70d11481666"
   },
   {
    "nome": "codigo/frontend/src/pages/VideosPage.tsx",
@@ -948,13 +948,13 @@
   },
   {
    "nome": "historico/repo.bundle",
-   "tamanho": 722735,
-   "sha256": "6ffc464ed41733fda4106ba5ab440d27b0337d39ce293e1c77787084ac22fa70"
+   "tamanho": 745801,
+   "sha256": "56be0a098053c86d3213c32d584887070c056963e5172c5d416b7006f9b666ce"
   },
   {
    "nome": "historico/commits.txt",
-   "tamanho": 23122,
-   "sha256": "1edf4fd70be444ec41d992b8381cd0353799245fbd906ec45629cad1bfaf756b"
+   "tamanho": 23822,
+   "sha256": "8a3ac6b37050913d6a77a218fc17cfbcb901c4398272094ded088ab98c0a3d94"
   },
   {
    "nome": "ESCOPO.md",
@@ -969,7 +969,7 @@
   {
    "nome": "REGRAS_DE_CLASSIFICACAO.md",
    "tamanho": 57163,
-   "sha256": "b51c5a82b75c5a95991a03059499d34bea8a3db95d0f156d79f8393787cbe7ea"
+   "sha256": "0f0be0ad5605e015ebb65538e84f350dd9205833e065699ae6e2a2600d581349"
   },
   {
    "nome": "plataforma/perfis.json",
@@ -1973,8 +1973,8 @@
   },
   {
    "nome": "funcoes/231-validarLista.sql",
-   "tamanho": 2882,
-   "sha256": "19f7cc5e017d8dd2c1b2020ffc5c118e8d66720cc0fbd2848e928f3ed424502a"
+   "tamanho": 3164,
+   "sha256": "759fd37f118e1a8eb0357ab7c2aacb1af5c4f959dd41a2b560c65a55d80250d1"
   },
   {
    "nome": "funcoes/232-validarTotal.sql",
@@ -2048,13 +2048,13 @@
   },
   {
    "nome": "funcoes/246-validarAltaTotal.sql",
-   "tamanho": 219,
-   "sha256": "c287f0c9c26b795993a1933a420300aa8a4a8b6676b2fa38cd0c739de84aab66"
+   "tamanho": 273,
+   "sha256": "d948ab5b624ae9b9a6e9c9aaddf809997172eda46df155269874324a4d287ed3"
   },
   {
    "nome": "funcoes/247-validarAceitarAlta.sql",
-   "tamanho": 426,
-   "sha256": "edaf17c44af2c84dc0c34733d5d0db1aefb20b2d68fd6ae111f7e9a58245c445"
+   "tamanho": 480,
+   "sha256": "e34993ae7d11701548f066efb5579182b065bc04621c4586b8b1c8f69d159218"
   },
   {
    "nome": "funcoes/248-praticaFavorito.sql",
@@ -2198,18 +2198,18 @@
   },
   {
    "nome": "funcoes/276-validarExportar.sql",
-   "tamanho": 2780,
-   "sha256": "235d61f3034d16d894c82b974537ea41e401718705d3223526c0e5587d4166ea"
+   "tamanho": 3008,
+   "sha256": "f09a79aa4bf33c957c66cd92992ee2a079c3d8d49a65a492b835305a6a8a1b03"
   },
   {
    "nome": "funcoes/277-validarSugerir.sql",
-   "tamanho": 891,
-   "sha256": "10422f1d2dc9242ce25a901f325dab456381fd7b5ab6d8e01bc6d1fbfcc8aa70"
+   "tamanho": 919,
+   "sha256": "9a9c89a9c01151d366b857c8712108d06781a1ea89eca05d4f860ebb2107a1c5"
   },
   {
    "nome": "funcoes/278-validarSugerirEsp.sql",
-   "tamanho": 997,
-   "sha256": "fe0fffc401f67024c7213a98708eaab9fc5cb3cdb16cab409cf95104e99614a5"
+   "tamanho": 1025,
+   "sha256": "bf2f7b4874fae45c455fb261a42f0fa6fbea23ac0660dfab53f103c967dabf7a"
   },
   {
    "nome": "funcoes/279-outrosSubtipo.sql",
@@ -2263,18 +2263,18 @@
   },
   {
    "nome": "funcoes/INDICE_FUNCOES.csv",
-   "tamanho": 44439,
-   "sha256": "5928ceb002d7b98121884de0cc1fe6790a0561ae262372f65d6cc658d113a8e6"
+   "tamanho": 44440,
+   "sha256": "76d4bf3531437f4ff0aad981d1e872331c64cbde33ce4ba761cd86e715b955b7"
   },
   {
    "nome": "funcoes/INDICE_FUNCOES.json",
-   "tamanho": 106414,
-   "sha256": "830756ed0e012736edec8a7d94ce58b279d7cc7af7baed71be55ce11e9608a7e"
+   "tamanho": 106415,
+   "sha256": "a1f806af2a02e3baf1e5347bcc407ab2957c08e768ba9f69ae835dcee89cc269"
   },
   {
    "nome": "DIFF_FUNCOES.md",
    "tamanho": 5222,
-   "sha256": "da48419da07a5b865909f428df003ee27709f1a0b0d0118bb1e6b68a9b877bf4"
+   "sha256": "5922f64489ed9c269d4e4108f18656a03d55ec28e4772beaa4a9ed85085eda08"
   },
   {
    "nome": "plataforma/rotinas.csv",
@@ -2284,7 +2284,7 @@
   {
    "nome": "DEPENDENCIAS_MITRA.md",
    "tamanho": 21953,
-   "sha256": "c451dc46f99c36309245d3395e90118e97dcbf7cab9ea9b5feb0264ce57587c8"
+   "sha256": "f1c9f8cc437f9d68f4203f6c7b2658757a63c1bb5fa7180d3113625ac727f3a2"
   },
   {
    "nome": ".env.example",
@@ -2293,8 +2293,8 @@
   },
   {
    "nome": "LEIAME_EXPORTACAO_LEVE.md",
-   "tamanho": 20571,
-   "sha256": "c86df4318b48d84644c59131c1a3d7257711d1243bf44fad89e929cc47f12527"
+   "tamanho": 20572,
+   "sha256": "d7d5e48a97e4931dc71c955cc0d764e793d02491c76718c7a4ad2d1ea3e63d56"
   },
   {
    "nome": "README.md",

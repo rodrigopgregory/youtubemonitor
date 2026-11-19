@@ -1,6 +1,6 @@
 # Dependências do Mitra e o que reescrever fora dele
 
-Gerado de 256 funções publicadas, do código do front-end e das conexões, em 2026-11-18T21:58:37.
+Gerado de 256 funções publicadas, do código do front-end e das conexões, em 2026-11-18T22:59:32.
 
 ## 1. Mapa número -> função -> telas
 

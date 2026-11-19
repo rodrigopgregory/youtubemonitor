@@ -1,6 +1,6 @@
 # Exportação leve do Monitor de Canais do YouTube
 
-Gerada em 2026-11-18T21:58:37 (horário de Brasília), a partir do ambiente de desenvolvimento e da plataforma. Código no commit `719ba0459cd18af6218e2674a4638d07df46cfdd` (guardado em 2026-11-18T21:58:31). MySQL 8.3.0, schema `tenant_67241`.
+Gerada em 2026-11-18T22:59:32 (horário de Brasília), a partir do ambiente de desenvolvimento e da plataforma. Código no commit `e889ad4c1b08ebeb4cc5db03e38465d9da6699d6` (guardado em 2026-11-18T22:57:04). MySQL 8.3.0, schema `tenant_67241`.
 
 ## O que está neste ZIP
 
@@ -24,16 +24,16 @@ Gerada em 2026-11-18T21:58:37 (horário de Brasília), a partir do ambiente de d
 | tabela | linhas | motivo |
 |---|---|---|
 | AVISOS | 5 | dado de uso do dia a dia, não é configuração |
-| EXPORT_BASE | 4 | só estrutura (tabela de controle) |
+| EXPORT_BASE | 9 | só estrutura (tabela de controle) |
 | EXPORT_CODIGOS | 2 | só estrutura (tabela de controle) |
 | EXPORT_CODIGO_DEV | 2 | só estrutura (tabela de controle) |
 | EXPORT_DONOS | 2 | só estrutura (tabela de controle) |
-| EXPORT_LEVE | 4 | só estrutura (tabela de controle) |
-| EXPORT_LOG | 23 | só estrutura (tabela de controle) |
-| EXPORT_PACOTES | 5 | só estrutura (tabela de controle) |
-| EXPORT_PARTES | 20 | só estrutura (tabela de controle) |
+| EXPORT_LEVE | 5 | só estrutura (tabela de controle) |
+| EXPORT_LOG | 26 | só estrutura (tabela de controle) |
+| EXPORT_PACOTES | 6 | só estrutura (tabela de controle) |
+| EXPORT_PARTES | 26 | só estrutura (tabela de controle) |
 | EXPORT_SESSOES | 1 | só estrutura (tabela de controle) |
-| GIT_CONFIG | 3 | dados de movimento (grande ou pessoal) |
+| GIT_CONFIG | 10 | dados de movimento (grande ou pessoal) |
 | ITENS_FAVORITOS | 0 | dados de movimento (grande ou pessoal) |
 | ITENS_STATUS | 0 | dados de movimento (grande ou pessoal) |
 | LIVROS_CATALOGO | 2217 | dados de movimento (grande ou pessoal) |
