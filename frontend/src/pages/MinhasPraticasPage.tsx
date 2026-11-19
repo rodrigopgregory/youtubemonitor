@@ -1,7 +1,7 @@
 import { nomeEt } from '../lib/etiquetas'
 import { useCallback, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { PlayCircle, Trash2, Pencil } from 'lucide-react'
+import { PlayCircle, Trash2, Pencil, CheckCircle2, Undo2 } from 'lucide-react'
 import { Card } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
@@ -29,6 +29,8 @@ export default function MinhasPraticasPage() {
   const [editando, setEditando] = useState<(RegistroEd & { TITULO: string; PRATICA_ID: number }) | null>(null)
   const [apagando, setApagando] = useState<number | null>(null)
   const [cat, setCat] = useState('')
+  const [agindo, setAgindo] = useState<number | null>(null)
+  const [erroAcao, setErroAcao] = useState('')
 
   const carregar = useCallback(async () => {
     setCarregando(true)
@@ -46,6 +48,15 @@ export default function MinhasPraticasPage() {
   async function apagar(id: number) {
     setApagando(id)
     try { await chamar('diarioEditar', { acao: 'apagar', id }); await carregar() } finally { setApagando(null) }
+  }
+
+  async function marcar(praticaId: number, nome: 'fiz' | 'desfazer') {
+    setAgindo(praticaId); setErroAcao('')
+    try {
+      const r = await chamar<{ ok: boolean; erro?: string }>('diarioEditar', { acao: nome, praticaId })
+      if (!r.ok) setErroAcao(r.erro || 'Não foi possível salvar.')
+      else await carregar()
+    } catch (e) { setErroAcao((e as Error).message) } finally { setAgindo(null) }
   }
 
   const muted = { color: 'var(--fg-muted)' }
@@ -127,9 +138,14 @@ export default function MinhasPraticasPage() {
                     </span>
                   </div>
                   {hm && <span className="text-[13.5px]">{hm.emoji} {hm.nome}</span>}
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <Button size="sm" onClick={() => marcar(r.PRATICA_ID, 'fiz')} disabled={agindo === r.PRATICA_ID} title="Conta mais uma vez esta prática, com a data de hoje"><CheckCircle2 size={14} />Fiz hoje</Button>
+                    <Button size="sm" variant="secondary" onClick={() => marcar(r.PRATICA_ID, 'desfazer')} disabled={agindo === r.PRATICA_ID} title="Tira o último registro desta prática"><Undo2 size={14} />Desfazer</Button>
+                  </div>
                   {r.SENTIU && <p className="text-[13.5px] leading-relaxed whitespace-pre-line" style={muted}>{r.SENTIU}</p>}
                 </Card>)
             })}
+            {erroAcao && <p className="text-[12.5px]" style={{ color: 'var(--danger)' }}>{erroAcao}</p>}
             {!fim && <Button variant="secondary" onClick={verMais}>Ver mais</Button>}
           </div>
         )}
