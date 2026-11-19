@@ -24,6 +24,7 @@ export const tela = [
   S('videoTemas', `SELECT T.ID, T.NOME, VT.ORIGEM, VT.MOMENTOS FROM VIDEO_TEMAS VT JOIN TEMAS T ON T.ID = VT.TEMA_ID WHERE VT.VIDEO_ID = {{videoId}} ORDER BY T.NOME`, 'Temas de um vídeo'),
   S('temaGarantir', `INSERT IGNORE INTO TEMAS (NOME) VALUES ('{{nome}}')`, 'Cria tema'),
   S('vtAcrescentar', `INSERT INTO VIDEO_TEMAS (VIDEO_ID, TEMA_ID, ORIGEM, MOMENTOS) SELECT {{videoId}}, ID, 'USUARIO', '' FROM TEMAS WHERE NOME = '{{nome}}' ON DUPLICATE KEY UPDATE ORIGEM = 'USUARIO'`, 'Acrescenta tema'),
+  S('vtMomentos', `UPDATE VIDEO_TEMAS VT JOIN TEMAS T ON T.ID = VT.TEMA_ID SET VT.MOMENTOS = '{{momentos}}', VT.ORIGEM = 'USUARIO' WHERE VT.VIDEO_ID = {{videoId}} AND T.NOME = '{{nome}}'`, 'Grava os minutos de um tema do vídeo'),
   S('vtTirar', `DELETE FROM VIDEO_TEMAS WHERE VIDEO_ID = {{videoId}} AND TEMA_ID = {{temaId}}`, 'Tira tema'),
   S('vtRenomear', `UPDATE IGNORE VIDEO_TEMAS SET TEMA_ID = (SELECT ID FROM TEMAS WHERE NOME = '{{nome}}'), ORIGEM = 'USUARIO' WHERE VIDEO_ID = {{videoId}} AND TEMA_ID = {{temaId}}`, 'Renomeia tema do vídeo'),
   S('vtTirarSeOutro', `DELETE FROM VIDEO_TEMAS WHERE VIDEO_ID = {{videoId}} AND TEMA_ID = {{temaId}} AND TEMA_ID <> (SELECT ID FROM TEMAS WHERE NOME = '{{nome}}')`, 'Limpa tema antigo após renomear'),

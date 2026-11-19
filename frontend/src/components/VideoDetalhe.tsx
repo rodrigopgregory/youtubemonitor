@@ -20,6 +20,8 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
   const [novo, setNovo] = useState('')
   const [editando, setEditando] = useState<number | null>(null)
   const [nomeEd, setNomeEd] = useState('')
+  const [minEd, setMinEd] = useState('')
+  const [minNovo, setMinNovo] = useState('')
   const [erro, setErro] = useState('')
   const [salvando, setSalvando] = useState(false)
   const [movendo, setMovendo] = useState(false)
@@ -53,7 +55,7 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
     try {
       const r = await chamar<{ ok: boolean; erro?: string }>('temaEditar', { videoId: id, ...input })
       if (!r.ok) setErro(r.erro || 'Não foi possível salvar.')
-      else { await carregarTemas(); onMudou(); setNovo(''); setEditando(null) }
+      else { await carregarTemas(); onMudou(); setNovo(''); setMinNovo(''); setEditando(null) }
     } catch (e) { setErro((e as Error).message) } finally { setSalvando(false) }
   }
 
@@ -112,8 +114,9 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
               {temas.map(t => (
                 <div key={t.ID} className="flex items-center gap-2 flex-wrap">
                   {editando === t.ID ? (
-                    <form className="flex gap-1.5 items-center" onSubmit={e => { e.preventDefault(); editar({ acao: 'renomear', temaId: t.ID, novo: nomeEd }) }}>
-                      <input className="controle h-8" value={nomeEd} onChange={e => setNomeEd(e.target.value)} autoFocus />
+                    <form className="flex gap-1.5 items-center" onSubmit={e => { e.preventDefault(); editar({ acao: 'renomear', temaId: t.ID, novo: nomeEd, momentos: minEd }) }}>
+                      <input className="controle h-8" value={nomeEd} onChange={e => setNomeEd(e.target.value)} autoFocus aria-label="Nome do tema" />
+                      <input className="controle h-8 w-48" value={minEd} onChange={e => setMinEd(e.target.value)} placeholder="Minutos: 12, 25:30" aria-label="Minutos do tema no vídeo" title="Minutos em que o tema aparece. Use 12 (minuto 12) ou 25:30, separados por vírgula." />
                       <Button size="sm" variant="primary" type="submit" disabled={salvando}><Check size={14} /></Button>
                       <Button size="sm" variant="ghost" type="button" onClick={() => setEditando(null)}><X size={14} /></Button>
                     </form>
@@ -121,15 +124,16 @@ export default function VideoDetalhe({ id, onClose, onMudou }: { id: number; onC
                     <>
                       <Badge variant="accent">{t.NOME}</Badge>
                       {t.ORIGEM === 'USUARIO' && <span className="text-[11.5px]" style={{ color: 'var(--fg-subtle)' }}>editado por você</span>}
-                      <button onClick={() => { setEditando(t.ID); setNomeEd(t.NOME) }} title="Renomear" className="h-7 w-7 inline-flex items-center justify-center rounded-md" style={{ color: 'var(--fg-muted)' }}><Pencil size={13} /></button>
+                      <button onClick={() => { setEditando(t.ID); setNomeEd(t.NOME); setMinEd(String(t.MOMENTOS || '').split(',').map(Number).filter(n => Number.isFinite(n) && n >= 0 && String(n) !== '').map(mmss).join(', ')) }} title="Editar nome e minutos" className="h-7 w-7 inline-flex items-center justify-center rounded-md" style={{ color: 'var(--fg-muted)' }}><Pencil size={13} /></button>
                       <button onClick={() => editar({ acao: 'tirar', temaId: t.ID })} title="Tirar" disabled={salvando} className="h-7 w-7 inline-flex items-center justify-center rounded-md" style={{ color: 'var(--fg-muted)' }}><X size={14} /></button>
                       {momentos(t.MOMENTOS, d.DURACAO_SEG, 6).map(s => (
                         <a key={s} href={linkYt(d.YT_VIDEO_ID, s)} target="_blank" rel="noreferrer" className="text-[12px] inline-flex items-center gap-0.5 hover:underline" style={{ color: 'var(--accent-text)' }}><PlayCircle size={12} />{mmss(s)}</a>))}
                     </>
                   )}
                 </div>))}
-              <form className="flex gap-1.5 items-center mt-1" onSubmit={e => { e.preventDefault(); editar({ acao: 'acrescentar', nome: novo }) }}>
+              <form className="flex gap-1.5 items-center mt-1" onSubmit={e => { e.preventDefault(); editar({ acao: 'acrescentar', nome: novo, momentos: minNovo }) }}>
                 <input className="controle h-8 max-w-xs" placeholder="Acrescentar tema" value={novo} onChange={e => setNovo(e.target.value)} />
+                <input className="controle h-8 w-48" placeholder="Minutos: 12, 25:30" value={minNovo} onChange={e => setMinNovo(e.target.value)} aria-label="Minutos do tema no vídeo" title="Minutos em que o tema aparece. Use 12 (minuto 12) ou 25:30, separados por vírgula." />
                 <Button size="sm" variant="secondary" type="submit" disabled={salvando || !novo.trim()}><Plus size={14} />Acrescentar</Button>
               </form>
               {erro && <p className="text-[12.5px]" style={{ color: 'var(--danger)' }}>{erro}</p>}
