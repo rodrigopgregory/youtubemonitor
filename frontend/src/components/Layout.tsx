@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf, CheckCircle2, Home, BookMarked, Star } from 'lucide-react'
+import { Bell, Search, Film, Radio, Moon, Sun, Download, Users, RefreshCw, Settings, Archive, Check, Mail, BookOpen, Menu, X, Leaf, CheckCircle2, Home, BookMarked, Star, Network } from 'lucide-react'
 import Modal from './ui/Modal'
 import { linhas, chamar, dataBr, linkYt } from '../lib/api'
 
@@ -17,6 +17,7 @@ const abas = [
   { to: '/livros', label: 'Biblioteca', icon: BookMarked, end: false },
   { to: '/favoritos', label: 'Meus favoritos', icon: Star, end: false },
   { to: '/livro', label: 'Livro Vivo', icon: BookOpen, end: false },
+  { to: '/mapa-mental', label: 'Mapa mental', icon: Network, end: false },
   { to: '/mentores', label: 'Mentores', icon: Users, end: false },
   { to: '/configuracoes', label: 'Configurações', icon: Settings, end: false },
 ]

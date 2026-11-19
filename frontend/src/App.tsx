@@ -14,6 +14,7 @@ import MentoresPage from './pages/MentoresPage'
 import ConfiguracoesPage from './pages/ConfiguracoesPage'
 import LivroPage from './pages/LivroPage'
 import InicioPage from './pages/InicioPage'
+import MapaMentalPage from './pages/MapaMentalPage'
 
 function App() {
   const [configured, setConfigured] = useState(initMitra)
@@ -33,6 +34,7 @@ function App() {
         <Route path="/livros-relacao" element={<Navigate to="/livros/relacao" replace />} />
         <Route path="/minhas-praticas" element={<MinhasPraticasPage />} />
         <Route path="/livro" element={<LivroPage />} />
+        <Route path="/mapa-mental" element={<MapaMentalPage />} />
         <Route path="/mentores" element={<MentoresPage />} />
         <Route path="/canais" element={<CanaisPage />} />
         <Route path="/configuracoes" element={<ConfiguracoesPage />} />
