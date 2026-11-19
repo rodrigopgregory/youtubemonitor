@@ -96,17 +96,18 @@ export default function Layout() {
   return (
     <div className="min-h-screen" style={{ background: 'var(--bg)', color: 'var(--fg)' }}>
       <header className="sticky top-0 z-30 border-b" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
-        <div className="max-w-6xl mx-auto px-3 sm:px-6 h-14 flex items-center gap-2">
-          <button onClick={() => setGaveta(true)} className="lg:hidden h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg)' }} aria-label="Abrir menu" aria-expanded={gaveta}>
+        <div className="max-w-[1600px] mx-auto px-3 sm:px-6 h-14 flex items-center gap-2">
+          <button onClick={() => setGaveta(true)} className="xl:hidden h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg)' }} aria-label="Abrir menu" aria-expanded={gaveta}>
             <Menu size={20} />
           </button>
-          <span className="lg:hidden text-[14.5px] font-semibold truncate">{abas.find(a => a.end ? local.pathname === a.to : local.pathname.startsWith(a.to))?.label || 'Monitor'}</span>
-          <nav className="hidden lg:flex items-center gap-1">
+          <span className="xl:hidden text-[14.5px] font-semibold truncate">{abas.find(a => a.end ? local.pathname === a.to : local.pathname.startsWith(a.to))?.label || 'Monitor'}</span>
+          <nav className="hidden xl:flex items-center gap-1 min-w-0">
             {abas.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
-                className="h-9 px-3 rounded-lg inline-flex items-center gap-2 text-[13.5px] font-medium whitespace-nowrap transition-colors"
+                title={label} aria-label={label}
+                className="h-9 px-2.5 2xl:px-3 rounded-lg inline-flex items-center gap-2 text-[13.5px] font-medium whitespace-nowrap transition-colors"
                 style={({ isActive }) => isActive ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : { color: 'var(--fg-muted)' }}>
-                <Icon size={16} />{label}
+                {({ isActive }) => (<><Icon size={16} /><span className={isActive ? '' : 'hidden 2xl:inline'}>{label}</span></>)}
               </NavLink>
             ))}
           </nav>
@@ -115,7 +116,7 @@ export default function Layout() {
               <Download size={16} /><span className="hidden sm:inline">Instalar app</span>
             </button>}
             <button onClick={buscarNovos} disabled={busca?.rodando} className="h-9 px-3 inline-flex items-center gap-2 rounded-lg text-[13.5px]" style={{ color: 'var(--fg-muted)' }} title="Procurar agora vídeos novos em todos os canais" aria-label="Buscar vídeos novos">
-              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline lg:hidden 2xl:inline whitespace-nowrap">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
+              <RefreshCw size={16} className={busca?.rodando ? 'animate-spin' : ''} /><span className="hidden sm:inline xl:hidden 2xl:inline whitespace-nowrap">{busca?.rodando ? 'Procurando…' : 'Buscar vídeos novos'}</span>
             </button>
             <button onClick={() => setEscuro(e => !e)} className="h-9 w-9 inline-flex items-center justify-center rounded-lg" style={{ color: 'var(--fg-muted)' }} aria-label="Trocar tema">
               {escuro ? <Sun size={17} /> : <Moon size={17} />}
@@ -133,7 +134,7 @@ export default function Layout() {
       </header>
 
       {gaveta && (
-        <div className="lg:hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Menu">
+        <div className="xl:hidden fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Menu">
           <div className="absolute inset-0" style={{ background: 'var(--bg-overlay)' }} onClick={() => setGaveta(false)} />
           <aside className="absolute left-0 top-0 h-full w-[280px] max-w-[85vw] border-r flex flex-col" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)', boxShadow: 'var(--shadow-pop)' }}>
             <div className="h-14 px-3 flex items-center justify-between border-b" style={{ borderColor: 'var(--border)' }}>
