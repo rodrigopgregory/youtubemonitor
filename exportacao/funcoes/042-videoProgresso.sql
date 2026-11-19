@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET PROGRESSO_SEG = {{seg}} WHERE ID = {{id}}

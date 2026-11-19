@@ -250,5 +250,6 @@
  "diarioEditar": 190,
  "exportarGerar": 205,
  "exportarPacote": 206,
- "exportarLeve": 217
+ "exportarLeve": 217,
+ "exportarGit": 288
 }

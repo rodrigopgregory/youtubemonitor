@@ -1,0 +1,2 @@
+"numero","funcao","cron","entrada","descricao"
+65,"motor","0 5 * * * *","","Motor: carga histórica, checagem diária e estudo dos vídeos"

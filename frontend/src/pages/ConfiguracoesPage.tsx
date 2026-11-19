@@ -8,6 +8,7 @@ import { linhas, chamar } from '../lib/api'
 import { exportarNotebookLM } from '../lib/exportar'
 import PacoteExport from '../components/PacoteExport'
 import ExportLeve from '../components/ExportLeve'
+import ExportGit from '../components/ExportGit'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
@@ -228,6 +229,7 @@ export default function ConfiguracoesPage() {
       <section className="flex flex-col gap-3">
         <h2 className="text-[16px] font-semibold">Exportar</h2>
         <Card className="p-5"><ExportLeve /></Card>
+        <Card className="p-5"><ExportGit /></Card>
         <Card className="p-5"><PacoteExport /></Card>
         <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
           <p className="text-[13.5px] flex-1" style={muted}>Baixa as transcrições dos vídeos estudados num ZIP pronto para o NotebookLM: poucos arquivos de texto por canal, cada um abaixo do limite de uma fonte, com título, link, data, temas e resumo de cada vídeo. Depois é só enviar os arquivos em "Adicionar fontes" no NotebookLM.</p>

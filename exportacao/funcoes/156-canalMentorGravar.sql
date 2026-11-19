@@ -1,0 +1,1 @@
+UPDATE CANAIS SET TEM_MENTOR = {{tem}} WHERE ID = {{id}}

@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET MOTIVO = '{{motivo}}', ATUALIZADO_EM = DATE_FORMAT(NOW(), '%Y-%m-%dT%H:%i:%s') WHERE ID = {{id}}

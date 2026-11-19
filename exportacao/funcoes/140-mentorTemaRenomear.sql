@@ -1,0 +1,1 @@
+UPDATE TEMAS SET NOME = '{{nome}}' WHERE ID = {{temaId}} AND NOME LIKE 'mentor: %'

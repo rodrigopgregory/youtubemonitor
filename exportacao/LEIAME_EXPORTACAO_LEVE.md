@@ -1,0 +1,487 @@
+# Exportação leve do Monitor de Canais do YouTube
+
+Gerada em 2026-11-18T21:58:37 (horário de Brasília), a partir do ambiente de desenvolvimento e da plataforma. Código no commit `719ba0459cd18af6218e2674a4638d07df46cfdd` (guardado em 2026-11-18T21:58:31). MySQL 8.3.0, schema `tenant_67241`.
+
+## O que está neste ZIP
+
+- `codigo/`: front-end, back-end (scripts e Server Functions em `backend/sf`), configurações, README e `ESCOPO.md` (cópia dos arquivos versionados no Git, sem `.env`, `node_modules` e `dist`).
+- `historico/repo.bundle` e `historico/commits.txt`: histórico Git completo (`git clone historico/repo.bundle`) e a lista de commits.
+- `funcoes/`: as 256 Server Functions na versão PUBLICADA, uma por arquivo (`número-nome.sql|js`), com `INDICE_FUNCOES.csv` e `.json` (número, nome, tipo, parâmetros, perfis com permissão, cron, descrição, SHA-256). Inclui as que só existem no Mitra.
+- `DIFF_FUNCOES.md`: publicadas x scripts do repositório.
+- `REGRAS_DE_CLASSIFICACAO.md`: o que o app realmente faz para classificar (prompts exatos, modelo, temperatura, validações, valores permitidos, minutagem, filtros, e o que não se sabe).
+- `banco/schema.sql`: estrutura lida do `information_schema` (tabelas, views, chaves, índices, FULLTEXT, ENGINE, charset e collation), sem nenhuma linha de dados.
+- `dados-pequenos/`: CANAIS (3 linhas), CONFIG (17 linhas), MENTOR_REGRAS (28 linhas), PLAYLISTS (51 linhas), TEMAS (111 linhas), TEMA_MAPA (151 linhas), em CSV e em `CARGA_PEQUENAS.sql`. Da tabela CANAIS saiu a coluna `CARGA_TOKEN`; valores de CONFIG com nome de chave, token ou senha são trocados por `[REMOVIDO]`.
+- `praticas/`: todas as práticas (8499 linhas) com tipo, etiquetas, minuto e link, mais a contagem por tipo.
+- `livro-vivo/`: 13 capítulos (CSV e um `.md` por tema) e 2000 livros indicados.
+- `plataforma/`: `conexoes.json` (nome, URL base e nomes dos campos), `perfis.json` (perfis e funções permitidas) e `rotinas.csv`.
+- `DEPENDENCIAS_MITRA.md`, `.env.example` (só nomes), `MANIFEST.json` (todos os arquivos com tamanho e SHA-256).
+
+## O que NÃO está neste ZIP
+
+- Transcrições (`TRECHOS`), vínculos vídeo-tema, vídeos, playlists-vídeos e qualquer outro dado de movimento.
+- Tabelas grandes ou pessoais, com a contagem de linhas do momento:
+
+| tabela | linhas | motivo |
+|---|---|---|
+| AVISOS | 5 | dado de uso do dia a dia, não é configuração |
+| EXPORT_BASE | 4 | só estrutura (tabela de controle) |
+| EXPORT_CODIGOS | 2 | só estrutura (tabela de controle) |
+| EXPORT_CODIGO_DEV | 2 | só estrutura (tabela de controle) |
+| EXPORT_DONOS | 2 | só estrutura (tabela de controle) |
+| EXPORT_LEVE | 4 | só estrutura (tabela de controle) |
+| EXPORT_LOG | 23 | só estrutura (tabela de controle) |
+| EXPORT_PACOTES | 5 | só estrutura (tabela de controle) |
+| EXPORT_PARTES | 20 | só estrutura (tabela de controle) |
+| EXPORT_SESSOES | 1 | só estrutura (tabela de controle) |
+| GIT_CONFIG | 3 | dados de movimento (grande ou pessoal) |
+| ITENS_FAVORITOS | 0 | dados de movimento (grande ou pessoal) |
+| ITENS_STATUS | 0 | dados de movimento (grande ou pessoal) |
+| LIVROS_CATALOGO | 2217 | dados de movimento (grande ou pessoal) |
+| VIDEOS | 4037 | dados de movimento (grande ou pessoal) |
+| LIVROS_INDICADOS | 8074 | exportada à parte, na pasta livro-vivo/ |
+| LIVROS_NOMES | 3000 | dados de movimento (grande ou pessoal) |
+| LIVRO_CAPITULOS | 13 | exportada à parte, na pasta livro-vivo/ |
+| LOTES | 0 | só estrutura (tabela de controle) |
+| OBRA_DE | 31 | dados de movimento (grande ou pessoal) |
+| PLAYLIST_VIDEOS | 1703 | dados de movimento (grande ou pessoal) |
+| PRATICAS | 8499 | exportada à parte, na pasta praticas/ |
+| PRATICA_DIARIO | 5 | diário pessoal da pessoa |
+| TEMAS_BKP_20261113 | 243 | cópia de segurança, grande |
+| TRECHOS | 541782 | transcrições (grande e conteúdo de terceiros) |
+| VIDEO_TEMAS | 19895 | dados de movimento (grande ou pessoal) |
+| VIDEO_TEMAS_BKP_20261113 | 14970 | cópia de segurança, grande |
+| VIDEO_TEMAS_BKP_MENTORES | 205 | cópia de segurança, grande |
+
+- Chaves, tokens, senhas e hashes: nenhum. O gerador não encontrou trecho com cara de segredo.
+- Usuários e e-mails da plataforma, e a lista de donos da exportação pesada.
+- Valores das integrações (chaves do Gemini e do YouTube) e as configurações guardadas só dentro de cada conexão do Mitra.
+- O código das telas na versão publicada: o ZIP traz o código do repositório. O que está no ar pode ser diferente se alguém mudou algo sem commit. **NÃO SEI** comparar.
+- Os dados do banco além das tabelas listadas acima. O pacote completo (pesado) é outro fluxo e não foi usado.
+
+## Como conferir
+
+Cada arquivo tem tamanho e SHA-256 em `MANIFEST.json`. O gerador releu o ZIP depois de gravar e conferiu cada arquivo (SHA-256, CRC-32 e tamanho). Para repetir: `unzip` e `sha256sum -c` com os valores do manifesto.
+
+## Lista de arquivos
+
+- `banco/schema.sql`
+- `dados-pequenos/CANAIS.csv`
+- `dados-pequenos/CONFIG.csv`
+- `dados-pequenos/MENTOR_REGRAS.csv`
+- `dados-pequenos/PLAYLISTS.csv`
+- `dados-pequenos/TEMAS.csv`
+- `dados-pequenos/TEMA_MAPA.csv`
+- `dados-pequenos/CARGA_PEQUENAS.sql`
+- `praticas/praticas.csv`
+- `praticas/praticas_por_tipo.csv`
+- `praticas/LEIAME.md`
+- `livro-vivo/capitulos.csv`
+- `livro-vivo/capitulos/afinidade-e-sintonia.md`
+- `livro-vivo/capitulos/alquimia-interior-hermetismo-e-iniciacoes.md`
+- `livro-vivo/capitulos/ataques-espirituais-e-obsessao.md`
+- `livro-vivo/capitulos/autoconhecimento.md`
+- `livro-vivo/capitulos/chakras-e-bioenergia.md`
+- `livro-vivo/capitulos/criancas-educacao-e-comportamento.md`
+- `livro-vivo/capitulos/emocoes-medo-e-inteligencia-emocional.md`
+- `livro-vivo/capitulos/espiritualidade-no-dia-a-dia.md`
+- `livro-vivo/capitulos/expansao-da-consciencia.md`
+- `livro-vivo/capitulos/mediunidade-e-fenomenos-mediunicos.md`
+- `livro-vivo/capitulos/projecao-astral-e-saidas-do-corpo.md`
+- `livro-vivo/capitulos/protecao-e-limpeza-energetica.md`
+- `livro-vivo/capitulos/etica-e-coerencia-de-luz.md`
+- `livro-vivo/livros_indicados.csv`
+- `livro-vivo/LEIAME.md`
+- `codigo/.gitkeep`
+- `codigo/ESCOPO.md`
+- `codigo/backend/.env.example`
+- `codigo/backend/.gitignore`
+- `codigo/backend/casar.mjs`
+- `codigo/backend/criar-funcoes.mjs`
+- `codigo/backend/exportar-leve-base.mjs`
+- `codigo/backend/funcoes-tela.mjs`
+- `codigo/backend/gravar-etiquetas.mjs`
+- `codigo/backend/lib.mjs`
+- `codigo/backend/migracao-catalogo-livros.mjs`
+- `codigo/backend/migracao-diario.mjs`
+- `codigo/backend/migracao-etiquetas-view.mjs`
+- `codigo/backend/migracao-etiquetas.mjs`
+- `codigo/backend/migracao-exportacao-leve.mjs`
+- `codigo/backend/migracao-exportacao.mjs`
+- `codigo/backend/migracao-exportacao2.mjs`
+- `codigo/backend/migracao-exportacao3.mjs`
+- `codigo/backend/migracao-finalidades.mjs`
+- `codigo/backend/migracao-livros.mjs`
+- `codigo/backend/migracao-mentores.mjs`
+- `codigo/backend/migracao-praticas-erros.mjs`
+- `codigo/backend/migracao-praticas.mjs`
+- `codigo/backend/migracao-status-leitura.mjs`
+- `codigo/backend/package-lock.json`
+- `codigo/backend/package.json`
+- `codigo/backend/setup-backend.mjs`
+- `codigo/backend/sf-ids.json`
+- `codigo/backend/sf-tela.json`
+- `codigo/backend/sf/buscaTermos.js`
+- `codigo/backend/sf/canaisAtualizar.js`
+- `codigo/backend/sf/canalCadastrar.js`
+- `codigo/backend/sf/chatBusca.js`
+- `codigo/backend/sf/configEditar.js`
+- `codigo/backend/sf/diarioEditar.js`
+- `codigo/backend/sf/estudarMais.js`
+- `codigo/backend/sf/exportarGerar.js`
+- `codigo/backend/sf/exportarGit.js`
+- `codigo/backend/sf/exportarLeve.js`
+- `codigo/backend/sf/exportarPacote.js`
+- `codigo/backend/sf/livroGerar.js`
+- `codigo/backend/sf/livroValidar.js`
+- `codigo/backend/sf/mentorEditar.js`
+- `codigo/backend/sf/motor.js`
+- `codigo/backend/sf/resumoBusca.js`
+- `codigo/backend/sf/temaEditar.js`
+- `codigo/frontend/.env.example`
+- `codigo/frontend/.gitignore`
+- `codigo/frontend/README.md`
+- `codigo/frontend/eslint.config.js`
+- `codigo/frontend/index.html`
+- `codigo/frontend/package-lock.json`
+- `codigo/frontend/package.json`
+- `codigo/frontend/public/apple-touch-icon.png`
+- `codigo/frontend/public/favicon.svg`
+- `codigo/frontend/public/icon-192.png`
+- `codigo/frontend/public/icon-512.png`
+- `codigo/frontend/public/icon-maskable-512.png`
+- `codigo/frontend/public/manifest.webmanifest`
+- `codigo/frontend/public/sw.js`
+- `codigo/frontend/scripts/empacotar-fonte.mjs`
+- `codigo/frontend/src/App.tsx`
+- `codigo/frontend/src/components/CanalFiltro.tsx`
+- `codigo/frontend/src/components/Contador.tsx`
+- `codigo/frontend/src/components/EditarNome.tsx`
+- `codigo/frontend/src/components/EstadoIA.tsx`
+- `codigo/frontend/src/components/EstrelaItem.tsx`
+- `codigo/frontend/src/components/ExportGit.tsx`
+- `codigo/frontend/src/components/ExportLeve.tsx`
+- `codigo/frontend/src/components/FavoritaPratica.tsx`
+- `codigo/frontend/src/components/FizHoje.tsx`
+- `codigo/frontend/src/components/InstrucaoIA.tsx`
+- `codigo/frontend/src/components/Layout.tsx`
+- `codigo/frontend/src/components/PacoteExport.tsx`
+- `codigo/frontend/src/components/PendenciasLivros.tsx`
+- `codigo/frontend/src/components/PraticaDetalhe.tsx`
+- `codigo/frontend/src/components/VideoDetalhe.tsx`
+- `codigo/frontend/src/components/ui/Badge.tsx`
+- `codigo/frontend/src/components/ui/Button.tsx`
+- `codigo/frontend/src/components/ui/Card.tsx`
+- `codigo/frontend/src/components/ui/Chart.tsx`
+- `codigo/frontend/src/components/ui/Checkbox.tsx`
+- `codigo/frontend/src/components/ui/ConfirmDialog.tsx`
+- `codigo/frontend/src/components/ui/DatePicker.tsx`
+- `codigo/frontend/src/components/ui/Input.tsx`
+- `codigo/frontend/src/components/ui/Modal.tsx`
+- `codigo/frontend/src/components/ui/MultiSelect.tsx`
+- `codigo/frontend/src/components/ui/Radio.tsx`
+- `codigo/frontend/src/components/ui/Select.tsx`
+- `codigo/frontend/src/components/ui/Skeleton.tsx`
+- `codigo/frontend/src/components/ui/Toast.tsx`
+- `codigo/frontend/src/components/ui/Tooltip.tsx`
+- `codigo/frontend/src/hooks/useDrill.ts`
+- `codigo/frontend/src/hooks/useHighlight.ts`
+- `codigo/frontend/src/hooks/useToast.ts`
+- `codigo/frontend/src/index.css`
+- `codigo/frontend/src/lib/api.ts`
+- `codigo/frontend/src/lib/etiquetas.ts`
+- `codigo/frontend/src/lib/exportar.ts`
+- `codigo/frontend/src/lib/mitra-auth.ts`
+- `codigo/frontend/src/lib/sf.ts`
+- `codigo/frontend/src/lib/utils.ts`
+- `codigo/frontend/src/main.tsx`
+- `codigo/frontend/src/pages/CanaisPage.tsx`
+- `codigo/frontend/src/pages/ChatPage.tsx`
+- `codigo/frontend/src/pages/ConfiguracoesPage.tsx`
+- `codigo/frontend/src/pages/FavoritosPage.tsx`
+- `codigo/frontend/src/pages/InicioPage.tsx`
+- `codigo/frontend/src/pages/LivroPage.tsx`
+- `codigo/frontend/src/pages/LivrosPage.tsx`
+- `codigo/frontend/src/pages/LivrosSecaoPage.tsx`
+- `codigo/frontend/src/pages/LoginPage.tsx`
+- `codigo/frontend/src/pages/MapaMentalPage.tsx`
+- `codigo/frontend/src/pages/MentoresPage.tsx`
+- `codigo/frontend/src/pages/MinhasPraticasPage.tsx`
+- `codigo/frontend/src/pages/OutrosNomesPage.tsx`
+- `codigo/frontend/src/pages/PraticasPage.tsx`
+- `codigo/frontend/src/pages/RelacaoLivrosPage.tsx`
+- `codigo/frontend/src/pages/SagradosPage.tsx`
+- `codigo/frontend/src/pages/ValidarLivrosPage.tsx`
+- `codigo/frontend/src/pages/VideosPage.tsx`
+- `codigo/frontend/tsconfig.app.json`
+- `codigo/frontend/tsconfig.json`
+- `codigo/frontend/tsconfig.node.json`
+- `codigo/frontend/vite.config.ts`
+- `historico/repo.bundle`
+- `historico/commits.txt`
+- `ESCOPO.md`
+- `README_DO_APP.md`
+- `REGRAS_DE_CLASSIFICACAO.md`
+- `plataforma/perfis.json`
+- `plataforma/conexoes.json`
+- `funcoes/032-configLer.sql`
+- `funcoes/033-configGravar.sql`
+- `funcoes/034-loteGravar.sql`
+- `funcoes/035-loteApagar.sql`
+- `funcoes/036-videosInserirLote.sql`
+- `funcoes/037-canalCargaAtualizar.sql`
+- `funcoes/038-canalCargaMsg.sql`
+- `funcoes/039-videosIdsCanal.sql`
+- `funcoes/040-canalChecado.sql`
+- `funcoes/041-trechosInserirLote.sql`
+- `funcoes/042-videoProgresso.sql`
+- `funcoes/043-trechosDoVideo.sql`
+- `funcoes/044-temasNomes.sql`
+- `funcoes/045-temasGarantirLote.sql`
+- `funcoes/046-videoTemasIA.sql`
+- `funcoes/047-videoConcluir.sql`
+- `funcoes/048-videoPendente.sql`
+- `funcoes/049-videoIndisponivel.sql`
+- `funcoes/050-videoDetalhes.sql`
+- `funcoes/051-videoForaDoFiltro.sql`
+- `funcoes/052-videoOrigem.sql`
+- `funcoes/053-videosRetentar.sql`
+- `funcoes/054-canaisParaMotor.sql`
+- `funcoes/055-filaProximo.sql`
+- `funcoes/056-filaContar.sql`
+- `funcoes/057-avisoPendentes.sql`
+- `funcoes/058-avisoHoje.sql`
+- `funcoes/059-avisoCriar.sql`
+- `funcoes/060-avisoVincular.sql`
+- `funcoes/061-avisoRecontar.sql`
+- `funcoes/062-canaisAtualizarStatus.sql`
+- `funcoes/063-lockAdquirir.sql`
+- `funcoes/064-lockLiberar.sql`
+- `funcoes/065-motor.js`
+- `funcoes/066-canalPorYt.sql`
+- `funcoes/067-canalInserir.sql`
+- `funcoes/068-canaisListar.sql`
+- `funcoes/069-painelResumo.sql`
+- `funcoes/070-videosListar.sql`
+- `funcoes/071-temasListar.sql`
+- `funcoes/072-videoDetalhe.sql`
+- `funcoes/073-videoTemas.sql`
+- `funcoes/074-temaGarantir.sql`
+- `funcoes/075-vtAcrescentar.sql`
+- `funcoes/076-vtTirar.sql`
+- `funcoes/077-vtRenomear.sql`
+- `funcoes/078-vtTirarSeOutro.sql`
+- `funcoes/079-videoMarcarEditado.sql`
+- `funcoes/080-buscarTema.sql`
+- `funcoes/081-buscaTrechos.sql`
+- `funcoes/082-buscaResumos.sql`
+- `funcoes/083-avisosListar.sql`
+- `funcoes/084-avisoVideos.sql`
+- `funcoes/085-avisoMarcarLido.sql`
+- `funcoes/086-motorAndamento.sql`
+- `funcoes/087-canalCadastrar.js`
+- `funcoes/088-temaEditar.js`
+- `funcoes/089-resumoBusca.js`
+- `funcoes/090-chatBusca.js`
+- `funcoes/091-canaisLimiteMais.sql`
+- `funcoes/092-canaisNomes.sql`
+- `funcoes/093-estudoAndamento.sql`
+- `funcoes/094-estudarMais.js`
+- `funcoes/095-exportVideos.sql`
+- `funcoes/096-exportTrechos.sql`
+- `funcoes/097-filaComLegenda.sql`
+- `funcoes/098-videoTemasIALimpar.sql`
+- `funcoes/099-playlistsGravar.sql`
+- `funcoes/100-playlistsDoCanal.sql`
+- `funcoes/101-playlistVideosLimpar.sql`
+- `funcoes/102-playlistVideosGravar.sql`
+- `funcoes/103-playlistsSumidasVideos.sql`
+- `funcoes/104-playlistsSumidas.sql`
+- `funcoes/105-canalPlaylistsFeito.sql`
+- `funcoes/106-playlistsListar.sql`
+- `funcoes/107-exportEstrutura.sql`
+- `funcoes/108-exportIndices.sql`
+- `funcoes/109-exportTabCanais.sql`
+- `funcoes/110-exportTabVideos.sql`
+- `funcoes/111-exportTabTrechos.sql`
+- `funcoes/112-exportTabTemas.sql`
+- `funcoes/113-exportTabVideoTemas.sql`
+- `funcoes/114-exportTabPlaylists.sql`
+- `funcoes/115-exportTabPlaylistVideos.sql`
+- `funcoes/116-exportTabAvisos.sql`
+- `funcoes/117-exportTabConfig.sql`
+- `funcoes/118-exportVideosFiltro.sql`
+- `funcoes/119-praticasLimpar.sql`
+- `funcoes/120-praticasGravar.sql`
+- `funcoes/121-videoPraticasFeito.sql`
+- `funcoes/122-praticasFila.sql`
+- `funcoes/123-praticasTipos.sql`
+- `funcoes/124-praticasDoVideo.sql`
+- `funcoes/125-praticasResumo.sql`
+- `funcoes/126-exportTabPraticas.sql`
+- `funcoes/127-mentoresListar.sql`
+- `funcoes/128-mentoresGerir.sql`
+- `funcoes/129-mentorRegrasListar.sql`
+- `funcoes/130-mentorVideos.sql`
+- `funcoes/131-mentorRegraGravar.sql`
+- `funcoes/132-mentorRegraApagar.sql`
+- `funcoes/133-mentorRegraApagarNome.sql`
+- `funcoes/134-mentorTemaPorId.sql`
+- `funcoes/135-mentorTemaPorNome.sql`
+- `funcoes/136-mentorBackup.sql`
+- `funcoes/137-mentorMover.sql`
+- `funcoes/138-mentorDesligar.sql`
+- `funcoes/139-mentorTemaApagar.sql`
+- `funcoes/140-mentorTemaRenomear.sql`
+- `funcoes/141-mentorMarcarTitulos.sql`
+- `funcoes/142-mentorRegrasMotor.sql`
+- `funcoes/143-mentorEditar.js`
+- `funcoes/144-mentorConferirFila.sql`
+- `funcoes/145-mentorConferirContar.sql`
+- `funcoes/146-mentorConferido.sql`
+- `funcoes/147-mentorDescartarBkp.sql`
+- `funcoes/148-mentorDescartar.sql`
+- `funcoes/149-videoMentoresVerificados.sql`
+- `funcoes/150-videoCotaEspera.sql`
+- `funcoes/151-canaisAtualizar.js`
+- `funcoes/152-buscaTermos.js`
+- `funcoes/153-configTelaLer.sql`
+- `funcoes/154-configTelaGravar.sql`
+- `funcoes/155-canaisMentorLer.sql`
+- `funcoes/156-canalMentorGravar.sql`
+- `funcoes/157-configEditar.js`
+- `funcoes/158-avisoMarcar.sql`
+- `funcoes/159-avisoArquivar.sql`
+- `funcoes/160-avisosTodosLidos.sql`
+- `funcoes/161-videoForaTema.sql`
+- `funcoes/162-exportTabMentorRegras.sql`
+- `funcoes/163-exportVisoes.sql`
+- `funcoes/164-livroResumos.sql`
+- `funcoes/165-livroPraticas.sql`
+- `funcoes/166-livroTemaInfo.sql`
+- `funcoes/167-livroGravar.sql`
+- `funcoes/168-livroTemas.sql`
+- `funcoes/169-livroCapitulo.sql`
+- `funcoes/170-exportTabLivro.sql`
+- `funcoes/171-livroGerar.js`
+- `funcoes/172-iaEstado.sql`
+- `funcoes/173-finFila.sql`
+- `funcoes/174-finGravar.sql`
+- `funcoes/175-finContar.sql`
+- `funcoes/176-praticasMapa.sql`
+- `funcoes/177-praticasTiposFin.sql`
+- `funcoes/178-praticasLista.sql`
+- `funcoes/179-praticasTotais.sql`
+- `funcoes/180-videoFavorito.sql`
+- `funcoes/181-videoAssistido.sql`
+- `funcoes/182-meusContar.sql`
+- `funcoes/183-diarioInserir.sql`
+- `funcoes/184-diarioApagar.sql`
+- `funcoes/185-diarioListar.sql`
+- `funcoes/186-diarioPraticas.sql`
+- `funcoes/187-diarioResumo.sql`
+- `funcoes/188-livroProximo.sql`
+- `funcoes/189-livroHoje.sql`
+- `funcoes/190-diarioEditar.js`
+- `funcoes/191-diarioUltimo.sql`
+- `funcoes/192-diarioContagem.sql`
+- `funcoes/193-diarioAtualizar.sql`
+- `funcoes/194-diarioUm.sql`
+- `funcoes/195-diarioApagarUltimo.sql`
+- `funcoes/196-inicioVideosNovos.sql`
+- `funcoes/197-inicioParaAssistir.sql`
+- `funcoes/198-inicioLivroUltimo.sql`
+- `funcoes/199-inicioPraticaDia.sql`
+- `funcoes/200-praticasJeitos.sql`
+- `funcoes/201-praticasServe.sql`
+- `funcoes/202-praticasQuando.sql`
+- `funcoes/203-praticasErroAnotar.sql`
+- `funcoes/205-exportarGerar.js`
+- `funcoes/206-exportarPacote.js`
+- `funcoes/207-livrosLimpar.sql`
+- `funcoes/208-livrosGravar.sql`
+- `funcoes/209-videoLivrosFeito.sql`
+- `funcoes/210-livrosFila.sql`
+- `funcoes/211-livrosErroAnotar.sql`
+- `funcoes/212-livrosResumo.sql`
+- `funcoes/213-livrosLista.sql`
+- `funcoes/214-livrosTotais.sql`
+- `funcoes/215-livrosRelacao.sql`
+- `funcoes/216-livrosDoTitulo.sql`
+- `funcoes/217-exportarLeve.js`
+- `funcoes/218-nomesFila.sql`
+- `funcoes/219-nomesCatalogoGravar.sql`
+- `funcoes/220-nomesOkGravar.sql`
+- `funcoes/221-nomesPendGravar.sql`
+- `funcoes/222-pendLista.sql`
+- `funcoes/223-pendTotal.sql`
+- `funcoes/224-pendCatalogoCriar.sql`
+- `funcoes/225-pendDecidir.sql`
+- `funcoes/226-pendNaoLivro.sql`
+- `funcoes/227-validarUm.sql`
+- `funcoes/228-nomeEstado.sql`
+- `funcoes/229-nomesOkAtualizar.sql`
+- `funcoes/230-nomesPendAtualizar.sql`
+- `funcoes/231-validarLista.sql`
+- `funcoes/232-validarTotal.sql`
+- `funcoes/233-catalogoBusca.sql`
+- `funcoes/234-catalogoAchar.sql`
+- `funcoes/235-nomeOkCat.sql`
+- `funcoes/236-nomeNaoLivro.sql`
+- `funcoes/237-livroValidar.js`
+- `funcoes/238-validarOnde.sql`
+- `funcoes/239-nomesCatalogoLer.sql`
+- `funcoes/240-nomesSemDecisao.sql`
+- `funcoes/241-livroCatDe.sql`
+- `funcoes/242-livroCatOutro.sql`
+- `funcoes/243-livroCatEditar.sql`
+- `funcoes/244-livroStatusGravar.sql`
+- `funcoes/245-nomesCertezaGravar.sql`
+- `funcoes/246-validarAltaTotal.sql`
+- `funcoes/247-validarAceitarAlta.sql`
+- `funcoes/248-praticaFavorito.sql`
+- `funcoes/249-praticasFavoritas.sql`
+- `funcoes/250-praticaTrechos.sql`
+- `funcoes/251-praticaUma.sql`
+- `funcoes/252-nomeMusica.sql`
+- `funcoes/253-nomeAudiovisual.sql`
+- `funcoes/254-outrosTotais.sql`
+- `funcoes/255-outrosLista.sql`
+- `funcoes/256-outrosVoltar.sql`
+- `funcoes/257-favItemMarcar.sql`
+- `funcoes/258-favItemTirar.sql`
+- `funcoes/259-favItensTipo.sql`
+- `funcoes/260-favItensLista.sql`
+- `funcoes/261-favVideosLista.sql`
+- `funcoes/262-favContagens.sql`
+- `funcoes/263-itemStatusGravar.sql`
+- `funcoes/264-nomeSagrado.sql`
+- `funcoes/265-sagradoObras.sql`
+- `funcoes/266-sagradoPartes.sql`
+- `funcoes/267-sagradoJuntar.sql`
+- `funcoes/268-sagradoSeparar.sql`
+- `funcoes/269-nomeTipoIA.sql`
+- `funcoes/270-outrosEditar.sql`
+- `funcoes/271-outrosAceitar.sql`
+- `funcoes/272-outrosFila.sql`
+- `funcoes/273-outrosConferirGravar.sql`
+- `funcoes/274-pendRefinoFila.sql`
+- `funcoes/275-pendRefinoGravar.sql`
+- `funcoes/276-validarExportar.sql`
+- `funcoes/277-validarSugerir.sql`
+- `funcoes/278-validarSugerirEsp.sql`
+- `funcoes/279-outrosSubtipo.sql`
+- `funcoes/280-nomeTipoPorNome.sql`
+- `funcoes/281-vtMomentos.sql`
+- `funcoes/282-mapaTemasLista.sql`
+- `funcoes/283-mapaTemaJeitos.sql`
+- `funcoes/284-mapaTemaPraticas.sql`
+- `funcoes/285-mapaTemaVideos.sql`
+- `funcoes/286-mapaTemaLigados.sql`
+- `funcoes/287-mapaVideoBusca.sql`
+- `funcoes/288-exportarGit.js`
+- `funcoes/INDICE_FUNCOES.csv`
+- `funcoes/INDICE_FUNCOES.json`
+- `DIFF_FUNCOES.md`
+- `plataforma/rotinas.csv`
+- `DEPENDENCIAS_MITRA.md`
+- `.env.example`

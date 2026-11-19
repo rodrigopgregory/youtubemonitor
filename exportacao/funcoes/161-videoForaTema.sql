@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET STATUS = CASE WHEN {{fora}} = 1 THEN 'FORA_TEMA' ELSE 'ESTUDADO' END, MOTIVO = CASE WHEN {{fora}} = 1 THEN 'Marcado por você como fora do tema espiritualidade.' ELSE NULL END WHERE ID = {{id}} AND STATUS IN ('ESTUDADO', 'FORA_TEMA')

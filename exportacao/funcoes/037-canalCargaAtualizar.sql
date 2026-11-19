@@ -1,0 +1,1 @@
+UPDATE CANAIS SET CARGA_STATUS = '{{status}}', CARGA_TOKEN = '{{token}}', POS_BASE = {{posBase}}, CARGA_MSG = '{{msg}}', ELEGIVEIS = (SELECT COUNT(*) FROM VIDEOS WHERE CANAL_ID = {{id}}) WHERE ID = {{id}}

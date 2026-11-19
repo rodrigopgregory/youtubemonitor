@@ -1,0 +1,1 @@
+UPDATE AVISOS SET LIDO = {{lido}}, LIDO_EM = CASE WHEN {{lido}} = 1 THEN DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s') ELSE NULL END WHERE ID = {{id}}

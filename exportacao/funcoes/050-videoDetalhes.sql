@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET PUBLICADO_EM = NULLIF('{{publicado}}', ''), DURACAO_SEG = {{duracao}}, TIPO = '{{tipo}}', INDISPONIVEL = 0 WHERE ID = {{id}}

@@ -1,0 +1,147 @@
+719ba0459cd18af6218e2674a4638d07df46cfdd | 2026-11-19 00:58:28 +0000 | sledt1006p01 | Configurações: botão Enviar tudo para o GitHub
+e04a124ad3b1e1b24b7e8a2f7aadfc87457b6191 | 2026-11-19 00:11:31 +0000 | sledt1006p01 | Minhas práticas: Fiz hoje e Desfazer no diário
+e1dca633869da69bbbfff5c396b057470600b273 | 2026-11-19 00:10:11 +0000 | sledt1006p01 | Aba Mapa mental: temas, práticas e vídeos ligados
+c0a0f3b54b3a7190332f79fc3b8bdb110459c9e7 | 2026-11-19 00:07:05 +0000 | sledt1006p01 | Editar minutos do tema dentro do vídeo
+b274c03504243651f22845e889baa8d0bfa8e9ca | 2026-11-19 00:02:17 +0000 | sledt1006p01 | Menu do topo cabe na tela: gaveta abaixo de 1280px e só a aba ativa com nome até 1536px
+b166e84c8086d8b378c99052e01c58b0969dedf8 | 2026-11-18 23:56:59 +0000 | sledt1006p01 | Abas de musica/audiovisual/sagrado: validado pelo Claude, botao e filtro de validado
+c11017ae2ca40dba846e0ebdeeb1981c05b1d485 | 2026-11-18 23:50:52 +0000 | sledt1006p01 | Instrucao: ordem de decisao do tipo e motivo obrigatorio em outro; destaque do nao identificado
+95df51d922618455c835778de98f02d61deb026a | 2026-11-18 23:49:16 +0000 | sledt1006p01 | Instrucao do Claude: tipo obrigatorio e exemplos por categoria
+52de8413dec15eda79599bb42a0fc2a7faa0d2c2 | 2026-11-18 23:48:06 +0000 | sledt1006p01 | Colar resposta: deduz o tipo pelo motivo e leva musica, filme/serie e sagrado para a aba certa
+20d97d5797c9fcff447e6b2b7bcb8660e096a5f4 | 2026-11-18 23:39:42 +0000 | sledt1006p01 | Audiovisual: categoria (filme, serie, documentario, jogo) sugerida pelo Claude, com filtro e seletor
+8d07a595e979d82d9387ce47c54f4c513cafcac0 | 2026-11-18 22:38:12 +0000 | sledt1006p01 | Filtro por canal em musica, audiovisual e textos sagrados
+19b9fa9064f8cce47c3793d3da6df4c31eed790f | 2026-11-18 22:18:18 +0000 | sledt1006p01 | Validar: filtro por ter titulo e/ou autor
+3e7bff42e9923d25886dae247a1ecd3d69577ad0 | 2026-11-18 22:16:06 +0000 | sledt1006p01 | Validar: filtros combinaveis (certeza, agrupar, tipo, origem)
+dcaeb1610143f183a78a650b70fe0cc58cd3c98b | 2026-11-18 22:06:45 +0000 | sledt1006p01 | Validar livros: filtro de origem (Claude ou IA do app) e aceitar sugestão nos marcados
+27f5dbe93a44206ba4f6565ef699d701200981b3 | 2026-11-18 22:04:46 +0000 | sledt1006p01 | Validar livros: tipo sugerido (livro, música, filme, sagrado), filtro e marcação em massa
+4d9ac6e02f4af166fea09381cece5c4ecfc975ea | 2026-11-18 21:51:14 +0000 | sledt1006p01 | Validar livros: com filtro ou busca, carrega a lista inteira
+8eda7c87d69985374b5b957594dd6b9f2e5f3e63 | 2026-11-18 21:44:22 +0000 | sledt1006p01 | Exportar para o Claude segue busca e filtro da tela
+dbee58119f26d05180a99387a8cb41108b4775ff | 2026-11-18 21:42:44 +0000 | sledt1006p01 | Validar livros: filtro sem nenhum autor e não é livro em massa
+b24bfadf388a1e91212e1cd51848c5e7fc64b8e0 | 2026-11-18 21:20:41 +0000 | sledt1006p01 | Exportar todos os pendentes, inclusive nomes com aspas; importacao casa esses nomes
+fbf51b032306222267d5920b71ef22648a8c27f2 | 2026-11-18 20:49:59 +0000 | sledt1006p01 | Exportar pendentes: instrucao completa, sugestao atual e trecho; corrige erro de limit
+d0ef1ef0729ab3850696073f322244a5ef8eae05 | 2026-11-18 20:41:18 +0000 | sledt1006p01 | Validar: exportar pendentes para o Claude e importar respostas
+3921fbfebb4b68deaebf2730536fec518093faba | 2026-11-18 18:50:41 +0000 | sledt1006p01 | Validar manual: botao OK para ler titulo e autor do texto colado
+4adf0abec5822ea88a1a119882d884d2cffe178b | 2026-11-18 18:33:43 +0000 | sledt1006p01 | Validar com IA: busca do Google com fallback sem busca marcado para conferir
+b54285edb22d3d4fb2a66eddd1501d28eec8f265 | 2026-11-18 17:24:29 +0000 | sledt1006p01 | Refino dos pendentes sem sugestão com a busca do Google
+f9fa75f76044dc95977ca5da6df3fe5f6beecd51 | 2026-11-18 15:06:55 +0000 | sledt1006p01 | Conferência só roda com a busca do Google
+0e16391628eb58659c539e280a62b7e82581da76 | 2026-11-18 14:37:34 +0000 | sledt1006p01 | Conferência pela IA de músicas, audiovisuais e textos sagrados
+db9764c6d8cd88ba9b2e754a7c283ed690e95762 | 2026-11-18 11:38:50 +0000 | sledt1006p01 | Notificações: botão Lido e arquivar
+c2189fb4db1110cef674c0ebd0239166fb4b2ae3 | 2026-11-18 11:37:37 +0000 | sledt1006p01 | Botão Editar em Músicas, Audiovisuais e Textos sagrados
+a9de4c4fabad102e9d742b67e776b5c6f8d91eda | 2026-11-18 11:09:59 +0000 | sledt1006p01 | Motor separa livro, música, audiovisual e texto sagrado ao ler cada vídeo novo
+73df0f78121dcf0e7cac90a5e3f8e5c98244b665 | 2026-11-18 10:54:17 +0000 | sledt1006p01 | Favoritos de textos sagrados contam as partes da obra
+94a33053780e5640d5f3a8a63b5a06378bff7d52 | 2026-11-18 01:14:35 +0000 | sledt1006p01 | Minhas práticas: filtro e estatística por categoria
+4cb7cf9ac87e69de3457503088f8ef93116294ee | 2026-11-18 01:13:05 +0000 | sledt1006p01 | Textos sagrados agrupados por obra
+b05ade39fb566fc7d9dc63e170816e18e31e32cb | 2026-11-18 01:05:44 +0000 | sledt1006p01 | Filtro Só favoritos em Relação, Músicas, Audiovisuais e Textos sagrados; abas rolam no celular
+313a65a42830d6aebf58cd9e72100789c80ac534 | 2026-11-17 23:24:57 +0000 | sledt1006p01 | Textos sagrados; situação e filtros em Músicas e Audiovisuais
+f3f59abb5c689600e24116e4658805aae451f0ba | 2026-11-17 23:20:18 +0000 | sledt1006p01 | Biblioteca: remove Livros indicados, Validar entradas primeiro
+2a2995fe47f2a71a0004ee25218681f808f9a5b5 | 2026-11-17 23:16:11 +0000 | sledt1006p01 | Menu: Livros vira Biblioteca
+1b422b3e40a0b0e7268e78fcd043cf0c1cbaf900 | 2026-11-17 23:01:57 +0000 | sledt1006p01 | Rótulos em título e autor; colar texto da internet preenche os campos
+27513a2fd90f9583507c5806ed9fbc9aada2d17b | 2026-11-17 23:00:57 +0000 | sledt1006p01 | Renomeia Livros a validar para Validar entradas
+7c5a48dfdfdd6f917af0458fada23601d6213161 | 2026-11-17 22:59:24 +0000 | sledt1006p01 | Meus favoritos: estrela em livros, músicas e audiovisuais e seção própria
+f6f84d74086a85ea5098ae5371b04134a54e6ac5 | 2026-11-17 22:57:08 +0000 | sledt1006p01 | Músicas e Audiovisuais: botão Remover
+55894c4f9d1560d18403c0380863655cc85308a7 | 2026-11-17 22:46:47 +0000 | sledt1006p01 | Livros: seções Músicas e Audiovisuais, botões na validação
+6e4fa0114de1efa512ccce13cec08e691dbe96d1 | 2026-11-17 20:21:32 +0000 | sledt1006p01 | Validar livros: instrução por voz para a IA e 100% só com verificação
+8d0ff228a3775d2aa502cbe8acca2e8ecbbd1235 | 2026-11-17 20:18:11 +0000 | sledt1006p01 | Práticas favoritas, abrir prática com vídeo e transcrição em Minhas práticas
+07544f2e66033dc1ad343bca2675568b7e0d3fc0 | 2026-11-17 20:10:10 +0000 | sledt1006p01 | Vídeos e temas: caixa de busca nas listas do filtro
+8540e246a389be380f9ccf7ef135c0ad9707ec93 | 2026-11-17 19:42:09 +0000 | sledt1006p01 | Motor: aprova direto nomes com certeza 95% ou mais
+de8350f554b2c8894d30305aa8241d993120a413 | 2026-11-17 19:33:35 +0000 | sledt1006p01 | Motor: lote de 40 nomes por rodada
+90a22617ac8702eb85281172fb6c9ca0f34e9646 | 2026-11-17 19:27:59 +0000 | sledt1006p01 | Motor: validar livros sem busca do Google quando der 429
+f8d718e9e03a4be9b00e9737c857eca2ddf66bba | 2026-11-17 19:26:01 +0000 | sledt1006p01 | Motor: chaves gemini8 e gemini9 na frente para validar livros
+118db028b2026c0af7387443e0a9d89d8b210387 | 2026-11-17 15:36:27 +0000 | sledt1006p01 | Livros a validar: separar sem sugestão com autor e só nome
+96ed0a4a0e8894ee636789d71bf577b6992cb7b1 | 2026-11-17 15:18:16 +0000 | sledt1006p01 | Livros a validar: visão agrupada por livro sugerido
+9f5695985183424e58f0a300e31556e4381662e7 | 2026-11-17 13:49:43 +0000 | sledt1006p01 | Botão aceitar todos com 90% ou mais
+bf1444ca0743e852e510dec69f437c1c891dab0e | 2026-11-17 13:45:18 +0000 | sledt1006p01 | Livros a validar: certeza por sugestao e faixas de 90%
+72a1b1685d2cf7a62b63bdd30b487aa1692faa2f | 2026-11-17 13:39:18 +0000 | sledt1006p01 | Menu reordenado
+09a1ce110519d5de194f919dd433aa572d027535 | 2026-11-17 13:34:02 +0000 | sledt1006p01 | Status de leitura dos livros: planilha, seletor e filtro na Relação
+1dd173a322776783a29163e76e8b65ce5f9408ba | 2026-11-17 13:26:56 +0000 | sledt1006p01 | Relação de livros: editar título e autor
+efe85aae9f6e99318877b2e6b7f6976abed9f9d0 | 2026-11-17 13:25:01 +0000 | sledt1006p01 | Motor: casamento por autor e fila de validação priorizada
+65453f45f25b49a120755a48f95519924c2628d9 | 2026-11-17 13:15:39 +0000 | sledt1006p01 | Casamento local de nomes de livros por título e autor
+d8a4749e77a88645136ba878d47760d1b4808370 | 2026-11-17 13:12:51 +0000 | sledt1006p01 | Livros a validar: botão para ver onde o nome foi dito, com trecho e link no minuto
+b3021e142ca11287bfa84f0f0292272a2d832ba6 | 2026-11-17 13:04:49 +0000 | sledt1006p01 | Livros a validar: aba, validar com IA ou manual, ajuste automático em Configurações
+fa58c6cdddff859fcc3018d8913d20fe814355b0 | 2026-11-17 12:25:31 +0000 | sledt1006p01 | Relação de livros: filtros por título e autor, ordem e lista compacta
+672f7ad99c871241784cba56f6d6db7b6f759ec8 | 2026-11-17 03:58:25 +0000 | sledt1006p01 | Livros: validação no Google, catálogo e pendências na Início
+144d72b5f4f2c5e959a43b2736296f7874b24b67 | 2026-11-17 03:15:42 +0000 | sledt1006p01 | Livros: seção própria no menu com abas Indicados e Relação
+7fa33e53d6a3830011ccaf7ba3b07883a6fe9958 | 2026-11-16 22:00:52 +0000 | sledt1006p01 | Exportação leve: marcador do publicador montado em pedaços
+1a8f52a1f8c6416cdb10a60cbd92df5a048493c9 | 2026-11-16 21:59:16 +0000 | sledt1006p01 | Exportação leve: função, painel em Configurações, gerador da base de código e regras de classificação
+834a22f865474caaa6c2b9f4dfffa216c518ac35 | 2026-11-16 21:24:38 +0000 | sledt1006p01 | Relação de livros: tela separada com um livro por título, autor, vídeos e canais
+f32c681710c2b56e2dba675828d98bcdfb429a7e | 2026-11-16 21:23:27 +0000 | sledt1006p01 | Livros indicados: leitura pela IA no motor, tabela, tela com filtro de canal e busca
+94b693c4bcf0d442c75028292a6386df2cc3de87 | 2026-11-16 16:24:12 +0000 | sledt1006p01 | Exportação: painel com código por e-mail, geração em partes e download por link; tranca funções export antigas
+5ebb19ca730fa0b808682f4d2f86aae56e97094c | 2026-11-16 16:20:00 +0000 | sledt1006p01 | criar-funcoes: inclui exportarGerar
+f0070b79e41c51f8e7a0c95de7cc94d0f2204636 | 2026-11-16 15:23:38 +0000 | sledt1006p01 | Exportação completa: tabelas de controle EXPORT_* e gerador em partes (exportarGerar)
+887c33ef8e768d6ed75755adc52691600ceb1ca7 | 2026-11-16 13:39:31 +0000 | sledt1006p01 | Práticas: anota vídeo que deu erro e manda para o fim da fila
+7ef64ec6313fb0583e4144a9345477d890ac9f1a | 2026-11-16 13:35:58 +0000 | sledt1006p01 | Motor: vídeo com erro na leitura de práticas não trava a fila
+f8cde8761cc73e483477a517e02e8fd46d42dd9b | 2026-11-16 12:51:55 +0000 | sledt1006p01 | Leitura das práticas: Mônica primeiro, depois Wagner, depois Saulo
+155db1b99e4c271f2056e457164e8110ccd02da5 | 2026-11-16 12:38:04 +0000 | sledt1006p01 | Práticas: filtros Para que serve e Quando fazer voltam a aparecer dentro do jeito
+85cb7976324dfe8985df57439f0e746b787c821b | 2026-11-16 12:32:44 +0000 | sledt1006p01 | Práticas: aviso pequeno sobre orientação de saúde
+557e72d388fb63982514a0eb4093108af0c91d1f | 2026-11-16 12:31:21 +0000 | sledt1006p01 | Novo jeito de fazer: Homeopatia, medicação e suplementos
+a0459f5e973d08950a96f6678a501336ea02de10 | 2026-11-16 12:14:55 +0000 | sledt1006p01 | Práticas organizadas por jeito de fazer, para que serve e quando; esconde conselhos
+cc30960a88038b4fd21bf99daebfb7a95fd1adf1 | 2026-11-16 12:00:42 +0000 | sledt1006p01 | Etiquetas novas das praticas (jeito, serve, quando, conselho)
+a9785a041299308b37abd4db01808af0d2dc5514 | 2026-11-16 05:54:32 +0000 | sledt1006p01 | Início: etiqueta do tipo de prática
+cb16fae26801a701f9ed52767c9a0e9930411255 | 2026-11-16 05:54:07 +0000 | sledt1006p01 | Página inicial: pergunta aos mentores, minhas práticas, prática do dia por finalidade, Livro Vivo, vídeos novos, para assistir e andamento; Pesquisar vai para /pesquisar
+30720c8c7c6a5fbe7d6864ad7302f1972cecfe8a | 2026-11-16 05:39:07 +0000 | sledt1006p01 | Vídeos: botão Limpar filtros que tira todos os filtros de uma vez
+7fcf8a91470eade41f96296ddd34b915d931dde0 | 2026-11-16 05:12:55 +0000 | sledt1006p01 | Configurações: Livro Vivo ligar/desligar, capítulos por madrugada e pausa de 24h; chave da finalidade das práticas; situação da IA
+ebb2e1314fc3c07f9f846a360e167dca901697d4 | 2026-11-16 04:56:13 +0000 | sledt1006p01 | Resumo do projeto (ESCOPO) atualizado para a versão 3.0 com tudo o que o app faz hoje
+6c17ee98acdf4a152337cedf858025ded4c17c5f | 2026-11-16 04:50:25 +0000 | sledt1006p01 | Fiz hoje conta direto com contador e data; Desfazer tira sempre o último registro
+ecb4a6fe48748d14722f86bf86749afb3c825bdd | 2026-11-16 04:47:24 +0000 | sledt1006p01 | Práticas: botão +1 com contador, Desfazer e editar registro
+a2d8a69435b68499ad06787e744df96dc06279c3 | 2026-11-16 04:31:16 +0000 | sledt1006p01 | Minhas práticas (fiz hoje e como me senti), favoritos e já assisti nos vídeos, Livro Vivo escreve 2 capítulos por madrugada
+6ec3d96318d3a03922f76fbbf1754aff9a71418f | 2026-11-16 04:26:01 +0000 | sledt1006p01 | Base de Minhas práticas, favoritos/assistidos e Livro Vivo de madrugada
+9787bd64bc10c24d667d76e0c2bacc638f1255a5 | 2026-11-16 04:07:09 +0000 | sledt1006p01 | Nova tela Práticas: mapa por finalidade, jeito de fazer e passo a passo; IA marca a finalidade de cada prática
+2fe26567f6516026ad82953777daa7d6a1f05caf | 2026-11-16 03:55:30 +0000 | sledt1006p01 | Filtrar no celular, andamento das práticas, aviso de IA em pausa e textos curtos
+c81b0aec585ed927a392859818427273bc8d8280 | 2026-11-16 02:58:00 +0000 | sledt1006p01 | Pesquisar: caixa de pergunta maior e que cresce com o texto
+86e3d453a94428bd9b0573d65078b8dff04e16d3 | 2026-11-16 02:54:01 +0000 | sledt1006p01 | Pesquisar no computador: sugestões compactas lado a lado
+c04df48a04b3251f3a20813336c33cfefe1269c0 | 2026-11-16 02:50:17 +0000 | sledt1006p01 | Pesquisar: funciona sem a IA quando a cota acaba e prioriza o termo mais raro
+3cdd3b61ccefdb981664a720aa64ff9c66fbdb7d | 2026-11-16 02:46:05 +0000 | sledt1006p01 | Pesquisar no celular: sugestões lado a lado numa faixa que desliza
+58d731b83f0cd14208284ae5668cbd932842a779 | 2026-11-16 02:32:13 +0000 | sledt1006p01 | Celular: campos e cartões sem cortar na borda; Pesquisar com cabeçalho empilhado
+8ce3993d67eef8cb5ea2dd7ce2d702c6845bd3a1 | 2026-11-16 02:22:28 +0000 | sledt1006p01 | Modo escuro como padrão; lembra a escolha do tema
+48b6624222e286f3fd861df2adb3163c9eecb997 | 2026-11-16 02:20:06 +0000 | sledt1006p01 | Menu vira barra lateral (gaveta) no celular e tablet
+c2c9eec541ff83ddaa9b620c6cb4f400ab680194 | 2026-11-16 02:18:02 +0000 | sledt1006p01 | Motor: espera e tenta de novo quando o Gemini pede pausa de segundos; só marca esgotado no limite diário
+91a10261d3b8e1962ce8f4e83c43a291f0b34724 | 2026-11-16 02:12:07 +0000 | sledt1006p01 | Fora do tema passa a se chamar Fora do tema espiritualidade
+59998d74412d91aca939321f8cbd16fc29cd57cb | 2026-11-16 02:03:57 +0000 | sledt1006p01 | Menu: Canais e Mentores antes do Livro Vivo, Livro Vivo antes de Configurações
+fe2906e009903be104118a3f7fcb2ad611773bde | 2026-11-15 21:12:14 +0000 | sledt1006p01 | Livro Vivo: aba com um capítulo por tema (ensinamentos e práticas agrupadas) escrito pela IA; capítulos entram no Exportar tudo
+8cd9896f0435c1af3b969f1a8b4e86c39255cd1c | 2026-11-15 17:28:48 +0000 | sledt1006p01 | Configurações: Exportar para o NotebookLM (transcrições juntas em arquivos por canal, abaixo do limite de uma fonte)
+fbe7de38fb8e57d25882a63f7b8d597abcba9077 | 2026-11-15 16:50:25 +0000 | sledt1006p01 | Exportar tudo em Configurações; pacote passa a levar PRATICAS, MENTOR_REGRAS, LOTES, visões de lote, PRATICAS_EM e VERIFICADO
+d4b608ee2fe0185d0d8f1f619a8d6e6bafb5ac01 | 2026-11-15 16:46:05 +0000 | sledt1006p01 | Práticas: tipos mediunidade e percepção, autoconhecimento e conduta; grupo Autoconhecimento
+3b0ce11890148f26cb5306010b60c32b497728ba | 2026-11-15 16:36:01 +0000 | sledt1006p01 | Práticas em 4 grupos (técnicas, preces, ervas e velas, receitas e saúde) e 2 tipos novos no estudo
+88cf237b6c44a536a1bf1bfa95bb2a399d44e0b0 | 2026-11-15 16:04:10 +0000 | sledt1006p01 | Vídeos e temas: área Fora do tema (vídeos que não tratam de espiritualidade), com botão para mover e trazer de volta
+5887dc343bed1d55e1da5664ec89724b1de80e19 | 2026-11-15 12:57:30 +0000 | sledt1006p01 | Motor: trecho de áudio com defeito é refeito em partes menores; motivo do bloqueio da IA aparece
+ebedab3e92b1a02d42126d47c4432bcc017e7cb1 | 2026-11-14 15:54:41 +0000 | sledt1006p01 | Avisos: sininho aceso com número, marcar lido/não lido e arquivar
+a525ce1d1c3c176a1d5a584b3f853a76e6d7bccc | 2026-11-14 11:51:07 +0000 | sledt1006p01 | Aba Configurações (mentores e estudo) e etiqueta Transcrito pelo áudio com filtro e coluna na planilha
+e788f468d00f62fd00cf4877d24fa7feb7429018 | 2026-11-14 00:46:38 +0000 | sledt1006p01 | Busca e Chat viram uma aba só: Pesquisar
+d74a47609358ae82a60e5a99fb763583c6404640 | 2026-11-14 00:21:47 +0000 | sledt1006p01 | Busca com sinônimos e botão Buscar vídeos novos no topo
+730e949219d8f4a14bc42f4b2924964b4c6a89bd | 2026-11-13 23:47:07 +0000 | sledt1006p01 | Botão Atualizar canais: procura vídeos novos na hora
+246c9e0f36e44b3d22a463ae34bf01371b9c979a | 2026-11-13 22:01:59 +0000 | sledt1006p01 | Motor: cota da IA esgotada deixa o vídeo na fila e encerra a rodada
+5fe2f06611a501200ef499efd7999d341a374adb | 2026-11-13 21:56:59 +0000 | sledt1006p01 | Motor: leitura tolerante do JSON da IA e nova tentativa quando vem malformado
+86c45b6a5310ec2d01a56240f7b86821c38745bd | 2026-11-13 21:51:53 +0000 | sledt1006p01 | Mentor do título manda: quem não está no título sai quando o título traz outro mentor
+2c0ff624e268bf4e82fdbb8fbfa14ce3371471c2 | 2026-11-13 21:44:19 +0000 | sledt1006p01 | Mentor: no título = marca; fora do título = IA confere na transcrição se está incorporado e conduz a live
+d234b65b824dcddeff99b54b416195dc8731f4f6 | 2026-11-13 21:37:09 +0000 | sledt1006p01 | Motor marca mentor pelo título; Silvane/Silviane = Shell Y Ann
+23d6f95f31c61a3d5dd4aff6d28ec159133f4079 | 2026-11-13 21:32:38 +0000 | sledt1006p01 | Mentores com a primeira letra maiúscula (banco, motor e aba Mentores)
+25ea958fc1988ff29943d3b0116d37a39e9f08b2 | 2026-11-13 21:26:26 +0000 | sledt1006p01 | Aba Mentores: cadastrar, renomear, juntar e marcar não-mentor; regras em MENTOR_REGRAS seguidas pelo motor
+2cd4ef0bd9178c2a6b6c873c25e4bc8ae65b19b2 | 2026-11-13 21:18:39 +0000 | sledt1006p01 | Mentores: junta pai joaquim/tamires/tronqueira e barra margarete, oxala, pava, frei luiz, mario
+d4d7d6f5127367f7d6c3bfc968926f959980b819 | 2026-11-13 20:31:28 +0000 | sledt1006p01 | Mentor: nome correto Shell Y Ann
+eb08ba8bc04244b1e4aa8b0e21ff3fa272f07856 | 2026-11-13 20:30:22 +0000 | sledt1006p01 | Filtros múltiplos (temas, mentores, playlists, práticas); leitura de práticas; limpeza de mentores
+477f2926037791f9c166c6b0c601ecfd9d6d9c64 | 2026-11-13 20:06:06 +0000 | sledt1006p01 | Vídeos e temas: botão Exportar planilha com os filtros da tela
+e0d392d9f8af4074a90f3cd6789fadedfd1da593 | 2026-11-13 19:09:57 +0000 | sledt1006p01 | Temas: 32 categorias fixas; estudo escolhe só entre elas
+2f9a45dc4ebba12b5d857d4eb7686d7d6612ed99 | 2026-11-13 16:13:14 +0000 | sledt1006p01 | PWA: manifest, ícones, service worker e botão Instalar app
+26142eb00f4f27f9d82167681842c06bbaa5c82a | 2026-11-13 16:11:45 +0000 | sledt1006p01 | Chat: espera resposta longa sem cair; ditado por voz
+ccd42e2edc4204eba483a0de7b0f39dc7c22a63e | 2026-11-13 16:05:18 +0000 | sledt1006p01 | Exportar tudo: ZIP com código, esquema do banco e todos os dados
+117342509a2499e874b7df8b93ea9c53c54840c4 | 2026-11-13 15:59:17 +0000 | sledt1006p01 | Aviso a cada vídeo captado na checagem diária; filtro combinado tema+playlist
+289b3a2e58dadd2b680f2e82d421dbd311fbca6f | 2026-11-13 13:32:59 +0000 | sledt1006p01 | feat: playlists dos canais, lidas uma vez por dia, e agrupamento por playlist na tela de vídeos
+cbc445fac672dcd4dd323ea1db72b8340beaba3e | 2026-11-13 01:38:18 +0000 | sledt1006p01 | feat: várias chaves do Gemini, troca de chave quando a cota acaba
+3cf465652b4c2e8898115c84fa059d9ded07a393 | 2026-11-12 20:42:25 +0000 | sledt1006p01 | feat: ordem de estudo: Wagner com legenda, Mônica com legenda, depois os sem legenda
+fe6319d0175a2f9ad28ebe02a364365607a08749 | 2026-11-12 20:40:16 +0000 | sledt1006p01 | fix: canais se alternam na fila pelo último estudado
+c75a8f7c138a6f3495255e4fb4dec35afd631a3f | 2026-11-12 20:32:34 +0000 | sledt1006p01 | fix: mentor só se o nome aparece no título ou na transcrição
+f248a9103c01a5526bd76f63e630cec4d9d0e1c9 | 2026-11-12 20:31:15 +0000 | sledt1006p01 | fix: mentor só em canal com mentor (Mônica); grafias padronizadas
+1eb9794b875a9e6ec5109103419d04bb13a112e0 | 2026-11-12 20:19:22 +0000 | sledt1006p01 | fix: mentor é só quem conduz a live; reanálise dos vídeos com mentor
+773f7c3db9a37f6aea07b243ae8a3037c51a3b8f | 2026-11-12 20:15:39 +0000 | sledt1006p01 | feat: estudar só vídeos com legenda; sem legenda aguardam e aparecem na tela
+14e90fe35848603904d35b327101c7ad45e0566d | 2026-11-12 20:12:29 +0000 | sledt1006p01 | feat: app sem login (funções das telas com execução pública)
+957b25c8d6986d1419d6fa0d961ff39acb1d8a9c | 2026-11-12 20:03:02 +0000 | sledt1006p01 | feat: vídeos sem legenda são pulados e ficam para o fim da fila
+e1e269e101589695a655ac03d6118e58086e790d | 2026-11-12 20:00:30 +0000 | sledt1006p01 | fix: vídeos sem legenda vão para o fim da fila
+93fcb0417fc813e66b1df8c067979766b86ab0ea | 2026-11-12 19:56:55 +0000 | sledt1006p01 | fix: ler JSON da IA com texto sobrando
+d58210a2e02c16339cd3d0f4d263c57888ea7289 | 2026-11-12 19:56:16 +0000 | sledt1006p01 | feat: exportar temas (planilha) e transcrições (zip) por canal; fila alternando canais
+62a42e89e3a4512cd4b95e7f961bbd1b6517d746 | 2026-11-12 19:50:15 +0000 | sledt1006p01 | feat: tag de mentor na análise; acervo completo dos canais
+9e6155290aa9a23ff03446cd02f7ec4c7392b295 | 2026-11-12 19:46:04 +0000 | sledt1006p01 | feat: separar vídeos, busca e chat por canal; cadastro do canal Mônica de Medeiros
+1c54d536c59e8c63fca06fa6ccd4393ec20833f8 | 2026-11-12 19:42:38 +0000 | sledt1006p01 | feat: pedir pelo chat para estudar mais vídeos e ver o andamento
+3500a22fae2dbc1092f91679a9c5df011600a2ae | 2026-11-12 18:46:35 +0000 | sledt1006p01 | feat: chat de busca que responde só com a base
+047d5d065a43fa8ab1e0a72d4e6369df8fd510c4 | 2026-11-12 18:13:15 +0000 | sledt1006p01 | feat: motor de estudo dos vídeos, busca por tema, edição de temas, avisos e telas
+c36496eae005fcbda5ddc09b89ef80f11f0840f7 | 2026-11-12 17:44:58 +0000 | sledt1006p01 | feat: escopo e estrutura do banco do Monitor de Canais
+1b1f9f4cdb0185ceeaa4deab810f6f5702fd87e3 | 2026-11-12 17:18:33 +0000 | sledt1006p01 | chore: modelo padrão do Mitra (agente pessoal)
+52d32b18d196a0a7325f6c284936369150417979 | 2026-11-12 17:17:38 +0000 | mitra-sync[bot] | chore: bootstrap repo

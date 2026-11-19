@@ -1,0 +1,1 @@
+INSERT INTO ITENS_STATUS (TIPO, NOME, STATUS) VALUES ('{{tipo}}', '{{nome}}', '{{status}}') ON DUPLICATE KEY UPDATE STATUS = '{{status}}'

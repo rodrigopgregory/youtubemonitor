@@ -1,0 +1,1024 @@
+{
+ "observacao": "Somente perfis e as funções que cada um pode executar. Sem usuários, e-mails, senhas ou tokens.",
+ "perfis": [
+  {
+   "id": 1,
+   "nome": "Dona da base",
+   "qtd_funcoes": 253,
+   "funcoes": [
+    {
+     "numero": 32,
+     "nome": "configLer"
+    },
+    {
+     "numero": 33,
+     "nome": "configGravar"
+    },
+    {
+     "numero": 34,
+     "nome": "loteGravar"
+    },
+    {
+     "numero": 35,
+     "nome": "loteApagar"
+    },
+    {
+     "numero": 36,
+     "nome": "videosInserirLote"
+    },
+    {
+     "numero": 37,
+     "nome": "canalCargaAtualizar"
+    },
+    {
+     "numero": 38,
+     "nome": "canalCargaMsg"
+    },
+    {
+     "numero": 39,
+     "nome": "videosIdsCanal"
+    },
+    {
+     "numero": 40,
+     "nome": "canalChecado"
+    },
+    {
+     "numero": 41,
+     "nome": "trechosInserirLote"
+    },
+    {
+     "numero": 42,
+     "nome": "videoProgresso"
+    },
+    {
+     "numero": 43,
+     "nome": "trechosDoVideo"
+    },
+    {
+     "numero": 44,
+     "nome": "temasNomes"
+    },
+    {
+     "numero": 45,
+     "nome": "temasGarantirLote"
+    },
+    {
+     "numero": 46,
+     "nome": "videoTemasIA"
+    },
+    {
+     "numero": 47,
+     "nome": "videoConcluir"
+    },
+    {
+     "numero": 48,
+     "nome": "videoPendente"
+    },
+    {
+     "numero": 49,
+     "nome": "videoIndisponivel"
+    },
+    {
+     "numero": 50,
+     "nome": "videoDetalhes"
+    },
+    {
+     "numero": 51,
+     "nome": "videoForaDoFiltro"
+    },
+    {
+     "numero": 52,
+     "nome": "videoOrigem"
+    },
+    {
+     "numero": 53,
+     "nome": "videosRetentar"
+    },
+    {
+     "numero": 54,
+     "nome": "canaisParaMotor"
+    },
+    {
+     "numero": 55,
+     "nome": "filaProximo"
+    },
+    {
+     "numero": 56,
+     "nome": "filaContar"
+    },
+    {
+     "numero": 57,
+     "nome": "avisoPendentes"
+    },
+    {
+     "numero": 58,
+     "nome": "avisoHoje"
+    },
+    {
+     "numero": 59,
+     "nome": "avisoCriar"
+    },
+    {
+     "numero": 60,
+     "nome": "avisoVincular"
+    },
+    {
+     "numero": 61,
+     "nome": "avisoRecontar"
+    },
+    {
+     "numero": 62,
+     "nome": "canaisAtualizarStatus"
+    },
+    {
+     "numero": 63,
+     "nome": "lockAdquirir"
+    },
+    {
+     "numero": 64,
+     "nome": "lockLiberar"
+    },
+    {
+     "numero": 65,
+     "nome": "motor"
+    },
+    {
+     "numero": 66,
+     "nome": "canalPorYt"
+    },
+    {
+     "numero": 67,
+     "nome": "canalInserir"
+    },
+    {
+     "numero": 68,
+     "nome": "canaisListar"
+    },
+    {
+     "numero": 69,
+     "nome": "painelResumo"
+    },
+    {
+     "numero": 70,
+     "nome": "videosListar"
+    },
+    {
+     "numero": 71,
+     "nome": "temasListar"
+    },
+    {
+     "numero": 72,
+     "nome": "videoDetalhe"
+    },
+    {
+     "numero": 73,
+     "nome": "videoTemas"
+    },
+    {
+     "numero": 74,
+     "nome": "temaGarantir"
+    },
+    {
+     "numero": 75,
+     "nome": "vtAcrescentar"
+    },
+    {
+     "numero": 76,
+     "nome": "vtTirar"
+    },
+    {
+     "numero": 77,
+     "nome": "vtRenomear"
+    },
+    {
+     "numero": 78,
+     "nome": "vtTirarSeOutro"
+    },
+    {
+     "numero": 79,
+     "nome": "videoMarcarEditado"
+    },
+    {
+     "numero": 80,
+     "nome": "buscarTema"
+    },
+    {
+     "numero": 81,
+     "nome": "buscaTrechos"
+    },
+    {
+     "numero": 82,
+     "nome": "buscaResumos"
+    },
+    {
+     "numero": 83,
+     "nome": "avisosListar"
+    },
+    {
+     "numero": 84,
+     "nome": "avisoVideos"
+    },
+    {
+     "numero": 85,
+     "nome": "avisoMarcarLido"
+    },
+    {
+     "numero": 86,
+     "nome": "motorAndamento"
+    },
+    {
+     "numero": 87,
+     "nome": "canalCadastrar"
+    },
+    {
+     "numero": 88,
+     "nome": "temaEditar"
+    },
+    {
+     "numero": 89,
+     "nome": "resumoBusca"
+    },
+    {
+     "numero": 90,
+     "nome": "chatBusca"
+    },
+    {
+     "numero": 91,
+     "nome": "canaisLimiteMais"
+    },
+    {
+     "numero": 92,
+     "nome": "canaisNomes"
+    },
+    {
+     "numero": 93,
+     "nome": "estudoAndamento"
+    },
+    {
+     "numero": 94,
+     "nome": "estudarMais"
+    },
+    {
+     "numero": 95,
+     "nome": "exportVideos"
+    },
+    {
+     "numero": 96,
+     "nome": "exportTrechos"
+    },
+    {
+     "numero": 97,
+     "nome": "filaComLegenda"
+    },
+    {
+     "numero": 98,
+     "nome": "videoTemasIALimpar"
+    },
+    {
+     "numero": 99,
+     "nome": "playlistsGravar"
+    },
+    {
+     "numero": 101,
+     "nome": "playlistVideosLimpar"
+    },
+    {
+     "numero": 102,
+     "nome": "playlistVideosGravar"
+    },
+    {
+     "numero": 103,
+     "nome": "playlistsSumidasVideos"
+    },
+    {
+     "numero": 104,
+     "nome": "playlistsSumidas"
+    },
+    {
+     "numero": 105,
+     "nome": "canalPlaylistsFeito"
+    },
+    {
+     "numero": 106,
+     "nome": "playlistsListar"
+    },
+    {
+     "numero": 107,
+     "nome": "exportEstrutura"
+    },
+    {
+     "numero": 108,
+     "nome": "exportIndices"
+    },
+    {
+     "numero": 109,
+     "nome": "exportTabCanais"
+    },
+    {
+     "numero": 110,
+     "nome": "exportTabVideos"
+    },
+    {
+     "numero": 111,
+     "nome": "exportTabTrechos"
+    },
+    {
+     "numero": 112,
+     "nome": "exportTabTemas"
+    },
+    {
+     "numero": 113,
+     "nome": "exportTabVideoTemas"
+    },
+    {
+     "numero": 114,
+     "nome": "exportTabPlaylists"
+    },
+    {
+     "numero": 115,
+     "nome": "exportTabPlaylistVideos"
+    },
+    {
+     "numero": 116,
+     "nome": "exportTabAvisos"
+    },
+    {
+     "numero": 117,
+     "nome": "exportTabConfig"
+    },
+    {
+     "numero": 118,
+     "nome": "exportVideosFiltro"
+    },
+    {
+     "numero": 119,
+     "nome": "praticasLimpar"
+    },
+    {
+     "numero": 120,
+     "nome": "praticasGravar"
+    },
+    {
+     "numero": 121,
+     "nome": "videoPraticasFeito"
+    },
+    {
+     "numero": 122,
+     "nome": "praticasFila"
+    },
+    {
+     "numero": 123,
+     "nome": "praticasTipos"
+    },
+    {
+     "numero": 124,
+     "nome": "praticasDoVideo"
+    },
+    {
+     "numero": 125,
+     "nome": "praticasResumo"
+    },
+    {
+     "numero": 126,
+     "nome": "exportTabPraticas"
+    },
+    {
+     "numero": 127,
+     "nome": "mentoresListar"
+    },
+    {
+     "numero": 128,
+     "nome": "mentoresGerir"
+    },
+    {
+     "numero": 129,
+     "nome": "mentorRegrasListar"
+    },
+    {
+     "numero": 130,
+     "nome": "mentorVideos"
+    },
+    {
+     "numero": 131,
+     "nome": "mentorRegraGravar"
+    },
+    {
+     "numero": 132,
+     "nome": "mentorRegraApagar"
+    },
+    {
+     "numero": 133,
+     "nome": "mentorRegraApagarNome"
+    },
+    {
+     "numero": 134,
+     "nome": "mentorTemaPorId"
+    },
+    {
+     "numero": 135,
+     "nome": "mentorTemaPorNome"
+    },
+    {
+     "numero": 136,
+     "nome": "mentorBackup"
+    },
+    {
+     "numero": 137,
+     "nome": "mentorMover"
+    },
+    {
+     "numero": 138,
+     "nome": "mentorDesligar"
+    },
+    {
+     "numero": 139,
+     "nome": "mentorTemaApagar"
+    },
+    {
+     "numero": 140,
+     "nome": "mentorTemaRenomear"
+    },
+    {
+     "numero": 141,
+     "nome": "mentorMarcarTitulos"
+    },
+    {
+     "numero": 142,
+     "nome": "mentorRegrasMotor"
+    },
+    {
+     "numero": 143,
+     "nome": "mentorEditar"
+    },
+    {
+     "numero": 144,
+     "nome": "mentorConferirFila"
+    },
+    {
+     "numero": 145,
+     "nome": "mentorConferirContar"
+    },
+    {
+     "numero": 146,
+     "nome": "mentorConferido"
+    },
+    {
+     "numero": 147,
+     "nome": "mentorDescartarBkp"
+    },
+    {
+     "numero": 148,
+     "nome": "mentorDescartar"
+    },
+    {
+     "numero": 149,
+     "nome": "videoMentoresVerificados"
+    },
+    {
+     "numero": 150,
+     "nome": "videoCotaEspera"
+    },
+    {
+     "numero": 151,
+     "nome": "canaisAtualizar"
+    },
+    {
+     "numero": 152,
+     "nome": "buscaTermos"
+    },
+    {
+     "numero": 153,
+     "nome": "configTelaLer"
+    },
+    {
+     "numero": 154,
+     "nome": "configTelaGravar"
+    },
+    {
+     "numero": 155,
+     "nome": "canaisMentorLer"
+    },
+    {
+     "numero": 156,
+     "nome": "canalMentorGravar"
+    },
+    {
+     "numero": 157,
+     "nome": "configEditar"
+    },
+    {
+     "numero": 158,
+     "nome": "avisoMarcar"
+    },
+    {
+     "numero": 159,
+     "nome": "avisoArquivar"
+    },
+    {
+     "numero": 160,
+     "nome": "avisosTodosLidos"
+    },
+    {
+     "numero": 161,
+     "nome": "videoForaTema"
+    },
+    {
+     "numero": 162,
+     "nome": "exportTabMentorRegras"
+    },
+    {
+     "numero": 163,
+     "nome": "exportVisoes"
+    },
+    {
+     "numero": 164,
+     "nome": "livroResumos"
+    },
+    {
+     "numero": 165,
+     "nome": "livroPraticas"
+    },
+    {
+     "numero": 166,
+     "nome": "livroTemaInfo"
+    },
+    {
+     "numero": 167,
+     "nome": "livroGravar"
+    },
+    {
+     "numero": 168,
+     "nome": "livroTemas"
+    },
+    {
+     "numero": 169,
+     "nome": "livroCapitulo"
+    },
+    {
+     "numero": 170,
+     "nome": "exportTabLivro"
+    },
+    {
+     "numero": 171,
+     "nome": "livroGerar"
+    },
+    {
+     "numero": 172,
+     "nome": "iaEstado"
+    },
+    {
+     "numero": 173,
+     "nome": "finFila"
+    },
+    {
+     "numero": 174,
+     "nome": "finGravar"
+    },
+    {
+     "numero": 175,
+     "nome": "finContar"
+    },
+    {
+     "numero": 178,
+     "nome": "praticasLista"
+    },
+    {
+     "numero": 179,
+     "nome": "praticasTotais"
+    },
+    {
+     "numero": 180,
+     "nome": "videoFavorito"
+    },
+    {
+     "numero": 181,
+     "nome": "videoAssistido"
+    },
+    {
+     "numero": 182,
+     "nome": "meusContar"
+    },
+    {
+     "numero": 183,
+     "nome": "diarioInserir"
+    },
+    {
+     "numero": 184,
+     "nome": "diarioApagar"
+    },
+    {
+     "numero": 185,
+     "nome": "diarioListar"
+    },
+    {
+     "numero": 186,
+     "nome": "diarioPraticas"
+    },
+    {
+     "numero": 187,
+     "nome": "diarioResumo"
+    },
+    {
+     "numero": 188,
+     "nome": "livroProximo"
+    },
+    {
+     "numero": 189,
+     "nome": "livroHoje"
+    },
+    {
+     "numero": 190,
+     "nome": "diarioEditar"
+    },
+    {
+     "numero": 191,
+     "nome": "diarioUltimo"
+    },
+    {
+     "numero": 192,
+     "nome": "diarioContagem"
+    },
+    {
+     "numero": 193,
+     "nome": "diarioAtualizar"
+    },
+    {
+     "numero": 194,
+     "nome": "diarioUm"
+    },
+    {
+     "numero": 195,
+     "nome": "diarioApagarUltimo"
+    },
+    {
+     "numero": 196,
+     "nome": "inicioVideosNovos"
+    },
+    {
+     "numero": 197,
+     "nome": "inicioParaAssistir"
+    },
+    {
+     "numero": 198,
+     "nome": "inicioLivroUltimo"
+    },
+    {
+     "numero": 199,
+     "nome": "inicioPraticaDia"
+    },
+    {
+     "numero": 200,
+     "nome": "praticasJeitos"
+    },
+    {
+     "numero": 201,
+     "nome": "praticasServe"
+    },
+    {
+     "numero": 202,
+     "nome": "praticasQuando"
+    },
+    {
+     "numero": 203,
+     "nome": "praticasErroAnotar"
+    },
+    {
+     "numero": 205,
+     "nome": "exportarGerar"
+    },
+    {
+     "numero": 206,
+     "nome": "exportarPacote"
+    },
+    {
+     "numero": 207,
+     "nome": "livrosLimpar"
+    },
+    {
+     "numero": 208,
+     "nome": "livrosGravar"
+    },
+    {
+     "numero": 209,
+     "nome": "videoLivrosFeito"
+    },
+    {
+     "numero": 210,
+     "nome": "livrosFila"
+    },
+    {
+     "numero": 211,
+     "nome": "livrosErroAnotar"
+    },
+    {
+     "numero": 212,
+     "nome": "livrosResumo"
+    },
+    {
+     "numero": 213,
+     "nome": "livrosLista"
+    },
+    {
+     "numero": 214,
+     "nome": "livrosTotais"
+    },
+    {
+     "numero": 215,
+     "nome": "livrosRelacao"
+    },
+    {
+     "numero": 216,
+     "nome": "livrosDoTitulo"
+    },
+    {
+     "numero": 217,
+     "nome": "exportarLeve"
+    },
+    {
+     "numero": 218,
+     "nome": "nomesFila"
+    },
+    {
+     "numero": 219,
+     "nome": "nomesCatalogoGravar"
+    },
+    {
+     "numero": 220,
+     "nome": "nomesOkGravar"
+    },
+    {
+     "numero": 221,
+     "nome": "nomesPendGravar"
+    },
+    {
+     "numero": 222,
+     "nome": "pendLista"
+    },
+    {
+     "numero": 223,
+     "nome": "pendTotal"
+    },
+    {
+     "numero": 224,
+     "nome": "pendCatalogoCriar"
+    },
+    {
+     "numero": 225,
+     "nome": "pendDecidir"
+    },
+    {
+     "numero": 226,
+     "nome": "pendNaoLivro"
+    },
+    {
+     "numero": 227,
+     "nome": "validarUm"
+    },
+    {
+     "numero": 228,
+     "nome": "nomeEstado"
+    },
+    {
+     "numero": 229,
+     "nome": "nomesOkAtualizar"
+    },
+    {
+     "numero": 230,
+     "nome": "nomesPendAtualizar"
+    },
+    {
+     "numero": 231,
+     "nome": "validarLista"
+    },
+    {
+     "numero": 232,
+     "nome": "validarTotal"
+    },
+    {
+     "numero": 233,
+     "nome": "catalogoBusca"
+    },
+    {
+     "numero": 234,
+     "nome": "catalogoAchar"
+    },
+    {
+     "numero": 235,
+     "nome": "nomeOkCat"
+    },
+    {
+     "numero": 236,
+     "nome": "nomeNaoLivro"
+    },
+    {
+     "numero": 237,
+     "nome": "livroValidar"
+    },
+    {
+     "numero": 238,
+     "nome": "validarOnde"
+    },
+    {
+     "numero": 239,
+     "nome": "nomesCatalogoLer"
+    },
+    {
+     "numero": 240,
+     "nome": "nomesSemDecisao"
+    },
+    {
+     "numero": 241,
+     "nome": "livroCatDe"
+    },
+    {
+     "numero": 242,
+     "nome": "livroCatOutro"
+    },
+    {
+     "numero": 243,
+     "nome": "livroCatEditar"
+    },
+    {
+     "numero": 244,
+     "nome": "livroStatusGravar"
+    },
+    {
+     "numero": 245,
+     "nome": "nomesCertezaGravar"
+    },
+    {
+     "numero": 246,
+     "nome": "validarAltaTotal"
+    },
+    {
+     "numero": 247,
+     "nome": "validarAceitarAlta"
+    },
+    {
+     "numero": 248,
+     "nome": "praticaFavorito"
+    },
+    {
+     "numero": 249,
+     "nome": "praticasFavoritas"
+    },
+    {
+     "numero": 250,
+     "nome": "praticaTrechos"
+    },
+    {
+     "numero": 251,
+     "nome": "praticaUma"
+    },
+    {
+     "numero": 252,
+     "nome": "nomeMusica"
+    },
+    {
+     "numero": 253,
+     "nome": "nomeAudiovisual"
+    },
+    {
+     "numero": 254,
+     "nome": "outrosTotais"
+    },
+    {
+     "numero": 255,
+     "nome": "outrosLista"
+    },
+    {
+     "numero": 256,
+     "nome": "outrosVoltar"
+    },
+    {
+     "numero": 257,
+     "nome": "favItemMarcar"
+    },
+    {
+     "numero": 258,
+     "nome": "favItemTirar"
+    },
+    {
+     "numero": 259,
+     "nome": "favItensTipo"
+    },
+    {
+     "numero": 260,
+     "nome": "favItensLista"
+    },
+    {
+     "numero": 261,
+     "nome": "favVideosLista"
+    },
+    {
+     "numero": 262,
+     "nome": "favContagens"
+    },
+    {
+     "numero": 263,
+     "nome": "itemStatusGravar"
+    },
+    {
+     "numero": 264,
+     "nome": "nomeSagrado"
+    },
+    {
+     "numero": 265,
+     "nome": "sagradoObras"
+    },
+    {
+     "numero": 266,
+     "nome": "sagradoPartes"
+    },
+    {
+     "numero": 267,
+     "nome": "sagradoJuntar"
+    },
+    {
+     "numero": 268,
+     "nome": "sagradoSeparar"
+    },
+    {
+     "numero": 269,
+     "nome": "nomeTipoIA"
+    },
+    {
+     "numero": 270,
+     "nome": "outrosEditar"
+    },
+    {
+     "numero": 271,
+     "nome": "outrosAceitar"
+    },
+    {
+     "numero": 272,
+     "nome": "outrosFila"
+    },
+    {
+     "numero": 273,
+     "nome": "outrosConferirGravar"
+    },
+    {
+     "numero": 274,
+     "nome": "pendRefinoFila"
+    },
+    {
+     "numero": 275,
+     "nome": "pendRefinoGravar"
+    },
+    {
+     "numero": 276,
+     "nome": "validarExportar"
+    },
+    {
+     "numero": 277,
+     "nome": "validarSugerir"
+    },
+    {
+     "numero": 278,
+     "nome": "validarSugerirEsp"
+    },
+    {
+     "numero": 279,
+     "nome": "outrosSubtipo"
+    },
+    {
+     "numero": 280,
+     "nome": "nomeTipoPorNome"
+    },
+    {
+     "numero": 281,
+     "nome": "vtMomentos"
+    },
+    {
+     "numero": 282,
+     "nome": "mapaTemasLista"
+    },
+    {
+     "numero": 283,
+     "nome": "mapaTemaJeitos"
+    },
+    {
+     "numero": 284,
+     "nome": "mapaTemaPraticas"
+    },
+    {
+     "numero": 285,
+     "nome": "mapaTemaVideos"
+    },
+    {
+     "numero": 286,
+     "nome": "mapaTemaLigados"
+    },
+    {
+     "numero": 287,
+     "nome": "mapaVideoBusca"
+    },
+    {
+     "numero": 288,
+     "nome": "exportarGit"
+    }
+   ]
+  }
+ ]
+}

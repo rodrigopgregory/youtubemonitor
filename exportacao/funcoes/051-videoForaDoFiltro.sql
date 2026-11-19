@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET STATUS = 'FORA', MOTIVO = 'Duração de até 10 minutos.' WHERE ID = {{id}}

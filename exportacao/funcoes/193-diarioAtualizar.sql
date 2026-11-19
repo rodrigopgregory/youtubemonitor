@@ -1,0 +1,1 @@
+UPDATE PRATICA_DIARIO SET DIA = '{{dia}}', HUMOR = NULLIF({{humor}}, 0), SENTIU = NULLIF('{{sentiu}}', '') WHERE ID = {{id}}

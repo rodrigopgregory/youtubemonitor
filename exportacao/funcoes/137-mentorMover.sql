@@ -1,0 +1,1 @@
+UPDATE IGNORE VIDEO_TEMAS SET TEMA_ID = {{destino}} WHERE TEMA_ID = {{origem}}

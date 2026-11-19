@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET STATUS = 'ESTUDADO', PRIORIDADE = 0, RESUMO = '{{resumo}}', ESTUDADO_EM = '{{quando}}', ATUALIZADO_EM = '{{quando}}', MOTIVO = NULL WHERE ID = {{id}}

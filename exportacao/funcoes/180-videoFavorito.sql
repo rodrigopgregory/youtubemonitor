@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET FAVORITO = {{fav}} WHERE ID = {{id}}

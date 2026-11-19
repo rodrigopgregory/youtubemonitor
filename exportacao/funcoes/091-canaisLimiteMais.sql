@@ -1,0 +1,1 @@
+UPDATE CANAIS SET LIMITE = (SELECT COUNT(*) FROM VIDEOS V WHERE V.CANAL_ID = CANAIS.ID) + {{qtd}}, CARGA_STATUS = 'LISTANDO', CARGA_TOKEN = '', POS_BASE = 0, ELEGIVEIS = 0, CARGA_MSG = 'Levantando mais {{qtd}} vídeos do canal' WHERE {{canalId}} = 0 OR ID = {{canalId}}

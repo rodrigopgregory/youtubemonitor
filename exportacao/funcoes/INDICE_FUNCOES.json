@@ -1,0 +1,4760 @@
+[
+ {
+  "numero": 32,
+  "nome": "configLer",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Lê os parâmetros do monitor",
+  "tamanho_bytes": 31,
+  "sha256": "8888fea93f383d6c1c3f1d1da1f2f7f4215684278e6b038947448452e5396af1",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 33,
+  "nome": "configGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "valor",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava um parâmetro",
+  "tamanho_bytes": 63,
+  "sha256": "6751151ffc06738e323ea04b32b43703aadf683a740c97ccea6116e758a3c5b0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 34,
+  "nome": "loteGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave",
+   "json"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Área de passagem de lotes",
+  "tamanho_bytes": 120,
+  "sha256": "343bb820f54a15d6c0cbc5851b4db5c86e955b408b83c46e13be66109cf0eac3",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 35,
+  "nome": "loteApagar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Limpa a área de passagem",
+  "tamanho_bytes": 43,
+  "sha256": "d043e5aea0c6a913da18f01608a7dfb555b062811e1af7ffd7f03ea069e62759",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 36,
+  "nome": "videosInserirLote",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "descoberta",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Insere vídeos novos na fila",
+  "tamanho_bytes": 344,
+  "sha256": "d50d3b7aa5e7593e05b2bd861f6f5762b4a9844eb4802e23ccde489b7cd517e3",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 37,
+  "nome": "canalCargaAtualizar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "token",
+   "posBase",
+   "msg",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Andamento da carga histórica",
+  "tamanho_bytes": 204,
+  "sha256": "00581926e4c975947ab2b985b595e960d1f759db689b8b940095fa9124aeee20",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 38,
+  "nome": "canalCargaMsg",
+  "tipo": "SQL",
+  "parametros": [
+   "msg",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mensagem do canal",
+  "tamanho_bytes": 57,
+  "sha256": "eb67872cd27c0cb7b8a93339e125a335247d18e62bfeb7847eb2bc513be94a0c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 39,
+  "nome": "videosIdsCanal",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeos já conhecidos",
+  "tamanho_bytes": 59,
+  "sha256": "7d1c9fb4719876042ff4a3cff617ea8ca64bb4c85b744893c471ce172be54f25",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 40,
+  "nome": "canalChecado",
+  "tipo": "SQL",
+  "parametros": [
+   "quando",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca checagem diária",
+  "tamanho_bytes": 66,
+  "sha256": "686635cfe6f051fdb5c102b2149d7f9468ab259ff7e8002172fd3f4079e6a723",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 41,
+  "nome": "trechosInserirLote",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava trechos da transcrição",
+  "tamanho_bytes": 125,
+  "sha256": "45bea526a41ff437bee74b7b7b9cfd163622904b10f2adefaca2d6bb1b930b21",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 42,
+  "nome": "videoProgresso",
+  "tipo": "SQL",
+  "parametros": [
+   "seg",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Progresso da transcrição pelo áudio",
+  "tamanho_bytes": 59,
+  "sha256": "43b9009608289b23c439c8e96e2cb435bb78301c53648f839a2e96c73bcb4232",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 43,
+  "nome": "trechosDoVideo",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Trechos de um vídeo",
+  "tamanho_bytes": 114,
+  "sha256": "aedf8c6080bae4c74097c870e207f50e0761774985ec40c55f183d1ad6012be0",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 44,
+  "nome": "temasNomes",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Temas já usados",
+  "tamanho_bytes": 148,
+  "sha256": "f6dda0a6d4d14634e3c7a6dcbae19574e451f0d08ed1d82745126f4cacd894d0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 45,
+  "nome": "temasGarantirLote",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cria temas novos",
+  "tamanho_bytes": 97,
+  "sha256": "8178c45848356f606edf2b6bc53499ec7d51726ad852d776b56d6096be0d41d9",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 46,
+  "nome": "videoTemasIA",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Temas sugeridos pela IA (não mexe se a dona editou)",
+  "tamanho_bytes": 286,
+  "sha256": "a89c8f4d1cacc81f00b2ef7525d12b03ef05f1c00c7915f24cd8c243f0611636",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 47,
+  "nome": "videoConcluir",
+  "tipo": "SQL",
+  "parametros": [
+   "resumo",
+   "quando",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca vídeo estudado",
+  "tamanho_bytes": 167,
+  "sha256": "7c0ffc7a7df735efeb33d2ff5eeb827989eade0c7bf83fd2a87f59c82c6b6d1e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 48,
+  "nome": "videoPendente",
+  "tipo": "SQL",
+  "parametros": [
+   "motivo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca vídeo pendente com motivo",
+  "tamanho_bytes": 164,
+  "sha256": "75a54022d9b91416715480df061776aa8426d0664d38bd300265bf8f6352e6ad",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 49,
+  "nome": "videoIndisponivel",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeo removido do YouTube",
+  "tamanho_bytes": 52,
+  "sha256": "3ea9f8f36e078a367a06d0ca0afcb8a63d9eb6682317324602822d49155e2b30",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 50,
+  "nome": "videoDetalhes",
+  "tipo": "SQL",
+  "parametros": [
+   "publicado",
+   "duracao",
+   "tipo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Detalhes do vídeo",
+  "tamanho_bytes": 142,
+  "sha256": "247fbe27adfe6e677eaa234cb6badc1179651040036f60217743f25d94a5fc7d",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 51,
+  "nome": "videoForaDoFiltro",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeo curto",
+  "tamanho_bytes": 93,
+  "sha256": "93df4cafb626ffdbbfd7e7a43ade7fe1c206a5f6b1faabdd3a67cb76ac51d2df",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 52,
+  "nome": "videoOrigem",
+  "tipo": "SQL",
+  "parametros": [
+   "origem",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Origem da transcrição",
+  "tamanho_bytes": 57,
+  "sha256": "e948f8945260855a579c912b2e8f85c694d4537847050fca8bc55b65757d0e07",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 53,
+  "nome": "videosRetentar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Recoloca pendentes na fila",
+  "tamanho_bytes": 79,
+  "sha256": "bc4106f6098d226fa3d7ac514e42366a22accb95289e1e0080b570251402f66f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 54,
+  "nome": "canaisParaMotor",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Canais monitorados",
+  "tamanho_bytes": 142,
+  "sha256": "0c255bc56b91b37db4bd45b512996baddfa02d2de960cda22e7eb03dc2412b66",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 55,
+  "nome": "filaProximo",
+  "tipo": "SQL",
+  "parametros": [
+   "audio",
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Próximo vídeo da fila",
+  "tamanho_bytes": 717,
+  "sha256": "208cc3479009df9a68416198731475bd92eaac19e77fb47f2b408cb508a6792e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 56,
+  "nome": "filaContar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tamanho da fila",
+  "tamanho_bytes": 51,
+  "sha256": "21dadae1bbc69b61505d21f90970df6693ab7d3c21423335e43de649da5526cd",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 57,
+  "nome": "avisoPendentes",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeos novos sem aviso",
+  "tamanho_bytes": 78,
+  "sha256": "9b16d8111c6a7e17cf4efc38b6cad263387b982bc908f249fe01b0c8b97e9cdb",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 58,
+  "nome": "avisoHoje",
+  "tipo": "SQL",
+  "parametros": [
+   "dia"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Aviso do dia",
+  "tamanho_bytes": 68,
+  "sha256": "ba7a18ae3a75bfe3cdbc9a720e59ff03940820eada6f9c4150b061e312edccfc",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 59,
+  "nome": "avisoCriar",
+  "tipo": "SQL",
+  "parametros": [
+   "quando",
+   "dia"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cria aviso",
+  "tamanho_bytes": 89,
+  "sha256": "2b009300bd5c8bb9ad6d62cc3785d9b9df02993539ef539dd2b89d8e0b3f7bef",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 60,
+  "nome": "avisoVincular",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Liga vídeos ao aviso",
+  "tamanho_bytes": 84,
+  "sha256": "7f5076e97f9a01f977aa6eff595b0b8f1032f8bb165e8903c05edb2722956a0f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 61,
+  "nome": "avisoRecontar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Reconta aviso",
+  "tamanho_bytes": 124,
+  "sha256": "a49fedca2de713785d44d9bbc223b08b241dceebdf4b45c1b103d72b98f5a2ae",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 62,
+  "nome": "canaisAtualizarStatus",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Status do canal",
+  "tamanho_bytes": 205,
+  "sha256": "aae73795b4053ac54170b23336207beb76e62c3b9cfa0d0911f49b05943e55a1",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 63,
+  "nome": "lockAdquirir",
+  "tipo": "SQL",
+  "parametros": [
+   "ate",
+   "agora"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Trava do motor",
+  "tamanho_bytes": 112,
+  "sha256": "84d56f657136088cf7e7ee3d16128d268b13f107ccd9b8f9203564ca436fd120",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 64,
+  "nome": "lockLiberar",
+  "tipo": "SQL",
+  "parametros": [
+   "ate"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Libera trava",
+  "tamanho_bytes": 71,
+  "sha256": "7cfc2cedf01752494a4427d5c4aa20bbb9cd8d6bb5a22672f0be7d616c99e620",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 65,
+  "nome": "motor",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "modo",
+   "canalId",
+   "semContinuar",
+   "rodada"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": "0 5 * * * *",
+  "cron_entrada": null,
+  "descricao": "Motor: carga histórica, checagem diária e estudo dos vídeos",
+  "tamanho_bytes": 68449,
+  "sha256": "dd65367b11b08914f5b53e70bbb000bbb9f5987c52271d603945d08f8f39c50c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 66,
+  "nome": "canalPorYt",
+  "tipo": "SQL",
+  "parametros": [
+   "yt"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Canal pelo id do YouTube",
+  "tamanho_bytes": 58,
+  "sha256": "4763a0209133b2e749003a7f9985ed9b7cd7f1302dd5bfe013be286bc75dc5ac",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 67,
+  "nome": "canalInserir",
+  "tipo": "SQL",
+  "parametros": [
+   "yt",
+   "handle",
+   "nome",
+   "url",
+   "uploads",
+   "thumb"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cadastra canal",
+  "tamanho_bytes": 309,
+  "sha256": "7588c9eaee29f992878aec488bfa1d0c26b2b7acda4971424419f869110facd4",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 68,
+  "nome": "canaisListar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Canais com contagens",
+  "tamanho_bytes": 478,
+  "sha256": "2a1500d757e18fa4c69bc5ca3c6982c681d8e391c9050e37a58d89f65541abe1",
+  "telas_que_chamam": [
+   "frontend/src/pages/CanaisPage.tsx"
+  ]
+ },
+ {
+  "numero": 69,
+  "nome": "painelResumo",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Números gerais",
+  "tamanho_bytes": 216,
+  "sha256": "884dbe15f8385d6b5d704ac24faec3c161c64fa0258f4c6fd2d76d8afe1c6127",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx",
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 70,
+  "nome": "videosListar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem",
+   "meu",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Lista de vídeos com filtros combinados (temas, playlists e práticas)",
+  "tamanho_bytes": 1981,
+  "sha256": "12405d68ebbebbac8652f91a6a43e23783e4d70e976552e825b32bca55068090",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 71,
+  "nome": "temasListar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Temas com quantos vídeos sobram nos filtros escolhidos",
+  "tamanho_bytes": 1064,
+  "sha256": "42d230eea7bbab971ea49d8a101101adc6375d6d7dd7a066a30442cae614f8dc",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 72,
+  "nome": "videoDetalhe",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Detalhe do vídeo",
+  "tamanho_bytes": 284,
+  "sha256": "8206045a8e90e843544ea3977f84fc23d1fe95345ad1046991802e30bff3b4c2",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 73,
+  "nome": "videoTemas",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Temas de um vídeo",
+  "tamanho_bytes": 145,
+  "sha256": "e96da54e68e9d636e2ff70029740749c36f1107c1ef2cf677d2b1823b66847fd",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx",
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 74,
+  "nome": "temaGarantir",
+  "tipo": "SQL",
+  "parametros": [
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cria tema",
+  "tamanho_bytes": 51,
+  "sha256": "ed731fcfe42edfa9765c189ec8aac1ae886567d4a836e86d36e41e7778505987",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 75,
+  "nome": "vtAcrescentar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Acrescenta tema",
+  "tamanho_bytes": 177,
+  "sha256": "9cecdb4948abbae383da72ef6d9f82c30bba76472c2905accaa5ef03fd4cbf47",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 76,
+  "nome": "vtTirar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira tema",
+  "tamanho_bytes": 77,
+  "sha256": "0ad4fb7ea69c2a74947d9422e04f25ef76ff3c565a536cc08e75062232e4cd73",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 77,
+  "nome": "vtRenomear",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "videoId",
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Renomeia tema do vídeo",
+  "tamanho_bytes": 160,
+  "sha256": "5b649ffd9e32c04f9d9af5a91b2a2ebe0768d5afdd44e325d0227af4cb648f33",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 78,
+  "nome": "vtTirarSeOutro",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "temaId",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Limpa tema antigo após renomear",
+  "tamanho_bytes": 139,
+  "sha256": "066e162f990e4cdb8eec5956be808bd83883b7f2a5721976d9041b701ecdf1ca",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 79,
+  "nome": "videoMarcarEditado",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca temas editados pela dona",
+  "tamanho_bytes": 54,
+  "sha256": "020c80322079173f23514ec42aff90afa6602723e02f74f36cc12ba7b8d9dacc",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 80,
+  "nome": "buscarTema",
+  "tipo": "SQL",
+  "parametros": [
+   "tema",
+   "canalId",
+   "ordem",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Busca por tema (relevância ou recentes)",
+  "tamanho_bytes": 874,
+  "sha256": "550a6671ed68f6b780e91960e89bbe733b6db6e06127bde1916f8c373b3e196b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 81,
+  "nome": "buscaTrechos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "tema"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Trechos que citam o tema",
+  "tamanho_bytes": 283,
+  "sha256": "0858b6286f770c3300fc4a716138984556c630d4b95c364caf8d3134bc5cfddc",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 82,
+  "nome": "buscaResumos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "tema"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Resumos dos vídeos do tema",
+  "tamanho_bytes": 283,
+  "sha256": "201ac644a5ec7ad798f6b606b9811d0b661fad2c49ba9e591b852c600c7f3148",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 83,
+  "nome": "avisosListar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Avisos de vídeos novos",
+  "tamanho_bytes": 115,
+  "sha256": "fcb969e565537d9486eec590afeedd9a7ea6a2761398761fdf7e4911037077b6",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx"
+  ]
+ },
+ {
+  "numero": 84,
+  "nome": "avisoVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeos do aviso",
+  "tamanho_bytes": 180,
+  "sha256": "7ef866b2a263d74031b724ca83a9f265143d341e51235f34038d47f80696f8ca",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx"
+  ]
+ },
+ {
+  "numero": 85,
+  "nome": "avisoMarcarLido",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca aviso como lido",
+  "tamanho_bytes": 133,
+  "sha256": "0db022f379b462aab71cd7043d19b4356736a703a5e2ba0d66dbb4390473007b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 86,
+  "nome": "motorAndamento",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Se o motor está rodando",
+  "tamanho_bytes": 54,
+  "sha256": "d49e99abf5d02e7b7571494f643f25ade2729453be0eb1b7f0542130ea864fff",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 87,
+  "nome": "canalCadastrar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "url"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cadastra canal pelo link",
+  "tamanho_bytes": 8034,
+  "sha256": "a52861c407f759538c9af50a0e852a66419628727910124d2661391755d1a701",
+  "telas_que_chamam": [
+   "frontend/src/pages/CanaisPage.tsx"
+  ]
+ },
+ {
+  "numero": 88,
+  "nome": "temaEditar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "videoId",
+   "acao",
+   "nome",
+   "novo",
+   "momentos",
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Acrescenta, tira ou renomeia tema de um vídeo",
+  "tamanho_bytes": 7484,
+  "sha256": "8b5c27ab59878abacb0d081ae35a61308f027635d8d3438f3ed7daa878379e43",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 89,
+  "nome": "resumoBusca",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "tema",
+   "termos",
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Resumo do tema feito só com a base",
+  "tamanho_bytes": 8564,
+  "sha256": "022e4626717b99d55d2103ab2857635ebf0bf5d38696174697a7c1c378dcf783",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 90,
+  "nome": "chatBusca",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "mensagens",
+   "texto",
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Chat de busca: entende o pedido e responde só com a base",
+  "tamanho_bytes": 16292,
+  "sha256": "11a2f842350466c277c702a5ff24d5a604781ed2eacda71e22ab3ad2e068affb",
+  "telas_que_chamam": [
+   "frontend/src/pages/ChatPage.tsx"
+  ]
+ },
+ {
+  "numero": 91,
+  "nome": "canaisLimiteMais",
+  "tipo": "SQL",
+  "parametros": [
+   "qtd",
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Libera mais vídeos para estudar",
+  "tamanho_bytes": 269,
+  "sha256": "bb27fa595720a6dc279d155366201addea52f34fc20444dfa8922fed7600c12f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 92,
+  "nome": "canaisNomes",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes dos canais",
+  "tamanho_bytes": 47,
+  "sha256": "52ebabf7e57e343c342c011a05f0d2f1b3e2788633ce1758d739c0a90ef173b4",
+  "telas_que_chamam": [
+   "frontend/src/components/CanalFiltro.tsx"
+  ]
+ },
+ {
+  "numero": 93,
+  "nome": "estudoAndamento",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Andamento do estudo por canal",
+  "tamanho_bytes": 273,
+  "sha256": "9faa2d2c622e8adf4adb7af83d806e3825b55127049c0ee98d16e30809f5440f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 94,
+  "nome": "estudarMais",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "quantidade",
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Coloca mais vídeos na fila de estudo (pedido pelo chat)",
+  "tamanho_bytes": 6154,
+  "sha256": "52adb582f5d60207c42c3fa62dbfe5720f22b6a6122f6dd1dce37bb2a4a62916",
+  "telas_que_chamam": [
+   "frontend/src/pages/ChatPage.tsx"
+  ]
+ },
+ {
+  "numero": 95,
+  "nome": "exportVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exportação: vídeos estudados com resumo e temas",
+  "tamanho_bytes": 458,
+  "sha256": "2625ff85117ac6352979401b9faf57d0d0a679253bed963f15214d6ab51f5442",
+  "telas_que_chamam": [
+   "frontend/src/lib/exportar.ts"
+  ]
+ },
+ {
+  "numero": 96,
+  "nome": "exportTrechos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "video",
+   "segundo"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exportação: trechos das transcrições, em páginas",
+  "tamanho_bytes": 292,
+  "sha256": "dc02f67d60b02243baa324ddfdfa42eca49d6b7a15a0ffb66a744f3ba085400a",
+  "telas_que_chamam": [
+   "frontend/src/lib/exportar.ts"
+  ]
+ },
+ {
+  "numero": 97,
+  "nome": "filaComLegenda",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeos na fila ainda sem tentativa pelo áudio",
+  "tamanho_bytes": 93,
+  "sha256": "85e4cbe4bad8ea27d6933e6f088ec5839fdadf308fc078f6c236095fe30435de",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 98,
+  "nome": "videoTemasIALimpar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira os temas antigos da IA antes de reanalisar",
+  "tamanho_bytes": 143,
+  "sha256": "83850b41735801cb980f233349a74502410c5c94bda9c84775b31aa55040e40e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 99,
+  "nome": "playlistsGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "sinc",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava as playlists de um canal",
+  "tamanho_bytes": 412,
+  "sha256": "addab2dd2ed4cc92056636ee7ceae61ca852a572f3beccad93ed0ff645289cd5",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 100,
+  "nome": "playlistsDoCanal",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "sinc"
+  ],
+  "perfis_com_permissao": [],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Playlists de um canal nesta sincronização",
+  "tamanho_bytes": 91,
+  "sha256": "06d43cadc5b2a4c29fa018b421fb1d8eb2c79969ff7ee397a25829b96772b996",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 101,
+  "nome": "playlistVideosLimpar",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Limpa os vídeos das playlists do canal antes de regravar",
+  "tamanho_bytes": 106,
+  "sha256": "30845e0dbaee5869ce5fae351968790086d3c859f3645c39dd17b98c6f708f42",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 102,
+  "nome": "playlistVideosGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava os vídeos das playlists de um canal",
+  "tamanho_bytes": 195,
+  "sha256": "7301526f6c43f378db991c7f9b271c866b5cd18a2f30e7e43fa8d5db47fb3f7f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 103,
+  "nome": "playlistsSumidasVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "sinc"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Apaga vídeos de playlists que sumiram do canal",
+  "tamanho_bytes": 131,
+  "sha256": "5144ad9ec7449255576f5a6ac140a02102b6ae4b9bf873e8d687dae87ec9227a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 104,
+  "nome": "playlistsSumidas",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "sinc"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Apaga playlists que sumiram do canal",
+  "tamanho_bytes": 73,
+  "sha256": "1de0d193063f8094a7ec8eb0da4c6e0259be1e0f483b5dc6f40c0c20a2501b0c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 105,
+  "nome": "canalPlaylistsFeito",
+  "tipo": "SQL",
+  "parametros": [
+   "dia",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca o dia da leitura das playlists",
+  "tamanho_bytes": 60,
+  "sha256": "0b81c0916b3b78090a608dea4dbb4f18a8a60772b715862b6480012288508f99",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 106,
+  "nome": "playlistsListar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Playlists com quantos vídeos sobram nos filtros escolhidos",
+  "tamanho_bytes": 1185,
+  "sha256": "286f6876e3a74de4bb21a64e30e11e576eee7f5a708443a9886a1f241d2cdc3d",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 107,
+  "nome": "exportEstrutura",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Estrutura das tabelas para exportar",
+  "tamanho_bytes": 364,
+  "sha256": "ccdaa010d52a4dc3ddcc1eee056733dcb3d57dbb92e1b6caa9d0fe4f598dcab7",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 108,
+  "nome": "exportIndices",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Índices das tabelas para exportar",
+  "tamanho_bytes": 412,
+  "sha256": "1638f2cadac68861f07664e7568edaec6ef19f869cf409bc358f1a294690fec7",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 109,
+  "nome": "exportTabCanais",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta CANAIS",
+  "tamanho_bytes": 65,
+  "sha256": "86ab46117de61ee30030044027ac7eb281ddee41a475016e25e7ada7e845295e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 110,
+  "nome": "exportTabVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta VIDEOS",
+  "tamanho_bytes": 319,
+  "sha256": "2c115056abf8b02e5a725af432862c43dca09ae5530a49aabf10eb1e2babc40b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 111,
+  "nome": "exportTabTrechos",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta TRECHOS",
+  "tamanho_bytes": 93,
+  "sha256": "fba1bd90897dd9ad253fc29fc830c7cec20899222c49a2bef4c718b56d9f84e0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 112,
+  "nome": "exportTabTemas",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta TEMAS",
+  "tamanho_bytes": 71,
+  "sha256": "0d5a23a8b7cb962f10604f2fac46a376350aa3dd4b29a64d0729f96383bab8bb",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 113,
+  "nome": "exportTabVideoTemas",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta VIDEO_TEMAS",
+  "tamanho_bytes": 120,
+  "sha256": "bcca6dcb53a467dadde684616f15b2c2c8bf16e35832424bdd9b1c5274ecec10",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 114,
+  "nome": "exportTabPlaylists",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta PLAYLISTS",
+  "tamanho_bytes": 68,
+  "sha256": "6253add5f79d0811e11f470037283232d9d8996a94f3a5b0f4f5756f855583a0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 115,
+  "nome": "exportTabPlaylistVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta PLAYLIST_VIDEOS",
+  "tamanho_bytes": 106,
+  "sha256": "02cab96037be3a81e525842eeec28c3b04b36aa54c5228bd7c45b2c26f231eca",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 116,
+  "nome": "exportTabAvisos",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta AVISOS",
+  "tamanho_bytes": 65,
+  "sha256": "1d0cb366954c5215edd9ebfeca3997d605d38bd5bcf3ef5de4c7ffa55e1a3d2c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 117,
+  "nome": "exportTabConfig",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta CONFIG",
+  "tamanho_bytes": 68,
+  "sha256": "fd10736a40913e04c42ae916eedc146f7275ad37c46a28b1b995b1608d5c06b6",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 118,
+  "nome": "exportVideosFiltro",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem",
+   "meu",
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exportação: vídeos com os filtros da tela Vídeos e temas",
+  "tamanho_bytes": 1740,
+  "sha256": "61b22ac512a8ff8f2c423333658cd1396e2f2d3a36978c928339857943d61c81",
+  "telas_que_chamam": [
+   "frontend/src/lib/exportar.ts"
+  ]
+ },
+ {
+  "numero": 119,
+  "nome": "praticasLimpar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira as práticas antigas do vídeo antes de reler",
+  "tamanho_bytes": 49,
+  "sha256": "fd677276fe3d878de0a669ecf7949e94b88da03cb4fdcc9f48feca42d0055c00",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 120,
+  "nome": "praticasGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava as práticas de um vídeo",
+  "tamanho_bytes": 232,
+  "sha256": "ed9ddf81815bd9d87749bb2b02d82cb51dea9b906978c8260dc71e4959053877",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 121,
+  "nome": "videoPraticasFeito",
+  "tipo": "SQL",
+  "parametros": [
+   "quando",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca o vídeo como lido para práticas",
+  "tamanho_bytes": 62,
+  "sha256": "4ad54f9d6c4ddd2fee51c523d4f6ae66109401f3b02828f486e70db71d3c500a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 122,
+  "nome": "praticasFila",
+  "tipo": "SQL",
+  "parametros": [
+   "pular"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Próximo vídeo para ler as práticas: Mônica, depois Wagner, depois Saulo",
+  "tamanho_bytes": 226,
+  "sha256": "13cd942f50ee324437c08d87b3a66e9292124bbf52acca668a2ae7278d05ef3c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 123,
+  "nome": "praticasTipos",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tipos de prática com quantos vídeos sobram nos filtros escolhidos",
+  "tamanho_bytes": 1011,
+  "sha256": "0ad0e54846e0b9f94e53df56aa1965ffed435571058649d51c44a3f61416de8f",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 124,
+  "nome": "praticasDoVideo",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Práticas ensinadas num vídeo",
+  "tamanho_bytes": 146,
+  "sha256": "9f88154b41e79f5de3750044d9960fc6a585d553b4b8942a526bce67e1455fa5",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx",
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 125,
+  "nome": "praticasResumo",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos vídeos estudados já foram lidos para práticas",
+  "tamanho_bytes": 91,
+  "sha256": "d4d29cb9e8294da1991e9145dd1d33fc198c22a08af2e938d64cffcfe4f30de3",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 126,
+  "nome": "exportTabPraticas",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta PRATICAS",
+  "tamanho_bytes": 67,
+  "sha256": "88586867052b19929e5cad8b4095afdcd87153c73e9c6efbb1e2508998f67671",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 127,
+  "nome": "mentoresListar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "canalId",
+   "nTemas",
+   "temas",
+   "nPlay",
+   "playlists",
+   "nPrat",
+   "praticas",
+   "origem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mentores com quantos vídeos sobram nos filtros escolhidos",
+  "tamanho_bytes": 1079,
+  "sha256": "97c1111708010098ca82506b8d5aec9846c6a9fe76ba9512e14e1d5409f67f7e",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 128,
+  "nome": "mentoresGerir",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mentores com quantos vídeos têm, para a tela de gestão",
+  "tamanho_bytes": 288,
+  "sha256": "19e413fcb885dca4223bfc3a1fc817cc2f08fb5b624e8a5864242b24e105ed40",
+  "telas_que_chamam": [
+   "frontend/src/pages/ConfiguracoesPage.tsx",
+   "frontend/src/pages/MentoresPage.tsx"
+  ]
+ },
+ {
+  "numero": 129,
+  "nome": "mentorRegrasListar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Regras de mentores que o estudo segue",
+  "tamanho_bytes": 80,
+  "sha256": "64cc7d044f91a47e4596a502b21e8672ff6754de409abefd007a58ca4aa81913",
+  "telas_que_chamam": [
+   "frontend/src/pages/ConfiguracoesPage.tsx"
+  ]
+ },
+ {
+  "numero": 130,
+  "nome": "mentorVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Vídeos de um mentor",
+  "tamanho_bytes": 188,
+  "sha256": "2ab663325693ab21475cc1af6286d417febaf55a32956c5fb6ae8bfb29dd2921",
+  "telas_que_chamam": [
+   "frontend/src/pages/MentoresPage.tsx"
+  ]
+ },
+ {
+  "numero": 131,
+  "nome": "mentorRegraGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "tipo",
+   "destino"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava regra de mentor",
+  "tamanho_bytes": 247,
+  "sha256": "5dc8d1981ed89394ba412a304050ff1de3a9a37efb8c8a3fd406682fb5b0b7ed",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 132,
+  "nome": "mentorRegraApagar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Apaga regra de mentor",
+  "tamanho_bytes": 43,
+  "sha256": "7054f23d2d067f5de54f79178c329fc867d3c144ea527530ced7d156575f4a4e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 133,
+  "nome": "mentorRegraApagarNome",
+  "tipo": "SQL",
+  "parametros": [
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Apaga regra de mentor pelo nome",
+  "tamanho_bytes": 49,
+  "sha256": "461720384267c41471fff0d7c53a9d21bb8501b2e777b78d89903cebf849aea7",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 134,
+  "nome": "mentorTemaPorId",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mentor pelo id",
+  "tamanho_bytes": 89,
+  "sha256": "60fb48b3fe7db0f892da0c37616e8b4ca625f25753908495a4388ce0c7ea1943",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 135,
+  "nome": "mentorTemaPorNome",
+  "tipo": "SQL",
+  "parametros": [
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mentor pelo nome completo",
+  "tamanho_bytes": 69,
+  "sha256": "2b3e11ce4e9ccc77db76722a70d8c4e1b8d83d1c526196a5e583e35e5fbe4707",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 136,
+  "nome": "mentorBackup",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cópia de segurança das ligações de um mentor",
+  "tamanho_bytes": 176,
+  "sha256": "9614941d5e8ee0b450fcdab328c5c1c65f123be0ac197b2a0f008138ae3d2c53",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 137,
+  "nome": "mentorMover",
+  "tipo": "SQL",
+  "parametros": [
+   "destino",
+   "origem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Passa os vídeos de um mentor para outro",
+  "tamanho_bytes": 78,
+  "sha256": "15b7963bfe8010a280854a6233d9f3b62d359635ea852e0b0d827e8f8031848f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 138,
+  "nome": "mentorDesligar",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira um mentor de todos os vídeos",
+  "tamanho_bytes": 50,
+  "sha256": "e2fa488d81d0f74631ce673cef0dd20aeb492c71c3171a92d51c2e7945f3ddc5",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 139,
+  "nome": "mentorTemaApagar",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Apaga o mentor",
+  "tamanho_bytes": 65,
+  "sha256": "2c6df5486a81dbbbd7aa053cdfedef6078d455f3916e661ca1840e06821983f0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 140,
+  "nome": "mentorTemaRenomear",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Renomeia o mentor",
+  "tamanho_bytes": 82,
+  "sha256": "c0b4f4e9f275a6114f0b0a873d83edd24e526afface06296496f49353d79ba69",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 141,
+  "nome": "mentorMarcarTitulos",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca o mentor nos vídeos com o nome dele no título",
+  "tamanho_bytes": 223,
+  "sha256": "8fffe2b3e5ee9648cb24337f70b71fff6933f2513b98b2c953c1cbd36408743e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 142,
+  "nome": "mentorRegrasMotor",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Regras de mentores para o motor",
+  "tamanho_bytes": 45,
+  "sha256": "9aa6ff63ce060377879c5199126a1e7be1310aad293bf758a08fa91928d15d06",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 143,
+  "nome": "mentorEditar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "acao",
+   "nome",
+   "marcarTitulos",
+   "temaId",
+   "novo",
+   "destinoId",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cadastra, renomeia, junta ou marca como não-mentor, e grava a regra para o estudo seguir",
+  "tamanho_bytes": 10065,
+  "sha256": "5b71fb3225898eade15b0d7f5c71b22515d60a8c177bf4b5ac0fe07e2f92c4f7",
+  "telas_que_chamam": [
+   "frontend/src/pages/ConfiguracoesPage.tsx",
+   "frontend/src/pages/MentoresPage.tsx"
+  ]
+ },
+ {
+  "numero": 144,
+  "nome": "mentorConferirFila",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Próximo mentor marcado pela IA que falta conferir na transcrição",
+  "tamanho_bytes": 254,
+  "sha256": "d7f074d5aa19a6e38e8faac97b3fb4a76d5a1879101d0c4e85655f97d60196fb",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 145,
+  "nome": "mentorConferirContar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos mentores faltam conferir",
+  "tamanho_bytes": 148,
+  "sha256": "d1f82559fc0c5ffdbf17f50d1f7d0f5dcdda85f6fec98d27b37e383ae2d4e15a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 146,
+  "nome": "mentorConferido",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca mentor como conferido",
+  "tamanho_bytes": 55,
+  "sha256": "dd1fe2e8c3525a2181c1e169fb18bd26da0c616d73199e2bfe28b96811c65379",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 147,
+  "nome": "mentorDescartarBkp",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cópia antes de tirar mentor que não conduz",
+  "tamanho_bytes": 167,
+  "sha256": "33a5c1af09c267f4902710782b4e838205a7e948a9fbf23cfc7df7257aa7a98f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 148,
+  "nome": "mentorDescartar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira mentor que não conduz a live",
+  "tamanho_bytes": 41,
+  "sha256": "663af3b4bc10b30fb0a69046dab38f2ac98aa17576f99d1044c331123f6e596e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 149,
+  "nome": "videoMentoresVerificados",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mentores do vídeo já conferidos no estudo",
+  "tamanho_bytes": 137,
+  "sha256": "77f48da1d6ec4331ebf32596b141d47dd61694fa94bbe5b5876487cf8b337182",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 150,
+  "nome": "videoCotaEspera",
+  "tipo": "SQL",
+  "parametros": [
+   "motivo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mantém o vídeo na fila quando a cota da IA acabou",
+  "tamanho_bytes": 114,
+  "sha256": "2bc396afc018dd362136ad50925dbb4cba6fd1e574ece9288e0b08b3770dd596",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 151,
+  "nome": "canaisAtualizar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Procura agora vídeos novos em todos os canais",
+  "tamanho_bytes": 5656,
+  "sha256": "484f2b00eea22a12b8191a670f37cab47267c1b31fc344fa9866d1fe65ac7329",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx",
+   "frontend/src/pages/CanaisPage.tsx"
+  ]
+ },
+ {
+  "numero": 152,
+  "nome": "buscaTermos",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "tema"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Busca: sugere sinônimos do tema pesquisado",
+  "tamanho_bytes": 7734,
+  "sha256": "6042486b8d929cf72b7ca9fe12f72a201e0b1455298dba25ea3198872fed1849",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 153,
+  "nome": "configTelaLer",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Ajustes do estudo que a tela mostra",
+  "tamanho_bytes": 248,
+  "sha256": "3a769e39a3dac90d82849d9fdfc99c72310e88bc7d8802fe1a68f1cd19941bab",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 154,
+  "nome": "configTelaGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave",
+   "valor"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava um ajuste do estudo",
+  "tamanho_bytes": 113,
+  "sha256": "bb32f2ef135d213cd66b7832c90903046e16513ccd6596208461607ce38e8c4c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 155,
+  "nome": "canaisMentorLer",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Canais e se o estudo procura mentor neles",
+  "tamanho_bytes": 51,
+  "sha256": "487a771d3ae42b8607bd952e4e0f8b2b8da98058d9a6aab3fad0404dd85e231b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 156,
+  "nome": "canalMentorGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "tem",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Liga ou desliga a busca de mentor no canal",
+  "tamanho_bytes": 56,
+  "sha256": "c203fa0eace272ba8e0f381b88a39b6588831d3700dab51f364c2abf1459986b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 157,
+  "nome": "configEditar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "acao",
+   "chave",
+   "valor",
+   "canalId",
+   "tem"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Lê e grava os ajustes do estudo (tela Configurações)",
+  "tamanho_bytes": 8187,
+  "sha256": "3526bb19ce1abe974df04665da7dc5e6f0cc3b953f910e36f255de6f75e02e04",
+  "telas_que_chamam": [
+   "frontend/src/pages/ConfiguracoesPage.tsx"
+  ]
+ },
+ {
+  "numero": 158,
+  "nome": "avisoMarcar",
+  "tipo": "SQL",
+  "parametros": [
+   "lido",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca aviso como lido (1) ou não lido (0)",
+  "tamanho_bytes": 162,
+  "sha256": "8bea47308f763f09556db4dc73229c010e446655a0cf1e939014b7da5794ae01",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx"
+  ]
+ },
+ {
+  "numero": 159,
+  "nome": "avisoArquivar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Arquiva aviso: sai da lista",
+  "tamanho_bytes": 148,
+  "sha256": "90b640cd3095aa435cb828be5bc22d31ecf3b210d407a575394eb017e21f7ee8",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx"
+  ]
+ },
+ {
+  "numero": 160,
+  "nome": "avisosTodosLidos",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca todos os avisos como lidos",
+  "tamanho_bytes": 135,
+  "sha256": "341541cb54628aab7116bfe8bfd603e2083f3d92d1951b734d0d28efcd5ed3e1",
+  "telas_que_chamam": [
+   "frontend/src/components/Layout.tsx"
+  ]
+ },
+ {
+  "numero": 161,
+  "nome": "videoForaTema",
+  "tipo": "SQL",
+  "parametros": [
+   "fora",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Põe ou tira o vídeo da área Fora do tema",
+  "tamanho_bytes": 251,
+  "sha256": "3cee074335167a3d6ef4d1f8f8f4a502504d244f5fcef20477c9709b3e5c8d6c",
+  "telas_que_chamam": [
+   "frontend/src/components/VideoDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 162,
+  "nome": "exportTabMentorRegras",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta MENTOR_REGRAS",
+  "tamanho_bytes": 105,
+  "sha256": "934a7bf0aef2d243d2cda4f81318fa6292fdcc17a0486c2f2b482db34fae6043",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 163,
+  "nome": "exportVisoes",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Visões de lote para exportar",
+  "tamanho_bytes": 148,
+  "sha256": "7d0274a37fa10ba44133db54c5ba75ac372a1adb978a136a77225ad7df7b1bda",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 164,
+  "nome": "livroResumos",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: resumos dos vídeos do tema",
+  "tamanho_bytes": 250,
+  "sha256": "82062d37c54622b5ebb5f53a690af9912d2f19611910aa054e1e703e6905780b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 165,
+  "nome": "livroPraticas",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: práticas dos vídeos do tema",
+  "tamanho_bytes": 340,
+  "sha256": "ac7dfa80d8f612f52d9e164f068d7e574f707884b1bf385a473b78e21a4db12e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 166,
+  "nome": "livroTemaInfo",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: dados do tema",
+  "tamanho_bytes": 214,
+  "sha256": "dccea442aee05739e2971cc1a5c2f7375a8769fb8e0974ccb74439d1f3db64f6",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 167,
+  "nome": "livroGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId",
+   "tema",
+   "texto",
+   "praticas",
+   "videos"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: grava um capítulo",
+  "tamanho_bytes": 378,
+  "sha256": "afc1be79b0268e599fac9aaf472351a931a5c2a1ca37c69ea7b512fd0b030541",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 168,
+  "nome": "livroTemas",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: temas e se já têm capítulo",
+  "tamanho_bytes": 372,
+  "sha256": "3cd801a2ff92d205c595290fe6e7dedd1263d13358bbff09c48723842c7641a7",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx",
+   "frontend/src/pages/LivroPage.tsx"
+  ]
+ },
+ {
+  "numero": 169,
+  "nome": "livroCapitulo",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: um capítulo",
+  "tamanho_bytes": 109,
+  "sha256": "c6525e7715b7e346f982cd506cd9f5e04d6aa25fae9f2cb661d4c4e4da691b70",
+  "telas_que_chamam": [
+   "frontend/src/pages/LivroPage.tsx"
+  ]
+ },
+ {
+  "numero": 170,
+  "nome": "exportTabLivro",
+  "tipo": "SQL",
+  "parametros": [
+   "depois"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta LIVRO_CAPITULOS",
+  "tamanho_bytes": 73,
+  "sha256": "dd8171ea57610e4b2f1c73c2113c29bcbdc2205eb4d5840dfcc23c187c270cf6",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 171,
+  "nome": "livroGerar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: escreve o capítulo de um tema com a IA",
+  "tamanho_bytes": 10690,
+  "sha256": "8b8b350060ca36de2ffda22266ad6bfdbf56e3f0ddc81211cbe28e8b93b74677",
+  "telas_que_chamam": [
+   "frontend/src/pages/LivroPage.tsx"
+  ]
+ },
+ {
+  "numero": 172,
+  "nome": "iaEstado",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Se a IA está pausada pela cota e quantos vídeos já foram lidos para práticas",
+  "tamanho_bytes": 162,
+  "sha256": "f07d694d4e610a8372a298e8792935b84d7ed91c5b60e00ba58e431e69346fcd",
+  "telas_que_chamam": [
+   "frontend/src/components/EstadoIA.tsx"
+  ]
+ },
+ {
+  "numero": 173,
+  "nome": "finFila",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Próximas práticas para a IA etiquetar (jeito de fazer, para que serve, quando fazer)",
+  "tamanho_bytes": 130,
+  "sha256": "a832b8b8656cd331a4f5029a3534b48ed3e5a046d2dde4ddea2ec3c7869ae9ec",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 174,
+  "nome": "finGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava as etiquetas marcadas pela IA",
+  "tamanho_bytes": 369,
+  "sha256": "dd7d1f29a121c6452c885a95d0b001a7dedd93dd98bed55ca14b8c60e1af4427",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 175,
+  "nome": "finContar",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantas práticas faltam etiquetar",
+  "tamanho_bytes": 57,
+  "sha256": "354ac1944a60e36e0b83dceae6e37fb65229dd234225fda4fa752e994090ab2b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 176,
+  "nome": "praticasMapa",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "tipo"
+  ],
+  "perfis_com_permissao": [],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantas práticas há para cada finalidade",
+  "tamanho_bytes": 2412,
+  "sha256": "72a43aedd12b7fd24270cb55febdcf22686bb9d68f58ee31402d107e52a2b056",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 177,
+  "nome": "praticasTiposFin",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "fin"
+  ],
+  "perfis_com_permissao": [],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Jeitos de fazer dentro de uma finalidade",
+  "tamanho_bytes": 2008,
+  "sha256": "6f118f5119748b83c7933a2fe33ab4fc30fbedd6eb4b49dafdd8ce05f19a6d9d",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 178,
+  "nome": "praticasLista",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "fav",
+   "jeito",
+   "serve",
+   "quando",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Práticas com passo a passo, por jeito de fazer, para que serve e quando",
+  "tamanho_bytes": 980,
+  "sha256": "dbcca4a5d9fc3d73dd0059cf41c0bf5916fe083a2c2293f9cc9a259f12748e7d",
+  "telas_que_chamam": [
+   "frontend/src/pages/PraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 179,
+  "nome": "praticasTotais",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantas práticas há e quantas já estão organizadas",
+  "tamanho_bytes": 202,
+  "sha256": "dffdb0c6a3939cb37a8c40b50150c11d26dd2ad07d0dd6b30afd92f116f886e9",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx",
+   "frontend/src/pages/PraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 180,
+  "nome": "videoFavorito",
+  "tipo": "SQL",
+  "parametros": [
+   "fav",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca ou desmarca o vídeo como favorito",
+  "tamanho_bytes": 54,
+  "sha256": "601047fea9fb05a5de7b8d7a76fa10844a3e9a988e26f532e0e1c240b7bf6a0f",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx"
+  ]
+ },
+ {
+  "numero": 181,
+  "nome": "videoAssistido",
+  "tipo": "SQL",
+  "parametros": [
+   "visto",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca ou desmarca o vídeo como já assistido",
+  "tamanho_bytes": 151,
+  "sha256": "8d6a536a5c7585694d2614f701f38b83287c26789e69b2dba529f4e13402cf06",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 182,
+  "nome": "meusContar",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos vídeos são favoritos e quantos já foram assistidos",
+  "tamanho_bytes": 149,
+  "sha256": "b1ba7f7aa76b97deafac65f43dd40ba44efb31201993663937d274457e50b247",
+  "telas_que_chamam": [
+   "frontend/src/pages/VideosPage.tsx"
+  ]
+ },
+ {
+  "numero": 183,
+  "nome": "diarioInserir",
+  "tipo": "SQL",
+  "parametros": [
+   "dia",
+   "humor",
+   "sentiu",
+   "praticaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: registra que fiz e como me senti",
+  "tamanho_bytes": 237,
+  "sha256": "cc6bf8349ca6e497b72aeba75f4410d65b55b140ed7e614fba7ccb356464f2a0",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 184,
+  "nome": "diarioApagar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: apaga um registro",
+  "tamanho_bytes": 44,
+  "sha256": "883ceb8de4d67a32b397489c9c14c8c4993188c78bb86cffd19d206d8d9a5fe8",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 185,
+  "nome": "diarioListar",
+  "tipo": "SQL",
+  "parametros": [
+   "praticaId",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: o que fiz e como me senti",
+  "tamanho_bytes": 372,
+  "sha256": "ef6a9a5eabce306dde77d48c05375ed79f3c09624c5b486471091d56cb7fe514",
+  "telas_que_chamam": [
+   "frontend/src/pages/MinhasPraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 186,
+  "nome": "diarioPraticas",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: as que já fiz, quantas vezes e como me senti em média",
+  "tamanho_bytes": 496,
+  "sha256": "ad513d8dce544d7bae720c91889b168a6028f21fc54517e144ce7af5ea7ec395",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx",
+   "frontend/src/pages/MinhasPraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 187,
+  "nome": "diarioResumo",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: números gerais",
+  "tamanho_bytes": 218,
+  "sha256": "ee12d930341e1eb6b82a0f2cbad8b7c86686ff15fcec8358b0d7b5a97c6fb037",
+  "telas_que_chamam": [
+   "frontend/src/pages/MinhasPraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 188,
+  "nome": "livroProximo",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: o próximo capítulo a escrever sozinho",
+  "tamanho_bytes": 329,
+  "sha256": "efe6a1b151c49f4318b251bc8c18c7e9a0980a818830865a29db807b4d1084ef",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 189,
+  "nome": "livroHoje",
+  "tipo": "SQL",
+  "parametros": [
+   "dia"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livro Vivo: quantos capítulos foram escritos desde um dia",
+  "tamanho_bytes": 67,
+  "sha256": "c6320d28cb0a707b2a6b2ab3bd1d0cc20d7ee12baa510c9ec82bb00c9a5edf70",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 190,
+  "nome": "diarioEditar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "acao",
+   "id",
+   "dia",
+   "humor",
+   "sentiu",
+   "praticaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: registra que fiz (com como me senti) ou apaga um registro",
+  "tamanho_bytes": 8056,
+  "sha256": "8002ea1e360b8a89b3c151f5c9b1ca8ce90a6bd4aa6af7c9ac1a495b5454d567",
+  "telas_que_chamam": [
+   "frontend/src/components/Contador.tsx",
+   "frontend/src/components/FizHoje.tsx",
+   "frontend/src/pages/MinhasPraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 191,
+  "nome": "diarioUltimo",
+  "tipo": "SQL",
+  "parametros": [
+   "praticaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: o registro recém-criado e o novo total da prática",
+  "tamanho_bytes": 288,
+  "sha256": "80ba934347918aa07924be5bcf197c557b679fff21e27b5663daf6a27d41f1c3",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 192,
+  "nome": "diarioContagem",
+  "tipo": "SQL",
+  "parametros": [
+   "praticaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: quantas vezes e a última data de uma prática",
+  "tamanho_bytes": 91,
+  "sha256": "3de3a27c28ec89025653d74347cb05bf3170112a7add7c76c958f908d18874a8",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 193,
+  "nome": "diarioAtualizar",
+  "tipo": "SQL",
+  "parametros": [
+   "dia",
+   "humor",
+   "sentiu",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: edita um registro",
+  "tamanho_bytes": 124,
+  "sha256": "75cc7292216ecf2b86043cbf4b12ed41dfc899b420a22a7b2df91ab1559c3897",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 194,
+  "nome": "diarioUm",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: um registro",
+  "tamanho_bytes": 59,
+  "sha256": "a5734f72d042b793dfba9e262c028f253d148f1e4940e016811234276fa144b3",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 195,
+  "nome": "diarioApagarUltimo",
+  "tipo": "SQL",
+  "parametros": [
+   "praticaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: desfaz o último registro de uma prática",
+  "tamanho_bytes": 84,
+  "sha256": "ad4b4ea5578d991873925d7e7e2d33c4ded96bfc1288b3c9ff5dc6c8811f55cc",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 196,
+  "nome": "inicioVideosNovos",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Início: últimos vídeos estudados",
+  "tamanho_bytes": 243,
+  "sha256": "9e82f81c3b823952f352f19618b9c3c1be8d4b1cc88333945e465d4826035113",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx"
+  ]
+ },
+ {
+  "numero": 197,
+  "nome": "inicioParaAssistir",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Início: favoritos que ainda não assisti",
+  "tamanho_bytes": 247,
+  "sha256": "f8d921ffd7c05eb4eebf7e665e83191cc0602b912031eb19bcb7eb1f7b1ff3d9",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx"
+  ]
+ },
+ {
+  "numero": 198,
+  "nome": "inicioLivroUltimo",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Início: último capítulo do Livro Vivo",
+  "tamanho_bytes": 151,
+  "sha256": "1787d22f4e96b6b4903470ead601e754994318d53fab58ff9dc9c70cae879a33",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx"
+  ]
+ },
+ {
+  "numero": 199,
+  "nome": "inicioPraticaDia",
+  "tipo": "SQL",
+  "parametros": [
+   "fin",
+   "dia",
+   "vez"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Início: uma prática sorteada para o dia, pelo que ela serve",
+  "tamanho_bytes": 639,
+  "sha256": "832f35183ca99877b2468b0b05315a0720f22843d9f9d83d0b5eb85d28b13996",
+  "telas_que_chamam": [
+   "frontend/src/pages/InicioPage.tsx"
+  ]
+ },
+ {
+  "numero": 200,
+  "nome": "praticasJeitos",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "serve",
+   "quando"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Práticas: quantas há em cada jeito de fazer",
+  "tamanho_bytes": 539,
+  "sha256": "1fb266df14f1480f926700f6f11350426916ddf9be5ac854da066e896256f9f5",
+  "telas_que_chamam": [
+   "frontend/src/pages/PraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 201,
+  "nome": "praticasServe",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "jeito",
+   "quando"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Práticas: quantas servem para cada coisa, dentro do jeito de fazer",
+  "tamanho_bytes": 647,
+  "sha256": "4f9021bba575ff5e73eafca6cc29346f174b32f4ad8744288e77da0dfba8c30d",
+  "telas_que_chamam": [
+   "frontend/src/pages/PraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 202,
+  "nome": "praticasQuando",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "jeito",
+   "serve"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Práticas: quantas há para cada momento de fazer",
+  "tamanho_bytes": 744,
+  "sha256": "3c83c634e22cbbb193d6b956df4c59cc9c1c780465028c4e4accee99fd5eb0f9",
+  "telas_que_chamam": [
+   "frontend/src/pages/PraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 203,
+  "nome": "praticasErroAnotar",
+  "tipo": "SQL",
+  "parametros": [
+   "motivo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Anota que a leitura de práticas do vídeo deu erro; ele vai para o fim da fila",
+  "tamanho_bytes": 101,
+  "sha256": "de98f2c5e75741b1b3c897cb04035b4c5dc3ba73560e44ecb10573888b648f47",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 205,
+  "nome": "exportarGerar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "teste",
+   "email"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exportação: gera o pacote completo em partes (segundo plano)",
+  "tamanho_bytes": 44254,
+  "sha256": "a57a877f8a2e25c6e30dbb964d8b73021ead57755426e5995724489474c7500d",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 206,
+  "nome": "exportarPacote",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "acao",
+   "email",
+   "sessao",
+   "codigo",
+   "parteId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exportação: pede e valida o código por e-mail, inicia a geração e entrega links temporários",
+  "tamanho_bytes": 8189,
+  "sha256": "1c18ffbe297d4e418033b74bcfb12d6092758de2235d0b709a2b4c113508ea58",
+  "telas_que_chamam": [
+   "frontend/src/components/PacoteExport.tsx"
+  ]
+ },
+ {
+  "numero": 207,
+  "nome": "livrosLimpar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira os livros antigos do vídeo antes de reler",
+  "tamanho_bytes": 57,
+  "sha256": "e6e21e4a2414ddb417cee703b650c95c1679a7adb91f67b8dd43df094064d118",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 208,
+  "nome": "livrosGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava os livros indicados em um vídeo",
+  "tamanho_bytes": 246,
+  "sha256": "effe647e2e58c479a3ea2c780da7e70a14c64d87552787f87927958b85a91da2",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 209,
+  "nome": "videoLivrosFeito",
+  "tipo": "SQL",
+  "parametros": [
+   "quando",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca o vídeo como lido para livros",
+  "tamanho_bytes": 60,
+  "sha256": "237de1aa86cddb4cf41418ca9ff35e711dfeaeaf9657e00893878b6143f57090",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 210,
+  "nome": "livrosFila",
+  "tipo": "SQL",
+  "parametros": [
+   "pular"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Próximo vídeo para ler os livros indicados",
+  "tamanho_bytes": 245,
+  "sha256": "eb665c6df1f0d1a27d8b32c6fd51dc6caf204808b7bb9d6789cc903a592e3287",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 211,
+  "nome": "livrosErroAnotar",
+  "tipo": "SQL",
+  "parametros": [
+   "motivo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Anota erro na leitura de livros; o vídeo vai para o fim da fila",
+  "tamanho_bytes": 95,
+  "sha256": "5ce135ebcfc31589ee45d6db48180701934ac2b67e71293f7c9072f06c8d53ac",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 212,
+  "nome": "livrosResumo",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos vídeos estudados já foram lidos para livros",
+  "tamanho_bytes": 89,
+  "sha256": "969c617680099e093b2fba5b06a1f6b9ad6949fc47a41b7d752ce3e62cbf9e9f",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 213,
+  "nome": "livrosLista",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livros indicados nos vídeos, por canal e busca",
+  "tamanho_bytes": 795,
+  "sha256": "f0e91d3e92ca04a54b543bdda00c4b3d5741861f94bda33ce37094f7e727b1ba",
+  "telas_que_chamam": [
+   "frontend/src/pages/LivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 214,
+  "nome": "livrosTotais",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Totais de indicações de livros",
+  "tamanho_bytes": 435,
+  "sha256": "2ee4625a0d0d71c79ab42649c78496b2a2894672a01f7edebc4d9b6ca314ddae",
+  "telas_que_chamam": [
+   "frontend/src/pages/LivrosPage.tsx",
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 215,
+  "nome": "livrosRelacao",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "status",
+   "titulo",
+   "autor",
+   "fav",
+   "ordem",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Relação compilada dos livros indicados: um por título, com autor, vídeos e canais",
+  "tamanho_bytes": 1472,
+  "sha256": "92abc6b13f020fbcfcc99be0b853a2a6600772c5d8e67497a0f8c354d3e0cb50",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 216,
+  "nome": "livrosDoTitulo",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Todas as vezes que um livro foi indicado",
+  "tamanho_bytes": 845,
+  "sha256": "368ee12de1b10ecb2f46239bdd6b93b5fbde535205894f1bf0f130a13ea2331e",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 217,
+  "nome": "exportarLeve",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "opcoes",
+   "acao"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "",
+  "tamanho_bytes": 43616,
+  "sha256": "b79f2b907dae0475ccb1e39168aae4fc4eff5060554535e5600c4ded4f225221",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 218,
+  "nome": "nomesFila",
+  "tipo": "SQL",
+  "parametros": [
+   "limit"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes de livros ainda não validados, com autor e a palavra livro primeiro",
+  "tamanho_bytes": 526,
+  "sha256": "b1ee3156345b6dd4150e1f13402d6e255f9aa4421016d122113afc95d2754374",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 219,
+  "nome": "nomesCatalogoGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cadastra livros confirmados no catálogo",
+  "tamanho_bytes": 358,
+  "sha256": "4e6104cf645a1531e67ed3bd49472b21cc9387ba8be4a58196aa4223b689b97d",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 220,
+  "nome": "nomesOkGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Liga nomes confirmados ao catálogo",
+  "tamanho_bytes": 343,
+  "sha256": "965a96b9f1bbd6a33d1a3c494b8f3fd3e87e5ba450942dc784ddc8aef64a0c9b",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 221,
+  "nome": "nomesPendGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Guarda como pendentes os nomes que a busca não confirmou",
+  "tamanho_bytes": 335,
+  "sha256": "829241f92e4ec4f918855a5cb788ba6bbadc648b2165e6613beac35ef4f68d4c",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 222,
+  "nome": "pendLista",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes de livros que a busca não confirmou, para a pessoa decidir",
+  "tamanho_bytes": 271,
+  "sha256": "3272eee3b85e44809113cf057aa356f7435b65fa179cdb549bb56c62460f1f72",
+  "telas_que_chamam": [
+   "frontend/src/components/PendenciasLivros.tsx"
+  ]
+ },
+ {
+  "numero": 223,
+  "nome": "pendTotal",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos nomes de livros aguardam decisão",
+  "tamanho_bytes": 61,
+  "sha256": "d1b98e87796b8e25b2072d1da8b88c822cb1d4e1fa53abcacb79198785c8fd5a",
+  "telas_que_chamam": [
+   "frontend/src/components/PendenciasLivros.tsx"
+  ]
+ },
+ {
+  "numero": 224,
+  "nome": "pendCatalogoCriar",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "autor"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Cadastra um livro confirmado no catálogo",
+  "tamanho_bytes": 233,
+  "sha256": "adb4b67d32d4891c27ddebe9c35f02fe91f000984819e533811e827b8741c8e0",
+  "telas_que_chamam": [
+   "frontend/src/components/PendenciasLivros.tsx",
+   "frontend/src/pages/RelacaoLivrosPage.tsx",
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 225,
+  "nome": "pendDecidir",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Liga um nome ouvido a um livro do catálogo",
+  "tamanho_bytes": 133,
+  "sha256": "0034ae0e3c629a28a5431faea81411a91aa3d416072d31a377a5ba6913098499",
+  "telas_que_chamam": [
+   "frontend/src/components/PendenciasLivros.tsx"
+  ]
+ },
+ {
+  "numero": 226,
+  "nome": "pendNaoLivro",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como não sendo livro",
+  "tamanho_bytes": 82,
+  "sha256": "bb91ab8dad7384e3c3b9b3111a04dc126b461fc73bac409d0680964412ed9a64",
+  "telas_que_chamam": [
+   "frontend/src/components/PendenciasLivros.tsx",
+   "frontend/src/pages/OutrosNomesPage.tsx",
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 227,
+  "nome": "validarUm",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Dados de um nome de livro para validar",
+  "tamanho_bytes": 101,
+  "sha256": "a0e94607dba5d73e7bc5c4415bbeb51c1ebff9257a2762dd9249e4714e386dd4",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 228,
+  "nome": "nomeEstado",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Situação de um nome de livro",
+  "tamanho_bytes": 250,
+  "sha256": "c886097d89f321931c6654b02b4178c5be0311600324a30da75c4f2bdb2b1b5d",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 229,
+  "nome": "nomesOkAtualizar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Confirma um nome que estava pendente",
+  "tamanho_bytes": 309,
+  "sha256": "e0b80ddf44a7251c7b19e14e964de76841544c5f85257d47c4222a163f7f4a04",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 230,
+  "nome": "nomesPendAtualizar",
+  "tipo": "SQL",
+  "parametros": [
+   "chave"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Atualiza a sugestão de um nome pendente",
+  "tamanho_bytes": 302,
+  "sha256": "c7c7ae7ab8060544f91cb8ba934c81c2c0cae16c050aa0a232ddd59eeeb9fecd",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 231,
+  "nome": "validarLista",
+  "tipo": "SQL",
+  "parametros": [
+   "busca",
+   "tipo",
+   "origem",
+   "faixa",
+   "grupo",
+   "filtro",
+   "campos",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes de livros que ainda precisam de validação",
+  "tamanho_bytes": 2882,
+  "sha256": "19f7cc5e017d8dd2c1b2020ffc5c118e8d66720cc0fbd2848e928f3ed424502a",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 232,
+  "nome": "validarTotal",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos nomes de livros aguardam validação",
+  "tamanho_bytes": 426,
+  "sha256": "964fe6ee627f3ed698f35d999b21eaef7b08c1e381865164e7390168fa9e6f1d",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 233,
+  "nome": "catalogoBusca",
+  "tipo": "SQL",
+  "parametros": [
+   "busca"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Procura um livro no catálogo (biblioteca)",
+  "tamanho_bytes": 200,
+  "sha256": "28a29fff4cf60f2ffd0aa51282cd8645d36c3de52c58d06c2fff581841e29a52",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 234,
+  "nome": "catalogoAchar",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Acha o livro do catálogo pelo título",
+  "tamanho_bytes": 112,
+  "sha256": "04e335a06da2a8bff205ebbea7d58b871119e214257eff960cf26ef70cd83811",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx",
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 235,
+  "nome": "nomeOkCat",
+  "tipo": "SQL",
+  "parametros": [
+   "catId",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Liga um nome ouvido a um livro do catálogo",
+  "tamanho_bytes": 329,
+  "sha256": "dafb1d4a25203af7f654f23ebb2b0c832e0488c0fedd2b8e77b43e5f208e4160",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx",
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 236,
+  "nome": "nomeNaoLivro",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como não sendo livro",
+  "tamanho_bytes": 304,
+  "sha256": "40aa16d6e2162e3eaaadc769f883afb0d4eb66da062664637f3432a4370b7561",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 237,
+  "nome": "livroValidar",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "id",
+   "instrucao"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Livros a validar: confere um nome de livro na busca do Google",
+  "tamanho_bytes": 10014,
+  "sha256": "d9767c7a393cfe139645ba6fd01284375455348dd782afb2d224537142442b7a",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 238,
+  "nome": "validarOnde",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Onde um nome de livro foi dito: vídeo, minuto e transcrição ao redor",
+  "tamanho_bytes": 529,
+  "sha256": "12b433239796226b09f09e23c50cc2fcdeaf8b86e1a16103dd3dc6c0f966bac2",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx",
+   "frontend/src/pages/SagradosPage.tsx",
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 239,
+  "nome": "nomesCatalogoLer",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Catálogo para casar nomes ouvidos",
+  "tamanho_bytes": 45,
+  "sha256": "9d55bc74c564a3ded92e757a875429e4253a096db4b2d594e14f9c852700833a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 240,
+  "nome": "nomesSemDecisao",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes com autor ainda sem decisão",
+  "tamanho_bytes": 272,
+  "sha256": "61a50a5e331b84be846817b123a5264eabce38fa9eea0214e0fe64057152f5db",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 241,
+  "nome": "livroCatDe",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Qual livro do catálogo está ligado a uma indicação",
+  "tamanho_bytes": 247,
+  "sha256": "c0c36e09ed3fcedecd3fb76bd9df95bc8d9c8ca04b2128d3246744c4c4d7f551",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 242,
+  "nome": "livroCatOutro",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "catId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Outro livro do catálogo com o mesmo título",
+  "tamanho_bytes": 113,
+  "sha256": "066175faa3b853fccf94607f1591423f17b2da2c071b4398fa8d839d9da6a5ea",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 243,
+  "nome": "livroCatEditar",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "autor",
+   "catId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Corrige título e autor de um livro do catálogo",
+  "tamanho_bytes": 102,
+  "sha256": "9197c55d94a2977a546059ea848115c30dd6c8dc8e2aef805ac9b7b3d1f1af55",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 244,
+  "nome": "livroStatusGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "status",
+   "catId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca se o livro foi lido, está sendo lido, está na biblioteca ou é desejado",
+  "tamanho_bytes": 89,
+  "sha256": "e4088e6028824cf934a0c733d99a581e0b1bafe4510fe56d9722603738c92e73",
+  "telas_que_chamam": [
+   "frontend/src/pages/RelacaoLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 245,
+  "nome": "nomesCertezaGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "certeza",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava a certeza estimada da sugestão de um nome",
+  "tamanho_bytes": 120,
+  "sha256": "66b2148334cfb6913fb9a81592faad53555de01d710ea38c213ae0c23fbd071e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 246,
+  "nome": "validarAltaTotal",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantas sugestões com 90% ou mais de certeza podem ser aceitas em massa",
+  "tamanho_bytes": 219,
+  "sha256": "c287f0c9c26b795993a1933a420300aa8a4a8b6676b2fa38cd0c739de84aab66",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 247,
+  "nome": "validarAceitarAlta",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Aceita em massa as sugestões com 90% ou mais de certeza",
+  "tamanho_bytes": 426,
+  "sha256": "edaf17c44af2c84dc0c34733d5d0db1aefb20b2d68fd6ae111f7e9a58245c445",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 248,
+  "nome": "praticaFavorito",
+  "tipo": "SQL",
+  "parametros": [
+   "fav",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca ou desmarca a prática como favorita",
+  "tamanho_bytes": 56,
+  "sha256": "df517ec44752de344e8dd7a71ba104fe949014e9536a819e54ca8d4d795fc95c",
+  "telas_que_chamam": [
+   "frontend/src/components/FavoritaPratica.tsx"
+  ]
+ },
+ {
+  "numero": 249,
+  "nome": "praticasFavoritas",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Minhas práticas: as favoritas",
+  "tamanho_bytes": 505,
+  "sha256": "8415f7a6254aaa74d7f7ec278f80b58b2751860b12d69993f88d7f6e3cd54859",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx",
+   "frontend/src/pages/MinhasPraticasPage.tsx"
+  ]
+ },
+ {
+  "numero": 250,
+  "nome": "praticaTrechos",
+  "tipo": "SQL",
+  "parametros": [
+   "videoId",
+   "de",
+   "ate"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Trechos da transcrição perto do ponto onde a prática é ensinada",
+  "tamanho_bytes": 128,
+  "sha256": "b9b9be65191126b6676bffc481fcc5208ac72196fa88437497cbf272544227f3",
+  "telas_que_chamam": [
+   "frontend/src/components/PraticaDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 251,
+  "nome": "praticaUma",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Uma prática com o vídeo de onde veio",
+  "tamanho_bytes": 389,
+  "sha256": "a957f3361ef4ed60daa5f97fba57e0feb6af92b0c9f257b4c82db0ee3a497212",
+  "telas_que_chamam": [
+   "frontend/src/components/PraticaDetalhe.tsx"
+  ]
+ },
+ {
+  "numero": 252,
+  "nome": "nomeMusica",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como música, álbum ou banda",
+  "tamanho_bytes": 273,
+  "sha256": "a0dd1ef50ec5a451486950aeea18859e0c38fb297a2cadebae0b3c3143f15359",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 253,
+  "nome": "nomeAudiovisual",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como filme, série ou vídeo",
+  "tamanho_bytes": 283,
+  "sha256": "fddce9bd59c2c2a8b21db43520035f30d56d9765b1fe240a88148d3f42270c1f",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 254,
+  "nome": "outrosTotais",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Quantos nomes há em Músicas, Audiovisuais e Textos sagrados",
+  "tamanho_bytes": 112,
+  "sha256": "90c15d6ab53fb22fc9f66f384301af60de3dbc294c9b48df6f1b26ae79a8a15a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 255,
+  "nome": "outrosLista",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "estado",
+   "busca",
+   "status",
+   "conf",
+   "subtipo",
+   "fav",
+   "ordem",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes de músicas, audiovisuais ou textos sagrados citados nos vídeos",
+  "tamanho_bytes": 1417,
+  "sha256": "e46c0a8903a1fdc8ca2076df18eef3d878043dbedb4d7bffbc938585706a038d",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx"
+  ]
+ },
+ {
+  "numero": 256,
+  "nome": "outrosVoltar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Devolve um nome para Validar entradas",
+  "tamanho_bytes": 112,
+  "sha256": "87180f2fe3afe4b736facb871d1f58dc0e00800f67bc511d7ece78c0d038a3a3",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx",
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 257,
+  "nome": "favItemMarcar",
+  "tipo": "SQL",
+  "parametros": [
+   "tipo",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um livro, música ou audiovisual como favorito",
+  "tamanho_bytes": 149,
+  "sha256": "84518bddb1e9332dcc104785324260b6e9d87d4cb7cbb1ea8bc61b47f9bfe96e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 258,
+  "nome": "favItemTirar",
+  "tipo": "SQL",
+  "parametros": [
+   "tipo",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira um item dos favoritos",
+  "tamanho_bytes": 73,
+  "sha256": "650677df4c0c8a35300e4494a9475c3ac9d27e45bde234e6d5f84230288d5f60",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx"
+  ]
+ },
+ {
+  "numero": 259,
+  "nome": "favItensTipo",
+  "tipo": "SQL",
+  "parametros": [
+   "tipo"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes favoritos de um tipo",
+  "tamanho_bytes": 56,
+  "sha256": "c3701a1076c3dc45fc17d66d1b82908e42e6730f25db2a7dfda984471e03336f",
+  "telas_que_chamam": [
+   "frontend/src/components/EstrelaItem.tsx"
+  ]
+ },
+ {
+  "numero": 260,
+  "nome": "favItensLista",
+  "tipo": "SQL",
+  "parametros": [
+   "tipo"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Meus favoritos: livros, músicas ou audiovisuais",
+  "tamanho_bytes": 961,
+  "sha256": "b034389145eba8dcca44a254f51aa5b33fd06a805d2a657f6469eeb90fffad99",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx"
+  ]
+ },
+ {
+  "numero": 261,
+  "nome": "favVideosLista",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Meus favoritos: vídeos",
+  "tamanho_bytes": 213,
+  "sha256": "a3b88d023634004a448d184c1b01360024f431ed5209b9103b4068dbb71ab1ea",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx"
+  ]
+ },
+ {
+  "numero": 262,
+  "nome": "favContagens",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Meus favoritos: quantos de cada tipo",
+  "tamanho_bytes": 434,
+  "sha256": "2eb93e22fa53d303de64f72f291d29eb431d7e2152cb32eefb54a6c610cb4a39",
+  "telas_que_chamam": [
+   "frontend/src/pages/FavoritosPage.tsx"
+  ]
+ },
+ {
+  "numero": 263,
+  "nome": "itemStatusGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "tipo",
+   "nome",
+   "status"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca a situação de uma música, audiovisual ou texto sagrado",
+  "tamanho_bytes": 137,
+  "sha256": "13ef82d8d20a8e7136875c6bd36b2ba8495de64ca861232a84df503633e00104",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx",
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 264,
+  "nome": "nomeSagrado",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como texto sagrado ou clássico",
+  "tamanho_bytes": 255,
+  "sha256": "94b1dd5615d4321361087789d0a9d0584431069589999e15904fc6475be09a9f",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 265,
+  "nome": "sagradoObras",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "busca",
+   "status",
+   "fav",
+   "ordem",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Textos sagrados agrupados por obra",
+  "tamanho_bytes": 1063,
+  "sha256": "b4c721c743d6b9147ccdd1d4f98aa59a6cdd3618ac8517aa6901626b5eca17ae",
+  "telas_que_chamam": [
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 266,
+  "nome": "sagradoPartes",
+  "tipo": "SQL",
+  "parametros": [
+   "canalId",
+   "obra"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Partes e grafias de uma obra sagrada",
+  "tamanho_bytes": 551,
+  "sha256": "f63c0c1ff93849c41d1c6fda3e2dec299f7ae55a0311039d93999c9273176f1e",
+  "telas_que_chamam": [
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 267,
+  "nome": "sagradoJuntar",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "obra"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Junta um nome a uma obra sagrada",
+  "tamanho_bytes": 106,
+  "sha256": "f6f004da71f7bf8134f784e3042649e853ce8edb5064f6f8350fc8eed1902156",
+  "telas_que_chamam": [
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 268,
+  "nome": "sagradoSeparar",
+  "tipo": "SQL",
+  "parametros": [
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Tira um nome do grupo de uma obra",
+  "tamanho_bytes": 43,
+  "sha256": "86c4d454b233c25d7fb8efaa36dfff9f79b93cc105b55f1946d01a348a2c3d0c",
+  "telas_que_chamam": [
+   "frontend/src/pages/SagradosPage.tsx"
+  ]
+ },
+ {
+  "numero": 269,
+  "nome": "nomeTipoIA",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "estado"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Marca um nome como música, audiovisual ou texto sagrado ao ler o vídeo, sem mudar o que a pessoa já decidiu",
+  "tamanho_bytes": 194,
+  "sha256": "b65ce12aa70376db0a76748104423d267ea8e0b317c65cb41ed380678dba3825",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 270,
+  "nome": "outrosEditar",
+  "tipo": "SQL",
+  "parametros": [
+   "estado",
+   "motivo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Muda o tipo de um nome (música, audiovisual, texto sagrado ou voltar para validar) e a nota",
+  "tamanho_bytes": 308,
+  "sha256": "ca8537e75f0af98d889fb0420d4717361b6e3d6ef29a5d054c628f4be0afd266",
+  "telas_que_chamam": [
+   "frontend/src/components/EditarNome.tsx"
+  ]
+ },
+ {
+  "numero": 271,
+  "nome": "outrosAceitar",
+  "tipo": "SQL",
+  "parametros": [
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "A pessoa aceita a conferência de um nome de música, audiovisual ou texto sagrado",
+  "tamanho_bytes": 113,
+  "sha256": "ba32de3dea7987f75d7dcb600b42e1bbd15cfb85adcb988a66e846869068eccf",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx"
+  ]
+ },
+ {
+  "numero": 272,
+  "nome": "outrosFila",
+  "tipo": "SQL",
+  "parametros": [
+   "limit"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Nomes de música, audiovisual e texto sagrado ainda não conferidos pela IA",
+  "tamanho_bytes": 380,
+  "sha256": "3a89de4ab6e8170807646d1f029aa88424f52397ef077c68b9a67d2fe506e09a",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 273,
+  "nome": "outrosConferirGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "conferido",
+   "nota",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava o resultado da conferência da IA (OK ou dúvida) sem mexer no que a pessoa já aceitou",
+  "tamanho_bytes": 189,
+  "sha256": "128f3fec44373cc32291a9a65eb0d20318c9914e5b7a982cf1fdb12a23a91d47",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 274,
+  "nome": "pendRefinoFila",
+  "tipo": "SQL",
+  "parametros": [
+   "limit"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Pendentes sem sugestão que ainda não passaram pelo refino com a busca do Google",
+  "tamanho_bytes": 331,
+  "sha256": "14413d9fd63a344b0e50839ea5711a5099c2d0e513e0bfe10d8f2085f793f0bd",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 275,
+  "nome": "pendRefinoGravar",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "autor",
+   "motivo",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Guarda o resultado do refino de um pendente sem sugestão",
+  "tamanho_bytes": 289,
+  "sha256": "b2ef0f07747fa1f623a16558482131afd9bb42f673e115794a9d221e65225d8e",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 276,
+  "nome": "validarExportar",
+  "tipo": "SQL",
+  "parametros": [
+   "busca",
+   "tipo",
+   "origem",
+   "faixa",
+   "grupo",
+   "filtro",
+   "campos",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Pendentes de validação para exportar",
+  "tamanho_bytes": 2780,
+  "sha256": "235d61f3034d16d894c82b974537ea41e401718705d3223526c0e5587d4166ea",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 277,
+  "nome": "validarSugerir",
+  "tipo": "SQL",
+  "parametros": [
+   "nome",
+   "titulo",
+   "autor",
+   "certeza",
+   "motivo",
+   "tipo",
+   "subtipo"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava uma sugestão vinda de fora, sem aprovar nada",
+  "tamanho_bytes": 891,
+  "sha256": "10422f1d2dc9242ce25a901f325dab456381fd7b5ab6d8e01bc6d1fbfcc8aa70",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 278,
+  "nome": "validarSugerirEsp",
+  "tipo": "SQL",
+  "parametros": [
+   "titulo",
+   "autor",
+   "certeza",
+   "motivo",
+   "tipo",
+   "subtipo",
+   "padrao"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava sugestão vinda de fora para nomes com aspas ou barras",
+  "tamanho_bytes": 997,
+  "sha256": "fe0fffc401f67024c7213a98708eaab9fc5cb3cdb16cab409cf95104e99614a5",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 279,
+  "nome": "outrosSubtipo",
+  "tipo": "SQL",
+  "parametros": [
+   "subtipo",
+   "id"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Define se um audiovisual é filme, série, documentário ou jogo",
+  "tamanho_bytes": 77,
+  "sha256": "eb247e53069c0751292ec322c666f6a576cd9624593e1ab6be2fde86314c2c13",
+  "telas_que_chamam": [
+   "frontend/src/pages/OutrosNomesPage.tsx"
+  ]
+ },
+ {
+  "numero": 280,
+  "nome": "nomeTipoPorNome",
+  "tipo": "SQL",
+  "parametros": [
+   "estado",
+   "motivo",
+   "subtipo",
+   "padrao"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Manda um nome para música, filme ou série, ou texto sagrado, pelo nome",
+  "tamanho_bytes": 583,
+  "sha256": "7663f72b081c78824fd3cecb9fd8e7ed73e542fd15c2d6c3bfb4ae2ada3ad2ec",
+  "telas_que_chamam": [
+   "frontend/src/pages/ValidarLivrosPage.tsx"
+  ]
+ },
+ {
+  "numero": 281,
+  "nome": "vtMomentos",
+  "tipo": "SQL",
+  "parametros": [
+   "momentos",
+   "videoId",
+   "nome"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Grava os minutos de um tema do vídeo",
+  "tamanho_bytes": 167,
+  "sha256": "2345938553fa50c5011d803c4e763e20880aa43403b61366cbd5af783fa0b244",
+  "telas_que_chamam": []
+ },
+ {
+  "numero": 282,
+  "nome": "mapaTemasLista",
+  "tipo": "SQL",
+  "parametros": [],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: temas com quantos vídeos têm",
+  "tamanho_bytes": 239,
+  "sha256": "7602d0a7b301aea0315b0190414efbe7a69ea236cc604f3bb028d1af1c5f266d",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 283,
+  "nome": "mapaTemaJeitos",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: jeitos de prática ligados a um tema",
+  "tamanho_bytes": 268,
+  "sha256": "4cf8a237c3361606e465e91303ab3fdc148f69762d35d904dfa9e8a641ad968b",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 284,
+  "nome": "mapaTemaPraticas",
+  "tipo": "SQL",
+  "parametros": [
+   "jeito",
+   "temaId",
+   "limit",
+   "offset"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: práticas de um jeito dentro de um tema",
+  "tamanho_bytes": 372,
+  "sha256": "f9adcdffa5890fff5025fb706144752d661a13a891d2888efa4295acf96b9b87",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 285,
+  "nome": "mapaTemaVideos",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: vídeos que mais ensinam práticas num tema",
+  "tamanho_bytes": 279,
+  "sha256": "6c2186ee0abd6879e6993f0b4aa136634bf9c7ff1be32ac41389ade8d895ea3a",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 286,
+  "nome": "mapaTemaLigados",
+  "tipo": "SQL",
+  "parametros": [
+   "temaId"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: temas que aparecem junto de um tema",
+  "tamanho_bytes": 270,
+  "sha256": "f2987beb5fb61a854158d75ac3d2a71eb7873655bb66fdc331f6e420579259ee",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 287,
+  "nome": "mapaVideoBusca",
+  "tipo": "SQL",
+  "parametros": [
+   "busca"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Mapa mental: procura um vídeo pelo título",
+  "tamanho_bytes": 275,
+  "sha256": "47f33fab21f21fee5458b21b86142b7e69d9eca7ee356936313bb5e0bec56f80",
+  "telas_que_chamam": [
+   "frontend/src/pages/MapaMentalPage.tsx"
+  ]
+ },
+ {
+  "numero": 288,
+  "nome": "exportarGit",
+  "tipo": "JAVASCRIPT",
+  "parametros": [
+   "acao"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Configurações: envia a exportação leve (código, funções, estrutura, regras) para o repositório do GitHub",
+  "tamanho_bytes": 7497,
+  "sha256": "ee99892375b184cc8531db179e1b5ed97e761a593b01e858200027a2e4207630",
+  "telas_que_chamam": []
+ }
+]

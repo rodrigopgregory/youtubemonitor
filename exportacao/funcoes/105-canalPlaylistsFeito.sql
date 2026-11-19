@@ -1,0 +1,1 @@
+UPDATE CANAIS SET PLAYLISTS_EM = '{{dia}}' WHERE ID = {{id}}

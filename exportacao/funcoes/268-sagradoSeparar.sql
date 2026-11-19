@@ -1,0 +1,1 @@
+DELETE FROM OBRA_DE WHERE NOME = '{{nome}}'

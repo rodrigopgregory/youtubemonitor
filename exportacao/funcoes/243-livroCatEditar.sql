@@ -1,0 +1,1 @@
+UPDATE LIVROS_CATALOGO SET TITULO = '{{titulo}}', AUTOR = NULLIF('{{autor}}', '') WHERE ID = {{catId}}

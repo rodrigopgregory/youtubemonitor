@@ -1,0 +1,1 @@
+UPDATE CANAIS SET CARGA_MSG = '{{msg}}' WHERE ID = {{id}}

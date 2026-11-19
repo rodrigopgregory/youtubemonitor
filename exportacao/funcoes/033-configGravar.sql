@@ -1,0 +1,1 @@
+UPDATE CONFIG SET VALOR = '{{valor}}' WHERE CHAVE = '{{chave}}'

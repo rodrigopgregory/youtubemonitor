@@ -1,0 +1,3 @@
+# Exportação leve
+
+Comece por `LEIAME_EXPORTACAO_LEVE.md`. Depois `REGRAS_DE_CLASSIFICACAO.md`, `DEPENDENCIAS_MITRA.md` e `DIFF_FUNCOES.md`.

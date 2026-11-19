@@ -1,0 +1,1 @@
+UPDATE CANAIS SET ULTIMA_CHECAGEM = '{{quando}}' WHERE ID = {{id}}

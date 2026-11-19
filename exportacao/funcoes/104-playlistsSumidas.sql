@@ -1,0 +1,1 @@
+DELETE FROM PLAYLISTS WHERE CANAL_ID = {{canalId}} AND SINC <> '{{sinc}}'

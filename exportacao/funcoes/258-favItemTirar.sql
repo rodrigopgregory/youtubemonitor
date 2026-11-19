@@ -1,0 +1,1 @@
+DELETE FROM ITENS_FAVORITOS WHERE TIPO = '{{tipo}}' AND NOME = '{{nome}}'

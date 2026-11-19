@@ -1,0 +1,1 @@
+DELETE FROM TEMAS WHERE ID = {{temaId}} AND NOME LIKE 'mentor: %'

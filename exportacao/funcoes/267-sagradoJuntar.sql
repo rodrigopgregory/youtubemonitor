@@ -1,0 +1,1 @@
+INSERT INTO OBRA_DE (NOME, OBRA) VALUES ('{{nome}}', '{{obra}}') ON DUPLICATE KEY UPDATE OBRA = '{{obra}}'

@@ -1,0 +1,1 @@
+UPDATE PRATICAS SET FAVORITA = {{fav}} WHERE ID = {{id}}

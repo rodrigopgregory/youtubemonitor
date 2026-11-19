@@ -1,0 +1,1 @@
+DELETE FROM VIDEO_TEMAS WHERE VIDEO_ID = {{videoId}} AND TEMA_ID = {{temaId}}

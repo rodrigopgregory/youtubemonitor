@@ -1,0 +1,1 @@
+UPDATE VIDEOS SET PRATICAS_EM = '{{quando}}' WHERE ID = {{id}}

@@ -1,0 +1,1 @@
+UPDATE LIVROS_NOMES SET SUBTIPO = NULLIF('{{subtipo}}', '') WHERE ID = {{id}}

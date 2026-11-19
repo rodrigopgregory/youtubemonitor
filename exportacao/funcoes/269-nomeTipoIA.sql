@@ -1,0 +1,1 @@
+INSERT IGNORE INTO LIVROS_NOMES (NOME, ESTADO, MOTIVO, CRIADO_EM) VALUES ('{{nome}}', '{{estado}}', 'Separado pela IA ao ler o vídeo', DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s'))

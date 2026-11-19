@@ -1,0 +1,2306 @@
+{
+ "gerado_em": "2026-11-18T21:58:37",
+ "commit": "719ba0459cd18af6218e2674a4638d07df46cfdd",
+ "codigo_guardado_em": "2026-11-18T21:58:31",
+ "versao_mysql": "8.3.0",
+ "esquema": "tenant_67241",
+ "opcoes": {
+  "praticas": true,
+  "livro": true
+ },
+ "trechos_de_segredo_removidos": 0,
+ "tabelas_incluidas": [
+  {
+   "tabela": "CANAIS",
+   "linhas": 3,
+   "colunasRetiradas": [
+    "CARGA_TOKEN"
+   ]
+  },
+  {
+   "tabela": "CONFIG",
+   "linhas": 17,
+   "colunasRetiradas": []
+  },
+  {
+   "tabela": "MENTOR_REGRAS",
+   "linhas": 28,
+   "colunasRetiradas": []
+  },
+  {
+   "tabela": "PLAYLISTS",
+   "linhas": 51,
+   "colunasRetiradas": []
+  },
+  {
+   "tabela": "TEMAS",
+   "linhas": 111,
+   "colunasRetiradas": []
+  },
+  {
+   "tabela": "TEMA_MAPA",
+   "linhas": 151,
+   "colunasRetiradas": []
+  }
+ ],
+ "tabelas_fora": [
+  {
+   "tabela": "AVISOS",
+   "linhas": 5,
+   "motivo": "dado de uso do dia a dia, não é configuração"
+  },
+  {
+   "tabela": "EXPORT_BASE",
+   "linhas": 4,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_CODIGOS",
+   "linhas": 2,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_CODIGO_DEV",
+   "linhas": 2,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_DONOS",
+   "linhas": 2,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_LEVE",
+   "linhas": 4,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_LOG",
+   "linhas": 23,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_PACOTES",
+   "linhas": 5,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_PARTES",
+   "linhas": 20,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "EXPORT_SESSOES",
+   "linhas": 1,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "GIT_CONFIG",
+   "linhas": 3,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "ITENS_FAVORITOS",
+   "linhas": 0,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "ITENS_STATUS",
+   "linhas": 0,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "LIVROS_CATALOGO",
+   "linhas": 2217,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "VIDEOS",
+   "linhas": 4037,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "LIVROS_INDICADOS",
+   "linhas": 8074,
+   "motivo": "exportada à parte, na pasta livro-vivo/"
+  },
+  {
+   "tabela": "LIVROS_NOMES",
+   "linhas": 3000,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "LIVRO_CAPITULOS",
+   "linhas": 13,
+   "motivo": "exportada à parte, na pasta livro-vivo/"
+  },
+  {
+   "tabela": "LOTES",
+   "linhas": 0,
+   "motivo": "só estrutura (tabela de controle)"
+  },
+  {
+   "tabela": "OBRA_DE",
+   "linhas": 31,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "PLAYLIST_VIDEOS",
+   "linhas": 1703,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "PRATICAS",
+   "linhas": 8499,
+   "motivo": "exportada à parte, na pasta praticas/"
+  },
+  {
+   "tabela": "PRATICA_DIARIO",
+   "linhas": 5,
+   "motivo": "diário pessoal da pessoa"
+  },
+  {
+   "tabela": "TEMAS_BKP_20261113",
+   "linhas": 243,
+   "motivo": "cópia de segurança, grande"
+  },
+  {
+   "tabela": "TRECHOS",
+   "linhas": 541782,
+   "motivo": "transcrições (grande e conteúdo de terceiros)"
+  },
+  {
+   "tabela": "VIDEO_TEMAS",
+   "linhas": 19895,
+   "motivo": "dados de movimento (grande ou pessoal)"
+  },
+  {
+   "tabela": "VIDEO_TEMAS_BKP_20261113",
+   "linhas": 14970,
+   "motivo": "cópia de segurança, grande"
+  },
+  {
+   "tabela": "VIDEO_TEMAS_BKP_MENTORES",
+   "linhas": 205,
+   "motivo": "cópia de segurança, grande"
+  }
+ ],
+ "arquivos": [
+  {
+   "nome": "banco/schema.sql",
+   "tamanho": 34054,
+   "sha256": "4f5c587b95beed16c0c1917d4a59a464f5021a7372e2d7a25a7b765be1d5ae24"
+  },
+  {
+   "nome": "dados-pequenos/CANAIS.csv",
+   "tamanho": 1426,
+   "sha256": "febf13e412c7b016dea023aac13f8b06e1ec39714806df50e4b0c469b618547a"
+  },
+  {
+   "nome": "dados-pequenos/CONFIG.csv",
+   "tamanho": 608,
+   "sha256": "3bcf3234327b094823a969e30a0cf7f4bbd63ae246d9ea53f9bfebb2a4e4732c"
+  },
+  {
+   "nome": "dados-pequenos/MENTOR_REGRAS.csv",
+   "tamanho": 1551,
+   "sha256": "abfbbacacc1209a38d0571717dc1736dba3792fb4856dfcc8f3db8dd6d38f0af"
+  },
+  {
+   "nome": "dados-pequenos/PLAYLISTS.csv",
+   "tamanho": 5299,
+   "sha256": "9d47e6c2ca12cd7a5a7276b593487709afeed0e9672c1be0450e821d675ce24d"
+  },
+  {
+   "nome": "dados-pequenos/TEMAS.csv",
+   "tamanho": 3342,
+   "sha256": "e53d7906d9e7b361599fb542cb8243b680c5f6b807564c9a6c697c9fcfc44961"
+  },
+  {
+   "nome": "dados-pequenos/TEMA_MAPA.csv",
+   "tamanho": 5970,
+   "sha256": "dba586c106539f6828b8444c7ccbcaf020b70cd6859a28673a9a186bd942f425"
+  },
+  {
+   "nome": "dados-pequenos/CARGA_PEQUENAS.sql",
+   "tamanho": 43498,
+   "sha256": "bb976fe6e221a82ba32c58d7e39988dd3af0120b5326d91846362f74e458b89f"
+  },
+  {
+   "nome": "praticas/praticas.csv",
+   "tamanho": 4489747,
+   "sha256": "07d6ecccaaa778c7771b9d8049556f16fa6bd31e0c4b8ad25cb61feb9d2e9914"
+  },
+  {
+   "nome": "praticas/praticas_por_tipo.csv",
+   "tamanho": 498,
+   "sha256": "babca8763be2eb19298b9f5e708765347e44e05d8b67101cdceb382063dc1cbf"
+  },
+  {
+   "nome": "praticas/LEIAME.md",
+   "tamanho": 702,
+   "sha256": "9625db8620ca1a64bbd0c49534076bfbbad8a609cb1eee9ef2178b79e1039246"
+  },
+  {
+   "nome": "livro-vivo/capitulos.csv",
+   "tamanho": 132898,
+   "sha256": "64a8172abb8946ace8b22bb5fe4cc0fc875834e1c3707a50776e21c421601c34"
+  },
+  {
+   "nome": "livro-vivo/capitulos/afinidade-e-sintonia.md",
+   "tamanho": 9108,
+   "sha256": "1daedef52b522bfedbd32f5a0cdb62be0a927498dcc3f25f92c7f15169ad80b3"
+  },
+  {
+   "nome": "livro-vivo/capitulos/alquimia-interior-hermetismo-e-iniciacoes.md",
+   "tamanho": 5422,
+   "sha256": "9519b5648d18a605ef7bf044e74af1d0d75e35ed9aa6b0a0205ab05f7b4b1931"
+  },
+  {
+   "nome": "livro-vivo/capitulos/ataques-espirituais-e-obsessao.md",
+   "tamanho": 9377,
+   "sha256": "6db10250399bf3de9c308042d805ce474ed675e76ff926e2fbd9c4f76fe02c57"
+  },
+  {
+   "nome": "livro-vivo/capitulos/autoconhecimento.md",
+   "tamanho": 3963,
+   "sha256": "51f841181f056d7e5820e6f35f00e61759fde2b030639c90d3c3b6d0131e67d6"
+  },
+  {
+   "nome": "livro-vivo/capitulos/chakras-e-bioenergia.md",
+   "tamanho": 9012,
+   "sha256": "d0b4e95cdef9703359f5dff83f3d7139cb2bab6b394ac0f48ed9487d773cd2a9"
+  },
+  {
+   "nome": "livro-vivo/capitulos/criancas-educacao-e-comportamento.md",
+   "tamanho": 5720,
+   "sha256": "4682e066df44a79ef21706776d664c90c5deffdecdf241a51da79b326e1a759a"
+  },
+  {
+   "nome": "livro-vivo/capitulos/emocoes-medo-e-inteligencia-emocional.md",
+   "tamanho": 19125,
+   "sha256": "2b11c43029e93d584b6ae4d34a322158b97915833905d548b58415598eb85b18"
+  },
+  {
+   "nome": "livro-vivo/capitulos/espiritualidade-no-dia-a-dia.md",
+   "tamanho": 12209,
+   "sha256": "285f7ddabae9533becff8994f45ebd4d73e151410e64b8e9292dd1c2a89cf2ee"
+  },
+  {
+   "nome": "livro-vivo/capitulos/expansao-da-consciencia.md",
+   "tamanho": 9807,
+   "sha256": "3c83491884ed07ccc13d3d899dc141f7a5b6b7d61539b78deedd4b7e922d9811"
+  },
+  {
+   "nome": "livro-vivo/capitulos/mediunidade-e-fenomenos-mediunicos.md",
+   "tamanho": 7849,
+   "sha256": "08a1e1a7b6056b3c73f8fad053c47a24ec804c3314cc7433c7c30640d4ea504e"
+  },
+  {
+   "nome": "livro-vivo/capitulos/projecao-astral-e-saidas-do-corpo.md",
+   "tamanho": 9565,
+   "sha256": "eb74a3c21581293bc99a1af5ef2b203cd26a067ceabeb51c1de6077660269299"
+  },
+  {
+   "nome": "livro-vivo/capitulos/protecao-e-limpeza-energetica.md",
+   "tamanho": 13428,
+   "sha256": "7c927ad299c2310edabe369f427a86360dc2b9851404ff2624779365f4aa0da4"
+  },
+  {
+   "nome": "livro-vivo/capitulos/etica-e-coerencia-de-luz.md",
+   "tamanho": 6154,
+   "sha256": "d9345d3e961c69189addb642ea6ae892113c7c9cf60e89ae71580549f2f2e7ef"
+  },
+  {
+   "nome": "livro-vivo/livros_indicados.csv",
+   "tamanho": 698307,
+   "sha256": "82f2d28f48eefe95b6c98b2bcc8aff910a744fbc8ac09c2b9c27f8f3b142580a"
+  },
+  {
+   "nome": "livro-vivo/LEIAME.md",
+   "tamanho": 293,
+   "sha256": "1956675a458a4484428808927148d4a56c165cae6d016a6015b786ba487e2c22"
+  },
+  {
+   "nome": "codigo/.gitkeep",
+   "tamanho": 0,
+   "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+   "nome": "codigo/ESCOPO.md",
+   "tamanho": 15714,
+   "sha256": "65d5933eee3fa99888eb728e177903b8b9ed94a8edcbb344be18b37c25f3da04"
+  },
+  {
+   "nome": "codigo/backend/.env.example",
+   "tamanho": 158,
+   "sha256": "c8a89613928812a2006150b0ca172f9e291d0a39d322b98345d9fae6154247d7"
+  },
+  {
+   "nome": "codigo/backend/.gitignore",
+   "tamanho": 99,
+   "sha256": "c0a6f74495de7090e0deac3ee5a8e2a16464f2408ad7b4086a2849e242138f48"
+  },
+  {
+   "nome": "codigo/backend/casar.mjs",
+   "tamanho": 2527,
+   "sha256": "7e262e23eddc5380c8883813cd293001b45aced2a2750c2633e84914ae3eb4b0"
+  },
+  {
+   "nome": "codigo/backend/criar-funcoes.mjs",
+   "tamanho": 22734,
+   "sha256": "bba88a5cac5106d2b749c9e32dbd36e297f4b6a0a8d0f8fb56bab882518c0967"
+  },
+  {
+   "nome": "codigo/backend/exportar-leve-base.mjs",
+   "tamanho": 21316,
+   "sha256": "b01e93d37c5ad481aded191e16ca9806e771162d72d3b16783201869d30b9967"
+  },
+  {
+   "nome": "codigo/backend/funcoes-tela.mjs",
+   "tamanho": 66661,
+   "sha256": "95f87c607035a721469ec69196913bf7f22ceeded48a34f6a356dd96d9615c8a"
+  },
+  {
+   "nome": "codigo/backend/gravar-etiquetas.mjs",
+   "tamanho": 925,
+   "sha256": "7138250ba734c9c52c79d29785867938909fa85f161aaf0b76dba29729dec052"
+  },
+  {
+   "nome": "codigo/backend/lib.mjs",
+   "tamanho": 1078,
+   "sha256": "5e640dbc15a29707474d00c09a88bb6b4e3a503c5f4a65c2a26d05f4c3010a90"
+  },
+  {
+   "nome": "codigo/backend/migracao-catalogo-livros.mjs",
+   "tamanho": 2216,
+   "sha256": "e4ec8f825e20f8f1745ac3c0825bafedf5e5b52cd56638b956a3da9956d620b5"
+  },
+  {
+   "nome": "codigo/backend/migracao-diario.mjs",
+   "tamanho": 1154,
+   "sha256": "80337d595efb089578423baa1652dfebc5f15d90127c65c924aa57a2ad0103ff"
+  },
+  {
+   "nome": "codigo/backend/migracao-etiquetas-view.mjs",
+   "tamanho": 638,
+   "sha256": "a5c0622546e84e3a91c8a74eabe37f133094e0f9035e799508f85151b932201a"
+  },
+  {
+   "nome": "codigo/backend/migracao-etiquetas.mjs",
+   "tamanho": 1153,
+   "sha256": "a18c42e33cbaa637e0e56f460cedce11e371810130791c9bfecb8be614c39cd0"
+  },
+  {
+   "nome": "codigo/backend/migracao-exportacao-leve.mjs",
+   "tamanho": 1072,
+   "sha256": "69c8444ca20c97320616a20837542a351d76d2b0777bacee531304f83cb7299c"
+  },
+  {
+   "nome": "codigo/backend/migracao-exportacao.mjs",
+   "tamanho": 2829,
+   "sha256": "d20b59546119cf6f11efdb450c8eab1d0d07e1f2dc0f8d9b5a4e2ee5086deb7d"
+  },
+  {
+   "nome": "codigo/backend/migracao-exportacao2.mjs",
+   "tamanho": 581,
+   "sha256": "19abe54f466dc1e2ba6a38fb87725b0872d029838ad98d492530c38add242141"
+  },
+  {
+   "nome": "codigo/backend/migracao-exportacao3.mjs",
+   "tamanho": 576,
+   "sha256": "2b6f255748e53a622b04c8e1d292d52ceb1a23798abaf918d7cbc35cd51f7d1c"
+  },
+  {
+   "nome": "codigo/backend/migracao-finalidades.mjs",
+   "tamanho": 915,
+   "sha256": "edfb12b8a337c644fa1f7a9094370d56acbd5409e5d60a27409b0052e9dadd35"
+  },
+  {
+   "nome": "codigo/backend/migracao-livros.mjs",
+   "tamanho": 1351,
+   "sha256": "10ee5467185c36d51ee34c01e0820fc222825ae1ef9882463d8d3fdc9b993da0"
+  },
+  {
+   "nome": "codigo/backend/migracao-mentores.mjs",
+   "tamanho": 2241,
+   "sha256": "8e4c878a1cb165c979396d4c869640fea5902476b93b5f5bf9621c10b3a8d5f4"
+  },
+  {
+   "nome": "codigo/backend/migracao-praticas-erros.mjs",
+   "tamanho": 538,
+   "sha256": "4213a346e530506800eb12476f70bd9f38cf367eb2fb2ba2be2b9a5717f3c80a"
+  },
+  {
+   "nome": "codigo/backend/migracao-praticas.mjs",
+   "tamanho": 1255,
+   "sha256": "d1e7d596ba30d705c8bade923940c86a076059b5a1e0d9afefbda3d469f37c82"
+  },
+  {
+   "nome": "codigo/backend/migracao-status-leitura.mjs",
+   "tamanho": 2328,
+   "sha256": "156a2cca5dabd57fc90a7f2215f9956de485a0d7a7c173629fca6baa3b13e5cb"
+  },
+  {
+   "nome": "codigo/backend/package-lock.json",
+   "tamanho": 1409,
+   "sha256": "561396796b466660479fabfb22a2ae203c03882c704a029119205171f4379228"
+  },
+  {
+   "nome": "codigo/backend/package.json",
+   "tamanho": 140,
+   "sha256": "0ae4f60094833ce07a5b151397b79e047243f33a81179ed91c33f0467cfa5ba0"
+  },
+  {
+   "nome": "codigo/backend/setup-backend.mjs",
+   "tamanho": 4958,
+   "sha256": "a2c85af943383a4e8669a58a0bc3db8045c5bd12a2260cedfb424aa21cb8a0be"
+  },
+  {
+   "nome": "codigo/backend/sf-ids.json",
+   "tamanho": 5921,
+   "sha256": "ebea380757a2a1f2eee8b430e5d2ac188f734341c27e358b947bd30e26d9b95a"
+  },
+  {
+   "nome": "codigo/backend/sf-tela.json",
+   "tamanho": 3624,
+   "sha256": "e02580f006583053d6b8482c1a5afb2596bff16fe79296819fb46fdf3337f261"
+  },
+  {
+   "nome": "codigo/backend/sf/buscaTermos.js",
+   "tamanho": 2579,
+   "sha256": "f8453aedccc9fe150ca946192752afaf1e375e5f3ee5f94be7b45adadf8a3082"
+  },
+  {
+   "nome": "codigo/backend/sf/canaisAtualizar.js",
+   "tamanho": 501,
+   "sha256": "e1a5fe1243f51b4629b87e91ea2a21820f271a4ef50ee979701380efbceb2fea"
+  },
+  {
+   "nome": "codigo/backend/sf/canalCadastrar.js",
+   "tamanho": 2879,
+   "sha256": "2c49826b24a8163511ca700238dbee17c8f7a13818fff81ede978d5f6b2338da"
+  },
+  {
+   "nome": "codigo/backend/sf/chatBusca.js",
+   "tamanho": 11137,
+   "sha256": "4a56b121e032ff6f150e3789acf050524e5949eb891f494bf79b1a967a89ac04"
+  },
+  {
+   "nome": "codigo/backend/sf/configEditar.js",
+   "tamanho": 3032,
+   "sha256": "4c79fb29b8279025b5318b105513ab49ecfd1f6e3e8455b1b0862b946f14ecba"
+  },
+  {
+   "nome": "codigo/backend/sf/diarioEditar.js",
+   "tamanho": 2901,
+   "sha256": "50475af2f92a0f27a7e31d0805ce62923189a6605a1380aec07808945bc87a44"
+  },
+  {
+   "nome": "codigo/backend/sf/estudarMais.js",
+   "tamanho": 999,
+   "sha256": "d49afe3205143d9b5f4f904eb573cbaf051cee8150fcbdd37052f97a8df6bb4a"
+  },
+  {
+   "nome": "codigo/backend/sf/exportarGerar.js",
+   "tamanho": 44254,
+   "sha256": "a57a877f8a2e25c6e30dbb964d8b73021ead57755426e5995724489474c7500d"
+  },
+  {
+   "nome": "codigo/backend/sf/exportarGit.js",
+   "tamanho": 7497,
+   "sha256": "ee99892375b184cc8531db179e1b5ed97e761a593b01e858200027a2e4207630"
+  },
+  {
+   "nome": "codigo/backend/sf/exportarLeve.js",
+   "tamanho": 43616,
+   "sha256": "b79f2b907dae0475ccb1e39168aae4fc4eff5060554535e5600c4ded4f225221"
+  },
+  {
+   "nome": "codigo/backend/sf/exportarPacote.js",
+   "tamanho": 8189,
+   "sha256": "1c18ffbe297d4e418033b74bcfb12d6092758de2235d0b709a2b4c113508ea58"
+  },
+  {
+   "nome": "codigo/backend/sf/livroGerar.js",
+   "tamanho": 5535,
+   "sha256": "b85c4bbe18b030d0189e191ada332b99c84b9c8fc5111dd06ce27f5f2dd70fe1"
+  },
+  {
+   "nome": "codigo/backend/sf/livroValidar.js",
+   "tamanho": 4859,
+   "sha256": "2fe31668a6167e751ccde4a5e6bf1819ff92f2f45f14fc9cc8b0e010dc7e8ba6"
+  },
+  {
+   "nome": "codigo/backend/sf/mentorEditar.js",
+   "tamanho": 4910,
+   "sha256": "d5a33c19a0cb13f43315d43fb28ef8c80a07aa25170b0e497ceb2c05469aa9a0"
+  },
+  {
+   "nome": "codigo/backend/sf/motor.js",
+   "tamanho": 63294,
+   "sha256": "6a416386d8eba6377f985f38c4db2805eef1473e47643ff87684944458f09a57"
+  },
+  {
+   "nome": "codigo/backend/sf/resumoBusca.js",
+   "tamanho": 3409,
+   "sha256": "8d1fc2422e2e3328b02009e98636289cdebebd98c7f22c81d5def8038bedd2d1"
+  },
+  {
+   "nome": "codigo/backend/sf/temaEditar.js",
+   "tamanho": 2329,
+   "sha256": "4784667c84378af3b7d60919b6479dd913fb8c34000c2e70bb79f0ee508ed228"
+  },
+  {
+   "nome": "codigo/frontend/.env.example",
+   "tamanho": 103,
+   "sha256": "bf34665c7bdae981fc3b3bec8c94cf249536ab74d36a8fdfcf4fc04e019ad99d"
+  },
+  {
+   "nome": "codigo/frontend/.gitignore",
+   "tamanho": 302,
+   "sha256": "6f6a76f074bc74d2893dc1a816d58d12d8ca11a1d24640fca75f2380919b47c3"
+  },
+  {
+   "nome": "codigo/frontend/README.md",
+   "tamanho": 2628,
+   "sha256": "2428c4c18f14c5809f8e18e24bb7a1a4c7ccedf238406d9bd901364e47ae4206"
+  },
+  {
+   "nome": "codigo/frontend/eslint.config.js",
+   "tamanho": 1865,
+   "sha256": "971321bd67bc74009606052b62db4499e88b389500178679babcf30be5f2e085"
+  },
+  {
+   "nome": "codigo/frontend/index.html",
+   "tamanho": 1383,
+   "sha256": "91b85355036c6b5c45685d471febee4bea492c038ece2c67acabc789ed7e1197"
+  },
+  {
+   "nome": "codigo/frontend/package-lock.json",
+   "tamanho": 157401,
+   "sha256": "d593e7378bf9e8060734e7b68bffafeca8922f8ea0d290011acc7492bdf9d2ff"
+  },
+  {
+   "nome": "codigo/frontend/package.json",
+   "tamanho": 988,
+   "sha256": "e1bd88439b6d64ab5e81a6c2d173c8f0e6c871a154c8cd681d41b2f183215993"
+  },
+  {
+   "nome": "codigo/frontend/public/apple-touch-icon.png",
+   "tamanho": 12329,
+   "sha256": "63dd13605108e434f1eae29cfac6f177b21c4f05f2d33acf07aca2493ab2386b"
+  },
+  {
+   "nome": "codigo/frontend/public/favicon.svg",
+   "tamanho": 237,
+   "sha256": "7ee740258c1da5f52832f80458c5fb5baf4eed6981dd4b9aec70fcd0ef5f723c"
+  },
+  {
+   "nome": "codigo/frontend/public/icon-192.png",
+   "tamanho": 14098,
+   "sha256": "049d827e487704be004a8e0497dd739f8807a207bfac8be51ed1079f37e5b35a"
+  },
+  {
+   "nome": "codigo/frontend/public/icon-512.png",
+   "tamanho": 49800,
+   "sha256": "9ee4fe5d7de2b00a3d114c9b4a84f7a7aa37145074032f16cd998eff785006dc"
+  },
+  {
+   "nome": "codigo/frontend/public/icon-maskable-512.png",
+   "tamanho": 28073,
+   "sha256": "132cd07c843f12f6e6a50e47dbf6e4c9fe5c19cec925ad32fa806705b1260aaa"
+  },
+  {
+   "nome": "codigo/frontend/public/manifest.webmanifest",
+   "tamanho": 612,
+   "sha256": "b96be2ea00134c13b0935812ab266ba1bebacea98b69dba7139a2f7a890a81d6"
+  },
+  {
+   "nome": "codigo/frontend/public/sw.js",
+   "tamanho": 1407,
+   "sha256": "fae80a1249c56fe7d3c9f2fc0ada15304fea0bf5630920eb4ca4e1a652581dc7"
+  },
+  {
+   "nome": "codigo/frontend/scripts/empacotar-fonte.mjs",
+   "tamanho": 1205,
+   "sha256": "7246479feee39e0a8e4b864fa7915fdde26f41ac22e341a4d79a1f1ff973d750"
+  },
+  {
+   "nome": "codigo/frontend/src/App.tsx",
+   "tamanho": 2212,
+   "sha256": "0b0ba95a7fdd3aff6c3ec4e8196b76b7a1c5025893cb5ebd2e18fb7b3533a8f1"
+  },
+  {
+   "nome": "codigo/frontend/src/components/CanalFiltro.tsx",
+   "tamanho": 1248,
+   "sha256": "890698fc487967a64230344a87895438378e1638aaf0330cc612762f8e4d26ce"
+  },
+  {
+   "nome": "codigo/frontend/src/components/Contador.tsx",
+   "tamanho": 3086,
+   "sha256": "08d04f418d58b915acc42808fb2d25e36a29e77a513651976fb3870098d4c364"
+  },
+  {
+   "nome": "codigo/frontend/src/components/EditarNome.tsx",
+   "tamanho": 2233,
+   "sha256": "bdd44674b0e3f2ef888eefe0d1a77b483f6f2a3c1beb1b782820053f1677514e"
+  },
+  {
+   "nome": "codigo/frontend/src/components/EstadoIA.tsx",
+   "tamanho": 1929,
+   "sha256": "923e83b4f12e462cb45b177a216a2f8543e40f47ddb7e417ac234262b556736e"
+  },
+  {
+   "nome": "codigo/frontend/src/components/EstrelaItem.tsx",
+   "tamanho": 1774,
+   "sha256": "663865db00a3b1f82dff39a909bd11606016a8fcd87366ed2ea6f4670ba31f25"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ExportGit.tsx",
+   "tamanho": 4326,
+   "sha256": "1b6f2df2efb4e183c6a63f0d0d8598582c67f5dbfbb8b4dc4d4602dea7117a2f"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ExportLeve.tsx",
+   "tamanho": 5403,
+   "sha256": "529e4912395108d0c9749934df415aa69e3e809789aab39b4093937f411c3557"
+  },
+  {
+   "nome": "codigo/frontend/src/components/FavoritaPratica.tsx",
+   "tamanho": 975,
+   "sha256": "7faff93ed5eefb0e6e5b0a6094ccae24853393f8cbd6245c79b4c71308c56ce1"
+  },
+  {
+   "nome": "codigo/frontend/src/components/FizHoje.tsx",
+   "tamanho": 3970,
+   "sha256": "48734a8321d19d0cdf9a8cf48752ebf35589214a5cd6c7dd412e8e86763cfc33"
+  },
+  {
+   "nome": "codigo/frontend/src/components/InstrucaoIA.tsx",
+   "tamanho": 2555,
+   "sha256": "7ad7c7971c7f2738282333441b04d87371c048cd92d3a4d6425ec738c0178084"
+  },
+  {
+   "nome": "codigo/frontend/src/components/Layout.tsx",
+   "tamanho": 16842,
+   "sha256": "a5ad8fd2a0d864511c678d3b3c7807380e81957478a8febefe65c1ffa91d4538"
+  },
+  {
+   "nome": "codigo/frontend/src/components/PacoteExport.tsx",
+   "tamanho": 8504,
+   "sha256": "39a34a14e7585a3863d94f6473ed667da427f5f949dab9bd3e6ec4439b613f9d"
+  },
+  {
+   "nome": "codigo/frontend/src/components/PendenciasLivros.tsx",
+   "tamanho": 4362,
+   "sha256": "06f7d9afe5dedd209386cf66eca886dacd4862b461fe931001385c8710a6391f"
+  },
+  {
+   "nome": "codigo/frontend/src/components/PraticaDetalhe.tsx",
+   "tamanho": 4494,
+   "sha256": "5e0c08c3f1366055cfbadf776ab2ea41fdf34ba5a005074b1d7af1e6e9370810"
+  },
+  {
+   "nome": "codigo/frontend/src/components/VideoDetalhe.tsx",
+   "tamanho": 12091,
+   "sha256": "6e5453c0ced24a89e67eb9ab4b1b2dbdbce2991a4505160843e4558f575ae87e"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Badge.tsx",
+   "tamanho": 1506,
+   "sha256": "c6d788379397eec3020813ca2a4c6cbddc925d348546812c353e690fdbac4103"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Button.tsx",
+   "tamanho": 2283,
+   "sha256": "042fa7531137d75f7fa9fb7bfc8478c9db9ac412574c256005c72b8d4a5db42e"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Card.tsx",
+   "tamanho": 2130,
+   "sha256": "122708b2b87277a389fc0e673174a55633b90fb95bda805d7eff8c6f6e4fdccd"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Chart.tsx",
+   "tamanho": 58685,
+   "sha256": "677d8faeda520b9fb5ef2bedd2f5e0729eb4776e1032de0eac5fc643c5b562c1"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Checkbox.tsx",
+   "tamanho": 1575,
+   "sha256": "fb7d4670312888f63fb180887baee93aff7081a74dafa541527cf60820f34b5f"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/ConfirmDialog.tsx",
+   "tamanho": 1356,
+   "sha256": "bf3c9fcddcc2deae511d9a0e333d85f7364cfea3b7662a590cc34ea4748fc584"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/DatePicker.tsx",
+   "tamanho": 7932,
+   "sha256": "fc275e85f1b0f02232bcac239b0bf81d07e19153b14997baaba316fb188b96aa"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Input.tsx",
+   "tamanho": 1429,
+   "sha256": "b64218b157bcc738ebba16e37bcd188afee52355c52c85e2588a1016075a0c72"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Modal.tsx",
+   "tamanho": 2955,
+   "sha256": "56756c57b6627f29f18a761ebe2fcef6002231c5fd165ef60e6caea888b46675"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/MultiSelect.tsx",
+   "tamanho": 9927,
+   "sha256": "3292691e9965a1729a2bbc346aa460303e5381fd969c96c72d3853e00e4af75a"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Radio.tsx",
+   "tamanho": 2401,
+   "sha256": "cfd42f196cf783ea89146f62527cc4904c24677cf72025b61a149ae9489d3784"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Select.tsx",
+   "tamanho": 10312,
+   "sha256": "d6a26ad43ee6b8dbbce1b9cc28422c52e0557cb1872fb54fedde46322b3361ed"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Skeleton.tsx",
+   "tamanho": 6507,
+   "sha256": "a9f46b11d4498195d93a30805fe686f91b25381298526c9003201c161f1d2aee"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Toast.tsx",
+   "tamanho": 2844,
+   "sha256": "70d09f9764b61da86531bc043651791732c7f7a82092b6ad1faf35029d018de4"
+  },
+  {
+   "nome": "codigo/frontend/src/components/ui/Tooltip.tsx",
+   "tamanho": 3021,
+   "sha256": "225827c06981bfcd4e48cef473b1f71cf9a115a1b92d77d022118264433f9be5"
+  },
+  {
+   "nome": "codigo/frontend/src/hooks/useDrill.ts",
+   "tamanho": 11496,
+   "sha256": "5c73a0dacb3ba8da32b47b625427911ada07590fbda57d5d3a15292db8f9c7fa"
+  },
+  {
+   "nome": "codigo/frontend/src/hooks/useHighlight.ts",
+   "tamanho": 2115,
+   "sha256": "b2c4417beef04326eb1153f6928aaea0fc6f46f4e2787ceaf9994feacac9eff9"
+  },
+  {
+   "nome": "codigo/frontend/src/hooks/useToast.ts",
+   "tamanho": 601,
+   "sha256": "697b69a329fe6a857bf4ddb9acdc941f53ccec341452abc18ea604e51942c87d"
+  },
+  {
+   "nome": "codigo/frontend/src/index.css",
+   "tamanho": 22180,
+   "sha256": "85926fe571b7aa8d069c1e84eb3bfb8bb3fbe0d3ba501e884683a940c8881957"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/api.ts",
+   "tamanho": 3962,
+   "sha256": "1d6342afc1f258838060cc1b4895577483cb09ee8a72208ed2923c60004c03ac"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/etiquetas.ts",
+   "tamanho": 3391,
+   "sha256": "d7cb439014813854b9f58ed6b44713059837e0a85dd9e1c16600722f213dbdc2"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/exportar.ts",
+   "tamanho": 14239,
+   "sha256": "b0389d9ef3225bc30d4bd81c6e3a81f34dc981caf00ac89d1941fb4bb59514e2"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/mitra-auth.ts",
+   "tamanho": 2772,
+   "sha256": "168003ccc3c4a242a1e5494d07aa55f5fda331bd596d881865e15bf197721b6d"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/sf.ts",
+   "tamanho": 3649,
+   "sha256": "e83903301e0a880a30c2af17bb916d5a5176ae4b01ce57ff1d5d416b16165f6f"
+  },
+  {
+   "nome": "codigo/frontend/src/lib/utils.ts",
+   "tamanho": 1192,
+   "sha256": "7aa2cc6b7bc8795354a2b9ea66271fa1cccffe132baa573d03ebbf3b8df3ac55"
+  },
+  {
+   "nome": "codigo/frontend/src/main.tsx",
+   "tamanho": 520,
+   "sha256": "720b6297014d763ec5a6cfe839080a166bfeac861f6869f17b302398c9af697b"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/CanaisPage.tsx",
+   "tamanho": 9021,
+   "sha256": "ef0b99e12907795b858ad7ed2a5612a3488017584501aba575df103560019395"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/ChatPage.tsx",
+   "tamanho": 12958,
+   "sha256": "61ba93821911ab62298951f5000da851059c13326d00a93d33578b34706c500b"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/ConfiguracoesPage.tsx",
+   "tamanho": 16977,
+   "sha256": "64a250ebb0300355171f80404d1171574ba47df8bbaab64652cb61ab046d2bfb"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/FavoritosPage.tsx",
+   "tamanho": 6185,
+   "sha256": "4f33355669fafe268d1851b1ed607de7d67855ceddb5ef497cdc306c85e1fd64"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/InicioPage.tsx",
+   "tamanho": 11536,
+   "sha256": "78ed9e9992716d205c151d298ab2e9377bb3045a6bae798fd3018be0d99a59ef"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/LivroPage.tsx",
+   "tamanho": 8386,
+   "sha256": "7bee5b81bd5bd158b5d6ad793f6a1098e55b23c0306a3824a714e2d384c7bf31"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/LivrosPage.tsx",
+   "tamanho": 5245,
+   "sha256": "2ab253e25aabab6b5287eec991c2bbe0daf06caf083f2a968e0567363690a146"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/LivrosSecaoPage.tsx",
+   "tamanho": 1997,
+   "sha256": "889dc79dc53bb1224389e036b8a5d04bda63ad472fce9d37ccb144364c320bf9"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/LoginPage.tsx",
+   "tamanho": 18741,
+   "sha256": "dded23e0b813be43d92d65310cf44c7aa176702d25b20bcf1afb5939a42d025b"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/MapaMentalPage.tsx",
+   "tamanho": 13005,
+   "sha256": "8bcaae5c26e8d83dce692eac87683d38d430e3340485bd4df10384b03d474510"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/MentoresPage.tsx",
+   "tamanho": 7568,
+   "sha256": "753e392ce16ad71ad1d4d51491aecab2b048e54b859fbe549dec4feb9b0b7feb"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/MinhasPraticasPage.tsx",
+   "tamanho": 13190,
+   "sha256": "3152748a04ccfe9cb6a511e9d6d8c784b420d7a5e4e34730e51a6557a408dc7a"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/OutrosNomesPage.tsx",
+   "tamanho": 11667,
+   "sha256": "851c198f72fe5e1c6e6cb209d65760e97186a79f5cf98d97b319ae88012f23fa"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/PraticasPage.tsx",
+   "tamanho": 13078,
+   "sha256": "a1b506b90da65f18ed14fe66fcfdb88c392efa29b0514890b5fcd53d3aa7c3a6"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/RelacaoLivrosPage.tsx",
+   "tamanho": 12831,
+   "sha256": "3cfe9677138ea802aaf40e11e0fe7582c7c7188569e765272ca31eb9216fb9d7"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/SagradosPage.tsx",
+   "tamanho": 11374,
+   "sha256": "a047710a4151dab36c8a2cafdb2242cf451a4c46682dbd808ce190080b714a3f"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/ValidarLivrosPage.tsx",
+   "tamanho": 35729,
+   "sha256": "dc201024ad45daee7129fcf9c580ae2c3d07c53d304eb5ff2d506896416a7002"
+  },
+  {
+   "nome": "codigo/frontend/src/pages/VideosPage.tsx",
+   "tamanho": 25217,
+   "sha256": "a6a75fa74917a3228fb6c7c2561dcbd94233e5bfa644a61d7450e3db213b3c44"
+  },
+  {
+   "nome": "codigo/frontend/tsconfig.app.json",
+   "tamanho": 760,
+   "sha256": "185c585aa92b2cbe0df1918e999d9a6bc4fec6762a6d80de7d2d155d56369aed"
+  },
+  {
+   "nome": "codigo/frontend/tsconfig.json",
+   "tamanho": 126,
+   "sha256": "ad28d132ee48d6e23917cf5827cace785d0fc01a44ca68b0dda51cc8c3fd3f52"
+  },
+  {
+   "nome": "codigo/frontend/tsconfig.node.json",
+   "tamanho": 679,
+   "sha256": "a6d49d645590cac21c235a0548605d867321b2e1750e99176d2153d702dfa842"
+  },
+  {
+   "nome": "codigo/frontend/vite.config.ts",
+   "tamanho": 243,
+   "sha256": "c5519d64a1b55d9ae4c8f8afbc2e0078515cdfa174cdb074f623515c015e6ac1"
+  },
+  {
+   "nome": "historico/repo.bundle",
+   "tamanho": 722735,
+   "sha256": "6ffc464ed41733fda4106ba5ab440d27b0337d39ce293e1c77787084ac22fa70"
+  },
+  {
+   "nome": "historico/commits.txt",
+   "tamanho": 23122,
+   "sha256": "1edf4fd70be444ec41d992b8381cd0353799245fbd906ec45629cad1bfaf756b"
+  },
+  {
+   "nome": "ESCOPO.md",
+   "tamanho": 15714,
+   "sha256": "65d5933eee3fa99888eb728e177903b8b9ed94a8edcbb344be18b37c25f3da04"
+  },
+  {
+   "nome": "README_DO_APP.md",
+   "tamanho": 2628,
+   "sha256": "2428c4c18f14c5809f8e18e24bb7a1a4c7ccedf238406d9bd901364e47ae4206"
+  },
+  {
+   "nome": "REGRAS_DE_CLASSIFICACAO.md",
+   "tamanho": 57163,
+   "sha256": "b51c5a82b75c5a95991a03059499d34bea8a3db95d0f156d79f8393787cbe7ea"
+  },
+  {
+   "nome": "plataforma/perfis.json",
+   "tamanho": 16012,
+   "sha256": "c5e5f98d854c1b86392fc457242fb15061ef253a1159378df34eed6d4a33fc63"
+  },
+  {
+   "nome": "plataforma/conexoes.json",
+   "tamanho": 5180,
+   "sha256": "1bafde9a165c920a77b4811df34a06eb82b894e899de10779f1634f1fdd0488f"
+  },
+  {
+   "nome": "funcoes/032-configLer.sql",
+   "tamanho": 31,
+   "sha256": "8888fea93f383d6c1c3f1d1da1f2f7f4215684278e6b038947448452e5396af1"
+  },
+  {
+   "nome": "funcoes/033-configGravar.sql",
+   "tamanho": 63,
+   "sha256": "6751151ffc06738e323ea04b32b43703aadf683a740c97ccea6116e758a3c5b0"
+  },
+  {
+   "nome": "funcoes/034-loteGravar.sql",
+   "tamanho": 120,
+   "sha256": "343bb820f54a15d6c0cbc5851b4db5c86e955b408b83c46e13be66109cf0eac3"
+  },
+  {
+   "nome": "funcoes/035-loteApagar.sql",
+   "tamanho": 43,
+   "sha256": "d043e5aea0c6a913da18f01608a7dfb555b062811e1af7ffd7f03ea069e62759"
+  },
+  {
+   "nome": "funcoes/036-videosInserirLote.sql",
+   "tamanho": 344,
+   "sha256": "d50d3b7aa5e7593e05b2bd861f6f5762b4a9844eb4802e23ccde489b7cd517e3"
+  },
+  {
+   "nome": "funcoes/037-canalCargaAtualizar.sql",
+   "tamanho": 204,
+   "sha256": "00581926e4c975947ab2b985b595e960d1f759db689b8b940095fa9124aeee20"
+  },
+  {
+   "nome": "funcoes/038-canalCargaMsg.sql",
+   "tamanho": 57,
+   "sha256": "eb67872cd27c0cb7b8a93339e125a335247d18e62bfeb7847eb2bc513be94a0c"
+  },
+  {
+   "nome": "funcoes/039-videosIdsCanal.sql",
+   "tamanho": 59,
+   "sha256": "7d1c9fb4719876042ff4a3cff617ea8ca64bb4c85b744893c471ce172be54f25"
+  },
+  {
+   "nome": "funcoes/040-canalChecado.sql",
+   "tamanho": 66,
+   "sha256": "686635cfe6f051fdb5c102b2149d7f9468ab259ff7e8002172fd3f4079e6a723"
+  },
+  {
+   "nome": "funcoes/041-trechosInserirLote.sql",
+   "tamanho": 125,
+   "sha256": "45bea526a41ff437bee74b7b7b9cfd163622904b10f2adefaca2d6bb1b930b21"
+  },
+  {
+   "nome": "funcoes/042-videoProgresso.sql",
+   "tamanho": 59,
+   "sha256": "43b9009608289b23c439c8e96e2cb435bb78301c53648f839a2e96c73bcb4232"
+  },
+  {
+   "nome": "funcoes/043-trechosDoVideo.sql",
+   "tamanho": 114,
+   "sha256": "aedf8c6080bae4c74097c870e207f50e0761774985ec40c55f183d1ad6012be0"
+  },
+  {
+   "nome": "funcoes/044-temasNomes.sql",
+   "tamanho": 148,
+   "sha256": "f6dda0a6d4d14634e3c7a6dcbae19574e451f0d08ed1d82745126f4cacd894d0"
+  },
+  {
+   "nome": "funcoes/045-temasGarantirLote.sql",
+   "tamanho": 97,
+   "sha256": "8178c45848356f606edf2b6bc53499ec7d51726ad852d776b56d6096be0d41d9"
+  },
+  {
+   "nome": "funcoes/046-videoTemasIA.sql",
+   "tamanho": 286,
+   "sha256": "a89c8f4d1cacc81f00b2ef7525d12b03ef05f1c00c7915f24cd8c243f0611636"
+  },
+  {
+   "nome": "funcoes/047-videoConcluir.sql",
+   "tamanho": 167,
+   "sha256": "7c0ffc7a7df735efeb33d2ff5eeb827989eade0c7bf83fd2a87f59c82c6b6d1e"
+  },
+  {
+   "nome": "funcoes/048-videoPendente.sql",
+   "tamanho": 164,
+   "sha256": "75a54022d9b91416715480df061776aa8426d0664d38bd300265bf8f6352e6ad"
+  },
+  {
+   "nome": "funcoes/049-videoIndisponivel.sql",
+   "tamanho": 52,
+   "sha256": "3ea9f8f36e078a367a06d0ca0afcb8a63d9eb6682317324602822d49155e2b30"
+  },
+  {
+   "nome": "funcoes/050-videoDetalhes.sql",
+   "tamanho": 142,
+   "sha256": "247fbe27adfe6e677eaa234cb6badc1179651040036f60217743f25d94a5fc7d"
+  },
+  {
+   "nome": "funcoes/051-videoForaDoFiltro.sql",
+   "tamanho": 93,
+   "sha256": "93df4cafb626ffdbbfd7e7a43ade7fe1c206a5f6b1faabdd3a67cb76ac51d2df"
+  },
+  {
+   "nome": "funcoes/052-videoOrigem.sql",
+   "tamanho": 57,
+   "sha256": "e948f8945260855a579c912b2e8f85c694d4537847050fca8bc55b65757d0e07"
+  },
+  {
+   "nome": "funcoes/053-videosRetentar.sql",
+   "tamanho": 79,
+   "sha256": "bc4106f6098d226fa3d7ac514e42366a22accb95289e1e0080b570251402f66f"
+  },
+  {
+   "nome": "funcoes/054-canaisParaMotor.sql",
+   "tamanho": 142,
+   "sha256": "0c255bc56b91b37db4bd45b512996baddfa02d2de960cda22e7eb03dc2412b66"
+  },
+  {
+   "nome": "funcoes/055-filaProximo.sql",
+   "tamanho": 717,
+   "sha256": "208cc3479009df9a68416198731475bd92eaac19e77fb47f2b408cb508a6792e"
+  },
+  {
+   "nome": "funcoes/056-filaContar.sql",
+   "tamanho": 51,
+   "sha256": "21dadae1bbc69b61505d21f90970df6693ab7d3c21423335e43de649da5526cd"
+  },
+  {
+   "nome": "funcoes/057-avisoPendentes.sql",
+   "tamanho": 78,
+   "sha256": "9b16d8111c6a7e17cf4efc38b6cad263387b982bc908f249fe01b0c8b97e9cdb"
+  },
+  {
+   "nome": "funcoes/058-avisoHoje.sql",
+   "tamanho": 68,
+   "sha256": "ba7a18ae3a75bfe3cdbc9a720e59ff03940820eada6f9c4150b061e312edccfc"
+  },
+  {
+   "nome": "funcoes/059-avisoCriar.sql",
+   "tamanho": 89,
+   "sha256": "2b009300bd5c8bb9ad6d62cc3785d9b9df02993539ef539dd2b89d8e0b3f7bef"
+  },
+  {
+   "nome": "funcoes/060-avisoVincular.sql",
+   "tamanho": 84,
+   "sha256": "7f5076e97f9a01f977aa6eff595b0b8f1032f8bb165e8903c05edb2722956a0f"
+  },
+  {
+   "nome": "funcoes/061-avisoRecontar.sql",
+   "tamanho": 124,
+   "sha256": "a49fedca2de713785d44d9bbc223b08b241dceebdf4b45c1b103d72b98f5a2ae"
+  },
+  {
+   "nome": "funcoes/062-canaisAtualizarStatus.sql",
+   "tamanho": 205,
+   "sha256": "aae73795b4053ac54170b23336207beb76e62c3b9cfa0d0911f49b05943e55a1"
+  },
+  {
+   "nome": "funcoes/063-lockAdquirir.sql",
+   "tamanho": 112,
+   "sha256": "84d56f657136088cf7e7ee3d16128d268b13f107ccd9b8f9203564ca436fd120"
+  },
+  {
+   "nome": "funcoes/064-lockLiberar.sql",
+   "tamanho": 71,
+   "sha256": "7cfc2cedf01752494a4427d5c4aa20bbb9cd8d6bb5a22672f0be7d616c99e620"
+  },
+  {
+   "nome": "funcoes/065-motor.js",
+   "tamanho": 68449,
+   "sha256": "dd65367b11b08914f5b53e70bbb000bbb9f5987c52271d603945d08f8f39c50c"
+  },
+  {
+   "nome": "funcoes/066-canalPorYt.sql",
+   "tamanho": 58,
+   "sha256": "4763a0209133b2e749003a7f9985ed9b7cd7f1302dd5bfe013be286bc75dc5ac"
+  },
+  {
+   "nome": "funcoes/067-canalInserir.sql",
+   "tamanho": 309,
+   "sha256": "7588c9eaee29f992878aec488bfa1d0c26b2b7acda4971424419f869110facd4"
+  },
+  {
+   "nome": "funcoes/068-canaisListar.sql",
+   "tamanho": 478,
+   "sha256": "2a1500d757e18fa4c69bc5ca3c6982c681d8e391c9050e37a58d89f65541abe1"
+  },
+  {
+   "nome": "funcoes/069-painelResumo.sql",
+   "tamanho": 216,
+   "sha256": "884dbe15f8385d6b5d704ac24faec3c161c64fa0258f4c6fd2d76d8afe1c6127"
+  },
+  {
+   "nome": "funcoes/070-videosListar.sql",
+   "tamanho": 1981,
+   "sha256": "12405d68ebbebbac8652f91a6a43e23783e4d70e976552e825b32bca55068090"
+  },
+  {
+   "nome": "funcoes/071-temasListar.sql",
+   "tamanho": 1064,
+   "sha256": "42d230eea7bbab971ea49d8a101101adc6375d6d7dd7a066a30442cae614f8dc"
+  },
+  {
+   "nome": "funcoes/072-videoDetalhe.sql",
+   "tamanho": 284,
+   "sha256": "8206045a8e90e843544ea3977f84fc23d1fe95345ad1046991802e30bff3b4c2"
+  },
+  {
+   "nome": "funcoes/073-videoTemas.sql",
+   "tamanho": 145,
+   "sha256": "e96da54e68e9d636e2ff70029740749c36f1107c1ef2cf677d2b1823b66847fd"
+  },
+  {
+   "nome": "funcoes/074-temaGarantir.sql",
+   "tamanho": 51,
+   "sha256": "ed731fcfe42edfa9765c189ec8aac1ae886567d4a836e86d36e41e7778505987"
+  },
+  {
+   "nome": "funcoes/075-vtAcrescentar.sql",
+   "tamanho": 177,
+   "sha256": "9cecdb4948abbae383da72ef6d9f82c30bba76472c2905accaa5ef03fd4cbf47"
+  },
+  {
+   "nome": "funcoes/076-vtTirar.sql",
+   "tamanho": 77,
+   "sha256": "0ad4fb7ea69c2a74947d9422e04f25ef76ff3c565a536cc08e75062232e4cd73"
+  },
+  {
+   "nome": "funcoes/077-vtRenomear.sql",
+   "tamanho": 160,
+   "sha256": "5b649ffd9e32c04f9d9af5a91b2a2ebe0768d5afdd44e325d0227af4cb648f33"
+  },
+  {
+   "nome": "funcoes/078-vtTirarSeOutro.sql",
+   "tamanho": 139,
+   "sha256": "066e162f990e4cdb8eec5956be808bd83883b7f2a5721976d9041b701ecdf1ca"
+  },
+  {
+   "nome": "funcoes/079-videoMarcarEditado.sql",
+   "tamanho": 54,
+   "sha256": "020c80322079173f23514ec42aff90afa6602723e02f74f36cc12ba7b8d9dacc"
+  },
+  {
+   "nome": "funcoes/080-buscarTema.sql",
+   "tamanho": 874,
+   "sha256": "550a6671ed68f6b780e91960e89bbe733b6db6e06127bde1916f8c373b3e196b"
+  },
+  {
+   "nome": "funcoes/081-buscaTrechos.sql",
+   "tamanho": 283,
+   "sha256": "0858b6286f770c3300fc4a716138984556c630d4b95c364caf8d3134bc5cfddc"
+  },
+  {
+   "nome": "funcoes/082-buscaResumos.sql",
+   "tamanho": 283,
+   "sha256": "201ac644a5ec7ad798f6b606b9811d0b661fad2c49ba9e591b852c600c7f3148"
+  },
+  {
+   "nome": "funcoes/083-avisosListar.sql",
+   "tamanho": 115,
+   "sha256": "fcb969e565537d9486eec590afeedd9a7ea6a2761398761fdf7e4911037077b6"
+  },
+  {
+   "nome": "funcoes/084-avisoVideos.sql",
+   "tamanho": 180,
+   "sha256": "7ef866b2a263d74031b724ca83a9f265143d341e51235f34038d47f80696f8ca"
+  },
+  {
+   "nome": "funcoes/085-avisoMarcarLido.sql",
+   "tamanho": 133,
+   "sha256": "0db022f379b462aab71cd7043d19b4356736a703a5e2ba0d66dbb4390473007b"
+  },
+  {
+   "nome": "funcoes/086-motorAndamento.sql",
+   "tamanho": 54,
+   "sha256": "d49e99abf5d02e7b7571494f643f25ade2729453be0eb1b7f0542130ea864fff"
+  },
+  {
+   "nome": "funcoes/087-canalCadastrar.js",
+   "tamanho": 8034,
+   "sha256": "a52861c407f759538c9af50a0e852a66419628727910124d2661391755d1a701"
+  },
+  {
+   "nome": "funcoes/088-temaEditar.js",
+   "tamanho": 7484,
+   "sha256": "8b5c27ab59878abacb0d081ae35a61308f027635d8d3438f3ed7daa878379e43"
+  },
+  {
+   "nome": "funcoes/089-resumoBusca.js",
+   "tamanho": 8564,
+   "sha256": "022e4626717b99d55d2103ab2857635ebf0bf5d38696174697a7c1c378dcf783"
+  },
+  {
+   "nome": "funcoes/090-chatBusca.js",
+   "tamanho": 16292,
+   "sha256": "11a2f842350466c277c702a5ff24d5a604781ed2eacda71e22ab3ad2e068affb"
+  },
+  {
+   "nome": "funcoes/091-canaisLimiteMais.sql",
+   "tamanho": 269,
+   "sha256": "bb27fa595720a6dc279d155366201addea52f34fc20444dfa8922fed7600c12f"
+  },
+  {
+   "nome": "funcoes/092-canaisNomes.sql",
+   "tamanho": 47,
+   "sha256": "52ebabf7e57e343c342c011a05f0d2f1b3e2788633ce1758d739c0a90ef173b4"
+  },
+  {
+   "nome": "funcoes/093-estudoAndamento.sql",
+   "tamanho": 273,
+   "sha256": "9faa2d2c622e8adf4adb7af83d806e3825b55127049c0ee98d16e30809f5440f"
+  },
+  {
+   "nome": "funcoes/094-estudarMais.js",
+   "tamanho": 6154,
+   "sha256": "52adb582f5d60207c42c3fa62dbfe5720f22b6a6122f6dd1dce37bb2a4a62916"
+  },
+  {
+   "nome": "funcoes/095-exportVideos.sql",
+   "tamanho": 458,
+   "sha256": "2625ff85117ac6352979401b9faf57d0d0a679253bed963f15214d6ab51f5442"
+  },
+  {
+   "nome": "funcoes/096-exportTrechos.sql",
+   "tamanho": 292,
+   "sha256": "dc02f67d60b02243baa324ddfdfa42eca49d6b7a15a0ffb66a744f3ba085400a"
+  },
+  {
+   "nome": "funcoes/097-filaComLegenda.sql",
+   "tamanho": 93,
+   "sha256": "85e4cbe4bad8ea27d6933e6f088ec5839fdadf308fc078f6c236095fe30435de"
+  },
+  {
+   "nome": "funcoes/098-videoTemasIALimpar.sql",
+   "tamanho": 143,
+   "sha256": "83850b41735801cb980f233349a74502410c5c94bda9c84775b31aa55040e40e"
+  },
+  {
+   "nome": "funcoes/099-playlistsGravar.sql",
+   "tamanho": 412,
+   "sha256": "addab2dd2ed4cc92056636ee7ceae61ca852a572f3beccad93ed0ff645289cd5"
+  },
+  {
+   "nome": "funcoes/100-playlistsDoCanal.sql",
+   "tamanho": 91,
+   "sha256": "06d43cadc5b2a4c29fa018b421fb1d8eb2c79969ff7ee397a25829b96772b996"
+  },
+  {
+   "nome": "funcoes/101-playlistVideosLimpar.sql",
+   "tamanho": 106,
+   "sha256": "30845e0dbaee5869ce5fae351968790086d3c859f3645c39dd17b98c6f708f42"
+  },
+  {
+   "nome": "funcoes/102-playlistVideosGravar.sql",
+   "tamanho": 195,
+   "sha256": "7301526f6c43f378db991c7f9b271c866b5cd18a2f30e7e43fa8d5db47fb3f7f"
+  },
+  {
+   "nome": "funcoes/103-playlistsSumidasVideos.sql",
+   "tamanho": 131,
+   "sha256": "5144ad9ec7449255576f5a6ac140a02102b6ae4b9bf873e8d687dae87ec9227a"
+  },
+  {
+   "nome": "funcoes/104-playlistsSumidas.sql",
+   "tamanho": 73,
+   "sha256": "1de0d193063f8094a7ec8eb0da4c6e0259be1e0f483b5dc6f40c0c20a2501b0c"
+  },
+  {
+   "nome": "funcoes/105-canalPlaylistsFeito.sql",
+   "tamanho": 60,
+   "sha256": "0b81c0916b3b78090a608dea4dbb4f18a8a60772b715862b6480012288508f99"
+  },
+  {
+   "nome": "funcoes/106-playlistsListar.sql",
+   "tamanho": 1185,
+   "sha256": "286f6876e3a74de4bb21a64e30e11e576eee7f5a708443a9886a1f241d2cdc3d"
+  },
+  {
+   "nome": "funcoes/107-exportEstrutura.sql",
+   "tamanho": 364,
+   "sha256": "ccdaa010d52a4dc3ddcc1eee056733dcb3d57dbb92e1b6caa9d0fe4f598dcab7"
+  },
+  {
+   "nome": "funcoes/108-exportIndices.sql",
+   "tamanho": 412,
+   "sha256": "1638f2cadac68861f07664e7568edaec6ef19f869cf409bc358f1a294690fec7"
+  },
+  {
+   "nome": "funcoes/109-exportTabCanais.sql",
+   "tamanho": 65,
+   "sha256": "86ab46117de61ee30030044027ac7eb281ddee41a475016e25e7ada7e845295e"
+  },
+  {
+   "nome": "funcoes/110-exportTabVideos.sql",
+   "tamanho": 319,
+   "sha256": "2c115056abf8b02e5a725af432862c43dca09ae5530a49aabf10eb1e2babc40b"
+  },
+  {
+   "nome": "funcoes/111-exportTabTrechos.sql",
+   "tamanho": 93,
+   "sha256": "fba1bd90897dd9ad253fc29fc830c7cec20899222c49a2bef4c718b56d9f84e0"
+  },
+  {
+   "nome": "funcoes/112-exportTabTemas.sql",
+   "tamanho": 71,
+   "sha256": "0d5a23a8b7cb962f10604f2fac46a376350aa3dd4b29a64d0729f96383bab8bb"
+  },
+  {
+   "nome": "funcoes/113-exportTabVideoTemas.sql",
+   "tamanho": 120,
+   "sha256": "bcca6dcb53a467dadde684616f15b2c2c8bf16e35832424bdd9b1c5274ecec10"
+  },
+  {
+   "nome": "funcoes/114-exportTabPlaylists.sql",
+   "tamanho": 68,
+   "sha256": "6253add5f79d0811e11f470037283232d9d8996a94f3a5b0f4f5756f855583a0"
+  },
+  {
+   "nome": "funcoes/115-exportTabPlaylistVideos.sql",
+   "tamanho": 106,
+   "sha256": "02cab96037be3a81e525842eeec28c3b04b36aa54c5228bd7c45b2c26f231eca"
+  },
+  {
+   "nome": "funcoes/116-exportTabAvisos.sql",
+   "tamanho": 65,
+   "sha256": "1d0cb366954c5215edd9ebfeca3997d605d38bd5bcf3ef5de4c7ffa55e1a3d2c"
+  },
+  {
+   "nome": "funcoes/117-exportTabConfig.sql",
+   "tamanho": 68,
+   "sha256": "fd10736a40913e04c42ae916eedc146f7275ad37c46a28b1b995b1608d5c06b6"
+  },
+  {
+   "nome": "funcoes/118-exportVideosFiltro.sql",
+   "tamanho": 1740,
+   "sha256": "61b22ac512a8ff8f2c423333658cd1396e2f2d3a36978c928339857943d61c81"
+  },
+  {
+   "nome": "funcoes/119-praticasLimpar.sql",
+   "tamanho": 49,
+   "sha256": "fd677276fe3d878de0a669ecf7949e94b88da03cb4fdcc9f48feca42d0055c00"
+  },
+  {
+   "nome": "funcoes/120-praticasGravar.sql",
+   "tamanho": 232,
+   "sha256": "ed9ddf81815bd9d87749bb2b02d82cb51dea9b906978c8260dc71e4959053877"
+  },
+  {
+   "nome": "funcoes/121-videoPraticasFeito.sql",
+   "tamanho": 62,
+   "sha256": "4ad54f9d6c4ddd2fee51c523d4f6ae66109401f3b02828f486e70db71d3c500a"
+  },
+  {
+   "nome": "funcoes/122-praticasFila.sql",
+   "tamanho": 226,
+   "sha256": "13cd942f50ee324437c08d87b3a66e9292124bbf52acca668a2ae7278d05ef3c"
+  },
+  {
+   "nome": "funcoes/123-praticasTipos.sql",
+   "tamanho": 1011,
+   "sha256": "0ad0e54846e0b9f94e53df56aa1965ffed435571058649d51c44a3f61416de8f"
+  },
+  {
+   "nome": "funcoes/124-praticasDoVideo.sql",
+   "tamanho": 146,
+   "sha256": "9f88154b41e79f5de3750044d9960fc6a585d553b4b8942a526bce67e1455fa5"
+  },
+  {
+   "nome": "funcoes/125-praticasResumo.sql",
+   "tamanho": 91,
+   "sha256": "d4d29cb9e8294da1991e9145dd1d33fc198c22a08af2e938d64cffcfe4f30de3"
+  },
+  {
+   "nome": "funcoes/126-exportTabPraticas.sql",
+   "tamanho": 67,
+   "sha256": "88586867052b19929e5cad8b4095afdcd87153c73e9c6efbb1e2508998f67671"
+  },
+  {
+   "nome": "funcoes/127-mentoresListar.sql",
+   "tamanho": 1079,
+   "sha256": "97c1111708010098ca82506b8d5aec9846c6a9fe76ba9512e14e1d5409f67f7e"
+  },
+  {
+   "nome": "funcoes/128-mentoresGerir.sql",
+   "tamanho": 288,
+   "sha256": "19e413fcb885dca4223bfc3a1fc817cc2f08fb5b624e8a5864242b24e105ed40"
+  },
+  {
+   "nome": "funcoes/129-mentorRegrasListar.sql",
+   "tamanho": 80,
+   "sha256": "64cc7d044f91a47e4596a502b21e8672ff6754de409abefd007a58ca4aa81913"
+  },
+  {
+   "nome": "funcoes/130-mentorVideos.sql",
+   "tamanho": 188,
+   "sha256": "2ab663325693ab21475cc1af6286d417febaf55a32956c5fb6ae8bfb29dd2921"
+  },
+  {
+   "nome": "funcoes/131-mentorRegraGravar.sql",
+   "tamanho": 247,
+   "sha256": "5dc8d1981ed89394ba412a304050ff1de3a9a37efb8c8a3fd406682fb5b0b7ed"
+  },
+  {
+   "nome": "funcoes/132-mentorRegraApagar.sql",
+   "tamanho": 43,
+   "sha256": "7054f23d2d067f5de54f79178c329fc867d3c144ea527530ced7d156575f4a4e"
+  },
+  {
+   "nome": "funcoes/133-mentorRegraApagarNome.sql",
+   "tamanho": 49,
+   "sha256": "461720384267c41471fff0d7c53a9d21bb8501b2e777b78d89903cebf849aea7"
+  },
+  {
+   "nome": "funcoes/134-mentorTemaPorId.sql",
+   "tamanho": 89,
+   "sha256": "60fb48b3fe7db0f892da0c37616e8b4ca625f25753908495a4388ce0c7ea1943"
+  },
+  {
+   "nome": "funcoes/135-mentorTemaPorNome.sql",
+   "tamanho": 69,
+   "sha256": "2b3e11ce4e9ccc77db76722a70d8c4e1b8d83d1c526196a5e583e35e5fbe4707"
+  },
+  {
+   "nome": "funcoes/136-mentorBackup.sql",
+   "tamanho": 176,
+   "sha256": "9614941d5e8ee0b450fcdab328c5c1c65f123be0ac197b2a0f008138ae3d2c53"
+  },
+  {
+   "nome": "funcoes/137-mentorMover.sql",
+   "tamanho": 78,
+   "sha256": "15b7963bfe8010a280854a6233d9f3b62d359635ea852e0b0d827e8f8031848f"
+  },
+  {
+   "nome": "funcoes/138-mentorDesligar.sql",
+   "tamanho": 50,
+   "sha256": "e2fa488d81d0f74631ce673cef0dd20aeb492c71c3171a92d51c2e7945f3ddc5"
+  },
+  {
+   "nome": "funcoes/139-mentorTemaApagar.sql",
+   "tamanho": 65,
+   "sha256": "2c6df5486a81dbbbd7aa053cdfedef6078d455f3916e661ca1840e06821983f0"
+  },
+  {
+   "nome": "funcoes/140-mentorTemaRenomear.sql",
+   "tamanho": 82,
+   "sha256": "c0b4f4e9f275a6114f0b0a873d83edd24e526afface06296496f49353d79ba69"
+  },
+  {
+   "nome": "funcoes/141-mentorMarcarTitulos.sql",
+   "tamanho": 223,
+   "sha256": "8fffe2b3e5ee9648cb24337f70b71fff6933f2513b98b2c953c1cbd36408743e"
+  },
+  {
+   "nome": "funcoes/142-mentorRegrasMotor.sql",
+   "tamanho": 45,
+   "sha256": "9aa6ff63ce060377879c5199126a1e7be1310aad293bf758a08fa91928d15d06"
+  },
+  {
+   "nome": "funcoes/143-mentorEditar.js",
+   "tamanho": 10065,
+   "sha256": "5b71fb3225898eade15b0d7f5c71b22515d60a8c177bf4b5ac0fe07e2f92c4f7"
+  },
+  {
+   "nome": "funcoes/144-mentorConferirFila.sql",
+   "tamanho": 254,
+   "sha256": "d7f074d5aa19a6e38e8faac97b3fb4a76d5a1879101d0c4e85655f97d60196fb"
+  },
+  {
+   "nome": "funcoes/145-mentorConferirContar.sql",
+   "tamanho": 148,
+   "sha256": "d1f82559fc0c5ffdbf17f50d1f7d0f5dcdda85f6fec98d27b37e383ae2d4e15a"
+  },
+  {
+   "nome": "funcoes/146-mentorConferido.sql",
+   "tamanho": 55,
+   "sha256": "dd1fe2e8c3525a2181c1e169fb18bd26da0c616d73199e2bfe28b96811c65379"
+  },
+  {
+   "nome": "funcoes/147-mentorDescartarBkp.sql",
+   "tamanho": 167,
+   "sha256": "33a5c1af09c267f4902710782b4e838205a7e948a9fbf23cfc7df7257aa7a98f"
+  },
+  {
+   "nome": "funcoes/148-mentorDescartar.sql",
+   "tamanho": 41,
+   "sha256": "663af3b4bc10b30fb0a69046dab38f2ac98aa17576f99d1044c331123f6e596e"
+  },
+  {
+   "nome": "funcoes/149-videoMentoresVerificados.sql",
+   "tamanho": 137,
+   "sha256": "77f48da1d6ec4331ebf32596b141d47dd61694fa94bbe5b5876487cf8b337182"
+  },
+  {
+   "nome": "funcoes/150-videoCotaEspera.sql",
+   "tamanho": 114,
+   "sha256": "2bc396afc018dd362136ad50925dbb4cba6fd1e574ece9288e0b08b3770dd596"
+  },
+  {
+   "nome": "funcoes/151-canaisAtualizar.js",
+   "tamanho": 5656,
+   "sha256": "484f2b00eea22a12b8191a670f37cab47267c1b31fc344fa9866d1fe65ac7329"
+  },
+  {
+   "nome": "funcoes/152-buscaTermos.js",
+   "tamanho": 7734,
+   "sha256": "6042486b8d929cf72b7ca9fe12f72a201e0b1455298dba25ea3198872fed1849"
+  },
+  {
+   "nome": "funcoes/153-configTelaLer.sql",
+   "tamanho": 248,
+   "sha256": "3a769e39a3dac90d82849d9fdfc99c72310e88bc7d8802fe1a68f1cd19941bab"
+  },
+  {
+   "nome": "funcoes/154-configTelaGravar.sql",
+   "tamanho": 113,
+   "sha256": "bb32f2ef135d213cd66b7832c90903046e16513ccd6596208461607ce38e8c4c"
+  },
+  {
+   "nome": "funcoes/155-canaisMentorLer.sql",
+   "tamanho": 51,
+   "sha256": "487a771d3ae42b8607bd952e4e0f8b2b8da98058d9a6aab3fad0404dd85e231b"
+  },
+  {
+   "nome": "funcoes/156-canalMentorGravar.sql",
+   "tamanho": 56,
+   "sha256": "c203fa0eace272ba8e0f381b88a39b6588831d3700dab51f364c2abf1459986b"
+  },
+  {
+   "nome": "funcoes/157-configEditar.js",
+   "tamanho": 8187,
+   "sha256": "3526bb19ce1abe974df04665da7dc5e6f0cc3b953f910e36f255de6f75e02e04"
+  },
+  {
+   "nome": "funcoes/158-avisoMarcar.sql",
+   "tamanho": 162,
+   "sha256": "8bea47308f763f09556db4dc73229c010e446655a0cf1e939014b7da5794ae01"
+  },
+  {
+   "nome": "funcoes/159-avisoArquivar.sql",
+   "tamanho": 148,
+   "sha256": "90b640cd3095aa435cb828be5bc22d31ecf3b210d407a575394eb017e21f7ee8"
+  },
+  {
+   "nome": "funcoes/160-avisosTodosLidos.sql",
+   "tamanho": 135,
+   "sha256": "341541cb54628aab7116bfe8bfd603e2083f3d92d1951b734d0d28efcd5ed3e1"
+  },
+  {
+   "nome": "funcoes/161-videoForaTema.sql",
+   "tamanho": 251,
+   "sha256": "3cee074335167a3d6ef4d1f8f8f4a502504d244f5fcef20477c9709b3e5c8d6c"
+  },
+  {
+   "nome": "funcoes/162-exportTabMentorRegras.sql",
+   "tamanho": 105,
+   "sha256": "934a7bf0aef2d243d2cda4f81318fa6292fdcc17a0486c2f2b482db34fae6043"
+  },
+  {
+   "nome": "funcoes/163-exportVisoes.sql",
+   "tamanho": 148,
+   "sha256": "7d0274a37fa10ba44133db54c5ba75ac372a1adb978a136a77225ad7df7b1bda"
+  },
+  {
+   "nome": "funcoes/164-livroResumos.sql",
+   "tamanho": 250,
+   "sha256": "82062d37c54622b5ebb5f53a690af9912d2f19611910aa054e1e703e6905780b"
+  },
+  {
+   "nome": "funcoes/165-livroPraticas.sql",
+   "tamanho": 340,
+   "sha256": "ac7dfa80d8f612f52d9e164f068d7e574f707884b1bf385a473b78e21a4db12e"
+  },
+  {
+   "nome": "funcoes/166-livroTemaInfo.sql",
+   "tamanho": 214,
+   "sha256": "dccea442aee05739e2971cc1a5c2f7375a8769fb8e0974ccb74439d1f3db64f6"
+  },
+  {
+   "nome": "funcoes/167-livroGravar.sql",
+   "tamanho": 378,
+   "sha256": "afc1be79b0268e599fac9aaf472351a931a5c2a1ca37c69ea7b512fd0b030541"
+  },
+  {
+   "nome": "funcoes/168-livroTemas.sql",
+   "tamanho": 372,
+   "sha256": "3cd801a2ff92d205c595290fe6e7dedd1263d13358bbff09c48723842c7641a7"
+  },
+  {
+   "nome": "funcoes/169-livroCapitulo.sql",
+   "tamanho": 109,
+   "sha256": "c6525e7715b7e346f982cd506cd9f5e04d6aa25fae9f2cb661d4c4e4da691b70"
+  },
+  {
+   "nome": "funcoes/170-exportTabLivro.sql",
+   "tamanho": 73,
+   "sha256": "dd8171ea57610e4b2f1c73c2113c29bcbdc2205eb4d5840dfcc23c187c270cf6"
+  },
+  {
+   "nome": "funcoes/171-livroGerar.js",
+   "tamanho": 10690,
+   "sha256": "8b8b350060ca36de2ffda22266ad6bfdbf56e3f0ddc81211cbe28e8b93b74677"
+  },
+  {
+   "nome": "funcoes/172-iaEstado.sql",
+   "tamanho": 162,
+   "sha256": "f07d694d4e610a8372a298e8792935b84d7ed91c5b60e00ba58e431e69346fcd"
+  },
+  {
+   "nome": "funcoes/173-finFila.sql",
+   "tamanho": 130,
+   "sha256": "a832b8b8656cd331a4f5029a3534b48ed3e5a046d2dde4ddea2ec3c7869ae9ec"
+  },
+  {
+   "nome": "funcoes/174-finGravar.sql",
+   "tamanho": 369,
+   "sha256": "dd7d1f29a121c6452c885a95d0b001a7dedd93dd98bed55ca14b8c60e1af4427"
+  },
+  {
+   "nome": "funcoes/175-finContar.sql",
+   "tamanho": 57,
+   "sha256": "354ac1944a60e36e0b83dceae6e37fb65229dd234225fda4fa752e994090ab2b"
+  },
+  {
+   "nome": "funcoes/176-praticasMapa.sql",
+   "tamanho": 2412,
+   "sha256": "72a43aedd12b7fd24270cb55febdcf22686bb9d68f58ee31402d107e52a2b056"
+  },
+  {
+   "nome": "funcoes/177-praticasTiposFin.sql",
+   "tamanho": 2008,
+   "sha256": "6f118f5119748b83c7933a2fe33ab4fc30fbedd6eb4b49dafdd8ce05f19a6d9d"
+  },
+  {
+   "nome": "funcoes/178-praticasLista.sql",
+   "tamanho": 980,
+   "sha256": "dbcca4a5d9fc3d73dd0059cf41c0bf5916fe083a2c2293f9cc9a259f12748e7d"
+  },
+  {
+   "nome": "funcoes/179-praticasTotais.sql",
+   "tamanho": 202,
+   "sha256": "dffdb0c6a3939cb37a8c40b50150c11d26dd2ad07d0dd6b30afd92f116f886e9"
+  },
+  {
+   "nome": "funcoes/180-videoFavorito.sql",
+   "tamanho": 54,
+   "sha256": "601047fea9fb05a5de7b8d7a76fa10844a3e9a988e26f532e0e1c240b7bf6a0f"
+  },
+  {
+   "nome": "funcoes/181-videoAssistido.sql",
+   "tamanho": 151,
+   "sha256": "8d6a536a5c7585694d2614f701f38b83287c26789e69b2dba529f4e13402cf06"
+  },
+  {
+   "nome": "funcoes/182-meusContar.sql",
+   "tamanho": 149,
+   "sha256": "b1ba7f7aa76b97deafac65f43dd40ba44efb31201993663937d274457e50b247"
+  },
+  {
+   "nome": "funcoes/183-diarioInserir.sql",
+   "tamanho": 237,
+   "sha256": "cc6bf8349ca6e497b72aeba75f4410d65b55b140ed7e614fba7ccb356464f2a0"
+  },
+  {
+   "nome": "funcoes/184-diarioApagar.sql",
+   "tamanho": 44,
+   "sha256": "883ceb8de4d67a32b397489c9c14c8c4993188c78bb86cffd19d206d8d9a5fe8"
+  },
+  {
+   "nome": "funcoes/185-diarioListar.sql",
+   "tamanho": 372,
+   "sha256": "ef6a9a5eabce306dde77d48c05375ed79f3c09624c5b486471091d56cb7fe514"
+  },
+  {
+   "nome": "funcoes/186-diarioPraticas.sql",
+   "tamanho": 496,
+   "sha256": "ad513d8dce544d7bae720c91889b168a6028f21fc54517e144ce7af5ea7ec395"
+  },
+  {
+   "nome": "funcoes/187-diarioResumo.sql",
+   "tamanho": 218,
+   "sha256": "ee12d930341e1eb6b82a0f2cbad8b7c86686ff15fcec8358b0d7b5a97c6fb037"
+  },
+  {
+   "nome": "funcoes/188-livroProximo.sql",
+   "tamanho": 329,
+   "sha256": "efe6a1b151c49f4318b251bc8c18c7e9a0980a818830865a29db807b4d1084ef"
+  },
+  {
+   "nome": "funcoes/189-livroHoje.sql",
+   "tamanho": 67,
+   "sha256": "c6320d28cb0a707b2a6b2ab3bd1d0cc20d7ee12baa510c9ec82bb00c9a5edf70"
+  },
+  {
+   "nome": "funcoes/190-diarioEditar.js",
+   "tamanho": 8056,
+   "sha256": "8002ea1e360b8a89b3c151f5c9b1ca8ce90a6bd4aa6af7c9ac1a495b5454d567"
+  },
+  {
+   "nome": "funcoes/191-diarioUltimo.sql",
+   "tamanho": 288,
+   "sha256": "80ba934347918aa07924be5bcf197c557b679fff21e27b5663daf6a27d41f1c3"
+  },
+  {
+   "nome": "funcoes/192-diarioContagem.sql",
+   "tamanho": 91,
+   "sha256": "3de3a27c28ec89025653d74347cb05bf3170112a7add7c76c958f908d18874a8"
+  },
+  {
+   "nome": "funcoes/193-diarioAtualizar.sql",
+   "tamanho": 124,
+   "sha256": "75cc7292216ecf2b86043cbf4b12ed41dfc899b420a22a7b2df91ab1559c3897"
+  },
+  {
+   "nome": "funcoes/194-diarioUm.sql",
+   "tamanho": 59,
+   "sha256": "a5734f72d042b793dfba9e262c028f253d148f1e4940e016811234276fa144b3"
+  },
+  {
+   "nome": "funcoes/195-diarioApagarUltimo.sql",
+   "tamanho": 84,
+   "sha256": "ad4b4ea5578d991873925d7e7e2d33c4ded96bfc1288b3c9ff5dc6c8811f55cc"
+  },
+  {
+   "nome": "funcoes/196-inicioVideosNovos.sql",
+   "tamanho": 243,
+   "sha256": "9e82f81c3b823952f352f19618b9c3c1be8d4b1cc88333945e465d4826035113"
+  },
+  {
+   "nome": "funcoes/197-inicioParaAssistir.sql",
+   "tamanho": 247,
+   "sha256": "f8d921ffd7c05eb4eebf7e665e83191cc0602b912031eb19bcb7eb1f7b1ff3d9"
+  },
+  {
+   "nome": "funcoes/198-inicioLivroUltimo.sql",
+   "tamanho": 151,
+   "sha256": "1787d22f4e96b6b4903470ead601e754994318d53fab58ff9dc9c70cae879a33"
+  },
+  {
+   "nome": "funcoes/199-inicioPraticaDia.sql",
+   "tamanho": 639,
+   "sha256": "832f35183ca99877b2468b0b05315a0720f22843d9f9d83d0b5eb85d28b13996"
+  },
+  {
+   "nome": "funcoes/200-praticasJeitos.sql",
+   "tamanho": 539,
+   "sha256": "1fb266df14f1480f926700f6f11350426916ddf9be5ac854da066e896256f9f5"
+  },
+  {
+   "nome": "funcoes/201-praticasServe.sql",
+   "tamanho": 647,
+   "sha256": "4f9021bba575ff5e73eafca6cc29346f174b32f4ad8744288e77da0dfba8c30d"
+  },
+  {
+   "nome": "funcoes/202-praticasQuando.sql",
+   "tamanho": 744,
+   "sha256": "3c83c634e22cbbb193d6b956df4c59cc9c1c780465028c4e4accee99fd5eb0f9"
+  },
+  {
+   "nome": "funcoes/203-praticasErroAnotar.sql",
+   "tamanho": 101,
+   "sha256": "de98f2c5e75741b1b3c897cb04035b4c5dc3ba73560e44ecb10573888b648f47"
+  },
+  {
+   "nome": "funcoes/205-exportarGerar.js",
+   "tamanho": 44254,
+   "sha256": "a57a877f8a2e25c6e30dbb964d8b73021ead57755426e5995724489474c7500d"
+  },
+  {
+   "nome": "funcoes/206-exportarPacote.js",
+   "tamanho": 8189,
+   "sha256": "1c18ffbe297d4e418033b74bcfb12d6092758de2235d0b709a2b4c113508ea58"
+  },
+  {
+   "nome": "funcoes/207-livrosLimpar.sql",
+   "tamanho": 57,
+   "sha256": "e6e21e4a2414ddb417cee703b650c95c1679a7adb91f67b8dd43df094064d118"
+  },
+  {
+   "nome": "funcoes/208-livrosGravar.sql",
+   "tamanho": 246,
+   "sha256": "effe647e2e58c479a3ea2c780da7e70a14c64d87552787f87927958b85a91da2"
+  },
+  {
+   "nome": "funcoes/209-videoLivrosFeito.sql",
+   "tamanho": 60,
+   "sha256": "237de1aa86cddb4cf41418ca9ff35e711dfeaeaf9657e00893878b6143f57090"
+  },
+  {
+   "nome": "funcoes/210-livrosFila.sql",
+   "tamanho": 245,
+   "sha256": "eb665c6df1f0d1a27d8b32c6fd51dc6caf204808b7bb9d6789cc903a592e3287"
+  },
+  {
+   "nome": "funcoes/211-livrosErroAnotar.sql",
+   "tamanho": 95,
+   "sha256": "5ce135ebcfc31589ee45d6db48180701934ac2b67e71293f7c9072f06c8d53ac"
+  },
+  {
+   "nome": "funcoes/212-livrosResumo.sql",
+   "tamanho": 89,
+   "sha256": "969c617680099e093b2fba5b06a1f6b9ad6949fc47a41b7d752ce3e62cbf9e9f"
+  },
+  {
+   "nome": "funcoes/213-livrosLista.sql",
+   "tamanho": 795,
+   "sha256": "f0e91d3e92ca04a54b543bdda00c4b3d5741861f94bda33ce37094f7e727b1ba"
+  },
+  {
+   "nome": "funcoes/214-livrosTotais.sql",
+   "tamanho": 435,
+   "sha256": "2ee4625a0d0d71c79ab42649c78496b2a2894672a01f7edebc4d9b6ca314ddae"
+  },
+  {
+   "nome": "funcoes/215-livrosRelacao.sql",
+   "tamanho": 1472,
+   "sha256": "92abc6b13f020fbcfcc99be0b853a2a6600772c5d8e67497a0f8c354d3e0cb50"
+  },
+  {
+   "nome": "funcoes/216-livrosDoTitulo.sql",
+   "tamanho": 845,
+   "sha256": "368ee12de1b10ecb2f46239bdd6b93b5fbde535205894f1bf0f130a13ea2331e"
+  },
+  {
+   "nome": "funcoes/217-exportarLeve.js",
+   "tamanho": 43616,
+   "sha256": "b79f2b907dae0475ccb1e39168aae4fc4eff5060554535e5600c4ded4f225221"
+  },
+  {
+   "nome": "funcoes/218-nomesFila.sql",
+   "tamanho": 526,
+   "sha256": "b1ee3156345b6dd4150e1f13402d6e255f9aa4421016d122113afc95d2754374"
+  },
+  {
+   "nome": "funcoes/219-nomesCatalogoGravar.sql",
+   "tamanho": 358,
+   "sha256": "4e6104cf645a1531e67ed3bd49472b21cc9387ba8be4a58196aa4223b689b97d"
+  },
+  {
+   "nome": "funcoes/220-nomesOkGravar.sql",
+   "tamanho": 343,
+   "sha256": "965a96b9f1bbd6a33d1a3c494b8f3fd3e87e5ba450942dc784ddc8aef64a0c9b"
+  },
+  {
+   "nome": "funcoes/221-nomesPendGravar.sql",
+   "tamanho": 335,
+   "sha256": "829241f92e4ec4f918855a5cb788ba6bbadc648b2165e6613beac35ef4f68d4c"
+  },
+  {
+   "nome": "funcoes/222-pendLista.sql",
+   "tamanho": 271,
+   "sha256": "3272eee3b85e44809113cf057aa356f7435b65fa179cdb549bb56c62460f1f72"
+  },
+  {
+   "nome": "funcoes/223-pendTotal.sql",
+   "tamanho": 61,
+   "sha256": "d1b98e87796b8e25b2072d1da8b88c822cb1d4e1fa53abcacb79198785c8fd5a"
+  },
+  {
+   "nome": "funcoes/224-pendCatalogoCriar.sql",
+   "tamanho": 233,
+   "sha256": "adb4b67d32d4891c27ddebe9c35f02fe91f000984819e533811e827b8741c8e0"
+  },
+  {
+   "nome": "funcoes/225-pendDecidir.sql",
+   "tamanho": 133,
+   "sha256": "0034ae0e3c629a28a5431faea81411a91aa3d416072d31a377a5ba6913098499"
+  },
+  {
+   "nome": "funcoes/226-pendNaoLivro.sql",
+   "tamanho": 82,
+   "sha256": "bb91ab8dad7384e3c3b9b3111a04dc126b461fc73bac409d0680964412ed9a64"
+  },
+  {
+   "nome": "funcoes/227-validarUm.sql",
+   "tamanho": 101,
+   "sha256": "a0e94607dba5d73e7bc5c4415bbeb51c1ebff9257a2762dd9249e4714e386dd4"
+  },
+  {
+   "nome": "funcoes/228-nomeEstado.sql",
+   "tamanho": 250,
+   "sha256": "c886097d89f321931c6654b02b4178c5be0311600324a30da75c4f2bdb2b1b5d"
+  },
+  {
+   "nome": "funcoes/229-nomesOkAtualizar.sql",
+   "tamanho": 309,
+   "sha256": "e0b80ddf44a7251c7b19e14e964de76841544c5f85257d47c4222a163f7f4a04"
+  },
+  {
+   "nome": "funcoes/230-nomesPendAtualizar.sql",
+   "tamanho": 302,
+   "sha256": "c7c7ae7ab8060544f91cb8ba934c81c2c0cae16c050aa0a232ddd59eeeb9fecd"
+  },
+  {
+   "nome": "funcoes/231-validarLista.sql",
+   "tamanho": 2882,
+   "sha256": "19f7cc5e017d8dd2c1b2020ffc5c118e8d66720cc0fbd2848e928f3ed424502a"
+  },
+  {
+   "nome": "funcoes/232-validarTotal.sql",
+   "tamanho": 426,
+   "sha256": "964fe6ee627f3ed698f35d999b21eaef7b08c1e381865164e7390168fa9e6f1d"
+  },
+  {
+   "nome": "funcoes/233-catalogoBusca.sql",
+   "tamanho": 200,
+   "sha256": "28a29fff4cf60f2ffd0aa51282cd8645d36c3de52c58d06c2fff581841e29a52"
+  },
+  {
+   "nome": "funcoes/234-catalogoAchar.sql",
+   "tamanho": 112,
+   "sha256": "04e335a06da2a8bff205ebbea7d58b871119e214257eff960cf26ef70cd83811"
+  },
+  {
+   "nome": "funcoes/235-nomeOkCat.sql",
+   "tamanho": 329,
+   "sha256": "dafb1d4a25203af7f654f23ebb2b0c832e0488c0fedd2b8e77b43e5f208e4160"
+  },
+  {
+   "nome": "funcoes/236-nomeNaoLivro.sql",
+   "tamanho": 304,
+   "sha256": "40aa16d6e2162e3eaaadc769f883afb0d4eb66da062664637f3432a4370b7561"
+  },
+  {
+   "nome": "funcoes/237-livroValidar.js",
+   "tamanho": 10014,
+   "sha256": "d9767c7a393cfe139645ba6fd01284375455348dd782afb2d224537142442b7a"
+  },
+  {
+   "nome": "funcoes/238-validarOnde.sql",
+   "tamanho": 529,
+   "sha256": "12b433239796226b09f09e23c50cc2fcdeaf8b86e1a16103dd3dc6c0f966bac2"
+  },
+  {
+   "nome": "funcoes/239-nomesCatalogoLer.sql",
+   "tamanho": 45,
+   "sha256": "9d55bc74c564a3ded92e757a875429e4253a096db4b2d594e14f9c852700833a"
+  },
+  {
+   "nome": "funcoes/240-nomesSemDecisao.sql",
+   "tamanho": 272,
+   "sha256": "61a50a5e331b84be846817b123a5264eabce38fa9eea0214e0fe64057152f5db"
+  },
+  {
+   "nome": "funcoes/241-livroCatDe.sql",
+   "tamanho": 247,
+   "sha256": "c0c36e09ed3fcedecd3fb76bd9df95bc8d9c8ca04b2128d3246744c4c4d7f551"
+  },
+  {
+   "nome": "funcoes/242-livroCatOutro.sql",
+   "tamanho": 113,
+   "sha256": "066175faa3b853fccf94607f1591423f17b2da2c071b4398fa8d839d9da6a5ea"
+  },
+  {
+   "nome": "funcoes/243-livroCatEditar.sql",
+   "tamanho": 102,
+   "sha256": "9197c55d94a2977a546059ea848115c30dd6c8dc8e2aef805ac9b7b3d1f1af55"
+  },
+  {
+   "nome": "funcoes/244-livroStatusGravar.sql",
+   "tamanho": 89,
+   "sha256": "e4088e6028824cf934a0c733d99a581e0b1bafe4510fe56d9722603738c92e73"
+  },
+  {
+   "nome": "funcoes/245-nomesCertezaGravar.sql",
+   "tamanho": 120,
+   "sha256": "66b2148334cfb6913fb9a81592faad53555de01d710ea38c213ae0c23fbd071e"
+  },
+  {
+   "nome": "funcoes/246-validarAltaTotal.sql",
+   "tamanho": 219,
+   "sha256": "c287f0c9c26b795993a1933a420300aa8a4a8b6676b2fa38cd0c739de84aab66"
+  },
+  {
+   "nome": "funcoes/247-validarAceitarAlta.sql",
+   "tamanho": 426,
+   "sha256": "edaf17c44af2c84dc0c34733d5d0db1aefb20b2d68fd6ae111f7e9a58245c445"
+  },
+  {
+   "nome": "funcoes/248-praticaFavorito.sql",
+   "tamanho": 56,
+   "sha256": "df517ec44752de344e8dd7a71ba104fe949014e9536a819e54ca8d4d795fc95c"
+  },
+  {
+   "nome": "funcoes/249-praticasFavoritas.sql",
+   "tamanho": 505,
+   "sha256": "8415f7a6254aaa74d7f7ec278f80b58b2751860b12d69993f88d7f6e3cd54859"
+  },
+  {
+   "nome": "funcoes/250-praticaTrechos.sql",
+   "tamanho": 128,
+   "sha256": "b9b9be65191126b6676bffc481fcc5208ac72196fa88437497cbf272544227f3"
+  },
+  {
+   "nome": "funcoes/251-praticaUma.sql",
+   "tamanho": 389,
+   "sha256": "a957f3361ef4ed60daa5f97fba57e0feb6af92b0c9f257b4c82db0ee3a497212"
+  },
+  {
+   "nome": "funcoes/252-nomeMusica.sql",
+   "tamanho": 273,
+   "sha256": "a0dd1ef50ec5a451486950aeea18859e0c38fb297a2cadebae0b3c3143f15359"
+  },
+  {
+   "nome": "funcoes/253-nomeAudiovisual.sql",
+   "tamanho": 283,
+   "sha256": "fddce9bd59c2c2a8b21db43520035f30d56d9765b1fe240a88148d3f42270c1f"
+  },
+  {
+   "nome": "funcoes/254-outrosTotais.sql",
+   "tamanho": 112,
+   "sha256": "90c15d6ab53fb22fc9f66f384301af60de3dbc294c9b48df6f1b26ae79a8a15a"
+  },
+  {
+   "nome": "funcoes/255-outrosLista.sql",
+   "tamanho": 1417,
+   "sha256": "e46c0a8903a1fdc8ca2076df18eef3d878043dbedb4d7bffbc938585706a038d"
+  },
+  {
+   "nome": "funcoes/256-outrosVoltar.sql",
+   "tamanho": 112,
+   "sha256": "87180f2fe3afe4b736facb871d1f58dc0e00800f67bc511d7ece78c0d038a3a3"
+  },
+  {
+   "nome": "funcoes/257-favItemMarcar.sql",
+   "tamanho": 149,
+   "sha256": "84518bddb1e9332dcc104785324260b6e9d87d4cb7cbb1ea8bc61b47f9bfe96e"
+  },
+  {
+   "nome": "funcoes/258-favItemTirar.sql",
+   "tamanho": 73,
+   "sha256": "650677df4c0c8a35300e4494a9475c3ac9d27e45bde234e6d5f84230288d5f60"
+  },
+  {
+   "nome": "funcoes/259-favItensTipo.sql",
+   "tamanho": 56,
+   "sha256": "c3701a1076c3dc45fc17d66d1b82908e42e6730f25db2a7dfda984471e03336f"
+  },
+  {
+   "nome": "funcoes/260-favItensLista.sql",
+   "tamanho": 961,
+   "sha256": "b034389145eba8dcca44a254f51aa5b33fd06a805d2a657f6469eeb90fffad99"
+  },
+  {
+   "nome": "funcoes/261-favVideosLista.sql",
+   "tamanho": 213,
+   "sha256": "a3b88d023634004a448d184c1b01360024f431ed5209b9103b4068dbb71ab1ea"
+  },
+  {
+   "nome": "funcoes/262-favContagens.sql",
+   "tamanho": 434,
+   "sha256": "2eb93e22fa53d303de64f72f291d29eb431d7e2152cb32eefb54a6c610cb4a39"
+  },
+  {
+   "nome": "funcoes/263-itemStatusGravar.sql",
+   "tamanho": 137,
+   "sha256": "13ef82d8d20a8e7136875c6bd36b2ba8495de64ca861232a84df503633e00104"
+  },
+  {
+   "nome": "funcoes/264-nomeSagrado.sql",
+   "tamanho": 255,
+   "sha256": "94b1dd5615d4321361087789d0a9d0584431069589999e15904fc6475be09a9f"
+  },
+  {
+   "nome": "funcoes/265-sagradoObras.sql",
+   "tamanho": 1063,
+   "sha256": "b4c721c743d6b9147ccdd1d4f98aa59a6cdd3618ac8517aa6901626b5eca17ae"
+  },
+  {
+   "nome": "funcoes/266-sagradoPartes.sql",
+   "tamanho": 551,
+   "sha256": "f63c0c1ff93849c41d1c6fda3e2dec299f7ae55a0311039d93999c9273176f1e"
+  },
+  {
+   "nome": "funcoes/267-sagradoJuntar.sql",
+   "tamanho": 106,
+   "sha256": "f6f004da71f7bf8134f784e3042649e853ce8edb5064f6f8350fc8eed1902156"
+  },
+  {
+   "nome": "funcoes/268-sagradoSeparar.sql",
+   "tamanho": 43,
+   "sha256": "86c4d454b233c25d7fb8efaa36dfff9f79b93cc105b55f1946d01a348a2c3d0c"
+  },
+  {
+   "nome": "funcoes/269-nomeTipoIA.sql",
+   "tamanho": 194,
+   "sha256": "b65ce12aa70376db0a76748104423d267ea8e0b317c65cb41ed380678dba3825"
+  },
+  {
+   "nome": "funcoes/270-outrosEditar.sql",
+   "tamanho": 308,
+   "sha256": "ca8537e75f0af98d889fb0420d4717361b6e3d6ef29a5d054c628f4be0afd266"
+  },
+  {
+   "nome": "funcoes/271-outrosAceitar.sql",
+   "tamanho": 113,
+   "sha256": "ba32de3dea7987f75d7dcb600b42e1bbd15cfb85adcb988a66e846869068eccf"
+  },
+  {
+   "nome": "funcoes/272-outrosFila.sql",
+   "tamanho": 380,
+   "sha256": "3a89de4ab6e8170807646d1f029aa88424f52397ef077c68b9a67d2fe506e09a"
+  },
+  {
+   "nome": "funcoes/273-outrosConferirGravar.sql",
+   "tamanho": 189,
+   "sha256": "128f3fec44373cc32291a9a65eb0d20318c9914e5b7a982cf1fdb12a23a91d47"
+  },
+  {
+   "nome": "funcoes/274-pendRefinoFila.sql",
+   "tamanho": 331,
+   "sha256": "14413d9fd63a344b0e50839ea5711a5099c2d0e513e0bfe10d8f2085f793f0bd"
+  },
+  {
+   "nome": "funcoes/275-pendRefinoGravar.sql",
+   "tamanho": 289,
+   "sha256": "b2ef0f07747fa1f623a16558482131afd9bb42f673e115794a9d221e65225d8e"
+  },
+  {
+   "nome": "funcoes/276-validarExportar.sql",
+   "tamanho": 2780,
+   "sha256": "235d61f3034d16d894c82b974537ea41e401718705d3223526c0e5587d4166ea"
+  },
+  {
+   "nome": "funcoes/277-validarSugerir.sql",
+   "tamanho": 891,
+   "sha256": "10422f1d2dc9242ce25a901f325dab456381fd7b5ab6d8e01bc6d1fbfcc8aa70"
+  },
+  {
+   "nome": "funcoes/278-validarSugerirEsp.sql",
+   "tamanho": 997,
+   "sha256": "fe0fffc401f67024c7213a98708eaab9fc5cb3cdb16cab409cf95104e99614a5"
+  },
+  {
+   "nome": "funcoes/279-outrosSubtipo.sql",
+   "tamanho": 77,
+   "sha256": "eb247e53069c0751292ec322c666f6a576cd9624593e1ab6be2fde86314c2c13"
+  },
+  {
+   "nome": "funcoes/280-nomeTipoPorNome.sql",
+   "tamanho": 583,
+   "sha256": "7663f72b081c78824fd3cecb9fd8e7ed73e542fd15c2d6c3bfb4ae2ada3ad2ec"
+  },
+  {
+   "nome": "funcoes/281-vtMomentos.sql",
+   "tamanho": 167,
+   "sha256": "2345938553fa50c5011d803c4e763e20880aa43403b61366cbd5af783fa0b244"
+  },
+  {
+   "nome": "funcoes/282-mapaTemasLista.sql",
+   "tamanho": 239,
+   "sha256": "7602d0a7b301aea0315b0190414efbe7a69ea236cc604f3bb028d1af1c5f266d"
+  },
+  {
+   "nome": "funcoes/283-mapaTemaJeitos.sql",
+   "tamanho": 268,
+   "sha256": "4cf8a237c3361606e465e91303ab3fdc148f69762d35d904dfa9e8a641ad968b"
+  },
+  {
+   "nome": "funcoes/284-mapaTemaPraticas.sql",
+   "tamanho": 372,
+   "sha256": "f9adcdffa5890fff5025fb706144752d661a13a891d2888efa4295acf96b9b87"
+  },
+  {
+   "nome": "funcoes/285-mapaTemaVideos.sql",
+   "tamanho": 279,
+   "sha256": "6c2186ee0abd6879e6993f0b4aa136634bf9c7ff1be32ac41389ade8d895ea3a"
+  },
+  {
+   "nome": "funcoes/286-mapaTemaLigados.sql",
+   "tamanho": 270,
+   "sha256": "f2987beb5fb61a854158d75ac3d2a71eb7873655bb66fdc331f6e420579259ee"
+  },
+  {
+   "nome": "funcoes/287-mapaVideoBusca.sql",
+   "tamanho": 275,
+   "sha256": "47f33fab21f21fee5458b21b86142b7e69d9eca7ee356936313bb5e0bec56f80"
+  },
+  {
+   "nome": "funcoes/288-exportarGit.js",
+   "tamanho": 7497,
+   "sha256": "ee99892375b184cc8531db179e1b5ed97e761a593b01e858200027a2e4207630"
+  },
+  {
+   "nome": "funcoes/INDICE_FUNCOES.csv",
+   "tamanho": 44439,
+   "sha256": "5928ceb002d7b98121884de0cc1fe6790a0561ae262372f65d6cc658d113a8e6"
+  },
+  {
+   "nome": "funcoes/INDICE_FUNCOES.json",
+   "tamanho": 106414,
+   "sha256": "830756ed0e012736edec8a7d94ce58b279d7cc7af7baed71be55ce11e9608a7e"
+  },
+  {
+   "nome": "DIFF_FUNCOES.md",
+   "tamanho": 5222,
+   "sha256": "da48419da07a5b865909f428df003ee27709f1a0b0d0118bb1e6b68a9b877bf4"
+  },
+  {
+   "nome": "plataforma/rotinas.csv",
+   "tamanho": 140,
+   "sha256": "7551c586b1a45a0908bb049f9273931a409e001d3388ec01151d6458a607c2d2"
+  },
+  {
+   "nome": "DEPENDENCIAS_MITRA.md",
+   "tamanho": 21953,
+   "sha256": "c451dc46f99c36309245d3395e90118e97dcbf7cab9ea9b5feb0264ce57587c8"
+  },
+  {
+   "nome": ".env.example",
+   "tamanho": 552,
+   "sha256": "60dcc4c633acd3835f57c64dc665addfa957df96969fc0d03385f4591e99c04f"
+  },
+  {
+   "nome": "LEIAME_EXPORTACAO_LEVE.md",
+   "tamanho": 20571,
+   "sha256": "c86df4318b48d84644c59131c1a3d7257711d1243bf44fad89e929cc47f12527"
+  },
+  {
+   "nome": "README.md",
+   "tamanho": 143,
+   "sha256": "12cf7b2d59ec1619ce796e3d91967d2fcb8d49f51f47101d88ec2b4482d90f30"
+  }
+ ],
+ "observacao": "O próprio MANIFEST.json não aparece na lista (não dá para conter o próprio SHA-256)."
+}

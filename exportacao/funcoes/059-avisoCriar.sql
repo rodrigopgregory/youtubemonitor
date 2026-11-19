@@ -1,0 +1,1 @@
+INSERT INTO AVISOS (CRIADO_EM, QTD, LIDO, DIA) VALUES ('{{quando}}', 0, FALSE, '{{dia}}')

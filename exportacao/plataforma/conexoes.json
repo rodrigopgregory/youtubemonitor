@@ -1,0 +1,230 @@
+{
+ "observacao": "Somente nome, URL base sem query string e nomes dos campos. Nenhum valor de chave.",
+ "conexoes": [
+  {
+   "nome": "zz-teste",
+   "slug": "zz-teste",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://httpbin.org",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "query",
+    "nome_do_campo": "key"
+   },
+   "observacao": "Sobra de teste."
+  },
+  {
+   "nome": "zz-teste2",
+   "slug": "zz-teste2",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://hub.dummyapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "query",
+    "nome_do_campo": "k"
+   },
+   "observacao": "Sobra de teste."
+  },
+  {
+   "nome": "zz-teste3",
+   "slug": "zz-teste3",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://httpstat.us",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "query",
+    "nome_do_campo": "k"
+   },
+   "observacao": "Sobra de teste."
+  },
+  {
+   "nome": "YouTube (páginas públicas)",
+   "slug": "youtube-web",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://www.youtube.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key",
+    "auth_x_origem"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "X-Origem"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI)",
+   "slug": "gemini",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 2",
+   "slug": "gemini2",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 3",
+   "slug": "gemini3",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 4",
+   "slug": "gemini4",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 5",
+   "slug": "gemini5",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 6",
+   "slug": "gemini6",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 7",
+   "slug": "gemini7",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 8",
+   "slug": "gemini8",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini (Google AI) - chave 9",
+   "slug": "gemini9",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  },
+  {
+   "nome": "Gemini botao validar",
+   "slug": "gemini-botao",
+   "tipo": "HTTP_REQUEST",
+   "autenticacao": "STATIC_KEY",
+   "url_base": "https://generativelanguage.googleapis.com",
+   "campos_de_credencial": [
+    "base_url",
+    "api_key"
+   ],
+   "onde_vai_a_chave": {
+    "tipo": "header",
+    "nome_do_campo": "x-goog-api-key"
+   },
+   "observacao": ""
+  }
+ ]
+}

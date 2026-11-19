@@ -1,0 +1,1 @@
+INSERT INTO LOTES (CHAVE, JSON_TXT, CRIADO_EM) VALUES ('{{chave}}', '{{json}}', DATE_FORMAT(NOW(), '%Y-%m-%dT%H:%i:%s'))

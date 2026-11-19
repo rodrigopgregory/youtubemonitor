@@ -1,0 +1,1 @@
+INSERT IGNORE INTO CANAIS (YT_CHANNEL_ID, HANDLE, NOME, URL, UPLOADS_PLAYLIST, THUMB, CARGA_STATUS, CARGA_MSG, CRIADO_EM) VALUES ('{{yt}}', '{{handle}}', '{{nome}}', '{{url}}', '{{uploads}}', '{{thumb}}', 'LISTANDO', 'Levantando os vídeos do canal', DATE_FORMAT(NOW() - INTERVAL 3 HOUR, '%Y-%m-%dT%H:%i:%s'))
