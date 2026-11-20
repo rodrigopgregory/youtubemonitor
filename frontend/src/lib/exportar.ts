@@ -1,4 +1,5 @@
 import { linhas, mmss, linkYt, dataBr, duracao } from './api'
+import { nomeEt, lista } from './etiquetas'
 
 type VideoExp = { ID: number; YT_VIDEO_ID: string; TITULO: string; PUBLICADO_EM: string | null; DURACAO_SEG: number; ORIGEM: string; CANAL: string; RESUMO: string | null; TEMAS: string | null }
 type Trecho = { VIDEO_ID: number; SEGUNDO: number; TEXTO: string }
@@ -90,6 +91,93 @@ export async function exportarVideosFiltro(filtro: FiltroVideos, nome: string, p
   })
   baixar(new Blob(['\ufeff' + [cab.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeArquivo(nome) + '.csv')
   return todos.length
+}
+
+export async function exportarPraticasFiltro(filtro: FiltroVideos, nome: string, progresso: Progresso) {
+  type Prat = { ID: number; TIPO: string; JEITO: string | null; SERVE: string | null; QUANDO: string | null; TITULO: string; INSTRUCAO: string; SEGUNDO: number | null; FAVORITA: number | boolean | null; YT_VIDEO_ID: string; VIDEO: string; CANAL: string; VEZES: number; ULTIMA: string | null }
+  const todas: Prat[] = []
+  let depois = 0
+  for (;;) {
+    progresso(todas.length ? `Buscando as práticas… ${todas.length}` : 'Buscando as práticas…')
+    const pag = await linhas<Prat>('exportPraticasFiltro', { ...filtro, depois })
+    todas.push(...pag)
+    if (pag.length < 500) break
+    depois = pag[pag.length - 1].ID
+  }
+  const cab = ['Prática', 'Passo a passo', 'Jeito de fazer', 'Para que serve', 'Quando fazer', 'Favorita', 'Vezes que fiz', 'Última vez', 'Vídeo', 'Canal', 'Link']
+  const corpo = todas.map(p => [p.TITULO, p.INSTRUCAO, nomeEt(p.JEITO), lista(p.SERVE).map(nomeEt).join(', '), lista(p.QUANDO).map(nomeEt).join(', '), Number(p.FAVORITA) ? 'Sim' : '', Number(p.VEZES || 0), p.ULTIMA ? dataBr(p.ULTIMA) : '', p.VIDEO, p.CANAL, linkYt(p.YT_VIDEO_ID, p.SEGUNDO || undefined)].map(celula).join(';'))
+  baixar(new Blob(['\ufeff' + [cab.join(';'), ...corpo].join('\r\n')], { type: 'text/csv;charset=utf-8' }), nomeArquivo(nome) + '.csv')
+  return todas.length
+}
+
+type CapituloExp = { TEMA: string; TEXTO: string; PRATICAS_JSON: string; VIDEOS: number; GERADO_EM: string }
+
+function capituloEmTexto(cap: CapituloExp) {
+  type Fonte = { video: string; canal: string; yt: string; seg: number }
+  type Prat = { grupo: string; titulo: string; quando: string; passos: string; fontes: Fonte[] }
+  let praticas: Prat[] = []
+  try { praticas = JSON.parse(cap.PRATICAS_JSON || '[]') } catch { praticas = [] }
+  const saida = ['# ' + cap.TEMA, '', `${cap.VIDEOS} vídeos estudados · escrito em ${dataBr(cap.GERADO_EM)}`, '', String(cap.TEXTO || '').trim(), '']
+  if (praticas.length) {
+    saida.push('## Práticas', '')
+    for (const grupo of [...new Set(praticas.map(p => p.grupo))]) {
+      saida.push('### ' + grupo, '')
+      for (const p of praticas.filter(x => x.grupo === grupo)) {
+        saida.push('#### ' + p.titulo)
+        if (p.quando) saida.push('Quando: ' + p.quando)
+        saida.push('', String(p.passos || '').trim(), '')
+        for (const f of p.fontes || []) saida.push(`- ${f.canal}: ${f.video} (${linkYt(f.yt, f.seg || undefined)})`)
+        if (p.fontes?.length) saida.push('')
+      }
+    }
+  }
+  return saida.join('\n')
+}
+
+export async function exportarLivroCapitulo(temaId: number, nome: string) {
+  const cap = (await linhas<CapituloExp>('livroCapitulo', { temaId }))[0]
+  if (!cap) throw new Error('capítulo não encontrado')
+  baixar(new Blob(['\ufeff' + capituloEmTexto(cap)], { type: 'text/markdown;charset=utf-8' }), nomeArquivo(nome) + '.md')
+}
+
+export async function exportarLivroTodo(temas: { ID: number; NOME: string; GERADO_EM: string | null }[], progresso: Progresso) {
+  const prontos = temas.filter(t => t.GERADO_EM)
+  const partes: string[] = []
+  for (let i = 0; i < prontos.length; i++) {
+    progresso(`Juntando os capítulos… ${i + 1} de ${prontos.length}`)
+    const cap = (await linhas<CapituloExp>('livroCapitulo', { temaId: prontos[i].ID }))[0]
+    if (cap) partes.push(capituloEmTexto(cap))
+  }
+  baixar(new Blob(['\ufeff' + partes.join('\n\n---\n\n')], { type: 'text/markdown;charset=utf-8' }), nomeArquivo('Livro Vivo') + '.md')
+  return partes.length
+}
+
+export async function exportarMapaImagem(svg: SVGSVGElement, nome: string, larg: number, alto: number) {
+  const estilo = getComputedStyle(document.documentElement)
+  const clone = svg.cloneNode(true) as SVGSVGElement
+  let xml = new XMLSerializer().serializeToString(clone)
+  xml = xml.replace(/var\((--[\w-]+)(?:,\s*([^)]*))?\)/g, (_m, nomeVar: string, padrao?: string) => estilo.getPropertyValue(nomeVar).trim() || (padrao || '').trim() || '#000')
+  const fundo = estilo.getPropertyValue('--bg').trim() || '#ffffff'
+  const url = URL.createObjectURL(new Blob([xml], { type: 'image/svg+xml;charset=utf-8' }))
+  try {
+    const img = new Image()
+    await new Promise<void>((ok, erro) => { img.onload = () => ok(); img.onerror = () => erro(new Error('imagem')); img.src = url })
+    const canvas = document.createElement('canvas')
+    canvas.width = larg * 2; canvas.height = alto * 2
+    const ctx = canvas.getContext('2d')
+    if (!ctx) throw new Error('canvas')
+    ctx.fillStyle = fundo; ctx.fillRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+    const png = await new Promise<Blob | null>(ok => canvas.toBlob(ok, 'image/png'))
+    if (!png) throw new Error('png')
+    baixar(png, nomeArquivo('Mapa mental - ' + nome) + '.png')
+  } finally { URL.revokeObjectURL(url) }
+}
+
+export function exportarMapaTexto(centro: string, centroSub: string | undefined, tituloEsq: string, esquerda: { rotulo: string; sub?: string }[], tituloDir: string, direita: { rotulo: string; sub?: string }[]) {
+  const item = (n: { rotulo: string; sub?: string }) => `  - ${n.rotulo}${n.sub ? ' (' + n.sub + ')' : ''}`
+  const linhasTxt = ['- ' + centro + (centroSub ? ' (' + centroSub + ')' : ''), '  - ' + tituloEsq.replace(/ \(.*\)$/, ''), ...esquerda.map(n => '  ' + item(n)), '  - ' + tituloDir.replace(/ \(.*\)$/, ''), ...direita.map(n => '  ' + item(n))]
+  baixar(new Blob(['\ufeff' + linhasTxt.join('\n') + '\n'], { type: 'text/markdown;charset=utf-8' }), nomeArquivo('Mapa mental - ' + centro) + '.md')
 }
 
 function crc32(b: Uint8Array) {

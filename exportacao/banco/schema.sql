@@ -1,5 +1,5 @@
 -- Estrutura do banco reconstruída a partir do information_schema do MySQL 8.3.0 (SHOW CREATE foi recusado pelo Mitra).
--- Schema de origem: tenant_67241 | gerado em 2026-11-18T22:59:32 (horário de Brasília)
+-- Schema de origem: tenant_67241 | gerado em 2026-11-19T22:53:28 (horário de Brasília)
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -54,7 +54,7 @@ CREATE TABLE `EXPORT_BASE` (
   `TAMANHO_BYTES` bigint NULL DEFAULT NULL,
   `SHA256` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Código e histórico Git empacotados no desenvolvimento para a exportação leve. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Código e histórico Git empacotados no desenvolvimento para a exportação leve. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_CODIGOS`;
 CREATE TABLE `EXPORT_CODIGOS` (
@@ -68,7 +68,7 @@ CREATE TABLE `EXPORT_CODIGOS` (
   `CRIADO_EM` varchar(19) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   KEY `IX_EXPCOD_EMAIL` (`EMAIL`),
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Códigos de 6 dígitos (hash com sal). RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Códigos de 6 dígitos (hash com sal). RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_CODIGO_DEV`;
 CREATE TABLE `EXPORT_CODIGO_DEV` (
@@ -105,7 +105,7 @@ CREATE TABLE `EXPORT_LEVE` (
   `CONFERIDO` tinyint NULL DEFAULT NULL,
   `ERRO` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Exportações leves geradas. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Exportações leves geradas. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_LOG`;
 CREATE TABLE `EXPORT_LOG` (
@@ -117,7 +117,7 @@ CREATE TABLE `EXPORT_LOG` (
   `TAMANHO_BYTES` bigint NULL DEFAULT NULL,
   `DETALHE` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Registro de pedidos, recusas e gerações. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Registro de pedidos, recusas e gerações. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_PACOTES`;
 CREATE TABLE `EXPORT_PACOTES` (
@@ -134,7 +134,7 @@ CREATE TABLE `EXPORT_PACOTES` (
   `MANIFESTO_JSON` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `ERRO` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Pacotes gerados e estado. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Pacotes gerados e estado. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_PARTES`;
 CREATE TABLE `EXPORT_PARTES` (
@@ -150,7 +150,7 @@ CREATE TABLE `EXPORT_PARTES` (
   KEY `IX_EXPPAR_PACOTE` (`PACOTE_ID`),
   PRIMARY KEY (`ID`),
   CONSTRAINT `FK_EXPPAR_PACOTE` FOREIGN KEY (`PACOTE_ID`) REFERENCES `EXPORT_PACOTES` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Partes (ZIPs) de cada pacote. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Partes (ZIPs) de cada pacote. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `EXPORT_SESSOES`;
 CREATE TABLE `EXPORT_SESSOES` (
@@ -161,7 +161,7 @@ CREATE TABLE `EXPORT_SESSOES` (
   `EXPIRA_EM` varchar(19) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
   KEY `IX_EXPSES_HASH` (`HASH`),
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Sessões curtas após validar o código. RETENCAO: só estrutura entra no pacote';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Sessões curtas após validar o código. RETENCAO: só estrutura entra no pacote';
 
 DROP TABLE IF EXISTS `GIT_CONFIG`;
 CREATE TABLE `GIT_CONFIG` (
@@ -206,7 +206,7 @@ CREATE TABLE `LIVROS_CATALOGO` (
   `IDIOMA` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UX_LC_TITULO` (`TITULO`)
-) ENGINE=InnoDB AUTO_INCREMENT=2617 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livros reais confirmados (titulo oficial e autor). Varios nomes ouvidos nos videos apontam para um livro. RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=2790 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livros reais confirmados (titulo oficial e autor). Varios nomes ouvidos nos videos apontam para um livro. RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `VIDEOS`;
 CREATE TABLE `VIDEOS` (
@@ -250,7 +250,7 @@ CREATE TABLE `VIDEOS` (
   UNIQUE KEY `YT_VIDEO_ID` (`YT_VIDEO_ID`),
   CONSTRAINT `VIDEOS_ibfk_1` FOREIGN KEY (`CANAL_ID`) REFERENCES `CANAIS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `VIDEOS_ibfk_2` FOREIGN KEY (`AVISO_ID`) REFERENCES `AVISOS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=5712 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Videos e lives elegiveis (mais de 10 min). RETENCAO: tudo, e a base de conhecimento';
+) ENGINE=InnoDB AUTO_INCREMENT=5713 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Videos e lives elegiveis (mais de 10 min). RETENCAO: tudo, e a base de conhecimento';
 
 DROP TABLE IF EXISTS `LIVROS_INDICADOS`;
 CREATE TABLE `LIVROS_INDICADOS` (
@@ -265,7 +265,7 @@ CREATE TABLE `LIVROS_INDICADOS` (
   KEY `IX_LI_VIDEO` (`VIDEO_ID`),
   PRIMARY KEY (`ID`),
   CONSTRAINT `LIVROS_INDICADOS_ibfk_1` FOREIGN KEY (`VIDEO_ID`) REFERENCES `VIDEOS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=10794 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livros indicados ou citados nos videos (titulo, autor, trecho e minuto). RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=10798 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livros indicados ou citados nos videos (titulo, autor, trecho e minuto). RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `LIVROS_NOMES`;
 CREATE TABLE `LIVROS_NOMES` (
@@ -288,7 +288,7 @@ CREATE TABLE `LIVROS_NOMES` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UX_LN_NOME` (`NOME`),
   CONSTRAINT `LIVROS_NOMES_ibfk_1` FOREIGN KEY (`CATALOGO_ID`) REFERENCES `LIVROS_CATALOGO` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4301 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Cada nome de livro como foi ouvido nos videos e o que se decidiu: OK (aponta para o catalogo), PENDENTE (a pessoa decide na tela inicial) ou NAO_LIVRO. RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=5684 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Cada nome de livro como foi ouvido nos videos e o que se decidiu: OK (aponta para o catalogo), PENDENTE (a pessoa decide na tela inicial) ou NAO_LIVRO. RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `LIVRO_CAPITULOS`;
 CREATE TABLE `LIVRO_CAPITULOS` (
@@ -301,7 +301,7 @@ CREATE TABLE `LIVRO_CAPITULOS` (
   `GERADO_EM` varchar(19) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UQ_LIVRO_TEMA` (`TEMA_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livro Vivo: um capitulo por tema, com o resumo dos ensinamentos dos canais e as praticas agrupadas. RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Livro Vivo: um capitulo por tema, com o resumo dos ensinamentos dos canais e as praticas agrupadas. RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `LOTES`;
 CREATE TABLE `LOTES` (
@@ -311,7 +311,7 @@ CREATE TABLE `LOTES` (
   `CRIADO_EM` varchar(19) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   KEY `IX_LOTE` (`CHAVE`),
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=16554 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Passagem de lotes JSON entre funcoes. RETENCAO: apagado logo apos o uso';
+) ENGINE=InnoDB AUTO_INCREMENT=16572 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Passagem de lotes JSON entre funcoes. RETENCAO: apagado logo apos o uso';
 
 DROP TABLE IF EXISTS `MENTOR_REGRAS`;
 CREATE TABLE `MENTOR_REGRAS` (
@@ -322,7 +322,7 @@ CREATE TABLE `MENTOR_REGRAS` (
   `CRIADO_EM` varchar(19) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UQ_MR_NOME` (`NOME`)
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Regras de mentores definidas pela dona: MENTOR (cadastrado a mao), APELIDO (NOME e outro jeito de escrever DESTINO) e NAO (nao e mentor). O motor segue estas regras. RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Regras de mentores definidas pela dona: MENTOR (cadastrado a mao), APELIDO (NOME e outro jeito de escrever DESTINO) e NAO (nao e mentor). O motor segue estas regras. RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `OBRA_DE`;
 CREATE TABLE `OBRA_DE` (
@@ -345,7 +345,7 @@ CREATE TABLE `PLAYLISTS` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `YT_PLAYLIST_ID` (`YT_PLAYLIST_ID`),
   CONSTRAINT `PLAYLISTS_ibfk_1` FOREIGN KEY (`CANAL_ID`) REFERENCES `CANAIS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Playlists dos canais monitorados. RETENCAO: espelho do YouTube, a sincronizacao apaga as que sumiram';
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Playlists dos canais monitorados. RETENCAO: espelho do YouTube, a sincronizacao apaga as que sumiram';
 
 DROP TABLE IF EXISTS `PLAYLIST_VIDEOS`;
 CREATE TABLE `PLAYLIST_VIDEOS` (
@@ -357,7 +357,7 @@ CREATE TABLE `PLAYLIST_VIDEOS` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UQ_PLV` (`PLAYLIST_ID`, `YT_VIDEO_ID`),
   CONSTRAINT `PLAYLIST_VIDEOS_ibfk_1` FOREIGN KEY (`PLAYLIST_ID`) REFERENCES `PLAYLISTS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=15656 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Videos de cada playlist, na ordem do YouTube. RETENCAO: espelho do YouTube, regravado a cada sincronizacao';
+) ENGINE=InnoDB AUTO_INCREMENT=17848 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Videos de cada playlist, na ordem do YouTube. RETENCAO: espelho do YouTube, regravado a cada sincronizacao';
 
 DROP TABLE IF EXISTS `PRATICAS`;
 CREATE TABLE `PRATICAS` (
@@ -380,7 +380,7 @@ CREATE TABLE `PRATICAS` (
   KEY `IX_PR_VIDEO` (`VIDEO_ID`),
   PRIMARY KEY (`ID`),
   CONSTRAINT `PRATICAS_ibfk_1` FOREIGN KEY (`VIDEO_ID`) REFERENCES `VIDEOS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=11412 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Praticas e instrucoes de trabalho espiritual citadas nos videos (meditacao, banho de ervas, velas, prece...). RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=11413 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Praticas e instrucoes de trabalho espiritual citadas nos videos (meditacao, banho de ervas, velas, prece...). RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `PRATICA_DIARIO`;
 CREATE TABLE `PRATICA_DIARIO` (
@@ -394,7 +394,7 @@ CREATE TABLE `PRATICA_DIARIO` (
   KEY `IX_PD_PRATICA` (`PRATICA_ID`),
   PRIMARY KEY (`ID`),
   CONSTRAINT `PRATICA_DIARIO_ibfk_1` FOREIGN KEY (`PRATICA_ID`) REFERENCES `PRATICAS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Minhas praticas: cada vez que a pessoa fez uma pratica, o dia e como se sentiu (HUMOR 1 pior a 5 melhor). RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Minhas praticas: cada vez que a pessoa fez uma pratica, o dia e como se sentiu (HUMOR 1 pior a 5 melhor). RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `TEMAS`;
 CREATE TABLE `TEMAS` (
@@ -403,7 +403,7 @@ CREATE TABLE `TEMAS` (
   FULLTEXT KEY `FT_TEMA` (`NOME`),
   UNIQUE KEY `NOME` (`NOME`),
   PRIMARY KEY (`ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=4491 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Temas (palavras-chave). RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=4493 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Temas (palavras-chave). RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `TEMAS_BKP_20261113`;
 CREATE TABLE `TEMAS_BKP_20261113` (
@@ -429,7 +429,7 @@ CREATE TABLE `TRECHOS` (
   PRIMARY KEY (`ID`),
   UNIQUE KEY `UQ_TR` (`VIDEO_ID`, `SEGUNDO`),
   CONSTRAINT `TRECHOS_ibfk_1` FOREIGN KEY (`VIDEO_ID`) REFERENCES `VIDEOS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=840073 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Transcricao com marcacao de tempo. RETENCAO: tudo, e a base de conhecimento';
+) ENGINE=InnoDB AUTO_INCREMENT=840173 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Transcricao com marcacao de tempo. RETENCAO: tudo, e a base de conhecimento';
 
 DROP TABLE IF EXISTS `VIDEO_TEMAS`;
 CREATE TABLE `VIDEO_TEMAS` (
@@ -444,7 +444,7 @@ CREATE TABLE `VIDEO_TEMAS` (
   UNIQUE KEY `UQ_VT` (`VIDEO_ID`, `TEMA_ID`),
   CONSTRAINT `VIDEO_TEMAS_ibfk_1` FOREIGN KEY (`VIDEO_ID`) REFERENCES `VIDEOS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `VIDEO_TEMAS_ibfk_2` FOREIGN KEY (`TEMA_ID`) REFERENCES `TEMAS` (`ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=45607 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Temas de cada video (IA ou editados pela dona). RETENCAO: tudo';
+) ENGINE=InnoDB AUTO_INCREMENT=45611 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin ROW_FORMAT=Dynamic COMMENT='Temas de cada video (IA ou editados pela dona). RETENCAO: tudo';
 
 DROP TABLE IF EXISTS `VIDEO_TEMAS_BKP_20261113`;
 CREATE TABLE `VIDEO_TEMAS_BKP_20261113` (

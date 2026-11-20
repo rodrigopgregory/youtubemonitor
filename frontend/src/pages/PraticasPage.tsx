@@ -8,6 +8,7 @@ import Button from '../components/ui/Button'
 import CanalFiltro, { useCanal } from '../components/CanalFiltro'
 import VideoDetalhe from '../components/VideoDetalhe'
 import Contador from '../components/Contador'
+import ExportPraticas from '../components/ExportPraticas'
 import FavoritaPratica from '../components/FavoritaPratica'
 import { linhas, linkYt, mmss } from '../lib/api'
 import { JEITOS, SERVE, QUANDO, nomeEt, lista as listaEt } from '../lib/etiquetas'
@@ -83,6 +84,8 @@ export default function PraticasPage() {
         <Button type="submit" variant="secondary">Procurar</Button>
       </form>
       <div className="flex"><button onClick={() => mudar('fav', soFav ? '' : '1')} aria-pressed={soFav} className="h-8 px-3 rounded-full border text-[13px] font-medium inline-flex items-center gap-1.5" style={chip(soFav)}><Star size={14} fill={soFav ? 'currentColor' : 'none'} />Só as favoritas</button></div>
+
+      <ExportPraticas filtro={{ ...base, jeito, serve, quando }} nome={'Práticas' + (mostrandoLista ? ' filtradas' : '')} titulo="Baixa uma planilha com as práticas dos filtros marcados agora (sem filtro, todas)" />
 
       {mostrandoLista && (
         <div className="flex items-center gap-2 flex-wrap">

@@ -4,7 +4,7 @@
   {
    "id": 1,
    "nome": "Dona da base",
-   "qtd_funcoes": 253,
+   "qtd_funcoes": 254,
    "funcoes": [
     {
      "numero": 32,
@@ -1017,6 +1017,10 @@
     {
      "numero": 288,
      "nome": "exportarGit"
+    },
+    {
+     "numero": 289,
+     "nome": "exportPraticasFiltro"
     }
    ]
   }

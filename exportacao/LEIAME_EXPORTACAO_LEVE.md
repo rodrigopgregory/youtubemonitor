@@ -1,18 +1,18 @@
 # Exportação leve do Monitor de Canais do YouTube
 
-Gerada em 2026-11-18T22:59:32 (horário de Brasília), a partir do ambiente de desenvolvimento e da plataforma. Código no commit `e889ad4c1b08ebeb4cc5db03e38465d9da6699d6` (guardado em 2026-11-18T22:57:04). MySQL 8.3.0, schema `tenant_67241`.
+Gerada em 2026-11-19T22:53:28 (horário de Brasília), a partir do ambiente de desenvolvimento e da plataforma. Código no commit `245c87a66e9896f48ca00e62c04bcee4f1e171af` (guardado em 2026-11-18T23:20:30). MySQL 8.3.0, schema `tenant_67241`.
 
 ## O que está neste ZIP
 
 - `codigo/`: front-end, back-end (scripts e Server Functions em `backend/sf`), configurações, README e `ESCOPO.md` (cópia dos arquivos versionados no Git, sem `.env`, `node_modules` e `dist`).
 - `historico/repo.bundle` e `historico/commits.txt`: histórico Git completo (`git clone historico/repo.bundle`) e a lista de commits.
-- `funcoes/`: as 256 Server Functions na versão PUBLICADA, uma por arquivo (`número-nome.sql|js`), com `INDICE_FUNCOES.csv` e `.json` (número, nome, tipo, parâmetros, perfis com permissão, cron, descrição, SHA-256). Inclui as que só existem no Mitra.
+- `funcoes/`: as 257 Server Functions na versão PUBLICADA, uma por arquivo (`número-nome.sql|js`), com `INDICE_FUNCOES.csv` e `.json` (número, nome, tipo, parâmetros, perfis com permissão, cron, descrição, SHA-256). Inclui as que só existem no Mitra.
 - `DIFF_FUNCOES.md`: publicadas x scripts do repositório.
 - `REGRAS_DE_CLASSIFICACAO.md`: o que o app realmente faz para classificar (prompts exatos, modelo, temperatura, validações, valores permitidos, minutagem, filtros, e o que não se sabe).
 - `banco/schema.sql`: estrutura lida do `information_schema` (tabelas, views, chaves, índices, FULLTEXT, ENGINE, charset e collation), sem nenhuma linha de dados.
 - `dados-pequenos/`: CANAIS (3 linhas), CONFIG (17 linhas), MENTOR_REGRAS (28 linhas), PLAYLISTS (51 linhas), TEMAS (111 linhas), TEMA_MAPA (151 linhas), em CSV e em `CARGA_PEQUENAS.sql`. Da tabela CANAIS saiu a coluna `CARGA_TOKEN`; valores de CONFIG com nome de chave, token ou senha são trocados por `[REMOVIDO]`.
 - `praticas/`: todas as práticas (8499 linhas) com tipo, etiquetas, minuto e link, mais a contagem por tipo.
-- `livro-vivo/`: 13 capítulos (CSV e um `.md` por tema) e 2000 livros indicados.
+- `livro-vivo/`: 15 capítulos (CSV e um `.md` por tema) e 2000 livros indicados.
 - `plataforma/`: `conexoes.json` (nome, URL base e nomes dos campos), `perfis.json` (perfis e funções permitidas) e `rotinas.csv`.
 - `DEPENDENCIAS_MITRA.md`, `.env.example` (só nomes), `MANIFEST.json` (todos os arquivos com tamanho e SHA-256).
 
@@ -24,23 +24,23 @@ Gerada em 2026-11-18T22:59:32 (horário de Brasília), a partir do ambiente de d
 | tabela | linhas | motivo |
 |---|---|---|
 | AVISOS | 5 | dado de uso do dia a dia, não é configuração |
-| EXPORT_BASE | 9 | só estrutura (tabela de controle) |
-| EXPORT_CODIGOS | 2 | só estrutura (tabela de controle) |
+| EXPORT_BASE | 12 | só estrutura (tabela de controle) |
+| EXPORT_CODIGOS | 3 | só estrutura (tabela de controle) |
 | EXPORT_CODIGO_DEV | 2 | só estrutura (tabela de controle) |
 | EXPORT_DONOS | 2 | só estrutura (tabela de controle) |
-| EXPORT_LEVE | 5 | só estrutura (tabela de controle) |
-| EXPORT_LOG | 26 | só estrutura (tabela de controle) |
-| EXPORT_PACOTES | 6 | só estrutura (tabela de controle) |
-| EXPORT_PARTES | 26 | só estrutura (tabela de controle) |
-| EXPORT_SESSOES | 1 | só estrutura (tabela de controle) |
+| EXPORT_LEVE | 7 | só estrutura (tabela de controle) |
+| EXPORT_LOG | 37 | só estrutura (tabela de controle) |
+| EXPORT_PACOTES | 7 | só estrutura (tabela de controle) |
+| EXPORT_PARTES | 32 | só estrutura (tabela de controle) |
+| EXPORT_SESSOES | 2 | só estrutura (tabela de controle) |
 | GIT_CONFIG | 10 | dados de movimento (grande ou pessoal) |
 | ITENS_FAVORITOS | 0 | dados de movimento (grande ou pessoal) |
 | ITENS_STATUS | 0 | dados de movimento (grande ou pessoal) |
-| LIVROS_CATALOGO | 2217 | dados de movimento (grande ou pessoal) |
+| LIVROS_CATALOGO | 2346 | dados de movimento (grande ou pessoal) |
 | VIDEOS | 4037 | dados de movimento (grande ou pessoal) |
 | LIVROS_INDICADOS | 8074 | exportada à parte, na pasta livro-vivo/ |
-| LIVROS_NOMES | 3000 | dados de movimento (grande ou pessoal) |
-| LIVRO_CAPITULOS | 13 | exportada à parte, na pasta livro-vivo/ |
+| LIVROS_NOMES | 3074 | dados de movimento (grande ou pessoal) |
+| LIVRO_CAPITULOS | 15 | exportada à parte, na pasta livro-vivo/ |
 | LOTES | 0 | só estrutura (tabela de controle) |
 | OBRA_DE | 31 | dados de movimento (grande ou pessoal) |
 | PLAYLIST_VIDEOS | 1703 | dados de movimento (grande ou pessoal) |
@@ -81,6 +81,7 @@ Cada arquivo tem tamanho e SHA-256 em `MANIFEST.json`. O gerador releu o ZIP dep
 - `livro-vivo/capitulos/ataques-espirituais-e-obsessao.md`
 - `livro-vivo/capitulos/autoconhecimento.md`
 - `livro-vivo/capitulos/chakras-e-bioenergia.md`
+- `livro-vivo/capitulos/corpo-perispirito-saude-e-cura.md`
 - `livro-vivo/capitulos/criancas-educacao-e-comportamento.md`
 - `livro-vivo/capitulos/emocoes-medo-e-inteligencia-emocional.md`
 - `livro-vivo/capitulos/espiritualidade-no-dia-a-dia.md`
@@ -88,6 +89,7 @@ Cada arquivo tem tamanho e SHA-256 em `MANIFEST.json`. O gerador releu o ZIP dep
 - `livro-vivo/capitulos/mediunidade-e-fenomenos-mediunicos.md`
 - `livro-vivo/capitulos/projecao-astral-e-saidas-do-corpo.md`
 - `livro-vivo/capitulos/protecao-e-limpeza-energetica.md`
+- `livro-vivo/capitulos/transicao-planetaria-e-evolucao-da-humanidade.md`
 - `livro-vivo/capitulos/etica-e-coerencia-de-luz.md`
 - `livro-vivo/livros_indicados.csv`
 - `livro-vivo/LEIAME.md`
@@ -160,6 +162,7 @@ Cada arquivo tem tamanho e SHA-256 em `MANIFEST.json`. O gerador releu o ZIP dep
 - `codigo/frontend/src/components/EstrelaItem.tsx`
 - `codigo/frontend/src/components/ExportGit.tsx`
 - `codigo/frontend/src/components/ExportLeve.tsx`
+- `codigo/frontend/src/components/ExportPraticas.tsx`
 - `codigo/frontend/src/components/FavoritaPratica.tsx`
 - `codigo/frontend/src/components/FizHoje.tsx`
 - `codigo/frontend/src/components/InstrucaoIA.tsx`
@@ -479,6 +482,7 @@ Cada arquivo tem tamanho e SHA-256 em `MANIFEST.json`. O gerador releu o ZIP dep
 - `funcoes/286-mapaTemaLigados.sql`
 - `funcoes/287-mapaVideoBusca.sql`
 - `funcoes/288-exportarGit.js`
+- `funcoes/289-exportPraticasFiltro.sql`
 - `funcoes/INDICE_FUNCOES.csv`
 - `funcoes/INDICE_FUNCOES.json`
 - `DIFF_FUNCOES.md`

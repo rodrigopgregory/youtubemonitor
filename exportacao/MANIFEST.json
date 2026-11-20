@@ -1,7 +1,7 @@
 {
- "gerado_em": "2026-11-18T22:59:32",
- "commit": "e889ad4c1b08ebeb4cc5db03e38465d9da6699d6",
- "codigo_guardado_em": "2026-11-18T22:57:04",
+ "gerado_em": "2026-11-19T22:53:28",
+ "commit": "245c87a66e9896f48ca00e62c04bcee4f1e171af",
+ "codigo_guardado_em": "2026-11-18T23:20:30",
  "versao_mysql": "8.3.0",
  "esquema": "tenant_67241",
  "opcoes": {
@@ -51,12 +51,12 @@
   },
   {
    "tabela": "EXPORT_BASE",
-   "linhas": 9,
+   "linhas": 12,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
    "tabela": "EXPORT_CODIGOS",
-   "linhas": 2,
+   "linhas": 3,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
@@ -71,27 +71,27 @@
   },
   {
    "tabela": "EXPORT_LEVE",
-   "linhas": 5,
+   "linhas": 7,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
    "tabela": "EXPORT_LOG",
-   "linhas": 26,
+   "linhas": 37,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
    "tabela": "EXPORT_PACOTES",
-   "linhas": 6,
+   "linhas": 7,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
    "tabela": "EXPORT_PARTES",
-   "linhas": 26,
+   "linhas": 32,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
    "tabela": "EXPORT_SESSOES",
-   "linhas": 1,
+   "linhas": 2,
    "motivo": "só estrutura (tabela de controle)"
   },
   {
@@ -111,7 +111,7 @@
   },
   {
    "tabela": "LIVROS_CATALOGO",
-   "linhas": 2217,
+   "linhas": 2346,
    "motivo": "dados de movimento (grande ou pessoal)"
   },
   {
@@ -126,12 +126,12 @@
   },
   {
    "tabela": "LIVROS_NOMES",
-   "linhas": 3000,
+   "linhas": 3074,
    "motivo": "dados de movimento (grande ou pessoal)"
   },
   {
    "tabela": "LIVRO_CAPITULOS",
-   "linhas": 13,
+   "linhas": 15,
    "motivo": "exportada à parte, na pasta livro-vivo/"
   },
   {
@@ -188,18 +188,18 @@
  "arquivos": [
   {
    "nome": "banco/schema.sql",
-   "tamanho": 34096,
-   "sha256": "d7acc94436bf7f07622eaee79201c0dc7a6317ae108ca9ee67c45284e80f06e6"
+   "tamanho": 34097,
+   "sha256": "6a65e4714b5f7471a32449570c326b528875c5f4852b759e8f7151d4a9db11bc"
   },
   {
    "nome": "dados-pequenos/CANAIS.csv",
    "tamanho": 1426,
-   "sha256": "e20fedee73ca7df59f526264958a0875db241d90b64e01ebf634d486494f240a"
+   "sha256": "10f5151cf207a3483124be6661bb3a44bf9c89ab03ff41e063cafebc4776dd9d"
   },
   {
    "nome": "dados-pequenos/CONFIG.csv",
    "tamanho": 608,
-   "sha256": "3bcf3234327b094823a969e30a0cf7f4bbd63ae246d9ea53f9bfebb2a4e4732c"
+   "sha256": "7a206bb608576e7a60715ef81e2c7babcd9540391f9e663a70becb7836f2623e"
   },
   {
    "nome": "dados-pequenos/MENTOR_REGRAS.csv",
@@ -209,7 +209,7 @@
   {
    "nome": "dados-pequenos/PLAYLISTS.csv",
    "tamanho": 5299,
-   "sha256": "9d47e6c2ca12cd7a5a7276b593487709afeed0e9672c1be0450e821d675ce24d"
+   "sha256": "24e4537a043364ca34b3e6c80a73ed8f6fd7249863e963324832fa598be04c3d"
   },
   {
    "nome": "dados-pequenos/TEMAS.csv",
@@ -224,7 +224,7 @@
   {
    "nome": "dados-pequenos/CARGA_PEQUENAS.sql",
    "tamanho": 43498,
-   "sha256": "65152a7d1749c5b533b908998adf7a88bf7b168388134416530b5a36261c3311"
+   "sha256": "f95e871ad5ff2545a62dd63276a5915bb8398dbf975b9fbb8f1da0d4ddd07380"
   },
   {
    "nome": "praticas/praticas.csv",
@@ -243,8 +243,8 @@
   },
   {
    "nome": "livro-vivo/capitulos.csv",
-   "tamanho": 132898,
-   "sha256": "64a8172abb8946ace8b22bb5fe4cc0fc875834e1c3707a50776e21c421601c34"
+   "tamanho": 170758,
+   "sha256": "61c3ff0b1f033743b0a3d3a6adc56ae4f0e0d9dfcae6f21ded84f46956d4d66b"
   },
   {
    "nome": "livro-vivo/capitulos/afinidade-e-sintonia.md",
@@ -270,6 +270,11 @@
    "nome": "livro-vivo/capitulos/chakras-e-bioenergia.md",
    "tamanho": 9012,
    "sha256": "d0b4e95cdef9703359f5dff83f3d7139cb2bab6b394ac0f48ed9487d773cd2a9"
+  },
+  {
+   "nome": "livro-vivo/capitulos/corpo-perispirito-saude-e-cura.md",
+   "tamanho": 14471,
+   "sha256": "576b325bed90513a92f2d2fc338402741811b1e1eabec02c108657aaaa16f6d5"
   },
   {
    "nome": "livro-vivo/capitulos/criancas-educacao-e-comportamento.md",
@@ -307,6 +312,11 @@
    "sha256": "7c927ad299c2310edabe369f427a86360dc2b9851404ff2624779365f4aa0da4"
   },
   {
+   "nome": "livro-vivo/capitulos/transicao-planetaria-e-evolucao-da-humanidade.md",
+   "tamanho": 19089,
+   "sha256": "c0c5beebee1b0061717ef42438ed49b0e5b74264e3eb9b63dec703a4a344e72a"
+  },
+  {
    "nome": "livro-vivo/capitulos/etica-e-coerencia-de-luz.md",
    "tamanho": 6154,
    "sha256": "d9345d3e961c69189addb642ea6ae892113c7c9cf60e89ae71580549f2f2e7ef"
@@ -319,7 +329,7 @@
   {
    "nome": "livro-vivo/LEIAME.md",
    "tamanho": 293,
-   "sha256": "1956675a458a4484428808927148d4a56c165cae6d016a6015b786ba487e2c22"
+   "sha256": "26ac23577a8f431661b989e7569d2d047233da0382f59a95393707855e6ab33e"
   },
   {
    "nome": "codigo/.gitkeep",
@@ -348,8 +358,8 @@
   },
   {
    "nome": "codigo/backend/criar-funcoes.mjs",
-   "tamanho": 22734,
-   "sha256": "bba88a5cac5106d2b749c9e32dbd36e297f4b6a0a8d0f8fb56bab882518c0967"
+   "tamanho": 22758,
+   "sha256": "8805392b6c3b9b23e2f146496b06e1188e014d128be8dbf9593c778caa3b747c"
   },
   {
    "nome": "codigo/backend/exportar-leve-base.mjs",
@@ -358,8 +368,8 @@
   },
   {
    "nome": "codigo/backend/funcoes-tela.mjs",
-   "tamanho": 67335,
-   "sha256": "173bd638c826b41e2159ec3355d3273e38b3fabb2dfc5447364e1fd383b7a64f"
+   "tamanho": 68712,
+   "sha256": "34a6d754d5ab1e30931dd06006cb00b243939eef708e349368a83a520e38812c"
   },
   {
    "nome": "codigo/backend/gravar-etiquetas.mjs",
@@ -458,13 +468,13 @@
   },
   {
    "nome": "codigo/backend/sf-ids.json",
-   "tamanho": 5921,
-   "sha256": "ebea380757a2a1f2eee8b430e5d2ac188f734341c27e358b947bd30e26d9b95a"
+   "tamanho": 5951,
+   "sha256": "e1900bba9d8d80868bedbf0a6a38b0cbde55d1b369efe87d2516e6f59aebdb30"
   },
   {
    "nome": "codigo/backend/sf-tela.json",
-   "tamanho": 3624,
-   "sha256": "e02580f006583053d6b8482c1a5afb2596bff16fe79296819fb46fdf3337f261"
+   "tamanho": 3651,
+   "sha256": "2fd51a6df409ab07dd683203f878dd612126a9da9ee3e6b81e10cf7f3167df48"
   },
   {
    "nome": "codigo/backend/sf/buscaTermos.js",
@@ -667,6 +677,11 @@
    "sha256": "05145342235779406df5076eacb95bf462884bab327ece17fd22f68fd3ca404d"
   },
   {
+   "nome": "codigo/frontend/src/components/ExportPraticas.tsx",
+   "tamanho": 1301,
+   "sha256": "b2c2ca2b295afd1cc1cadb0d8a10c4f5fd228ad158f6bb97b9afe2e1a78babc6"
+  },
+  {
    "nome": "codigo/frontend/src/components/FavoritaPratica.tsx",
    "tamanho": 975,
    "sha256": "7faff93ed5eefb0e6e5b0a6094ccae24853393f8cbd6245c79b4c71308c56ce1"
@@ -813,8 +828,8 @@
   },
   {
    "nome": "codigo/frontend/src/lib/exportar.ts",
-   "tamanho": 14239,
-   "sha256": "b0389d9ef3225bc30d4bd81c6e3a81f34dc981caf00ac89d1941fb4bb59514e2"
+   "tamanho": 19859,
+   "sha256": "626a57aef75736476792696c9eca3ef550a94cb226b2ec3fb3294ba10da82c11"
   },
   {
    "nome": "codigo/frontend/src/lib/mitra-auth.ts",
@@ -823,8 +838,8 @@
   },
   {
    "nome": "codigo/frontend/src/lib/sf.ts",
-   "tamanho": 3649,
-   "sha256": "e83903301e0a880a30c2af17bb916d5a5176ae4b01ce57ff1d5d416b16165f6f"
+   "tamanho": 3676,
+   "sha256": "820cf6c01225a5e1c01ccc5e07325421d0daa5aa05310294f084e33cd8aca01c"
   },
   {
    "nome": "codigo/frontend/src/lib/utils.ts",
@@ -848,8 +863,8 @@
   },
   {
    "nome": "codigo/frontend/src/pages/ConfiguracoesPage.tsx",
-   "tamanho": 16977,
-   "sha256": "64a250ebb0300355171f80404d1171574ba47df8bbaab64652cb61ab046d2bfb"
+   "tamanho": 17524,
+   "sha256": "d6aff0ddd1e100561d30100f12c3b7765ac5950d3bb33c2ab3b09a02c242f71b"
   },
   {
    "nome": "codigo/frontend/src/pages/FavoritosPage.tsx",
@@ -863,8 +878,8 @@
   },
   {
    "nome": "codigo/frontend/src/pages/LivroPage.tsx",
-   "tamanho": 8386,
-   "sha256": "7bee5b81bd5bd158b5d6ad793f6a1098e55b23c0306a3824a714e2d384c7bf31"
+   "tamanho": 9605,
+   "sha256": "b75d18ee44d0ed59a44029005ffa114b5ab3a07fd29304b09fe7d9f2a6738b0d"
   },
   {
    "nome": "codigo/frontend/src/pages/LivrosPage.tsx",
@@ -883,8 +898,8 @@
   },
   {
    "nome": "codigo/frontend/src/pages/MapaMentalPage.tsx",
-   "tamanho": 13005,
-   "sha256": "8bcaae5c26e8d83dce692eac87683d38d430e3340485bd4df10384b03d474510"
+   "tamanho": 14359,
+   "sha256": "c2b84daac0115aee07a4b0994eba3e4b0c005c2b418db927a571f7b73fc2a31d"
   },
   {
    "nome": "codigo/frontend/src/pages/MentoresPage.tsx",
@@ -903,8 +918,8 @@
   },
   {
    "nome": "codigo/frontend/src/pages/PraticasPage.tsx",
-   "tamanho": 13078,
-   "sha256": "a1b506b90da65f18ed14fe66fcfdb88c392efa29b0514890b5fcd53d3aa7c3a6"
+   "tamanho": 13355,
+   "sha256": "e523ea796c78e475b2a0ffad7d3852f7987b13ac124b76dea5e523b92f75a6ae"
   },
   {
    "nome": "codigo/frontend/src/pages/RelacaoLivrosPage.tsx",
@@ -948,13 +963,13 @@
   },
   {
    "nome": "historico/repo.bundle",
-   "tamanho": 745801,
-   "sha256": "56be0a098053c86d3213c32d584887070c056963e5172c5d416b7006f9b666ce"
+   "tamanho": 705547,
+   "sha256": "c2cbb6229b8ef2d11c80d35246809645982a33340382b6e656d5866b813ad4d8"
   },
   {
    "nome": "historico/commits.txt",
-   "tamanho": 23822,
-   "sha256": "8a3ac6b37050913d6a77a218fc17cfbcb901c4398272094ded088ab98c0a3d94"
+   "tamanho": 24212,
+   "sha256": "80b84766fadc777521c36e884d8d5f4da6a84deaa15b2751bdc68f3bb821d7ef"
   },
   {
    "nome": "ESCOPO.md",
@@ -969,12 +984,12 @@
   {
    "nome": "REGRAS_DE_CLASSIFICACAO.md",
    "tamanho": 57163,
-   "sha256": "0f0be0ad5605e015ebb65538e84f350dd9205833e065699ae6e2a2600d581349"
+   "sha256": "1e7a123b2888c3ae2585772cc060175108c734170550bae8555c3ec040add679"
   },
   {
    "nome": "plataforma/perfis.json",
-   "tamanho": 16012,
-   "sha256": "c5e5f98d854c1b86392fc457242fb15061ef253a1159378df34eed6d4a33fc63"
+   "tamanho": 16081,
+   "sha256": "f4916a151c692ced8e0c15d958a83a88f1313c9ad968a45c77055cd2b1c384a3"
   },
   {
    "nome": "plataforma/conexoes.json",
@@ -1148,8 +1163,8 @@
   },
   {
    "nome": "funcoes/065-motor.js",
-   "tamanho": 68449,
-   "sha256": "dd65367b11b08914f5b53e70bbb000bbb9f5987c52271d603945d08f8f39c50c"
+   "tamanho": 68476,
+   "sha256": "c8b2a7d2eb5a5754ebbaa163824d62fbeefc90f3b4a9602c20b21d7cd3cc23d0"
   },
   {
    "nome": "funcoes/066-canalPorYt.sql",
@@ -1258,23 +1273,23 @@
   },
   {
    "nome": "funcoes/087-canalCadastrar.js",
-   "tamanho": 8034,
-   "sha256": "a52861c407f759538c9af50a0e852a66419628727910124d2661391755d1a701"
+   "tamanho": 8061,
+   "sha256": "a3bcf216cabd29c176ddfbe3b769ae2589d55aee1d8ad33cc55a75083ac71658"
   },
   {
    "nome": "funcoes/088-temaEditar.js",
-   "tamanho": 7484,
-   "sha256": "8b5c27ab59878abacb0d081ae35a61308f027635d8d3438f3ed7daa878379e43"
+   "tamanho": 7511,
+   "sha256": "fcee5cf612752d2cac04364c2b6f5987e99a2b846f27a91eaf2a5b736daffa75"
   },
   {
    "nome": "funcoes/089-resumoBusca.js",
-   "tamanho": 8564,
-   "sha256": "022e4626717b99d55d2103ab2857635ebf0bf5d38696174697a7c1c378dcf783"
+   "tamanho": 8591,
+   "sha256": "824f6464f25d9e72862439b86d301c01208b7e54b10181210a7a88a27f048e77"
   },
   {
    "nome": "funcoes/090-chatBusca.js",
-   "tamanho": 16292,
-   "sha256": "11a2f842350466c277c702a5ff24d5a604781ed2eacda71e22ab3ad2e068affb"
+   "tamanho": 16319,
+   "sha256": "bdb6f851cb0ed5f1dcd6a5e664f0ea0d46cb5c1fad2dc2f71059546f287c0db9"
   },
   {
    "nome": "funcoes/091-canaisLimiteMais.sql",
@@ -1293,8 +1308,8 @@
   },
   {
    "nome": "funcoes/094-estudarMais.js",
-   "tamanho": 6154,
-   "sha256": "52adb582f5d60207c42c3fa62dbfe5720f22b6a6122f6dd1dce37bb2a4a62916"
+   "tamanho": 6181,
+   "sha256": "bf0597b80fcb94f29511b79e3e7dbe49d9760fce9b36066031f7ea3faece2342"
   },
   {
    "nome": "funcoes/095-exportVideos.sql",
@@ -1538,8 +1553,8 @@
   },
   {
    "nome": "funcoes/143-mentorEditar.js",
-   "tamanho": 10065,
-   "sha256": "5b71fb3225898eade15b0d7f5c71b22515d60a8c177bf4b5ac0fe07e2f92c4f7"
+   "tamanho": 10092,
+   "sha256": "857e3d368446ca23ef3a1e7a1e3e8ee0caf0c7df48731c8584471e87baa84773"
   },
   {
    "nome": "funcoes/144-mentorConferirFila.sql",
@@ -1578,13 +1593,13 @@
   },
   {
    "nome": "funcoes/151-canaisAtualizar.js",
-   "tamanho": 5656,
-   "sha256": "484f2b00eea22a12b8191a670f37cab47267c1b31fc344fa9866d1fe65ac7329"
+   "tamanho": 5683,
+   "sha256": "3b3b3216fbdde80f7f9b28ca4b7845fcbccf451f1f0c4dc127c6f75a3df6a43c"
   },
   {
    "nome": "funcoes/152-buscaTermos.js",
-   "tamanho": 7734,
-   "sha256": "6042486b8d929cf72b7ca9fe12f72a201e0b1455298dba25ea3198872fed1849"
+   "tamanho": 7761,
+   "sha256": "ccdbe1164982fb4a7528243de0215df51bf3903f68017f513f345cbfbb99114b"
   },
   {
    "nome": "funcoes/153-configTelaLer.sql",
@@ -1608,8 +1623,8 @@
   },
   {
    "nome": "funcoes/157-configEditar.js",
-   "tamanho": 8187,
-   "sha256": "3526bb19ce1abe974df04665da7dc5e6f0cc3b953f910e36f255de6f75e02e04"
+   "tamanho": 8214,
+   "sha256": "f9e36d9b56abb09d51fb2b6d1d9adfe33618a32d5eb12ad5f20aee7a66d238b6"
   },
   {
    "nome": "funcoes/158-avisoMarcar.sql",
@@ -1678,8 +1693,8 @@
   },
   {
    "nome": "funcoes/171-livroGerar.js",
-   "tamanho": 10690,
-   "sha256": "8b8b350060ca36de2ffda22266ad6bfdbf56e3f0ddc81211cbe28e8b93b74677"
+   "tamanho": 10717,
+   "sha256": "6cbc43cd494cd03d62d0662a3aa1b8dd8b77b17bc07c95fe9c137eda434b1c42"
   },
   {
    "nome": "funcoes/172-iaEstado.sql",
@@ -1773,8 +1788,8 @@
   },
   {
    "nome": "funcoes/190-diarioEditar.js",
-   "tamanho": 8056,
-   "sha256": "8002ea1e360b8a89b3c151f5c9b1ca8ce90a6bd4aa6af7c9ac1a495b5454d567"
+   "tamanho": 8083,
+   "sha256": "4466e7d77c65bb02d9b8970d337a6e62f588d4cebf95fbb364727dae6ab0497a"
   },
   {
    "nome": "funcoes/191-diarioUltimo.sql",
@@ -2003,8 +2018,8 @@
   },
   {
    "nome": "funcoes/237-livroValidar.js",
-   "tamanho": 10014,
-   "sha256": "d9767c7a393cfe139645ba6fd01284375455348dd782afb2d224537142442b7a"
+   "tamanho": 10041,
+   "sha256": "b60cd35e08130aa280cee4b88bea513ef471e7e8ff26c60685b8f93424be46bc"
   },
   {
    "nome": "funcoes/238-validarOnde.sql",
@@ -2228,33 +2243,33 @@
   },
   {
    "nome": "funcoes/282-mapaTemasLista.sql",
-   "tamanho": 239,
-   "sha256": "7602d0a7b301aea0315b0190414efbe7a69ea236cc604f3bb028d1af1c5f266d"
+   "tamanho": 289,
+   "sha256": "d470f0cab092da4cd131ef867fc463fc35487c2157e69b38069be9ed7c0c2ca6"
   },
   {
    "nome": "funcoes/283-mapaTemaJeitos.sql",
-   "tamanho": 268,
-   "sha256": "4cf8a237c3361606e465e91303ab3fdc148f69762d35d904dfa9e8a641ad968b"
+   "tamanho": 318,
+   "sha256": "78d78140be76a3b63e9b5a6c600364e84426a3a754fd489c3f3380119fb0a814"
   },
   {
    "nome": "funcoes/284-mapaTemaPraticas.sql",
-   "tamanho": 372,
-   "sha256": "f9adcdffa5890fff5025fb706144752d661a13a891d2888efa4295acf96b9b87"
+   "tamanho": 422,
+   "sha256": "b8d617bfff718b9b03aa6185ae397ef68f5ee194ba0de57c13d7c4a9b08f3a00"
   },
   {
    "nome": "funcoes/285-mapaTemaVideos.sql",
-   "tamanho": 279,
-   "sha256": "6c2186ee0abd6879e6993f0b4aa136634bf9c7ff1be32ac41389ade8d895ea3a"
+   "tamanho": 329,
+   "sha256": "141aa3069585a7e080c74371aa3d5c64f2e48dda01d3177775aeac12249cac85"
   },
   {
    "nome": "funcoes/286-mapaTemaLigados.sql",
-   "tamanho": 270,
-   "sha256": "f2987beb5fb61a854158d75ac3d2a71eb7873655bb66fdc331f6e420579259ee"
+   "tamanho": 355,
+   "sha256": "62cb85f0ac3cd7af7febb505fc8467607c96027de1e1b2488704bfcbe12510ab"
   },
   {
    "nome": "funcoes/287-mapaVideoBusca.sql",
-   "tamanho": 275,
-   "sha256": "47f33fab21f21fee5458b21b86142b7e69d9eca7ee356936313bb5e0bec56f80"
+   "tamanho": 325,
+   "sha256": "93013974c64971f4ea44956b36aa024a1e038022674a590358c4d693df203fd2"
   },
   {
    "nome": "funcoes/288-exportarGit.js",
@@ -2262,19 +2277,24 @@
    "sha256": "ee99892375b184cc8531db179e1b5ed97e761a593b01e858200027a2e4207630"
   },
   {
+   "nome": "funcoes/289-exportPraticasFiltro.sql",
+   "tamanho": 942,
+   "sha256": "cfb60e05c1e9b44380969f2fbaff9eb1e2459772e0394299bc1c6883e8386f6d"
+  },
+  {
    "nome": "funcoes/INDICE_FUNCOES.csv",
-   "tamanho": 44440,
-   "sha256": "76d4bf3531437f4ff0aad981d1e872331c64cbde33ce4ba761cd86e715b955b7"
+   "tamanho": 44721,
+   "sha256": "aba5a4c61ef00ac9553091a1b17c4acfa3eaaa9f938e78ad64a3d02b4742dc8a"
   },
   {
    "nome": "funcoes/INDICE_FUNCOES.json",
-   "tamanho": 106415,
-   "sha256": "a1f806af2a02e3baf1e5347bcc407ab2957c08e768ba9f69ae835dcee89cc269"
+   "tamanho": 107058,
+   "sha256": "db826dd0d9d1107adc60b4d6ff9e75fbff4ce2e53eae58063b0b941a5af4b40c"
   },
   {
    "nome": "DIFF_FUNCOES.md",
-   "tamanho": 5222,
-   "sha256": "5922f64489ed9c269d4e4108f18656a03d55ec28e4772beaa4a9ed85085eda08"
+   "tamanho": 5246,
+   "sha256": "15199e680981d4528e0daaa431267ac9ea39dcd6291bca7d00ee6b6fbc3e8ce0"
   },
   {
    "nome": "plataforma/rotinas.csv",
@@ -2283,8 +2303,8 @@
   },
   {
    "nome": "DEPENDENCIAS_MITRA.md",
-   "tamanho": 21953,
-   "sha256": "f1c9f8cc437f9d68f4203f6c7b2658757a63c1bb5fa7180d3113625ac727f3a2"
+   "tamanho": 22033,
+   "sha256": "7696fc354f3c749f452bb761d9d2f34b0d3a017221b3209f51aa0975a2632bd1"
   },
   {
    "nome": ".env.example",
@@ -2293,8 +2313,8 @@
   },
   {
    "nome": "LEIAME_EXPORTACAO_LEVE.md",
-   "tamanho": 20572,
-   "sha256": "d7d5e48a97e4931dc71c955cc0d764e793d02491c76718c7a4ad2d1ea3e63d56"
+   "tamanho": 20801,
+   "sha256": "9819d0e9b0bc19b103e774ea4488791a063ec5d85db7e85c22a284cf016379d3"
   },
   {
    "nome": "README.md",

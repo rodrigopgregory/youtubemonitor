@@ -1,9 +1,10 @@
 import { JEITOS } from '../lib/etiquetas'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { BookOpen, RefreshCw, Sparkles, ExternalLink, Search } from 'lucide-react'
+import { BookOpen, RefreshCw, Sparkles, ExternalLink, Search, Download } from 'lucide-react'
 import Button from '../components/ui/Button'
 import { Card } from '../components/ui/Card'
 import { linhas, chamarDemorado, linkYt, dataBr, mmss } from '../lib/api'
+import { exportarLivroCapitulo, exportarLivroTodo } from '../lib/exportar'
 
 interface Tema { ID: number; NOME: string; QTD: number; CANAIS: number; GERADO_EM: string | null }
 interface Fonte { video: string; canal: string; yt: string; seg: number }
@@ -32,6 +33,8 @@ export default function LivroPage() {
   const [aba, setAba] = useState<'texto' | 'praticas'>('texto')
   const [gerando, setGerando] = useState(false)
   const [erro, setErro] = useState('')
+  const [expMsg, setExpMsg] = useState('')
+  const [expRodando, setExpRodando] = useState(false)
 
   const carregarTemas = useCallback(() => linhas<Tema>('livroTemas').then(setTemas), [])
   useEffect(() => { carregarTemas() }, [carregarTemas])
@@ -58,6 +61,14 @@ export default function LivroPage() {
     } catch (e) { setErro((e as Error).message) } finally { setGerando(false) }
   }
 
+  async function exportar(todo: boolean) {
+    setExpRodando(true); setExpMsg(todo ? 'Juntando os capítulos…' : 'Montando o arquivo…')
+    try {
+      if (todo) { const n = await exportarLivroTodo(temas, setExpMsg); setExpMsg(`Arquivo baixado com ${n} ${n === 1 ? 'capítulo' : 'capítulos'}.`) }
+      else if (atual && tema) { await exportarLivroCapitulo(atual, tema.NOME); setExpMsg('Arquivo baixado.') }
+    } catch { setExpMsg('Não foi possível exportar agora. Tente de novo em instantes.') } finally { setExpRodando(false) }
+  }
+
   const praticas = useMemo<Pratica[]>(() => { try { return JSON.parse(cap?.PRATICAS_JSON || '[]') } catch { return [] } }, [cap])
   const lista = temas.filter(t => !filtro || t.NOME.toLowerCase().includes(filtro.toLowerCase()))
   const tema = temas.find(t => t.ID === atual)
@@ -68,6 +79,11 @@ export default function LivroPage() {
       <div>
         <h1 className="text-[22px] font-semibold flex items-center gap-2"><BookOpen size={22} />Livro Vivo</h1>
         <p className="text-[13.5px]" style={muted}>Os ensinamentos dos canais reunidos por tema. {prontos} de {temas.length} capítulos escritos.{prontos < temas.length ? ' Toda madrugada escrevo até 2 novos sozinho, quando sobra cota da IA.' : ''}</p>
+      </div>
+      <div className="flex items-center gap-2 flex-wrap">
+        <Button variant="secondary" size="sm" disabled={expRodando || prontos === 0} onClick={() => exportar(true)}><Download size={14} />Exportar o livro todo</Button>
+        {cap && tema && <Button variant="secondary" size="sm" disabled={expRodando} onClick={() => exportar(false)}><Download size={14} />Exportar este capítulo</Button>}
+        {expMsg && <span className="text-[12.5px]" style={muted}>{expMsg}</span>}
       </div>
       <div className="grid gap-4 md:grid-cols-[260px_1fr]">
         <Card className="p-2 flex flex-col gap-1 md:max-h-[75vh] overflow-y-auto">

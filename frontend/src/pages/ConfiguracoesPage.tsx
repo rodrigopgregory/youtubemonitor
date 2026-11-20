@@ -9,6 +9,7 @@ import { exportarNotebookLM } from '../lib/exportar'
 import PacoteExport from '../components/PacoteExport'
 import ExportLeve from '../components/ExportLeve'
 import ExportGit from '../components/ExportGit'
+import ExportPraticas from '../components/ExportPraticas'
 
 interface Mentor { ID: number; NOME: string; QTD: number }
 interface Regra { ID: number; NOME: string; TIPO: 'MENTOR' | 'APELIDO' | 'NAO'; DESTINO: string | null }
@@ -231,6 +232,10 @@ export default function ConfiguracoesPage() {
         <Card className="p-5"><ExportLeve /></Card>
         <Card className="p-5"><ExportGit /></Card>
         <Card className="p-5"><PacoteExport /></Card>
+        <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
+          <p className="text-[13.5px] flex-1" style={muted}>Baixa uma planilha com todas as práticas dos vídeos estudados: passo a passo, jeito de fazer, para que serve, quando fazer, favoritas, quantas vezes você fez e o link do vídeo no momento certo.</p>
+          <ExportPraticas filtro={{ canalId: 0, busca: '', fav: 0, jeito: '', serve: '', quando: '' }} nome="Todas as práticas" />
+        </Card>
         <Card className="p-5 flex flex-col sm:flex-row sm:items-center gap-3">
           <p className="text-[13.5px] flex-1" style={muted}>Baixa as transcrições dos vídeos estudados num ZIP pronto para o NotebookLM: poucos arquivos de texto por canal, cada um abaixo do limite de uma fonte, com título, link, data, temas e resumo de cada vídeo. Depois é só enviar os arquivos em "Adicionar fontes" no NotebookLM.</p>
           <div className="flex flex-col sm:items-end gap-2 sm:max-w-[320px]">

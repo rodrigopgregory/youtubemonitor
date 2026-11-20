@@ -1,6 +1,6 @@
 # Dependências do Mitra e o que reescrever fora dele
 
-Gerado de 256 funções publicadas, do código do front-end e das conexões, em 2026-11-18T22:59:32.
+Gerado de 257 funções publicadas, do código do front-end e das conexões, em 2026-11-19T22:53:28.
 
 ## 1. Mapa número -> função -> telas
 
@@ -145,7 +145,7 @@ A coluna "telas que chamam" vem de uma busca por `chamar('nome'`, `chamarDemorad
 | 166 | livroTemaInfo | SQL | - | livroGerar | - |
 | 167 | livroGravar | SQL | - | livroGerar | - |
 | 168 | livroTemas | SQL | pages/InicioPage.tsx, pages/LivroPage.tsx | - | - |
-| 169 | livroCapitulo | SQL | pages/LivroPage.tsx | - | - |
+| 169 | livroCapitulo | SQL | lib/exportar.ts, pages/LivroPage.tsx | - | - |
 | 170 | exportTabLivro | SQL | - | - | - |
 | 171 | livroGerar | JAVASCRIPT | pages/LivroPage.tsx | motor | executeServerFunctionMitra, callIntegrationMitra |
 | 172 | iaEstado | SQL | components/EstadoIA.tsx | - | - |
@@ -264,6 +264,7 @@ A coluna "telas que chamam" vem de uma busca por `chamar('nome'`, `chamarDemorad
 | 286 | mapaTemaLigados | SQL | pages/MapaMentalPage.tsx | - | - |
 | 287 | mapaVideoBusca | SQL | pages/MapaMentalPage.tsx | - | - |
 | 288 | exportarGit | JAVASCRIPT | - | - | runQueryMitra, runDmlMitra, getFileLinkMitra |
+| 289 | exportPraticasFiltro | SQL | lib/exportar.ts | - | - |
 
 ## 2. Consultas que usam o usuário logado
 
@@ -322,7 +323,7 @@ Nomes de conexão que o motor usa para o Gemini (de `CONFIG.GEMINI_CONEXOES`): g
 
 ## 7. O que precisa ser reescrito fora do Mitra
 
-- **Server Functions SQL** (239): viram consultas parametrizadas no seu back-end. O marcador `{{nome}}` hoje é substituído como texto pela plataforma; fora dela use parâmetros de verdade (evita injeção de SQL).
+- **Server Functions SQL** (240): viram consultas parametrizadas no seu back-end. O marcador `{{nome}}` hoje é substituído como texto pela plataforma; fora dela use parâmetros de verdade (evita injeção de SQL).
 - **Server Functions JavaScript** (17): usam `require('mitra-sdk')`, a variável `event` e `return` no nível de cima. Precisam virar módulos com o mesmo contrato, trocando cada `m.*Mitra` listado na seção 3.
 - **Banco**: `banco/schema.sql` (MySQL 8, collation `utf8mb4_bin`, FULLTEXT em `TRECHOS.TEXTO`). A busca por texto depende do FULLTEXT.
 - **Gemini**: sai de `callIntegrationMitra` para chamada direta à API do Google, com rodízio de chaves e modelos (REGRAS_DE_CLASSIFICACAO.md, seção 1).

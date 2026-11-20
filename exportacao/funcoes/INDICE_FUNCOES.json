@@ -589,8 +589,8 @@
   "cron": "0 5 * * * *",
   "cron_entrada": null,
   "descricao": "Motor: carga histórica, checagem diária e estudo dos vídeos",
-  "tamanho_bytes": 68449,
-  "sha256": "dd65367b11b08914f5b53e70bbb000bbb9f5987c52271d603945d08f8f39c50c",
+  "tamanho_bytes": 68476,
+  "sha256": "c8b2a7d2eb5a5754ebbaa163824d62fbeefc90f3b4a9602c20b21d7cd3cc23d0",
   "telas_que_chamam": []
  },
  {
@@ -1011,8 +1011,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Cadastra canal pelo link",
-  "tamanho_bytes": 8034,
-  "sha256": "a52861c407f759538c9af50a0e852a66419628727910124d2661391755d1a701",
+  "tamanho_bytes": 8061,
+  "sha256": "a3bcf216cabd29c176ddfbe3b769ae2589d55aee1d8ad33cc55a75083ac71658",
   "telas_que_chamam": [
    "frontend/src/pages/CanaisPage.tsx"
   ]
@@ -1035,8 +1035,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Acrescenta, tira ou renomeia tema de um vídeo",
-  "tamanho_bytes": 7484,
-  "sha256": "8b5c27ab59878abacb0d081ae35a61308f027635d8d3438f3ed7daa878379e43",
+  "tamanho_bytes": 7511,
+  "sha256": "fcee5cf612752d2cac04364c2b6f5987e99a2b846f27a91eaf2a5b736daffa75",
   "telas_que_chamam": [
    "frontend/src/components/VideoDetalhe.tsx"
   ]
@@ -1056,8 +1056,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Resumo do tema feito só com a base",
-  "tamanho_bytes": 8564,
-  "sha256": "022e4626717b99d55d2103ab2857635ebf0bf5d38696174697a7c1c378dcf783",
+  "tamanho_bytes": 8591,
+  "sha256": "824f6464f25d9e72862439b86d301c01208b7e54b10181210a7a88a27f048e77",
   "telas_que_chamam": []
  },
  {
@@ -1075,8 +1075,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Chat de busca: entende o pedido e responde só com a base",
-  "tamanho_bytes": 16292,
-  "sha256": "11a2f842350466c277c702a5ff24d5a604781ed2eacda71e22ab3ad2e068affb",
+  "tamanho_bytes": 16319,
+  "sha256": "bdb6f851cb0ed5f1dcd6a5e664f0ea0d46cb5c1fad2dc2f71059546f287c0db9",
   "telas_que_chamam": [
    "frontend/src/pages/ChatPage.tsx"
   ]
@@ -1145,8 +1145,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Coloca mais vídeos na fila de estudo (pedido pelo chat)",
-  "tamanho_bytes": 6154,
-  "sha256": "52adb582f5d60207c42c3fa62dbfe5720f22b6a6122f6dd1dce37bb2a4a62916",
+  "tamanho_bytes": 6181,
+  "sha256": "bf0597b80fcb94f29511b79e3e7dbe49d9760fce9b36066031f7ea3faece2342",
   "telas_que_chamam": [
    "frontend/src/pages/ChatPage.tsx"
   ]
@@ -2042,8 +2042,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Cadastra, renomeia, junta ou marca como não-mentor, e grava a regra para o estudo seguir",
-  "tamanho_bytes": 10065,
-  "sha256": "5b71fb3225898eade15b0d7f5c71b22515d60a8c177bf4b5ac0fe07e2f92c4f7",
+  "tamanho_bytes": 10092,
+  "sha256": "857e3d368446ca23ef3a1e7a1e3e8ee0caf0c7df48731c8584471e87baa84773",
   "telas_que_chamam": [
    "frontend/src/pages/ConfiguracoesPage.tsx",
    "frontend/src/pages/MentoresPage.tsx"
@@ -2176,8 +2176,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Procura agora vídeos novos em todos os canais",
-  "tamanho_bytes": 5656,
-  "sha256": "484f2b00eea22a12b8191a670f37cab47267c1b31fc344fa9866d1fe65ac7329",
+  "tamanho_bytes": 5683,
+  "sha256": "3b3b3216fbdde80f7f9b28ca4b7845fcbccf451f1f0c4dc127c6f75a3df6a43c",
   "telas_que_chamam": [
    "frontend/src/components/Layout.tsx",
    "frontend/src/pages/CanaisPage.tsx"
@@ -2196,8 +2196,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Busca: sugere sinônimos do tema pesquisado",
-  "tamanho_bytes": 7734,
-  "sha256": "6042486b8d929cf72b7ca9fe12f72a201e0b1455298dba25ea3198872fed1849",
+  "tamanho_bytes": 7761,
+  "sha256": "ccdbe1164982fb4a7528243de0215df51bf3903f68017f513f345cbfbb99114b",
   "telas_que_chamam": []
  },
  {
@@ -2283,8 +2283,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Lê e grava os ajustes do estudo (tela Configurações)",
-  "tamanho_bytes": 8187,
-  "sha256": "3526bb19ce1abe974df04665da7dc5e6f0cc3b953f910e36f255de6f75e02e04",
+  "tamanho_bytes": 8214,
+  "sha256": "f9e36d9b56abb09d51fb2b6d1d9adfe33618a32d5eb12ad5f20aee7a66d238b6",
   "telas_que_chamam": [
    "frontend/src/pages/ConfiguracoesPage.tsx"
   ]
@@ -2503,6 +2503,7 @@
   "tamanho_bytes": 109,
   "sha256": "c6525e7715b7e346f982cd506cd9f5e04d6aa25fae9f2cb661d4c4e4da691b70",
   "telas_que_chamam": [
+   "frontend/src/lib/exportar.ts",
    "frontend/src/pages/LivroPage.tsx"
   ]
  },
@@ -2536,8 +2537,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Livro Vivo: escreve o capítulo de um tema com a IA",
-  "tamanho_bytes": 10690,
-  "sha256": "8b8b350060ca36de2ffda22266ad6bfdbf56e3f0ddc81211cbe28e8b93b74677",
+  "tamanho_bytes": 10717,
+  "sha256": "6cbc43cd494cd03d62d0662a3aa1b8dd8b77b17bc07c95fe9c137eda434b1c42",
   "telas_que_chamam": [
    "frontend/src/pages/LivroPage.tsx"
   ]
@@ -2884,8 +2885,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Minhas práticas: registra que fiz (com como me senti) ou apaga um registro",
-  "tamanho_bytes": 8056,
-  "sha256": "8002ea1e360b8a89b3c151f5c9b1ca8ce90a6bd4aa6af7c9ac1a495b5454d567",
+  "tamanho_bytes": 8083,
+  "sha256": "4466e7d77c65bb02d9b8970d337a6e62f588d4cebf95fbb364727dae6ab0497a",
   "telas_que_chamam": [
    "frontend/src/components/Contador.tsx",
    "frontend/src/components/FizHoje.tsx",
@@ -3757,8 +3758,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Livros a validar: confere um nome de livro na busca do Google",
-  "tamanho_bytes": 10014,
-  "sha256": "d9767c7a393cfe139645ba6fd01284375455348dd782afb2d224537142442b7a",
+  "tamanho_bytes": 10041,
+  "sha256": "b60cd35e08130aa280cee4b88bea513ef471e7e8ff26c60685b8f93424be46bc",
   "telas_que_chamam": [
    "frontend/src/pages/ValidarLivrosPage.tsx"
   ]
@@ -4629,15 +4630,17 @@
   "numero": 282,
   "nome": "mapaTemasLista",
   "tipo": "SQL",
-  "parametros": [],
+  "parametros": [
+   "canalId"
+  ],
   "perfis_com_permissao": [
    "Dona da base"
   ],
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: temas com quantos vídeos têm",
-  "tamanho_bytes": 239,
-  "sha256": "7602d0a7b301aea0315b0190414efbe7a69ea236cc604f3bb028d1af1c5f266d",
+  "tamanho_bytes": 289,
+  "sha256": "d470f0cab092da4cd131ef867fc463fc35487c2157e69b38069be9ed7c0c2ca6",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4647,7 +4650,8 @@
   "nome": "mapaTemaJeitos",
   "tipo": "SQL",
   "parametros": [
-   "temaId"
+   "temaId",
+   "canalId"
   ],
   "perfis_com_permissao": [
    "Dona da base"
@@ -4655,8 +4659,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: jeitos de prática ligados a um tema",
-  "tamanho_bytes": 268,
-  "sha256": "4cf8a237c3361606e465e91303ab3fdc148f69762d35d904dfa9e8a641ad968b",
+  "tamanho_bytes": 318,
+  "sha256": "78d78140be76a3b63e9b5a6c600364e84426a3a754fd489c3f3380119fb0a814",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4666,6 +4670,7 @@
   "nome": "mapaTemaPraticas",
   "tipo": "SQL",
   "parametros": [
+   "canalId",
    "jeito",
    "temaId",
    "limit",
@@ -4677,8 +4682,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: práticas de um jeito dentro de um tema",
-  "tamanho_bytes": 372,
-  "sha256": "f9adcdffa5890fff5025fb706144752d661a13a891d2888efa4295acf96b9b87",
+  "tamanho_bytes": 422,
+  "sha256": "b8d617bfff718b9b03aa6185ae397ef68f5ee194ba0de57c13d7c4a9b08f3a00",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4688,7 +4693,8 @@
   "nome": "mapaTemaVideos",
   "tipo": "SQL",
   "parametros": [
-   "temaId"
+   "temaId",
+   "canalId"
   ],
   "perfis_com_permissao": [
    "Dona da base"
@@ -4696,8 +4702,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: vídeos que mais ensinam práticas num tema",
-  "tamanho_bytes": 279,
-  "sha256": "6c2186ee0abd6879e6993f0b4aa136634bf9c7ff1be32ac41389ade8d895ea3a",
+  "tamanho_bytes": 329,
+  "sha256": "141aa3069585a7e080c74371aa3d5c64f2e48dda01d3177775aeac12249cac85",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4707,7 +4713,8 @@
   "nome": "mapaTemaLigados",
   "tipo": "SQL",
   "parametros": [
-   "temaId"
+   "temaId",
+   "canalId"
   ],
   "perfis_com_permissao": [
    "Dona da base"
@@ -4715,8 +4722,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: temas que aparecem junto de um tema",
-  "tamanho_bytes": 270,
-  "sha256": "f2987beb5fb61a854158d75ac3d2a71eb7873655bb66fdc331f6e420579259ee",
+  "tamanho_bytes": 355,
+  "sha256": "62cb85f0ac3cd7af7febb505fc8467607c96027de1e1b2488704bfcbe12510ab",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4726,6 +4733,7 @@
   "nome": "mapaVideoBusca",
   "tipo": "SQL",
   "parametros": [
+   "canalId",
    "busca"
   ],
   "perfis_com_permissao": [
@@ -4734,8 +4742,8 @@
   "cron": null,
   "cron_entrada": null,
   "descricao": "Mapa mental: procura um vídeo pelo título",
-  "tamanho_bytes": 275,
-  "sha256": "47f33fab21f21fee5458b21b86142b7e69d9eca7ee356936313bb5e0bec56f80",
+  "tamanho_bytes": 325,
+  "sha256": "93013974c64971f4ea44956b36aa024a1e038022674a590358c4d693df203fd2",
   "telas_que_chamam": [
    "frontend/src/pages/MapaMentalPage.tsx"
   ]
@@ -4756,5 +4764,30 @@
   "tamanho_bytes": 7497,
   "sha256": "ee99892375b184cc8531db179e1b5ed97e761a593b01e858200027a2e4207630",
   "telas_que_chamam": []
+ },
+ {
+  "numero": 289,
+  "nome": "exportPraticasFiltro",
+  "tipo": "SQL",
+  "parametros": [
+   "depois",
+   "canalId",
+   "busca",
+   "fav",
+   "jeito",
+   "serve",
+   "quando"
+  ],
+  "perfis_com_permissao": [
+   "Dona da base"
+  ],
+  "cron": null,
+  "cron_entrada": null,
+  "descricao": "Exporta as práticas com os mesmos filtros da tela de Práticas",
+  "tamanho_bytes": 942,
+  "sha256": "cfb60e05c1e9b44380969f2fbaff9eb1e2459772e0394299bc1c6883e8386f6d",
+  "telas_que_chamam": [
+   "frontend/src/lib/exportar.ts"
+  ]
  }
 ]

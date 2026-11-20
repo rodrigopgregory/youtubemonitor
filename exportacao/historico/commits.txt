@@ -1,3 +1,6 @@
+245c87a66e9896f48ca00e62c04bcee4f1e171af | 2026-11-19 02:20:26 +0000 | sledt1006p01 | Mapa mental: filtro por canal e exportação (imagem e texto)
+cd035b0354a7b39fbe5dce8f4caad1ca9f5defde | 2026-11-19 02:17:48 +0000 | sledt1006p01 | Livro Vivo: exportar capítulo e livro todo
+3bcfde06028482a677b4548d06acdc443e2f3110 | 2026-11-19 02:16:18 +0000 | sledt1006p01 | Botão exportar práticas
 e889ad4c1b08ebeb4cc5db03e38465d9da6699d6 | 2026-11-19 01:57:00 +0000 | sledt1006p01 | Exportacoes: mostra o motivo real do erro e avisa quando a sessao acabou
 a34cfb178c7aa20ed9176efb13d172c732f15f79 | 2026-11-19 01:52:53 +0000 | sledt1006p01 | Botao do GitHub: envio em segundo plano com acompanhamento
 2100abff083313e9fa1f008235236759c94f1e36 | 2026-11-19 01:50:09 +0000 | sledt1006p01 | Menu do topo: so icones, nome so na pagina aberta

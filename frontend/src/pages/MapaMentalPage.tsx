@@ -1,5 +1,7 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Network, Search, PlayCircle } from 'lucide-react'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { Network, Search, PlayCircle, Download } from 'lucide-react'
+import CanalFiltro, { useCanal } from '../components/CanalFiltro'
+import { exportarMapaImagem, exportarMapaTexto } from '../lib/exportar'
 import { linhas, mmss, linkYt } from '../lib/api'
 import { nomeEt } from '../lib/etiquetas'
 
@@ -31,6 +33,11 @@ function Mapa({ centro, centroSub, esquerda, direita, tituloEsq, tituloDir }: { 
     })
   }
   const pe = posicoes(esquerda, -1), pd = posicoes(direita, 1)
+  const svgRef = useRef<SVGSVGElement>(null)
+  const [expMsg, setExpMsg] = useState('')
+  async function baixarImagem() {
+    try { if (svgRef.current) await exportarMapaImagem(svgRef.current, centro, LARG, ALTO); setExpMsg('') } catch { setExpMsg('Não foi possível baixar a imagem agora.') }
+  }
   function desenha(lista: No[], pos: { x: number; y: number }[], lado: -1 | 1) {
     return lista.map((no, i) => {
       const { x, y } = pos[i]
@@ -49,7 +56,12 @@ function Mapa({ centro, centroSub, esquerda, direita, tituloEsq, tituloDir }: { 
   }
   return (
     <div className="cartao p-2 overflow-x-auto">
-      <svg viewBox={`0 0 ${LARG} ${ALTO}`} className="w-full min-w-[640px]" role="img" aria-label={`Mapa mental de ${centro}`}>
+      <div className="flex items-center gap-2 flex-wrap px-2 pb-1">
+        <button onClick={baixarImagem} className="controle h-8 px-3 inline-flex items-center gap-1.5 text-[13px]"><Download size={14} />Baixar imagem</button>
+        <button onClick={() => exportarMapaTexto(centro, centroSub, tituloEsq, esquerda, tituloDir, direita)} className="controle h-8 px-3 inline-flex items-center gap-1.5 text-[13px]"><Download size={14} />Baixar em texto</button>
+        {expMsg && <span className="text-[12.5px]" style={{ color: 'var(--fg-muted)' }}>{expMsg}</span>}
+      </div>
+      <svg ref={svgRef} viewBox={`0 0 ${LARG} ${ALTO}`} className="w-full min-w-[640px]" role="img" aria-label={`Mapa mental de ${centro}`}>
         <text x={20} y={22} fontSize="12" fill="var(--fg-muted)">{tituloEsq}</text>
         <text x={LARG - 20} y={22} fontSize="12" textAnchor="end" fill="var(--fg-muted)">{tituloDir}</text>
         {desenha(esquerda, pe, -1)}
@@ -66,7 +78,7 @@ function Mapa({ centro, centroSub, esquerda, direita, tituloEsq, tituloDir }: { 
   )
 }
 
-function PorTema() {
+function PorTema({ canalId }: { canalId: number }) {
   const [temas, setTemas] = useState<Tema[]>([])
   const [filtro, setFiltro] = useState('')
   const [tema, setTema] = useState<Tema | null>(null)
@@ -76,17 +88,17 @@ function PorTema() {
   const [jeito, setJeito] = useState<string | null>(null)
   const [prats, setPrats] = useState<PratTema[]>([])
 
-  useEffect(() => { linhas<Tema>('mapaTemasLista').then(r => { setTemas(r); if (r.length) setTema(r[0]) }).catch(() => {}) }, [])
+  useEffect(() => { linhas<Tema>('mapaTemasLista', { canalId }).then(r => { setTemas(r); setTema(r[0] || null) }).catch(() => {}) }, [canalId])
   useEffect(() => {
-    if (!tema) return
+    if (!tema) { setJeitos([]); setLigados([]); setVideos([]); return }
     setJeito(null); setPrats([])
-    linhas<Jeito>('mapaTemaJeitos', { temaId: tema.ID }).then(setJeitos).catch(() => setJeitos([]))
-    linhas<Ligado>('mapaTemaLigados', { temaId: tema.ID }).then(setLigados).catch(() => setLigados([]))
-    linhas<VidTema>('mapaTemaVideos', { temaId: tema.ID }).then(setVideos).catch(() => setVideos([]))
+    linhas<Jeito>('mapaTemaJeitos', { temaId: tema.ID, canalId }).then(setJeitos).catch(() => setJeitos([]))
+    linhas<Ligado>('mapaTemaLigados', { temaId: tema.ID, canalId }).then(setLigados).catch(() => setLigados([]))
+    linhas<VidTema>('mapaTemaVideos', { temaId: tema.ID, canalId }).then(setVideos).catch(() => setVideos([]))
   }, [tema])
   useEffect(() => {
     if (!tema || jeito === null) return
-    linhas<PratTema>('mapaTemaPraticas', { temaId: tema.ID, jeito, limit: 30, offset: 0 }).then(setPrats).catch(() => setPrats([]))
+    linhas<PratTema>('mapaTemaPraticas', { temaId: tema.ID, jeito, limit: 30, offset: 0, canalId }).then(setPrats).catch(() => setPrats([]))
   }, [tema, jeito])
 
   const lista = useMemo(() => temas.filter(t => !filtro || t.NOME.toLowerCase().includes(filtro.toLowerCase())), [temas, filtro])
@@ -144,7 +156,7 @@ function PorTema() {
   )
 }
 
-function PorVideo() {
+function PorVideo({ canalId }: { canalId: number }) {
   const [busca, setBusca] = useState('')
   const [achados, setAchados] = useState<VidBusca[]>([])
   const [video, setVideo] = useState<VidBusca | null>(null)
@@ -152,9 +164,9 @@ function PorVideo() {
   const [prats, setPrats] = useState<PratVid[]>([])
 
   useEffect(() => {
-    const t = setTimeout(() => { linhas<VidBusca>('mapaVideoBusca', { busca: busca.replace(/['\\%]/g, ' ').trim() }).then(setAchados).catch(() => setAchados([])) }, 300)
+    const t = setTimeout(() => { linhas<VidBusca>('mapaVideoBusca', { busca: busca.replace(/['\\%]/g, ' ').trim(), canalId }).then(setAchados).catch(() => setAchados([])) }, 300)
     return () => clearTimeout(t)
-  }, [busca])
+  }, [busca, canalId])
   useEffect(() => {
     if (!video) return
     linhas<TemaVid>('videoTemas', { videoId: video.ID }).then(setTemas).catch(() => setTemas([]))
@@ -205,6 +217,7 @@ function PorVideo() {
 
 export default function MapaMentalPage() {
   const [modo, setModo] = useState<'tema' | 'video'>('tema')
+  const [canal, setCanal] = useCanal()
   return (
     <div className="max-w-6xl mx-auto px-3 sm:px-6 py-5 flex flex-col gap-4">
       <header>
@@ -216,7 +229,8 @@ export default function MapaMentalPage() {
           <button key={cod} onClick={() => setModo(cod)} className="h-9 px-4 rounded-lg text-[13.5px] font-medium"
             style={modo === cod ? { background: 'var(--accent-soft)', color: 'var(--accent-text)' } : { color: 'var(--fg-muted)' }}>{nome}</button>))}
       </div>
-      {modo === 'tema' ? <PorTema /> : <PorVideo />}
+      <CanalFiltro valor={canal} onChange={setCanal} />
+      {modo === 'tema' ? <PorTema canalId={canal} /> : <PorVideo canalId={canal} />}
     </div>
   )
 }
